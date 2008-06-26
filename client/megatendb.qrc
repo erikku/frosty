@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+	<file alias="dark.xml">res/dark.xml</file>
+	<file alias="blank.png">res/blank.png</file>
+	<file alias="edit.png">res/edit.png</file>
+	<file alias="next.png">res/next.png</file>
+	<file alias="previous.png">res/previous.png</file>
+</qresource>
+</RCC>

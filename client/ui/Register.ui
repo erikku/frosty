@@ -1,0 +1,178 @@
+<ui version="4.0" >
+ <author>John Eric Martin &lt;john.eric.martin@gmail.com></author>
+ <class>Register</class>
+ <widget class="QWidget" name="Register" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>350</width>
+    <height>230</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
+   </property>
+   <item>
+    <layout class="QGridLayout" >
+     <property name="verticalSpacing" >
+      <number>0</number>
+     </property>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="emailLabel" >
+       <property name="text" >
+        <string>Email:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLineEdit" name="emailEdit" />
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="nameLabel" >
+       <property name="text" >
+        <string>Player Name:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QLineEdit" name="nameEdit" />
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="passwordLabel" >
+       <property name="text" >
+        <string>Password:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QLineEdit" name="passwordEdit" >
+       <property name="echoMode" >
+        <enum>QLineEdit::Password</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="passwordLabel2" >
+       <property name="text" >
+        <string>Verify Password:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QLineEdit" name="passwordEdit2" >
+       <property name="echoMode" >
+        <enum>QLineEdit::Password</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" >
+      <widget class="QLabel" name="validationImageLabel" >
+       <property name="text" >
+        <string>Validation Image:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1" >
+      <widget class="QLabel" name="validationImage" />
+     </item>
+     <item row="5" column="0" >
+      <widget class="QLabel" name="validationLabel" >
+       <property name="text" >
+        <string>Validation Code:</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" >
+      <widget class="QLineEdit" name="validationEdit" />
+     </item>
+     <item row="6" column="0" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="registerButton" >
+       <property name="text" >
+        <string>&amp;Register</string>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="guestButton" >
+       <property name="text" >
+        <string>&amp;Guest</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="existingButton" >
+       <property name="text" >
+        <string>E&amp;xisting Account</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <includes/>
+ <resources/>
+ <connections/>
+</ui>

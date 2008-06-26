@@ -1,0 +1,58 @@
+/******************************************************************************\
+*  client/src/json.h                                                           *
+*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*                                                                              *
+*  This program is free software; you can redistribute it and/or modify        *
+*  it under the terms of the GNU General Public License version 2 as           *
+*  published by the Free Software Foundation.                                  *
+*                                                                              *
+*  This program is distributed in the hope that it will be useful,             *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of              *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
+*  GNU General Public License for more details.                                *
+*                                                                              *
+*  You should have received a copy of the GNU General Public License           *
+*  along with this program; if not, write to the                               *
+*  Free Software Foundation, Inc.,                                             *
+*  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
+\******************************************************************************/
+
+#ifndef __json_h__
+#define __json_h__
+
+#include <QtCore/QString>
+#include <QtCore/QVariant>
+
+class QTreeWidgetItem;
+
+class json
+{
+public:
+	static QVariant parse(const QString& str);
+	static QString toJSON(const QVariant& obj);
+	static QList<QTreeWidgetItem*> toTree(const QVariant& obj);
+
+protected:
+	static QString mapToJSON(const QVariant& obj);
+	static QString listToJSON(const QVariant& obj);
+	static QString stringToJSON(const QVariant& obj);
+
+	static QList<QTreeWidgetItem*> mapToTree(const QVariant& obj);
+	static QList<QTreeWidgetItem*> listToTree(const QVariant& obj);
+
+	json(const QString& string);
+
+	int pos;
+	QString str;
+
+	QVariant parse_any();
+
+	QVariant parse_object();
+	QVariant parse_array();
+	QVariant parse_string();
+	QVariant parse_null();
+	QVariant parse_true();
+	QVariant parse_false();
+};
+
+#endif // __json_h__

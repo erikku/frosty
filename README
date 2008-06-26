@@ -1,0 +1,26 @@
+============
+Requirements
+============
+
+Client Side
+===========
+* A browser with CSS and Javascript support
+
+Some known working browsers:
+* Firefox 2/3
+* Konqueror
+
+Server Side
+===========
+* PHP 5.2.x
+	* PDO (w/ the MySQL driver)
+	* Multi-byte (for example mb_strtolower)
+	* Regular Expressions
+	* MySQLi (until the code is ported to PDO)
+	* JSON encoding/decoding
+	* PEAR base system
+* MySQL Server 5
+	* Default encoding/colation of utf8
+* Apache 2
+* graphviz >= 2.16
+* imagemagick
