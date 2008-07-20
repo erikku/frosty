@@ -1,0 +1,143 @@
+/******************************************************************************\
+*  website/theme/default/style.css                                             *
+*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*                                                                              *
+*  This program is free software; you can redistribute it and/or modify        *
+*  it under the terms of the GNU General Public License version 2 as           *
+*  published by the Free Software Foundation.                                  *
+*                                                                              *
+*  This program is distributed in the hope that it will be useful,             *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of              *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
+*  GNU General Public License for more details.                                *
+*                                                                              *
+*  You should have received a copy of the GNU General Public License           *
+*  along with this program; if not, write to the                               *
+*  Free Software Foundation, Inc.,                                             *
+*  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
+\******************************************************************************/
+
+@charset "utf-8";
+
+body {
+	font-family: lr oSVbN, Osaka, qMmpS Pro W3;
+	font-size: 12px;
+	background-color: black;
+	background-image: url('bg.png');
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+
+body, p, a:link, a:visited, a:active {
+	color: #5f9939;
+}
+
+hr {
+	border-color: #5f9939;
+	border-width: 1px 0px 0px 0px;
+}
+
+.bar {
+	top: 0px;
+	width: 50%;
+	position: absolute;
+}
+
+.bar#left {
+	left: 0px;
+	text-align: left;
+}
+
+.bar#right {
+	left: 50%;
+	text-align: right;
+}
+
+.main {
+	top: 16px;
+	left: 0px;
+	width: 100%;
+	position: absolute;
+}
+
+.bar span {
+	font-weight: bold;
+}
+
+.login {
+	width: 300px;
+}
+
+table, table thead td {
+	border-width: 1px;
+	border-spacing: 0px;
+	border-style: solid;
+	border-color: #5f9939;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+table thead tr {
+	font-weight: bold;
+	background-color: #333333;
+}
+
+.jlink {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+td, th {
+	padding: 5px 5px 5px 5px;
+}
+
+th {
+	text-align: right;
+}
+
+input
+{
+	color: #5f9939;
+	background: black;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #5f9939;
+}
+
+.submit
+{
+	border: 2px outset #5f9939;
+}
+
+img {
+	border: none;
+}
+
+a:link, a:visited, a:hover, a:active {
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #8dd53b;
+}
+
+a.add img
+{
+	position: relative;
+	top: 2px;
+
+	width: 16px;
+	height: 16px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #5f9939;
+	vertical-align: text-bottom;
+	background: url('add.png') 0px 0px no-repeat;
+}
+
+a.add img:hover
+{
+	background: url('add_hover.png') 0px 0px no-repeat;
+}

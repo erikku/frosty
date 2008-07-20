@@ -1,0 +1,59 @@
+<?php
+
+/******************************************************************************\
+*  website/lib/config.inc.example                                              *
+*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*                                                                              *
+*  This program is free software; you can redistribute it and/or modify        *
+*  it under the terms of the GNU General Public License version 2 as           *
+*  published by the Free Software Foundation.                                  *
+*                                                                              *
+*  This program is distributed in the hope that it will be useful,             *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of              *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
+*  GNU General Public License for more details.                                *
+*                                                                              *
+*  You should have received a copy of the GNU General Public License           *
+*  along with this program; if not, write to the                               *
+*  Free Software Foundation, Inc.,                                             *
+*  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
+\******************************************************************************/
+
+//
+// Global Settings
+//
+// Bellow are the global site settings. You may modify these to your needs.
+//
+
+// Language Settings
+$MEGA_GLOBALS['DEFAULT_LANG']     = "en";
+$MEGA_GLOBALS['DEFAULT_THEME']    = "default";
+$MEGA_GLOBALS['AVALIABLE_LANGS']  = "en,ja";
+$MEGA_GLOBALS['AVALIABLE_THEMES'] = "default";
+
+// Site Specific Settings
+$MEGA_GLOBALS['SITE_NAME']['en'] = "MegatenDB";
+$MEGA_GLOBALS['SITE_NAME']['ja'] = "MegatenDB";
+
+// Hash salts
+$MEGA_GLOBALS['IMG_SALT']  = "salt_here";
+$MEGA_GLOBALS['PASS_SALT'] = "another_salt_here";
+
+$DEFAULT_PERMS = array(
+	'admin'     => false,
+	'view_db'   => true,
+	'modify_db' => true,
+	'admin_db'  => false
+);
+
+//
+// Database Settings
+//
+// Bellow are the settings for the MySQL database.
+//
+$DB['host'] = '127.0.0.1';
+$DB['user'] = 'megaten';
+$DB['pass'] = 'hackme';
+$DB['db']   = 'megaten';
+
+?>
