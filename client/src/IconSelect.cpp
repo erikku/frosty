@@ -38,7 +38,7 @@ void IconSelect::selectIcon(const QString& path)
 {
 	ui.iconList->clear();
 
-	mIconPath = QString("icons/%1").arg(path);
+	mIconPath = path;
 
 	QDir dir(mIconPath);
 	if( !dir.exists() )

@@ -35,11 +35,15 @@ RelationList::RelationList(QWidget *parent) : QWidget(parent)
 	ajax::getSingletonPtr()->subscribe(this);
 
 	connect(mEdit, SIGNAL(relationsUpdated()), this, SLOT(refresh()));
+	connect(mEdit, SIGNAL(relationsUpdated()), this, SIGNAL(relationsUpdated()));
 	connect(ui.closeButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 	connect(ui.addButton, SIGNAL(clicked(bool)), this, SLOT(addRelation()));
 	connect(ui.editButton, SIGNAL(clicked(bool)), this, SLOT(editRelation()));
 	connect(ui.deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteRelation()));
+	connect(ui.relationList, SIGNAL(itemSelectionChanged()),
+		this, SLOT(itemSelectionChanged()));
 
+	itemSelectionChanged();
 	if( !settings->canDelete() )
 	{
 		ui.deleteButton->setVisible(false);
@@ -53,6 +57,11 @@ RelationList::~RelationList()
 	delete mEdit;
 };
 
+void RelationList::itemSelectionChanged()
+{
+	ui.editButton->setEnabled( !ui.relationList->selectedItems().isEmpty() );
+};
+
 void RelationList::addRelation()
 {
 	mEdit->showEdit(tr("Add %1").arg( windowTitle() ), mTable, -1);
@@ -60,7 +69,7 @@ void RelationList::addRelation()
 
 void RelationList::editRelation()
 {
-	if( !ui.relationList->selectedItems().count() )
+	if( !ui.relationList->selectedItems().isEmpty() )
 		return;
 
 	QListWidgetItem *item = ui.relationList->selectedItems().first();
@@ -101,7 +110,7 @@ void RelationList::deleteRelation()
 
 	QVariantMap action;
 	action["action"] = QString("delete");
-	action["table"] = QString("db_skills");
+	action["table"] = mTable;
 	action["where"] = QVariantList() << where;
 	action["user_data"] = QString("relation_delete");
 
@@ -126,10 +135,10 @@ void RelationList::refresh()
 
 	QVariantMap action;
 	action["action"] = QString("select");
-	action["table"] = QString("db_%1").arg(mTable);
+	action["table"] = mTable;
 	action["columns"] = columns;
 	action["order_by"] = QVariantList() << orderby_name << orderby_id;
-	action["user_data"] = QString("%1_cache").arg(mTable);
+	action["user_data"] = QString("%1_relation_list").arg(mTable);
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
 };
@@ -147,7 +156,8 @@ void RelationList::ajaxResponse(const QVariant& resp)
 {
 	QVariantMap result = resp.toMap();
 
-	if(result.value("user_data").toString() == QString("%1_cache").arg(mTable))
+	if( result.value("user_data").toString() ==
+		QString("%1_relation_list").arg(mTable) )
 	{
 		QVariantList rows = result.value("rows").toList();
 		for(int i = 0; i < rows.count(); i++)

@@ -20,71 +20,27 @@
 #ifndef __SkillView_h__
 #define __SkillView_h__
 
+#include "AjaxView.h"
 #include "ui_SkillView.h"
 
 #include <QtCore/QVariant>
 #include <QtCore/QMap>
 
-class IconSelect;
-class RelationList;
-
-class SkillView : public QWidget
+class SkillView : public AjaxView
 {
 	Q_OBJECT
 
 public:
 	SkillView(QWidget *parent = 0);
 
-	void setPreserveEdit(bool preserve);
-	bool isEditing() const;
-
-public slots:
-	void edit();
-	void clear();
-	void cancel();
-	void refresh();
-	void addSkill();
-	void updateSkill();
-	void updateCombo();
-	void showIconSelect();
-	void view(int id, bool switchView = true);
-
-	void editType();
-	void editCategory();
-	void editAffinity();
-	void editExpert();
-
-private slots:
-	void costEditChanged();
-	void costEditUpdate();
-
-signals:
-	void skillChanged();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
-	void updateIcon(const QString& path, const QString& value);
-
 protected:
-	void darkenWidget(QWidget *widget);
+	virtual bool checkValues();
+	virtual QString table() const;
+
+	virtual QString addWarningTitle() const;
+	virtual QString addWarningMessage() const;
 
 	Ui::SkillView ui;
-
-	int mID;
-	int mCostHP, mCostMP, mCostMAG;
-
-	IconSelect *mIconSelect;
-	RelationList *mRelationList;
-
-	bool mPreserveEdit;
-	bool mExpertGood, mAffinityGood, mCategoryGood, mActionTypeGood;
-	int mLastExpertID, mLastActionTypeID, mLastCategoryID, mLastAffinityID;
-
-	QVariantMap mSleepingResponse;
-	QMap<int, QVariantMap> mExpertCache;
-	QMap<int, QVariantMap> mAffinityCache;
-	QMap<int, QVariantMap> mCategoryCache;
-	QMap<int, QVariantMap> mActionTypeCache;
 };
 
 #endif // __SkillView_h__

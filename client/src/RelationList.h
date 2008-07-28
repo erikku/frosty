@@ -40,7 +40,11 @@ public slots:
 	void editRelation();
 	void deleteRelation();
 
+signals:
+	void relationsUpdated();
+
 protected slots:
+	void itemSelectionChanged();
 	void ajaxResponse(const QVariant& resp);
 
 protected:

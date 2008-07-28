@@ -30,7 +30,7 @@ RESOURCES    = \#megatendb.rc \
 TRANSLATIONS = trans/megatendb_en.ts \
                trans/megatendb_ja.ts
 FORMS       += ui/PaletteEditor.ui \
-               ui/SkillList.ui \
+               ui/AjaxList.ui \
                ui/SkillView.ui \
                ui/IconSelect.ui \
                ui/RelationEdit.ui \
@@ -44,7 +44,9 @@ FORMS       += ui/PaletteEditor.ui \
 HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/PaletteEditor.h \
+               src/AjaxList.h \
                src/SkillList.h \
+               src/AjaxView.h \
                src/SkillView.h \
                src/SkillWindow.h \
                src/SearchEdit.h \
@@ -67,7 +69,9 @@ SOURCES     += src/main.cpp \
                src/ajaxTransfer.cpp \
                src/json.cpp \
                src/PaletteEditor.cpp \
+               src/AjaxList.cpp \
                src/SkillList.cpp \
+               src/AjaxView.cpp \
                src/SkillView.cpp \
                src/IconEdit.cpp \
                src/IconSelect.cpp \

@@ -73,7 +73,7 @@ void RelationEdit::submitRelation()
 	else
 		action["action"] = QString("update");
 
-	action["table"] = QString("db_%1").arg(mTable);
+	action["table"] = mTable;
 	action["columns"] = columns;
 	action["user_data"] = QString("relation_updated");
 	action["rows"] = QVariantList() << row;
@@ -111,7 +111,7 @@ void RelationEdit::showEdit(const QString& windowTitle, const QString& table, in
 
 	QVariantMap action;
 	action["action"] = QString("select");
-	action["table"] = QString("db_%1").arg(mTable);
+	action["table"] = mTable;
 	action["columns"] = columns;
 	action["user_data"] = QString("%1_entry").arg(mTable);
 	action["where"] = QVariantList() << where;

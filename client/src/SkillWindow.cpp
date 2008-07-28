@@ -54,9 +54,9 @@ SkillWindow::SkillWindow(QWidget *parent) : QWidget(parent), mUserList(0)
 	QVBoxLayout *mainLayout = new QVBoxLayout;
 	mainLayout->addWidget(mainSplitter);
 
-	connect(mSkillList, SIGNAL(skillClicked(int)), mSkillView, SLOT(view(int)));
-	connect(mSkillView, SIGNAL(skillChanged()), mSkillList, SLOT(refresh()));
-	connect(mSkillList, SIGNAL(addSkillRequested()), mSkillView, SLOT(addSkill()));
+	connect(mSkillList, SIGNAL(itemClicked(int)), mSkillView, SLOT(view(int)));
+	connect(mSkillView, SIGNAL(viewChanged()), mSkillList, SLOT(refresh()));
+	connect(mSkillList, SIGNAL(addItemRequested()), mSkillView, SLOT(add()));
 	connect(mOptions, SIGNAL(optionsChanged()), this, SLOT(refresh()));
 
 	setLayout(mainLayout);

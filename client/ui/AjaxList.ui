@@ -1,7 +1,7 @@
 <ui version="4.0" >
  <author>John Eric Martin &lt;john.eric.martin@gmail.com></author>
- <class>SkillList</class>
- <widget class="QWidget" name="SkillList" >
+ <class>AjaxList</class>
+ <widget class="QWidget" name="AjaxList" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -42,7 +42,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QListWidget" name="skillsList" >
+    <widget class="QListWidget" name="ajaxList" >
      <property name="iconSize" >
       <size>
        <width>16</width>
@@ -101,7 +101,6 @@
    <header>SearchEdit.h</header>
   </customwidget>
  </customwidgets>
- <includes/>
  <resources/>
  <connections/>
 </ui>

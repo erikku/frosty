@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/SkillList.h                                                      *
+*  client/src/AjaxList.h                                                       *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,41 +17,67 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __SkillList_h__
-#define __SkillList_h__
+#ifndef __AjaxList_h__
+#define __AjaxList_h__
 
-#include "AjaxList.h"
+#include "ui_AjaxList.h"
 
 #include <QtCore/QMap>
 #include <QtCore/QVariant>
 
-class SkillView;
+class AjaxView;
 class QListWidgetItem;
 
-class SkillList : public AjaxList
+class AjaxList : public QWidget
 {
 	Q_OBJECT
 
 public:
-	SkillList(SkillView *view = 0, QWidget *parent = 0);
+	AjaxList(AjaxView *view = 0, QWidget *parent = 0);
+
+public slots:
+	void refresh();
+	void updateFilter();
+	void updateSearch();
+	void deleteAjax();
+
+protected slots:
+	void ajaxResponse(const QVariant& resp);
+	void handleItemSelected();
+
+signals:
+	void addItemRequested();
+	void itemClicked(int id);
 
 protected:
-	virtual QVariant filterAction() const;
-	virtual QVariant filterUserData() const;
+	virtual QVariant filterAction() const = 0;
+	virtual QVariant filterUserData() const = 0;
 
-	virtual QVariant listAction() const;
-	virtual QVariant listUserData() const;
+	virtual QVariant listAction() const = 0;
+	virtual QVariant listUserData() const = 0;
 
-	virtual QString switchTitle() const;
-	virtual QString switchMessage() const;
+	virtual QString switchTitle() const = 0;
+	virtual QString switchMessage() const = 0;
 
-	virtual QString deleteTitle() const;
-	virtual QString deleteMessage() const;
-	virtual QVariant deleteAction(int id) const;
-	virtual QVariant deleteUserData() const;
+	virtual QString deleteTitle() const = 0;
+	virtual QString deleteMessage() const = 0;
+	virtual QVariant deleteAction(int id) const = 0;
+	virtual QVariant deleteUserData() const = 0;
 
-	virtual int filterID(const QVariantMap& map) const;
-	virtual QString itemIcon(const QVariantMap& map) const;
+	virtual int itemID(const QVariantMap& map) const;
+	virtual int filterID(const QVariantMap& map) const = 0;
+	virtual QString itemText(const QVariantMap& map) const;
+	virtual QString itemIcon(const QVariantMap& map) const = 0;
+	virtual bool itemMatches(const QVariantMap& map, const QString& search);
+
+	Ui::AjaxList ui;
+
+	int mFilterID;
+	int mCurrentID;
+
+	AjaxView *mAjaxView;
+	QVariantList mItems;
+	QListWidgetItem *mLastItem;
 };
 
-#endif // __SkillList_h__
+#endif // __AjaxList_h__
