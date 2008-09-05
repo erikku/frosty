@@ -669,6 +669,7 @@ function action_insert($i, $action)
 	if(!$stmt)
 		return herror_sql("insert action", "MySQL error for row action $i");
 
+	$ids = array();
 	for($j = 0; $j < $row_count; $j++)
 	{
 		if( !$stmt->execute($rows[$j]) )
@@ -678,10 +679,13 @@ function action_insert($i, $action)
 				"$j in action $i: " . $err[2]);
 		}
 
+		$ids[] = $db->lastInsertId();
 		$stmt->closeCursor();
 	}
 
 	$db->commit();
+
+	return array('ids' => $ids);
 }
 
 function action_update($i, $action)
@@ -897,6 +901,10 @@ function action_update($i, $action)
 
 	if( array_key_exists('where', $action) )
 	{
+		if( !is_array($action['where']) )
+			return herror("update action", "paramater 'where' for action $i " .
+				"exists but is not an object");
+
 		if( !count($action['where']) )
 			return herror("update action", "paramater 'where' for action $i " .
 				"exists but contains no where expressions");
@@ -1155,6 +1163,11 @@ function action_select($i, $action)
 
 	if( array_key_exists('where', $action) )
 	{
+		// TODO: More type-checking like this
+		if( !is_array($action['where']) )
+			return herror("select action", "paramater 'where' for action $i " .
+				"exists but is not an object");
+
 		if( !count($action['where']) )
 			return herror("select action", "paramater 'where' for action $i " .
 				"exists but contains no where expressions");

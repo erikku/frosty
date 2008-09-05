@@ -1,0 +1,13 @@
+Makefile
+Makefile.Release
+Makefile.Debug
+icons
+release
+debug
+.moc
+.objs
+.rcc
+.ui
+megatendb
+megatendb.exe
+megatendb_*.qm
