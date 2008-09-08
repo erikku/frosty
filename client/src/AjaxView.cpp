@@ -210,6 +210,8 @@ void AjaxView::clear()
 				// Save the defaults
 				map["data"] = data;
 				mBinds[field] = map;
+
+				break;
 			}
 			default:
 			{
