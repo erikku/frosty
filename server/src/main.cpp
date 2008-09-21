@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/main.cpp                                                         *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,13 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#include "Server.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
-#include <QtGui/QWidget>
-
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
-
-class LogWidget : public QWidget
+int main(int argc, char *argv[])
 {
-	Q_OBJECT
+	Server app(argc, argv);
 
-public:
-	LogWidget(QWidget *parent = 0);
+	app.init();
 
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
-
-protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
-
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
+	return app.exec();
 };
-
-#endif // ___h__

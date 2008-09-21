@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/Backend.h                                                        *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,33 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __Backend_h__
+#define __Backend_h__
 
-#include <QtCore/QMap>
+#include <QtSql/QSqlDatabase>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 #include <QtCore/QVariant>
-#include <QtGui/QWidget>
+#include <QtCore/QList>
+#include <QtCore/QMap>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
+class QTcpSocket;
 
-class LogWidget : public QWidget
+typedef QVariantMap (*BackendActionHandler)(int, QTcpSocket*,
+	const QSqlDatabase&, const QVariantMap&, const QString&);
+
+class Backend : public QObject
 {
-	Q_OBJECT
-
 public:
-	LogWidget(QWidget *parent = 0);
+	Backend();
 
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
+	QVariantList parseRequest(QTcpSocket *connection,
+		const QSqlDatabase& db, const QMap<QString, QString>& post) const;
 
 protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
+	QVariant herror(const QString& type, const QString& err) const;
 
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
+	QMap<QString, BackendActionHandler> mActionHandlers;
 };
 
-#endif // ___h__
+#endif // __Backend_h__

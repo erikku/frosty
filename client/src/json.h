@@ -23,22 +23,29 @@
 #include <QtCore/QString>
 #include <QtCore/QVariant>
 
+#ifdef QT_GUI_LIB
 class QTreeWidgetItem;
+#endif
 
 class json
 {
 public:
 	static QVariant parse(const QString& str);
 	static QString toJSON(const QVariant& obj);
+
+#ifdef QT_GUI_LIB
 	static QList<QTreeWidgetItem*> toTree(const QVariant& obj);
+#endif
 
 protected:
 	static QString mapToJSON(const QVariant& obj);
 	static QString listToJSON(const QVariant& obj);
 	static QString stringToJSON(const QVariant& obj);
 
+#ifdef QT_GUI_LIB
 	static QList<QTreeWidgetItem*> mapToTree(const QVariant& obj);
 	static QList<QTreeWidgetItem*> listToTree(const QVariant& obj);
+#endif
 
 	json(const QString& string);
 
@@ -53,6 +60,7 @@ protected:
 	QVariant parse_null();
 	QVariant parse_true();
 	QVariant parse_false();
+	QVariant parse_number();
 };
 
 #endif // __json_h__

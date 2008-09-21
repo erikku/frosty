@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  server/src/DomUtils.h                                                       *
+*  Copyright (C) 2006-2008 John Eric Martin <john.eric.martin@gmail.com>       *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,38 +17,20 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __DomUtils_h__
+#define __DomUtils_h__
 
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
-#include <QtGui/QWidget>
+#include <QtCore/QList>
+#include <QtCore/QStringList>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
+#include <QtXml/QDomNode>
+#include <QtXml/QDomDocument>
 
-class LogWidget : public QWidget
-{
-	Q_OBJECT
+QDomNode childElementByName(const QDomNode& node, const QString& name);
+QList<QDomNode> childElementsByName(const QDomNode& node, const QString& name);
 
-public:
-	LogWidget(QWidget *parent = 0);
+QString nodeToXPath(const QDomNode& node);
+QList<QDomNode> elementsByXPath(const QDomDocument& doc, const QString& xpath);
+QList<QDomNode> elementsByXPathNode(const QDomNode& node, const QString& xpath);
 
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
-
-protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
-
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
-};
-
-#endif // ___h__
+#endif // __DomUtils_h__

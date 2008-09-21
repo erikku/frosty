@@ -33,7 +33,11 @@ Register::Register(QWidget *parent) : QWidget(parent), mFirst(true)
 	ui.setupUi(this);
 
 	QUrl url = settings->url();
-	url.setPath(QFileInfo( url.path() ).dir().path() + "/register.php");
+	QString backend_path = QFileInfo( url.path() ).dir().path();
+	if(backend_path == "/")
+		url.setPath("/register.php");
+	else
+		url.setPath(backend_path + "/register.php");
 
 	mRegistration = new registration;
 	mRegistration->loadValidationImage(url);
@@ -185,7 +189,11 @@ void Register::sendRequest()
 	}
 
 	QUrl url = settings->url();
-	url.setPath(QFileInfo( url.path() ).dir().path() + "/register.php");
+	QString backend_path = QFileInfo( url.path() ).dir().path();
+	if(backend_path == "/")
+		url.setPath("/register.php");
+	else
+		url.setPath(backend_path + "/register.php");
 
 	mRegistration->registerUser(url,
 		ui.emailEdit->text(), ui.nameEdit->text(), pass,

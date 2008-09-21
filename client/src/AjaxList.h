@@ -75,6 +75,8 @@ protected:
 	int mFilterID;
 	int mCurrentID;
 
+	int mDataLoaded;
+
 	AjaxView *mAjaxView;
 	QVariantList mItems;
 	QListWidgetItem *mLastItem;

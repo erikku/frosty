@@ -26,7 +26,7 @@
 #include <QtGui/QMessageBox>
 
 AjaxList::AjaxList(AjaxView *view, QWidget *parent) : QWidget(parent), mFilterID(-1),
-	mCurrentID(-1), mAjaxView(view), mLastItem(0)
+	mCurrentID(-1), mDataLoaded(-1), mAjaxView(view), mLastItem(0)
 {
 	ui.setupUi(this);
 
@@ -177,6 +177,7 @@ void AjaxList::refresh()
 	}
 
 	mItems.clear();
+	mDataLoaded = -1;
 	ui.filterCombo->clear();
 	ui.filterCombo->addItem( tr("All") );
 
@@ -243,6 +244,7 @@ void AjaxList::ajaxResponse(const QVariant& resp)
 	if(result.value("user_data").toString() == listUserData())
 	{
 		mItems = rows;
+		mDataLoaded++;
 	}
 	else if(result.value("user_data").toString() == deleteUserData())
 	{
@@ -282,6 +284,8 @@ void AjaxList::ajaxResponse(const QVariant& resp)
 			combo->setCurrentIndex(0);
 
 		combo->blockSignals(blocked);
+
+		mDataLoaded++;
 	}
 	else if(result.value("user_data").toString() == "auth_query_perms")
 	{
@@ -289,7 +293,7 @@ void AjaxList::ajaxResponse(const QVariant& resp)
 			ui.addButton->setVisible(true);
 	}
 
-	if( ui.filterCombo->count() > 1 && mItems.count() )
+	if(mDataLoaded)
 	{
 		updateFilter();
 		updateSearch();

@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/AuthActions.h                                                    *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,27 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __AuthActions_h__
+#define __AuthActions_h__
 
 #include <QtCore/QMap>
+#include <QtCore/QList>
 #include <QtCore/QVariant>
-#include <QtGui/QWidget>
+#include <QtSql/QSqlDatabase>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
+class QTcpSocket;
 
-class LogWidget : public QWidget
-{
-	Q_OBJECT
+QVariantMap authActionQueryPerms(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap authActionQueryUsers(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap authActionQueryUser(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap authActionMakeInactive(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap authActionMakeActive(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap authActionModifyUser(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 
-public:
-	LogWidget(QWidget *parent = 0);
-
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
-
-protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
-
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
-};
-
-#endif // ___h__
+#endif // __AuthActions_h__

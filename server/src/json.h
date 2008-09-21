@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/json.h                                                           *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,50 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __json_h__
+#define __json_h__
 
-#include <QtCore/QMap>
+#include <QtCore/QString>
 #include <QtCore/QVariant>
-#include <QtGui/QWidget>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
+#ifdef QT_GUI_LIB
+class QTreeWidgetItem;
+#endif
 
-class LogWidget : public QWidget
+class json
 {
-	Q_OBJECT
-
 public:
-	LogWidget(QWidget *parent = 0);
+	static QVariant parse(const QString& str);
+	static QString toJSON(const QVariant& obj);
 
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
+#ifdef QT_GUI_LIB
+	static QList<QTreeWidgetItem*> toTree(const QVariant& obj);
+#endif
 
 protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
+	static QString mapToJSON(const QVariant& obj);
+	static QString listToJSON(const QVariant& obj);
+	static QString stringToJSON(const QVariant& obj);
 
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
+#ifdef QT_GUI_LIB
+	static QList<QTreeWidgetItem*> mapToTree(const QVariant& obj);
+	static QList<QTreeWidgetItem*> listToTree(const QVariant& obj);
+#endif
+
+	json(const QString& string);
+
+	int pos;
+	QString str;
+
+	QVariant parse_any();
+
+	QVariant parse_object();
+	QVariant parse_array();
+	QVariant parse_string();
+	QVariant parse_null();
+	QVariant parse_true();
+	QVariant parse_false();
+	QVariant parse_number();
 };
 
-#endif // ___h__
+#endif // __json_h__

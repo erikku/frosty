@@ -81,7 +81,11 @@ void Login::login()
 	}
 
 	QUrl url = settings->url();
-	url.setPath(QFileInfo( url.path() ).dir().path() + "/register.php");
+	QString backend_path = QFileInfo( url.path() ).dir().path();
+	if(backend_path == "/")
+		url.setPath("/register.php");
+	else
+		url.setPath(backend_path + "/register.php");
 
 	mRegistration = new registration;
 	mRegistration->loadValidationImage(url);

@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/Auth.h                                                           *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __Auth_h__
+#define __Auth_h__
 
 #include <QtCore/QMap>
+#include <QtCore/QString>
 #include <QtCore/QVariant>
-#include <QtGui/QWidget>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
+void auth_start();
+bool auth_authenticate(const QString& email, const QString& data,
+	const QString& hash);
+bool auth_validate_request(const QString& email, const QVariant& action);
 
-class LogWidget : public QWidget
-{
-	Q_OBJECT
+QVariant auth_query_perms(const QString& email);
+QVariant auth_query_users(const QString& email);
+QVariant auth_query_user(const QString& email, const QString& target_email);
 
-public:
-	LogWidget(QWidget *parent = 0);
+QString auth_register(const QString& email, const QString& name,
+	const QString& pass);
 
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
+bool auth_make_inactive(const QString& email, const QString& target_email);
+bool auth_make_active(const QString& email, const QString& target_email);
 
-protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
+bool auth_modify_user(const QString& email, const QString& target_email,
+	const QString& new_email, const QString& name, const QString& pass,
+	const QVariantMap& perms);
 
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
-};
-
-#endif // ___h__
+#endif // __Auth_h__

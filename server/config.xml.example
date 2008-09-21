@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<megatendb>
+	<connection>
+		<!-- Valid values are 'any', 'localhost', or any IP address -->
+		<address>any</address>
+		<port>8080</port>
+	</connection>
+	<database>
+		<!-- Database types are 'mysql' and 'sqlite' -->
+		<!--
+		<type>mysql</type>
+		<host>localhost</host>
+		<db>megaten</db>
+		<user>megaten</user>
+		<pass>hackme</pass>
+		-->
+		<type>sqlite</type>
+		<path>master.db</path>
+	</database>
+	<log>
+		<levels>
+			<debug>true</debug>
+			<info>true</info>
+			<warning>true</warning>
+			<error>true</error>
+			<critical>true</critical>
+		</levels>
+		<!-- 'plain' or 'html' -->
+		<type>plain</type>
+		<path>server.log</path>
+		<!-- in bytes -->
+		<size>16384</size><!-- 16kb -->
+		<!-- how many logs to keep -->
+		<rotate>3</rotate>
+	</log>
+	<!--
+		A unique server signature to pass along with every response.
+		You can include ${version} in the string to insert the version of the server.
+	-->
+	<signature>MegatenDB Official Server v${version}</signature>
+	<!-- The following salts should be changed for each server -->
+	<salts>
+		<img>change_me</img>
+		<pass>change_me_too</pass>
+	</salts>
+	<captcha>
+		<letters>あ,い,う,え,お,か,き,く,け,こ,さ,し,す,せ,そ,た,ち,つ,て,と,な,に,ぬ,ね,の,は,ひ,ふ,へ,ほ,ま,み,む,め,も,や,ゆ,よ,ら,り,る,れ,ろ,わ,を,ん,が,ぎ,ぐ,げ,ご,ざ,じ,ず,ぜ,ぞ,だ,で,ど,ば,び,ぶ,べ,ぼ,ぱ,ぴ,ぷ,ぺ,ぽ,ア,イ,ウ,エ,オ,カ,キ,ク,ケ,コ,サ,シ,ス,セ,ソ,タ,チ,ツ,テ,ト,ナ,ニ,ヌ,ネ,ノ,ハ,ヒ,フ,ヘ,ホ,マ,ミ,ム,メ,モ,ヤ,ユ,ヨ,ラ,リ,ル,レ,ロ,ワ,ヲ,ン,ガ,ギ,グ,ゲ,ゴ,ザ,ジ,ズ,ゼ,ゾ,ダ,デ,ド,バ,ビ,ブ,ベ,ボ,パ,ピ,プ,ペ,ポ</letters>
+		<font>font.ttf</font>
+	</captcha>
+	<auth>
+		<!--
+			This will override the permissions of the given user to give them admin rights.
+			This user must still exist in the database, so don't forget to register it.
+		-->
+		<admin>you@some-site.com</admin>
+		<!-- Default permissions for the user -->
+		<defaults>
+			<admin>false</admin>
+			<view_db>true</view_db>
+			<modify_db>false</modify_db>
+			<admin_db>false</admin_db>
+		</defaults>
+		<database>
+			<!-- Database types are 'mysql' and 'sqlite' -->
+			<!--
+			<type>mysql</type>
+			<host>localhost</host>
+			<db>megaten</db>
+			<user>megaten</user>
+			<pass>hackme</pass>
+			-->
+			<type>sqlite</type>
+			<path>master.db</path>
+		</database>
+	</auth>
+</megatendb>

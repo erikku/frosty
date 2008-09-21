@@ -120,6 +120,8 @@ void AjaxView::clear()
 	QVariantMap row;
 	QVariantList columns;
 
+	mID = -1;
+
 	while( i.hasNext() )
 	{
 		i.next();
@@ -225,10 +227,14 @@ void AjaxView::clear()
 void AjaxView::refresh()
 {
 	setEnabled(false);
-	clear();
 
-	if(mID > 0)
-		view(mID, false);
+	// Calling clear will reset mID to -1
+	// so we need to save the id first
+	int id = mID;
+
+	clear();
+	if(id > 0)
+		view(id, false);
 };
 
 void AjaxView::view(int id, bool switchView)
@@ -843,7 +849,12 @@ QVariantMap AjaxView::createUpdateAction() const
 
 	action["table"] = table();
 	action["columns"] = columns;
-	action["user_data"] = QString("%1_update").arg( table() );
+
+	QVariantList user_data;
+	user_data << QString("%1_update").arg( table() );
+	user_data << mID;
+
+	action["user_data"] = user_data;
 
 	if(mID > 0)
 	{
@@ -1079,20 +1090,35 @@ void AjaxView::processBindValues(const QVariantMap& values)
 
 void AjaxView::ajaxResponse(const QVariant& resp)
 {
-QVariantMap result = resp.toMap();
+	QVariantMap result = resp.toMap();
 
+	int updated_id = -1;
 	QString user_data = result.value("user_data").toString();
+	if( result.value("user_data").canConvert(QVariant::List) )
+	{
+		// Special case to recover the ID
+		// of the item updated after a clear()
+		QVariantList user_data_set = result.value("user_data").toList();
+		if(user_data_set.count() == 2)
+		{
+			user_data = user_data_set.at(0).toString();
+			updated_id = user_data_set.at(1).toInt();
+		}
+
+	}
+
 	QString update_data = QString("%1_update").arg( table() );
 	QString view_data = QString("%1_view").arg( table() );
 
 	if(user_data == view_data)
 	{
-		if( result.value("rows").toList().first().toMap().value("id") == mID )
+		QVariantList rows = result.value("rows").toList();
+		if( rows.count() && rows.first().toMap().value("id") == mID )
 			mSleepingResponse = result;
 	}
 	else if(user_data == update_data)
 	{
-		refresh();
+		view(updated_id);
 
 		emit viewChanged();
 

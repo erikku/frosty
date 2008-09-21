@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/Utils.h                                                          *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,31 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __Utils_h__
+#define __Utils_h__
 
 #include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QString>
 #include <QtCore/QVariant>
-#include <QtGui/QWidget>
+#include <QtCore/QStringList>
+#include <QtSql/QSqlDatabase>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
+QString sha1FromString(const QString& str);
 
-class LogWidget : public QWidget
-{
-	Q_OBJECT
+QVariantMap herror(const QString& type, const QString& err);
+QVariantMap herror_sql(const QSqlDatabase& db, const QString& type,
+	const QString& err);
+QVariantMap param_error(const QString& type, const QString& param,
+	const QString& action);
 
-public:
-	LogWidget(QWidget *parent = 0);
+QStringList tables_blacklist();
+QMap<QString, QString> where_connect_types();
+QMap<QString, QString> where_types();
 
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
+QString full_column_name(const QString& table, const QString& column);
+QStringList cache_columns(const QString& table, const QSqlDatabase& db);
+bool check_column(const QString& col, const QString& table,
+	const QSqlDatabase& db);
 
-protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
-
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
-};
-
-#endif // ___h__
+#endif // __Utils_h__

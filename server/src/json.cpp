@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/json.cpp                                                         *
+*  server/src/json.cpp                                                         *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *

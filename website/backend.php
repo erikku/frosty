@@ -184,6 +184,8 @@ function db_connect()
 
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 	$db->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+
+	$db->query("SET CHARSET utf8");
 }
 
 function cache_tables()

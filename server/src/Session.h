@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/Session.h                                                        *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,53 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __Session_h__
+#define __Session_h__
 
-#include <QtCore/QMap>
+#include <QtCore/QHash>
+#include <QtCore/QPair>
+#include <QtCore/QTimer>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 #include <QtCore/QVariant>
-#include <QtGui/QWidget>
+#include <QtCore/QDateTime>
+#include <QtNetwork/QHostAddress>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
-
-class LogWidget : public QWidget
+class Session : public QObject
 {
 	Q_OBJECT
 
 public:
-	LogWidget(QWidget *parent = 0);
+	static Session* getSingletonPtr();
+
+	// Creates a new session and returns a session key based on the current
+	// time and the peer address.
+	QString create(const QHostAddress& peer);
+
+	// Loads the session data for the given session key (if the
+	// session has expired, a QVariant::Invalid QVariant is returned)
+	QVariant load(const QString& key);
+
+	// Saves the session data for the given session key
+	void save(const QString& key, QVariant& data);
+
+	// Converts the session key to a cookie
+	static QString keyToCookie(const QString& key, const QString& host);
+
+	// Converts the cookie to a session key
+	static QString cookieToKey(const QString& cookie);
 
 public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
+	void clean();
 
 protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
+	Session(QObject *parent = 0);
 
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
+	QTimer *mTimer;
+
+	// Sessions are stored by session key and contain the last time they
+	// were used and the session data stored as a QVariant.
+	QHash< QString, QPair<QDateTime, QVariant> > mSessions;
 };
 
-#endif // ___h__
+#endif // __Session_h__

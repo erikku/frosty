@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/Server.h                                                         *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,55 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __Server_h__
+#define __Server_h__
 
-#include <QtCore/QMap>
+#include <QtCore/QCoreApplication>
 #include <QtCore/QVariant>
-#include <QtGui/QWidget>
+#include <QtCore/QMap>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
+#include <QtNetwork/QHttpResponseHeader>
+#include <QtSql/QSqlDatabase>
 
-class LogWidget : public QWidget
+class QTcpServer;
+class QTcpSocket;
+
+class ConnectionData
+{
+public:
+	QString header;
+	QByteArray content;
+	int contentLength;
+	bool contentRead;
+	bool done;
+};
+
+class Server : public QCoreApplication
 {
 	Q_OBJECT
 
 public:
-	LogWidget(QWidget *parent = 0);
+	Server(int argc, char *argv[]);
 
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
+	void init();
+
+protected slots:
+	void readyRead();
+	void handleNewConnection();
 
 protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
+	void read(QTcpSocket *connection);
+	void error(QTcpSocket *connection);
+	void finalize(QTcpSocket *connection);
+	void respond(QTcpSocket *connection, const QVariant& data);
+	void captcha(QTcpSocket *connection, const QString& session_key,
+		const QString& cookie, const QString& error = QString());
 
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
+	QHttpResponseHeader basicResponseHeader() const;
+
+	QSqlDatabase db;
+	QTcpServer *mConnection;
+	QMap<QTcpSocket*, ConnectionData*> mConnections;
 };
 
-#endif // ___h__
+#endif // __Server_h__

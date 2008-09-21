@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/LogWidget.h                                                      *
+*  server/src/Log.h                                                            *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,38 +17,36 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __LogWidget_h__
-#define __LogWidget_h__
+#ifndef __Log_h__
+#define __Log_h__
 
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
-#include <QtGui/QWidget>
+#include <QtCore/QString>
 
-class LogView;
-class QListWidget;
-class QListWidgetItem;
-class ajaxTransfer;
-class RequestSet;
+class QFile;
 
-class LogWidget : public QWidget
+class Log
 {
-	Q_OBJECT
-
 public:
-	LogWidget(QWidget *parent = 0);
+	static Log* getSingletonPtr();
 
-public slots:
-	void resendRequest();
-	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
+	void loadConfig();
+
+	void critical(const QString& msg);
+	void error(const QString& msg);
+	void warning(const QString& msg);
+	void info(const QString& msg);
+	void debug(const QString& msg);
 
 protected:
-	LogView *mLogView;
-	QListWidget *mLogList;
+	Log();
 
-	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
+	QFile *mLogFile;
 };
 
-#endif // ___h__
+#define LOG_CRITICAL(msg) Log::getSingletonPtr()->critical(msg)
+#define LOG_ERROR(msg)    Log::getSingletonPtr()->error(msg)
+#define LOG_WARNING(msg)  Log::getSingletonPtr()->warning(msg)
+#define LOG_INFO(msg)     Log::getSingletonPtr()->info(msg)
+#define LOG_DEBUG(msg)    Log::getSingletonPtr()->debug(msg)
+
+#endif // __Log_h__

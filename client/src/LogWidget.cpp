@@ -18,14 +18,17 @@
 \******************************************************************************/
 
 #include "LogWidget.h"
+#include "Settings.h"
 #include "LogView.h"
 
 #include "ajaxTransfer.h"
+#include "ajax.h"
 
 #include <QtCore/QDateTime>
 #include <QtGui/QListWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QSplitter>
+#include <QtGui/QAction>
 
 class RequestSet
 {
@@ -53,6 +56,13 @@ LogWidget::LogWidget(QWidget *parent) : QWidget(parent, Qt::Dialog)
 
 	connect(mLogList, SIGNAL(itemSelectionChanged()),
 		this, SLOT(updateCurrentRequest()));
+
+	QAction *action = new QAction(tr("Resend Request"), this);
+
+	mLogList->addAction(action);
+	mLogList->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+	connect(action, SIGNAL(triggered(bool)), this, SLOT(resendRequest()));
 };
 
 void LogWidget::updateCurrentRequest()
@@ -64,6 +74,20 @@ void LogWidget::updateCurrentRequest()
 	mLogView->loadRequest( mRequests.value(item)->request );
 	mLogView->loadResponse( mRequests.value(item)->response );
 	mLogView->loadContent( mRequests.value(item)->content );
+};
+
+void LogWidget::resendRequest()
+{
+	if( !mLogList->selectedItems().count() )
+		return;
+
+	QListWidgetItem *item = mLogList->selectedItems().first();
+
+	QVariantMap request = mRequests.value(item)->request.toMap();
+	QVariantList actions = request.value("actions").toList();
+
+	foreach(QVariant action, actions)
+		ajax::getSingletonPtr()->request(settings->url(), action);
 };
 
 void LogWidget::registerRequest(ajaxTransfer *transfer, const QVariant& request)
