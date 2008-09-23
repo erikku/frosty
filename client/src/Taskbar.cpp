@@ -20,6 +20,7 @@
 #include "Taskbar.h"
 #include "Options.h"
 #include "UserList.h"
+#include "Settings.h"
 #include "LogWidget.h"
 #include "SkillWindow.h"
 #include "ajax.h"
@@ -29,12 +30,12 @@
 #include <QtGui/QMenu>
 
 Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
-	mLogWidget(0), mSkillWindow(0)
+	mLogWidget(0), mSkillWindow(0), mAdminSep(0), mUsersAction(0)
 {
 	ui.setupUi(this);
 
 	// Hide the admin tab unless you have admin rights
-	ui.adminTab->setVisible(false);
+	ui.tabWidget->removeTab(1);
 
 	// Now that the registration is done, let's enable the tray icon
 	// and disable this setting.
@@ -43,23 +44,27 @@ Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
 	QMenu *menu = new QMenu( tr("MegatenDB") );
 	QAction *action;
 
-	// Skill Action
+	// Skills Action
 	action = menu->addAction(/* icon, */tr("&Skills") );
 	connect(action, SIGNAL(triggered()), this, SLOT(showSkillWindow()));
 	connect(ui.skillsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showSkillWindow()));
 
-	action = menu->addSeparator();
+	mAdminSep = menu->addSeparator();
+	mAdminSep->setEnabled(false);
+	mAdminSep->setVisible(false);
 
-	// Log Action
-	action = menu->addAction(/* icon, */tr("&Users") );
-	connect(action, SIGNAL(triggered()), this, SLOT(showUsersWindow()));
+	// Users Action
+	mUsersAction = menu->addAction(/* icon, */tr("&Users") );
+	mUsersAction->setEnabled(false);
+	mUsersAction->setVisible(false);
+	connect(mUsersAction, SIGNAL(triggered()), this, SLOT(showUsersWindow()));
 	connect(ui.usersButton, SIGNAL(clicked(bool)),
 		this, SLOT(showUsersWindow()));
 
 	action = menu->addSeparator();
 
-	// Log Action
+	// Options Action
 	action = menu->addAction(/* icon, */tr("&Options") );
 	connect(action, SIGNAL(triggered()), this, SLOT(showOptionsWindow()));
 	connect(ui.optionsButton, SIGNAL(clicked(bool)),
@@ -85,6 +90,14 @@ Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
 		tr("Shin Megami Tensei IMAGINE DB") ) );
 
 	ajax::getSingletonPtr()->subscribe(this);
+
+	{
+		QVariantMap action;
+		action["action"] = "auth_query_perms";
+		action["user_data"] = "auth_query_perms";
+
+		ajax::getSingletonPtr()->request(settings->url(), action);
+	}
 };
 
 void Taskbar::showLogWindow()
@@ -149,9 +162,14 @@ void Taskbar::ajaxResponse(const QVariant& resp)
 
 	if(result.value("user_data").toString() == "auth_query_perms")
 	{
-		if( result.value("perms").toMap().value("admin").toBool() )
+		if( result.value("perms").toMap().value("admin").toBool()
+			&& !mAdminSep->isVisible() )
 		{
-			ui.adminTab->setVisible(true);
+			ui.tabWidget->insertTab(1, ui.adminTab, tr("&Administration"));
+			mAdminSep->setVisible(true);
+			mAdminSep->setEnabled(true);
+			mUsersAction->setEnabled(true);
+			mUsersAction->setVisible(true);
 		}
 	}
 };

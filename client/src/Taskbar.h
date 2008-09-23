@@ -26,6 +26,7 @@ class Options;
 class UserList;
 class LogWidget;
 class SkillWindow;
+class QAction;
 
 class Taskbar : public QWidget
 {
@@ -50,6 +51,9 @@ protected:
 	UserList *mUserList;
 	LogWidget *mLogWidget;
 	SkillWindow *mSkillWindow;
+
+	QAction *mAdminSep;
+	QAction *mUsersAction;
 };
 
 #endif // __Taskbar_h__
