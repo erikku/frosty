@@ -23,6 +23,8 @@
 #include <QtCore/QCoreApplication>
 #include <QtGui/QMessageBox>
 
+static Options* g_options_inst = 0;
+
 Options::Options(QWidget *parent) : QWidget(parent)
 {
 	ui.setupUi(this);
@@ -40,6 +42,16 @@ Options::Options(QWidget *parent) : QWidget(parent)
 
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
 	connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(close()));
+};
+
+Options* Options::getSingletonPtr()
+{
+	if(!g_options_inst)
+		g_options_inst = new Options;
+
+	Q_ASSERT(g_options_inst != 0);
+
+	return g_options_inst;
 };
 
 void Options::darkenWidget(QWidget *widget)

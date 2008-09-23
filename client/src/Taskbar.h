@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/SkillWindow.cpp                                                  *
+*  client/src/Taskbar.h                                                        *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,42 +17,39 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include "SkillWindow.h"
-#include "SkillList.h"
-#include "SkillView.h"
-#include "UserList.h"
-#include "Options.h"
+#ifndef __Taskbar_h__
+#define __Taskbar_h__
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QSplitter>
+#include "ui_Taskbar.h"
 
-SkillWindow::SkillWindow(QWidget *parent) : QWidget(parent)
+class Options;
+class UserList;
+class LogWidget;
+class SkillWindow;
+
+class Taskbar : public QWidget
 {
-	mSkillView = new SkillView;
-	mSkillList = new SkillList(mSkillView);
+	Q_OBJECT
 
-	QSplitter *mainSplitter = new QSplitter;
-	mainSplitter->addWidget(mSkillList);
-	mainSplitter->addWidget(mSkillView);
+public:
+	Taskbar(QWidget *parent = 0);
 
-	QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->addWidget(mainSplitter);
+public slots:
+	void showLogWindow();
+	void showSkillWindow();
+	void showUsersWindow();
+	void showOptionsWindow();
 
-	connect(mSkillList, SIGNAL(itemClicked(int)), mSkillView, SLOT(view(int)));
-	connect(mSkillView, SIGNAL(viewChanged()), mSkillList, SLOT(refresh()));
-	connect(mSkillList, SIGNAL(addItemRequested()), mSkillView, SLOT(add()));
-	connect(Options::getSingletonPtr(), SIGNAL(optionsChanged()),
-		this, SLOT(refresh()));
+protected slots:
+	void ajaxResponse(const QVariant& resp);
 
-	setLayout(mainLayout);
-	setWindowTitle( tr("%1 - Skill List").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ) );
+protected:
+	Ui::Taskbar ui;
 
-	resize(800, 600);
+	Options *mOptions;
+	UserList *mUserList;
+	LogWidget *mLogWidget;
+	SkillWindow *mSkillWindow;
 };
 
-void SkillWindow::refresh()
-{
-	mSkillList->refresh();
-	mSkillView->refresh();
-};
+#endif // __Taskbar_h__

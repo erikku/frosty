@@ -27,7 +27,7 @@ class Options : public QWidget
 	Q_OBJECT
 
 public:
-	Options(QWidget *parent = 0);
+	static Options* getSingletonPtr();
 
 public slots:
 	void loadSettings();
@@ -38,6 +38,8 @@ signals:
 	void optionsChanged();
 
 protected:
+	Options(QWidget *parent = 0);
+
 	void darkenWidget(QWidget *widget);
 
 	Ui::Options ui;

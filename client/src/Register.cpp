@@ -19,7 +19,7 @@
 
 #include "Register.h"
 #include "Settings.h"
-#include "SkillWindow.h"
+#include "Taskbar.h"
 #include "registration.h"
 #include "Login.h"
 #include "sha1.h"
@@ -93,7 +93,7 @@ void Register::registrationComplete()
 	settings->setEmail( ui.emailEdit->text() );
 	settings->setPass(pass);
 
-	(new SkillWindow)->show();
+	(new Taskbar)->show();
 
 	deleteLater();
 	close();
@@ -209,7 +209,7 @@ void Register::showLogin()
 
 void Register::guestLogin()
 {
-	(new SkillWindow)->show();
+	(new Taskbar)->show();
 
 	deleteLater();
 	close();

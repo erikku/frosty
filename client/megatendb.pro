@@ -37,6 +37,7 @@ FORMS       += ui/PaletteEditor.ui \
                ui/RelationList.ui \
                ui/Options.ui \
                ui/Register.ui \
+               ui/Taskbar.ui \
                ui/Login.ui \
                ui/UserEdit.ui \
                ui/UserList.ui \
@@ -58,6 +59,7 @@ HEADERS     += src/ajax.h \
                src/Options.h \
                src/registration.h \
                src/Register.h \
+               src/Taskbar.h \
                src/Login.h \
                src/UserEdit.h \
                src/UserList.h \
@@ -83,6 +85,7 @@ SOURCES     += src/main.cpp \
                src/Options.cpp \
                src/registration.cpp \
                src/Register.cpp \
+               src/Taskbar.cpp \
                src/sha1.c \
                src/Login.cpp \
                src/UserEdit.cpp \

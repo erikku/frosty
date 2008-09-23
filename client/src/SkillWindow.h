@@ -24,8 +24,6 @@
 #include <QtCore/QVariant>
 #include <QtCore/QMap>
 
-class Options;
-class UserList;
 class SkillList;
 class SkillView;
 class QListWidgetItem;
@@ -40,13 +38,7 @@ public:
 public slots:
 	void refresh();
 
-protected slots:
-	void ajaxResponse(const QVariant& resp);
-
 protected:
-
-	Options *mOptions;
-	UserList *mUserList;
 	SkillList *mSkillList;
 	SkillView *mSkillView;
 };

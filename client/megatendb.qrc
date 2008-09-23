@@ -5,5 +5,6 @@
 	<file alias="edit.png">res/edit.png</file>
 	<file alias="next.png">res/next.png</file>
 	<file alias="previous.png">res/previous.png</file>
+	<file alias="megatendb.ico">res/megatendb.ico</file>
 </qresource>
 </RCC>

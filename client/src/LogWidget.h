@@ -35,7 +35,7 @@ class LogWidget : public QWidget
 	Q_OBJECT
 
 public:
-	LogWidget(QWidget *parent = 0);
+	static LogWidget* getSingletonPtr();
 
 public slots:
 	void resendRequest();
@@ -44,6 +44,8 @@ public slots:
 	void transferInfo(const QString& content, const QVariant& response);
 
 protected:
+	LogWidget(QWidget *parent = 0);
+
 	LogView *mLogView;
 	QListWidget *mLogList;
 

@@ -39,7 +39,7 @@ ajax::ajax(QObject *parent) : QObject(parent), mErrorLock(false)
 {
 	Q_ASSERT(g_ajax_inst == 0);
 
-	mLog = new LogWidget;
+	mLog = LogWidget::getSingletonPtr();
 	mRequestQueueTimer = new QTimer;
 	mRequestQueueTimer->setSingleShot(true);
 

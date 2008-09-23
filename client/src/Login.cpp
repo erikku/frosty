@@ -19,7 +19,7 @@
 
 #include "Login.h"
 #include "Settings.h"
-#include "SkillWindow.h"
+#include "Taskbar.h"
 #include "registration.h"
 #include "sha1.h"
 
@@ -123,7 +123,7 @@ void Login::validationImage(const QPixmap& image, const QString& error)
 	settings->setEmail( ui.emailEdit->text() );
 	settings->setPass(pass);
 
-	(new SkillWindow)->show();
+	(new Taskbar)->show();
 
 	mRegistration->deleteLater();
 	deleteLater();

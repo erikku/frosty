@@ -37,6 +37,8 @@ public:
 	QVariant request, response;
 };
 
+static LogWidget *g_log_inst = 0;
+
 LogWidget::LogWidget(QWidget *parent) : QWidget(parent, Qt::Dialog)
 {
 	mLogList = new QListWidget;
@@ -63,6 +65,16 @@ LogWidget::LogWidget(QWidget *parent) : QWidget(parent, Qt::Dialog)
 	mLogList->setContextMenuPolicy(Qt::ActionsContextMenu);
 
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(resendRequest()));
+};
+
+LogWidget* LogWidget::getSingletonPtr()
+{
+	if(!g_log_inst)
+		g_log_inst = new LogWidget;
+
+	Q_ASSERT(g_log_inst != 0);
+
+	return g_log_inst;
 };
 
 void LogWidget::updateCurrentRequest()

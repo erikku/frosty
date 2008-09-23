@@ -23,16 +23,18 @@
 #include <QtCore/QTranslator>
 #include <QtCore/QFile>
 
-#include "SkillWindow.h"
 #include "PaletteEditor.h"
 #include "Settings.h"
 #include "Register.h"
+#include "Taskbar.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication::setStyle("plastique");
 
 	QApplication app(argc, argv);
+
+	QApplication::setWindowIcon( QIcon( ":/megatendb.ico") );
 
 	QTranslator translator;
 	translator.load( QString("megatendb_%1").arg(settings->lang()) );
@@ -48,7 +50,7 @@ int main(int argc, char *argv[])
 	if( settings->email().isEmpty() )
 		(new Register)->show();
 	else
-		(new SkillWindow)->show();
+		(new Taskbar)->show();
 
 	return app.exec();
 };
