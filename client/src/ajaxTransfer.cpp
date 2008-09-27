@@ -24,9 +24,6 @@
 #include <QtCore/QStringList>
 #include <QtGui/QMessageBox>
 
-//#include <iostream>
-//using namespace std;
-
 ajaxTransfer::ajaxTransfer(QObject *parent) : QObject(parent)
 {
 	// Nothing to see here
@@ -94,8 +91,6 @@ ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 
 void ajaxTransfer::requestFinished(int id, bool error)
 {
-	deleteLater();
-
 	emit transferInfo(QString::fromUtf8(mContent), mResponse);
 
 	if(mRequestID != id)
@@ -104,46 +99,35 @@ void ajaxTransfer::requestFinished(int id, bool error)
 	QString content_error = QString::fromUtf8(mContent);
 	if( !content_error.isEmpty() )
 	{
-		if( !ajax::getSingletonPtr()->errorLock() )
-		{
-			QMessageBox::StandardButton button = QMessageBox::critical(0,
-				tr("AJAX Error"), tr("The AJAX backend has encountered one or "
-				"more errors. Would you like to view the AJAX Log?"),
-				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		QMessageBox::StandardButton button = QMessageBox::critical(0,
+			tr("AJAX Error"), tr("The AJAX backend has encountered one or "
+			"more errors. Would you like to view the AJAX Log?"),
+			QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-			if(button == QMessageBox::Yes)
-				ajax::getSingletonPtr()->showLog();
-
-			ajax::getSingletonPtr()->unlockError();
-		}
+		if(button == QMessageBox::Yes)
+			ajax::getSingletonPtr()->showLog();
 
 		emit transferFailed();
+		deleteLater();
 
 		return;
 	}
 
 	if(error)
 	{
-		if( !ajax::getSingletonPtr()->errorLock() )
-		{
-			QMessageBox::StandardButton button = QMessageBox::critical(0,
-				tr("AJAX Error"), tr("The AJAX backend has encountered one or "
-				"more errors. Would you like to view the AJAX Log?"),
-				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		QMessageBox::StandardButton button = QMessageBox::critical(0,
+			tr("AJAX Error"), tr("The AJAX backend has encountered one or "
+			"more errors. Would you like to view the AJAX Log?"),
+			QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-			if(button == QMessageBox::Yes)
-				ajax::getSingletonPtr()->showLog();
-
-			ajax::getSingletonPtr()->unlockError();
-		}
+		if(button == QMessageBox::Yes)
+			ajax::getSingletonPtr()->showLog();
 
 		emit transferFailed();
+		deleteLater();
 
 		return;
 	}
-
-	//QMessageBox::information(0, "JSON Response", json::toJSON(mResponse));
-	//cout << json::toJSON(mResponse).toLocal8Bit().data() << endl << endl;
 
 	foreach(QVariant action, mResponse.toList())
 		emit transferFinished(action);
@@ -160,32 +144,26 @@ void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 {
 	if(resp.statusCode() != 200)
 	{
-		if( !ajax::getSingletonPtr()->errorLock() )
-		{
-			QMessageBox::critical(0, tr("AJAX Error"),
-				tr("Server returned code %1").arg(resp.statusCode()));
+		QMessageBox::critical(0, tr("AJAX Error"),
+			tr("Server returned code %1").arg(resp.statusCode()));
 
-			ajax::getSingletonPtr()->showLog();
-			ajax::getSingletonPtr()->unlockError();
-		}
+		ajax::getSingletonPtr()->showLog();
 
 		emit transferFailed();
+		deleteLater();
 
 		return;
 	}
 
 	if( !resp.hasKey("X-JSON") )
 	{
-		if( !ajax::getSingletonPtr()->errorLock() )
-		{
-			QMessageBox::critical(0, tr("AJAX Error"),
-				tr("Response missing X-JSON header"));
+		QMessageBox::critical(0, tr("AJAX Error"),
+			tr("Response missing X-JSON header"));
 
-			ajax::getSingletonPtr()->showLog();
-			ajax::getSingletonPtr()->unlockError();
-		}
+		ajax::getSingletonPtr()->showLog();
 
 		emit transferFailed();
+		deleteLater();
 
 		return;
 	}
@@ -205,20 +183,16 @@ void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 		QVariantMap map = e_res.at(i).toMap();
 		if( map.contains("error") )
 		{
-			if( !ajax::getSingletonPtr()->errorLock() )
-			{
-				QMessageBox::StandardButton button = QMessageBox::critical(0,
-					tr("AJAX Error"), tr("The AJAX backend has encountered one or "
-					"more errors. Would you like to view the AJAX Log?"),
-					QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+			QMessageBox::StandardButton button = QMessageBox::critical(0,
+				tr("AJAX Error"), tr("The AJAX backend has encountered one or "
+				"more errors. Would you like to view the AJAX Log?"),
+				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-				if(button == QMessageBox::Yes)
-					ajax::getSingletonPtr()->showLog();
-
-				ajax::getSingletonPtr()->unlockError();
-			}
+			if(button == QMessageBox::Yes)
+				ajax::getSingletonPtr()->showLog();
 
 			emit transferFailed();
+			deleteLater();
 
 			return;
 		}

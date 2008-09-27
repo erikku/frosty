@@ -35,7 +35,7 @@
 
 static ajax *g_ajax_inst = 0;
 
-ajax::ajax(QObject *parent) : QObject(parent), mErrorLock(false)
+ajax::ajax(QObject *parent) : QObject(parent)
 {
 	Q_ASSERT(g_ajax_inst == 0);
 
@@ -66,19 +66,6 @@ ajax* ajax::getSingletonPtr()
 	Q_ASSERT(g_ajax_inst != 0);
 
 	return g_ajax_inst;
-};
-
-bool ajax::errorLock()
-{
-	bool lock = mErrorLock;
-	mErrorLock = true;
-
-	return lock;
-};
-
-void ajax::unlockError()
-{
-	mErrorLock = false;
 };
 
 void ajax::request(const QUrl& url, const QVariant& request)

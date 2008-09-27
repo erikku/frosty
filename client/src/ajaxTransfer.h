@@ -24,6 +24,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QString>
 #include <QtCore/QVariant>
+#include <QtCore/QPointer>
 #include <QtCore/QByteArray>
 #include <QtNetwork/QHttp>
 
@@ -54,11 +55,11 @@ signals:
 protected:
 	ajaxTransfer(QObject *parent = 0);
 
-	QHttp *mHttp;
 	int mRequestID;
 	QUrl mBackendURL;
 	QVariant mResponse;
 	QByteArray mContent;
+	QPointer<QHttp> mHttp;
 };
 
 #endif // __ajaxTransfer_h__

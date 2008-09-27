@@ -39,9 +39,6 @@ public:
 	void request(const QUrl& url, const QVariant& request);
 	void subscribe(QObject *obj);
 
-	bool errorLock();
-	void unlockError();
-
 public slots:
 	void showLog();
 	void dispatchQueue(const QUrl& url = QUrl());
@@ -55,7 +52,6 @@ protected:
 
 	void dispatchRequest(const QUrl& url, const QVariant& request);
 
-	bool mErrorLock;
 	LogWidget *mLog;
 
 	QTimer *mRequestQueueTimer;

@@ -186,7 +186,7 @@ void Server::finalize(QTcpSocket *connection)
 
 		QString key = postMatcher.cap(1).trimmed();
 		QString value = QUrl::fromPercentEncoding(
-			postMatcher.cap(2).trimmed().toUtf8() );
+			postMatcher.cap(2).trimmed().toUtf8().replace("+", "%20") );
 
 		post[key] = value;
 	}
@@ -350,9 +350,7 @@ void Server::error(QTcpSocket *connection)
 	header.setContentType("text/html; charset=UTF-8");
 
 	connection->write( QString(header.toString() + content).toUtf8() );
-
-	// For some reason calling close() here crashes the client
-	// connection->close();
+	connection->close();
 };
 
 void Server::respond(QTcpSocket *connection, const QVariant& data)
@@ -363,9 +361,7 @@ void Server::respond(QTcpSocket *connection, const QVariant& data)
 	header.setContentType("application/x-json");
 
 	connection->write( header.toString().toUtf8() );
-
-	// For some reason calling close() here crashes the client
-	// connection->close();
+	connection->close();
 };
 
 void Server::captcha(QTcpSocket *connection, const QString& session_key,

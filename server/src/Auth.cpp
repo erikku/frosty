@@ -94,7 +94,7 @@ bool auth_authenticate(const QString& email, const QString& data,
 	if(pass == hash)
 		return true;
 
-	LOG_ERROR("Passwords do not match");
+	LOG_ERROR("Passwords do not match\n");
 
 	return false;
 };
