@@ -10,3 +10,6 @@ debug
 megatendb_server
 megatendb_server.exe
 megatendb_server_*.qm
+config.xml
+*.db
+*.log
