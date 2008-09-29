@@ -69,7 +69,7 @@ void RelationList::addRelation()
 
 void RelationList::editRelation()
 {
-	if( !ui.relationList->selectedItems().isEmpty() )
+	if( ui.relationList->selectedItems().isEmpty() )
 		return;
 
 	QListWidgetItem *item = ui.relationList->selectedItems().first();
@@ -82,7 +82,7 @@ void RelationList::editRelation()
 
 void RelationList::deleteRelation()
 {
-	if( !ui.relationList->selectedItems().count() )
+	if( ui.relationList->selectedItems().isEmpty() )
 		return;
 
 	QListWidgetItem *item = ui.relationList->selectedItems().first();
@@ -112,7 +112,7 @@ void RelationList::deleteRelation()
 	action["action"] = QString("delete");
 	action["table"] = mTable;
 	action["where"] = QVariantList() << where;
-	action["user_data"] = QString("relation_delete");
+	action["user_data"] = QString("%1_relation_delete").arg(mTable);
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
 };
@@ -154,6 +154,9 @@ void RelationList::showList(const QString& windowTitle, const QString& table)
 
 void RelationList::ajaxResponse(const QVariant& resp)
 {
+	if( mTable.isEmpty() )
+		return;
+
 	QVariantMap result = resp.toMap();
 
 	if( result.value("user_data").toString() ==
@@ -173,7 +176,8 @@ void RelationList::ajaxResponse(const QVariant& resp)
 
 		setEnabled(true);
 	}
-	else if(result.value("user_data").toString() == "relation_delete")
+	else if(result.value("user_data").toString() ==
+		QString("%1_relation_delete").arg(mTable))
 	{
 		refresh();
 	}

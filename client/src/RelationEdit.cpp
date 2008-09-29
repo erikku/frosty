@@ -75,7 +75,7 @@ void RelationEdit::submitRelation()
 
 	action["table"] = mTable;
 	action["columns"] = columns;
-	action["user_data"] = QString("relation_updated");
+	action["user_data"] = QString("%1_relation_updated").arg(mTable);
 	action["rows"] = QVariantList() << row;
 
 	if(mID > 0)
@@ -121,16 +121,21 @@ void RelationEdit::showEdit(const QString& windowTitle, const QString& table, in
 
 void RelationEdit::ajaxResponse(const QVariant& resp)
 {
+	if( mTable.isEmpty() )
+		return;
+
 	QVariantMap result = resp.toMap();
 
-	if(result.value("user_data").toString() == "relation_updated")
+	if(result.value("user_data").toString() ==
+		QString("%1_relation_updated").arg(mTable))
 	{
 		setWindowModality(Qt::NonModal);
 		emit relationsUpdated();
 
 		close();
 	}
-	else if(result.value("user_data").toString() == QString("%1_entry").arg(mTable))
+	else if(result.value("user_data").toString() ==
+		QString("%1_entry").arg(mTable))
 	{
 		QVariantMap map = result.value("rows").toList().first().toMap();
 		if(map["id"].toInt() != mID)

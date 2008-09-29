@@ -101,7 +101,7 @@ QString SkillList::switchMessage() const
 
 QString SkillList::deleteTitle() const
 {
-	return tr("Deleting Ajax");
+	return tr("Deleting Skill");
 };
 
 QString SkillList::deleteMessage() const

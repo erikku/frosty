@@ -146,13 +146,13 @@ QPalette PaletteEditor::importPalette(const QString& xml)
 	doc.setContent(xml);
 
 	QDomNodeList roles = doc.elementsByTagName("role");
-	for(int i = 0; i < roles.length(); i++)
+	for(uint i = 0; i < roles.length(); i++)
 	{
 		QDomElement roleElement = roles.at(i).toElement();
 		QPalette::ColorRole colorRole = data.colorRoles.value( roleElement.attribute("name") );
 
 		QDomNodeList brushes = roleElement.elementsByTagName("brush");
-		for(int j = 0; j < brushes.length(); j++)
+		for(uint j = 0; j < brushes.length(); j++)
 		{
 			QDomElement brushElement = brushes.at(j).toElement();
 			QPalette::ColorGroup colorGroup = data.colorGroups.value( brushElement.attribute("group") );
