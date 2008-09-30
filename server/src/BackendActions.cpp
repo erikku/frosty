@@ -217,10 +217,6 @@ QVariantMap backendActionDelete(int i, QTcpSocket *connection,
 			"you must also include the paramater 'limit'");
 	}
 
-	if( !auth_validate_request(email, action) )
-		return herror("delete action", tr("authentication error for action "
-			"%1").arg(i));
-
 	QSqlDatabase m_db = db;
 	m_db.transaction();
 
@@ -416,10 +412,6 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 				"action %3 does not exist").arg(
 				missing.first() ).arg(j).arg(i));
 	}
-
-	if( !auth_validate_request(email, action) )
-		return herror("insert action", tr("authentication error for action "
-			"%1").arg(i));
 
 	QSqlDatabase m_db = db;
 	m_db.transaction();
@@ -990,10 +982,6 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 			"you must also include the paramater 'limit'");
 	}
 
-	if( !auth_validate_request(email, action) )
-		return herror("update action", tr("authentication error for action "
-			"%1").arg(i));
-
 	QSqlDatabase m_db = db;
 	m_db.transaction();
 
@@ -1525,10 +1513,6 @@ QVariantMap backendActionSelect(int i, QTcpSocket *connection,
 		return herror("select action", "to include the paramater 'offset', "
 			"you must also include the paramater 'limit'");
 	}
-
-	if( !auth_validate_request(email, action) )
-		return herror("select action", tr("authentication error for action "
-			"%1").arg(i));
 
 	QString sql = QString("SELECT %1 FROM %2%3%4%5%6%7").arg(
 		columns.join(", ") ).arg(table).arg(relation_join_sql).arg(where).arg(

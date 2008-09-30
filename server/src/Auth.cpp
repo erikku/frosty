@@ -102,16 +102,37 @@ bool auth_authenticate(const QString& email, const QString& data,
 bool auth_validate_request(const QString& email, const QVariant& action)
 {
 	QVariantMap perms = auth_query_perms(email).toMap();
-	QVariantMap action_map = action.toMap();
+	QString act = action.toMap().value("action").toString();
 
-	if(action_map.value("action").toString() == "select")
-		return perms.value("view_db").toBool();
-	if(action_map.value("action").toString() == "delete")
-		return perms.value("admin_db").toBool();
-	else
-		return perms.value("modify_db").toBool();
+	bool can_perform = false;
+	if(act == "salt")
+		can_perform = true;
+	else if(act == "delete")
+		can_perform = perms.value("admin_db").toBool();
+	else if(act == "insert")
+		can_perform = perms.value("modify_db").toBool();
+	else if(act == "update")
+		can_perform = perms.value("modify_db").toBool();
+	else if(act == "select")
+		can_perform = perms.value("view_db").toBool();
+	else if(act == "db_export")
+		can_perform = perms.value("admin").toBool();
+	else if(act == "db_import")
+		can_perform = perms.value("admin").toBool();
+	else if(act == "auth_query_perms")
+		can_perform = true;
+	else if(act == "auth_query_users")
+		can_perform = perms.value("admin").toBool();
+	else if(act == "auth_query_user")
+		can_perform = perms.value("admin").toBool();
+	else if(act == "auth_make_inactive")
+		can_perform = perms.value("admin").toBool();
+	else if(act == "auth_make_active")
+		can_perform = perms.value("admin").toBool();
+	else if(act == "auth_modify_user")
+		can_perform = perms.value("admin").toBool();
 
-	return false;
+	return can_perform | perms.value("admin").toBool();;
 };
 
 QVariant auth_query_perms(const QString& email)
@@ -220,8 +241,8 @@ QString auth_register(const QString& email, const QString& name,
 	{
 		QSqlQuery query(auth_db);
 		query.prepare("INSERT INTO users(email, name, pass, admin, view_db, "
-			"modify_db, admin_db) VALUES(:email, :name, :pass, :admin, "
-			":view_db, :modify_db, :admin_db)");
+			"modify_db, admin_db, type) VALUES(:email, :name, :pass, :admin, "
+			":view_db, :modify_db, :admin_db, :type)");
 		query.bindValue(":email", email);
 		query.bindValue(":name", name);
 		query.bindValue(":pass", pass);
@@ -229,6 +250,7 @@ QString auth_register(const QString& email, const QString& name,
 		query.bindValue(":view_db", conf->authViewDB());
 		query.bindValue(":modify_db", conf->authModifyDB());
 		query.bindValue(":admin_db", conf->authAdminDB());
+		query.bindValue(":type", 1);
 
 		if( !query.exec() )
 			return "Database error";

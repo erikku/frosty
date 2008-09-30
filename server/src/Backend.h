@@ -41,8 +41,6 @@ public:
 		const QSqlDatabase& db, const QMap<QString, QString>& post) const;
 
 protected:
-	QVariant herror(const QString& type, const QString& err) const;
-
 	QMap<QString, BackendActionHandler> mActionHandlers;
 };
 

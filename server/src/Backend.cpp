@@ -18,6 +18,7 @@
 \******************************************************************************/
 
 #include "Backend.h"
+#include "Utils.h"
 #include "Auth.h"
 #include "Log.h"
 
@@ -47,14 +48,6 @@ Backend::Backend()
 	mActionHandlers["auth_make_inactive"] = authActionMakeInactive;
 	mActionHandlers["auth_make_active"] = authActionMakeActive;
 	mActionHandlers["auth_modify_user"] = authActionModifyUser;
-};
-
-QVariant Backend::herror(const QString& type, const QString& err) const
-{
-	QVariantMap error;
-	error["error"] = tr("Error parsing %1: %2").arg(type).arg(err);
-
-	return error;
 };
 
 QVariantList Backend::parseRequest(QTcpSocket *connection,
@@ -132,9 +125,17 @@ QVariantList Backend::parseRequest(QTcpSocket *connection,
 
 		if( mActionHandlers.contains(name) )
 		{
-			QVariantMap request_result =
-				mActionHandlers.value(name)(i, connection, db,
-				action, email);
+			QVariantMap request_result;
+			if( auth_validate_request(email, action) )
+			{
+				request_result = mActionHandlers.value(name)(i, connection, db,
+					action, email);
+			}
+			else
+			{
+				request_result = herror(tr("%1 action").arg(name),
+					tr("authentication error for action %1").arg(i));
+			}
 
 			if( action.contains("user_data") )
 				request_result["user_data"] = action.value("user_data");
