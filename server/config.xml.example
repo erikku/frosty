@@ -73,4 +73,9 @@
 			<path>master.db</path>
 		</database>
 	</auth>
+	<ssl>
+		<enabled>false</enabled>
+		<cert>server.crt</cert>
+		<key>server.key</key>
+	</ssl>
 </megatendb>

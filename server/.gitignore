@@ -13,3 +13,5 @@ megatendb_server_*.qm
 config.xml
 *.db
 *.log
+*.crt
+*.key
