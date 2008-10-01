@@ -33,15 +33,15 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QStringList>
 #include <QtNetwork/QHttpRequestHeader>
-#include <QtNetwork/QTcpServer>
-#include <QtNetwork/QTcpSocket>
-#include <iostream>
+#include <QtNetwork/QSslSocket>
+#include <QtNetwork/QSslKey>
 #include <gd.h>
 
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 #include <QtSql/QSqlDatabase>
+
 
 Server::Server(int argc, char *argv[]) : QCoreApplication(argc, argv)
 {
@@ -54,10 +54,10 @@ void Server::init()
 
 	Log::getSingletonPtr()->loadConfig();
 
-	mConnection = new QTcpServer;
+	mConnection = new SslServer;
 
-	connect(mConnection, SIGNAL(newConnection()),
-		this, SLOT(handleNewConnection()));
+	connect(mConnection, SIGNAL(newConnection(QTcpSocket*)),
+		this, SLOT(handleNewConnection(QTcpSocket*)));
 
 	if(conf->address() == "any")
 		mConnection->listen(QHostAddress::Any, conf->port());
@@ -93,29 +93,74 @@ void Server::init()
 	//QSqlDatabase::removeDatabase("master");
 };
 
-void Server::handleNewConnection()
+void SslServer::incomingConnection(int socketDescriptor)
+{
+	if( conf->sslEnabled() )
+	{
+		QSslSocket *socket = new QSslSocket;
+
+		connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
+			this, SLOT(error(QAbstractSocket::SocketError)));
+		connect(socket, SIGNAL(sslErrors(const QList<QSslError>&)),
+			this, SLOT(sslErrors(const QList<QSslError>&)));
+
+		socket->setLocalCertificate( conf->sslCert() );
+		socket->setPrivateKey( conf->sslKey() );
+
+		socket->setSocketDescriptor(socketDescriptor);
+		socket->startServerEncryption();
+
+		emit newConnection(socket);
+	}
+	else
+	{
+		QTcpSocket *socket = new QTcpSocket;
+
+		connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
+			this, SLOT(error(QAbstractSocket::SocketError)));
+
+		socket->setSocketDescriptor(socketDescriptor);
+
+		emit newConnection(socket);
+	}
+};
+
+void SslServer::error(QAbstractSocket::SocketError err)
+{
+	Q_UNUSED(err);
+
+	QTcpSocket *socket = qobject_cast<QTcpSocket*>( sender() );
+	Q_ASSERT(socket);
+
+	LOG_ERROR( QString("Socket Error: %1\n").arg( socket->errorString() ) );
+};
+
+void SslServer::sslErrors(const QList<QSslError>& errors)
+{
+	foreach(QSslError err, errors)
+		LOG_ERROR( QString("SSL Error: %1").arg( err.errorString() ) );
+};
+
+void Server::handleNewConnection(QTcpSocket *socket)
 {
 	Q_ASSERT(mConnection);
 
-	QTcpSocket *connection = 0;
+	QTcpSocket *connection = socket;
 
-	while( (connection = mConnection->nextPendingConnection()) )
-	{
-		connect(connection, SIGNAL(readyRead()),
-			this, SLOT(readyRead()));
-		connect(connection, SIGNAL(disconnected()),
-			connection, SLOT(deleteLater()));
+	connect(connection, SIGNAL(readyRead()),
+		this, SLOT(readyRead()));
+	connect(connection, SIGNAL(disconnected()),
+		connection, SLOT(deleteLater()));
 
-		connection->open(QIODevice::ReadWrite);
+	connection->open(QIODevice::ReadWrite);
 
-		ConnectionData *data = new ConnectionData;
-		mConnections[connection] = data;
-		data->contentRead = false;
-		data->contentLength = 0;
-		data->done = false;
+	ConnectionData *data = new ConnectionData;
+	mConnections[connection] = data;
+	data->contentRead = false;
+	data->contentLength = 0;
+	data->done = false;
 
-		read(connection);
-	}
+	read(connection);
 };
 
 void Server::readyRead()

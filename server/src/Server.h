@@ -25,10 +25,25 @@
 #include <QtCore/QMap>
 
 #include <QtNetwork/QHttpResponseHeader>
+#include <QtNetwork/QTcpServer>
 #include <QtSql/QSqlDatabase>
 
-class QTcpServer;
 class QTcpSocket;
+
+class SslServer : public QTcpServer
+{
+	Q_OBJECT
+
+signals:
+	void newConnection(QTcpSocket *socket);
+
+protected slots:
+	void error(QAbstractSocket::SocketError err);
+	void sslErrors(const QList<QSslError>& errors);
+
+protected:
+	virtual void incomingConnection(int socketDescriptor);
+};
 
 class ConnectionData
 {
@@ -51,7 +66,7 @@ public:
 
 protected slots:
 	void readyRead();
-	void handleNewConnection();
+	void handleNewConnection(QTcpSocket *socket);
 
 protected:
 	void read(QTcpSocket *connection);
@@ -64,7 +79,7 @@ protected:
 	QHttpResponseHeader basicResponseHeader() const;
 
 	QSqlDatabase db;
-	QTcpServer *mConnection;
+	SslServer *mConnection;
 	QMap<QTcpSocket*, ConnectionData*> mConnections;
 };
 

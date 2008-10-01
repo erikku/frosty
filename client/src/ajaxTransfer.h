@@ -26,6 +26,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QPointer>
 #include <QtCore/QByteArray>
+#include <QtNetwork/QSslError>
 #include <QtNetwork/QHttp>
 
 #include "sha1.h"
@@ -46,6 +47,7 @@ protected slots:
 	void requestFinished(int id, bool error);
 	void readyRead(const QHttpResponseHeader& resp);
 	void responseHeaderReceived(const QHttpResponseHeader& resp);
+	void sslErrors(const QList<QSslError>& errors);
 
 signals:
 	void transferFailed();

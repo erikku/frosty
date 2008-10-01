@@ -24,6 +24,8 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtXml/QDomNode>
+#include <QtNetwork/QSslCertificate>
+#include <QtNetwork/QSslKey>
 
 class Config : public QObject
 {
@@ -185,6 +187,21 @@ public:
 
 	Q_PROPERTY(QString mCaptchaFont READ captchaFont WRITE setCaptchaFont)
 
+	bool sslEnabled() const;
+	void setSslEnabled(bool enabled);
+
+	Q_PROPERTY(bool mSslEnabled READ sslEnabled WRITE setSslEnabled)
+
+	QSslCertificate sslCert() const;
+	void setSslCert(const QSslCertificate& cert);
+
+	Q_PROPERTY(QSslCertificate mCert READ sslCert WRITE setSslCert)
+
+	QSslKey sslKey() const;
+	void setSslKey(const QSslKey& key);
+
+	Q_PROPERTY(QSslKey mKey READ sslKey WRITE setSslKey)
+
 protected:
 	Config(QObject *parent = 0);
 	bool nodeToBool(const QDomNode& node, bool def);
@@ -227,6 +244,11 @@ protected:
 
 	QStringList mCaptchaLetters;
 	QString mCaptchaFont;
+
+	QSslKey mKey;
+	QSslCertificate mCert;
+
+	bool mSslEnabled;
 };
 
 #define conf ( Config::getSingletonPtr() )

@@ -38,13 +38,27 @@ ajaxTransfer::~ajaxTransfer()
 	}
 };
 
+void ajaxTransfer::sslErrors(const QList<QSslError>& errors)
+{
+	QStringList list;
+	foreach(QSslError err, errors)
+		list << err.errorString();
+
+	QMessageBox::critical(0, tr("AJAX Error"), tr("The AJAX backend has "
+		"encountered the following SSL errors:\n%1").arg( list.join("\n") ));
+};
+
 ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 	const QMap<QString, QString>& post)
 {
 	ajaxTransfer *transfer = new ajaxTransfer;
 
 	transfer->mHttp = new QHttp(url.host(),
+		(url.scheme() == "https") ? QHttp::ConnectionModeHttps :
 		QHttp::ConnectionModeHttp, url.port(80), 0);
+
+	connect(transfer->mHttp, SIGNAL(sslErrors(const QList<QSslError>&)),
+		transfer, SLOT(sslErrors(const QList<QSslError>&)));
 
 	transfer->mBackendURL = url;
 

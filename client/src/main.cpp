@@ -28,6 +28,9 @@
 #include "Register.h"
 #include "Taskbar.h"
 
+#include <QtNetwork/QSslSocket>
+#include <QtNetwork/QSslCertificate>
+
 int main(int argc, char *argv[])
 {
 	QApplication::setStyle("plastique");
@@ -46,6 +49,12 @@ int main(int argc, char *argv[])
 	paletteFile.close();
 
 	app.setPalette(palette);
+
+	QFile cert_file(":/ca.crt");
+    cert_file.open(QIODevice::ReadOnly);
+
+	QSslCertificate cert(&cert_file);
+	QSslSocket::addDefaultCaCertificate(cert);
 
 	if( settings->email().isEmpty() )
 		(new Register)->show();

@@ -62,6 +62,8 @@ void Config::loadDefaults()
 
 	mDBType = "sqlite";
 	mDBPath = "master.db";
+
+	mSslEnabled = false;
 };
 
 bool Config::loadConfig(const QString& path)
@@ -316,6 +318,45 @@ bool Config::loadConfig(const QString& path)
 		mCaptchaFont = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "sqlite")
 		LOG_WARNING( tr("Failed to find captcha font in config file") );
+
+	// <ssl><enabled>
+	nodes = elementsByXPath(doc, "/ssl/enabled");
+	if( nodes.isEmpty() )
+		LOG_WARNING( tr("Error parsing <enabled>, default will be used") );
+	else
+		mSslEnabled = nodeToBool(nodes.first(), mSslEnabled);
+
+	// <ssl><cert>
+	nodes = elementsByXPath(doc, "/ssl/cert");
+	if( nodes.count() && nodes.first().isElement() )
+	{
+		QFile cert_file( nodes.first().toElement().text().trimmed() );
+	    cert_file.open(QIODevice::ReadOnly);
+
+		QSslCertificate cert(&cert_file);
+		if( cert.isNull() )
+			LOG_ERROR("Error loading SSL certificate!\n");
+
+		mCert = cert;
+	}
+	else
+		LOG_WARNING( tr("Failed to find SSL certificate path in config file") );
+
+	// <ssl><key>
+	nodes = elementsByXPath(doc, "/ssl/key");
+	if( nodes.count() && nodes.first().isElement() )
+	{
+		QFile key_file( nodes.first().toElement().text().trimmed() );
+	    key_file.open(QIODevice::ReadOnly);
+
+		QSslKey key(&key_file, QSsl::Rsa);
+		if( key.isNull() )
+			LOG_ERROR("Error loading SSL key!\n");
+
+		mKey = key;
+	}
+	else
+		LOG_WARNING( tr("Failed to find SSL key path in config file") );
 
 	return true;
 };
@@ -643,4 +684,34 @@ QString Config::captchaFont() const
 void Config::setCaptchaFont(const QString& font)
 {
 	mCaptchaFont = font;
+};
+
+bool Config::sslEnabled() const
+{
+	return mSslEnabled;
+};
+
+void Config::setSslEnabled(bool enabled)
+{
+	mSslEnabled = enabled;
+};
+
+QSslCertificate Config::sslCert() const
+{
+	return mCert;
+};
+
+void Config::setSslCert(const QSslCertificate& cert)
+{
+	mCert = cert;
+};
+
+QSslKey Config::sslKey() const
+{
+	return mKey;
+};
+
+void Config::setSslKey(const QSslKey& key)
+{
+	mKey = key;
 };
