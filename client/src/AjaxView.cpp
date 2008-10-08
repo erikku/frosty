@@ -1549,7 +1549,6 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 			user_data = user_data_set.at(0).toString();
 			updated_id = user_data_set.at(1).toInt();
 		}
-
 	}
 
 	QString update_data = QString("%1_update").arg( table() );
