@@ -72,22 +72,23 @@ SkillView::SkillView(QWidget *parent) : AjaxView(parent)
 	bindTextBox("desc_en", ui.desc_en, ui.desc_enEdit);
 	bindTextBox("desc_ja", ui.desc_ja, ui.desc_jaEdit);
 	bindRelation("action_type", ui.type, ui.typeEdit, "db_action_type",
-		ui.typeEditButton, tr("Action Type"));
+		QString(), ui.typeEditButton, tr("Action Type"));
 	bindRelation("category", ui.category, ui.categoryEdit, "db_category",
-		ui.categoryEditButton, tr("Category"));
+		QString(), ui.categoryEditButton, tr("Category"));
 	bindRelation("affinity", ui.affinity, ui.affinityEdit, "db_affinity",
-		ui.affinityEditButton, tr("Affinity"));
+		QString(), ui.affinityEditButton, tr("Affinity"));
 	bindRelation("expert", ui.expert, ui.expertEdit, "db_expert",
-		ui.expertEditButton, tr("Expert"));
+		QString(), ui.expertEditButton, tr("Expert"));
 	bindNumberSet("cost_set", ui.cost, ui.costEdit, ui.costEditCombo,
 		QStringList() << "hp_cost" << "mp_cost" << "mag_cost",
 		QStringList() << tr("HP%1") << tr("MP%1") << tr("MAG%1"), tr("+"));
 
 	// Give the relation buttons an icon
-	ui.typeEditButton->setIcon( QIcon(":/edit.png") );
-	ui.categoryEditButton->setIcon( QIcon(":/edit.png") );
-	ui.affinityEditButton->setIcon( QIcon(":/edit.png") );
-	ui.expertEditButton->setIcon( QIcon(":/edit.png") );
+	QIcon edit_icon(":/edit.png");
+	ui.typeEditButton->setIcon(edit_icon);
+	ui.categoryEditButton->setIcon(edit_icon);
+	ui.affinityEditButton->setIcon(edit_icon);
+	ui.expertEditButton->setIcon(edit_icon);
 
 	// Init the view
 	initView(ui.stackedWidget, ui.editButton, ui.cancelButton,

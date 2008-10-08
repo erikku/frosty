@@ -27,6 +27,8 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
 #include <QtGui/QStackedWidget>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QRadioButton>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPalette>
 #include <iostream>
@@ -38,6 +40,7 @@
 #include "ajax.h"
 
 Q_DECLARE_METATYPE(AjaxView::BindType);
+Q_DECLARE_METATYPE(QButtonGroup*);
 Q_DECLARE_METATYPE(QPushButton*);
 Q_DECLARE_METATYPE(QComboBox*);
 Q_DECLARE_METATYPE(QCheckBox*);
@@ -48,6 +51,7 @@ Q_DECLARE_METATYPE(QLabel*);
 Q_DECLARE_METATYPE(IconEdit*);
 Q_DECLARE_METATYPE(IconSelect*);
 Q_DECLARE_METATYPE(RelationList*);
+Q_DECLARE_METATYPE(RadioButtonMap);
 
 AjaxView::AjaxView(QWidget *parent) : QWidget(parent), mID(-1)
 {
@@ -90,7 +94,13 @@ void AjaxView::darkenWidget(QWidget *widget)
 	dark_palette.setBrush(QPalette::Window,
 		dark_palette.brush(QPalette::Base));
 
-	qobject_cast<QLabel*>(widget)->setMargin(5);
+	QLabel *label = qobject_cast<QLabel*>(widget);
+	if(label)
+		label->setMargin(5);
+	else
+		std::cout << tr("darkenWidget(%1) is not a QLabel").arg(
+			widget->objectName()).toLocal8Bit().data() << std::endl;
+
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
 };
@@ -196,14 +206,16 @@ void AjaxView::clear()
 			}
 			case BindNumberSet:
 			{
+				int defaultValue = map.value("default").toInt();
+
 				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
 				Q_ASSERT(edit != 0);
 
-				edit->setValue( map.value("default").toInt() );
+				bool block = edit->blockSignals(true);
+				edit->setValue(defaultValue);
+				edit->blockSignals(block);
 
 				QStringList columns = map.value("columns").toStringList();
-
-				int defaultValue = map.value("default").toInt();
 
 				QVariantMap data;
 				foreach(QString column, columns)
@@ -212,6 +224,40 @@ void AjaxView::clear()
 				// Save the defaults
 				map["data"] = data;
 				mBinds[field] = map;
+
+				QLabel *view = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view != 0);
+
+				view->clear();
+
+				break;
+			}
+			case BindNumberSelector:
+			{
+				int defaultValue = map.value("default").toInt();
+
+				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit != 0);
+
+				bool block = edit->blockSignals(true);
+				edit->setValue(defaultValue);
+				edit->blockSignals(block);
+
+				QStringList columns = map.value("columns").toStringList();
+
+				QVariantMap data;
+				foreach(QString column, columns)
+					data[column] = defaultValue;
+
+				// Save the defaults
+				map["data"] = data;
+				map["static_data"] = data;
+				mBinds[field] = map;
+
+				QLabel *view = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view != 0);
+
+				view->clear();
 
 				break;
 			}
@@ -596,8 +642,8 @@ void AjaxView::bindBool(const QString& field, QLabel *view, QCheckBox *edit)
 };
 
 void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
-	const QString& table, QPushButton *browseButton, const QString& listTitle,
-	const QString& column)
+	const QString& table, const QString& column, QPushButton *browseButton,
+	const QString& listTitle)
 {
 	RelationList *list = new RelationList;
 	Q_ASSERT(list != 0);
@@ -611,8 +657,13 @@ void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 	bindInfo["column"] = column;
 	bindInfo["title"] = listTitle;
 	bindInfo["cache"] = QVariantMap();
-	bindInfo["list"] = qVariantFromValue(list);
-	bindInfo["button"] = qVariantFromValue(browseButton);
+
+	if(browseButton)
+	{
+		bindInfo["list"] = qVariantFromValue(list);
+		bindInfo["button"] = qVariantFromValue(browseButton);
+	}
+
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindRelation);
 
 	mBinds[field] = bindInfo;
@@ -620,11 +671,14 @@ void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 	connect(edit, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(updateRelationCombo()));
 
-	connect(list, SIGNAL(relationsUpdated()),
-		this, SLOT(refreshRelationCombo()));
+	if(browseButton)
+	{
+		connect(list, SIGNAL(relationsUpdated()),
+			this, SLOT(refreshRelationCombo()));
 
-	connect(browseButton, SIGNAL(clicked(bool)),
-		this, SLOT(browseRelationList()));
+		connect(browseButton, SIGNAL(clicked(bool)),
+			this, SLOT(browseRelationList()));
+	}
 
 	refreshRelationCache(field);
 };
@@ -632,8 +686,7 @@ void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 // For this one the feild value is just used for keeping track of the number set
 void AjaxView::bindNumberSet(const QString& field, QLabel *view, QSpinBox *edit,
 	QComboBox *selector, const QStringList& columns,
-	const QStringList& patterns, const QString& separator,
-	int defaultValue)
+	const QStringList& patterns, const QString& separator, int defaultValue)
 {
 	Q_ASSERT(selector->count() && !columns.isEmpty());
 	Q_ASSERT(selector->count() == columns.count());
@@ -662,6 +715,179 @@ void AjaxView::bindNumberSet(const QString& field, QLabel *view, QSpinBox *edit,
 
 	connect(selector, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(updateNumberSetSelection()));
+};
+
+// For this one the feild value is just used for keeping track of the number set
+void AjaxView::bindNumberSelector(const QString& field, QLabel *view,
+	QSpinBox *edit, const RadioButtonMap& selectors_and_columns,
+	const RadioButtonMap& selector_edits_and_columns,
+	QButtonGroup *group, QButtonGroup *edit_group, int defaultValue,
+	QRadioButton *defaultSelector, QRadioButton *defaultEditSelector)
+{
+	QStringList columns = selectors_and_columns.values();
+	QStringList columns_2 = selector_edits_and_columns.values();
+	qSort(columns); qSort(columns_2);
+
+	Q_ASSERT(columns == columns_2);
+	Q_ASSERT( !columns.isEmpty() );
+
+	// TODO: Make sure none of the radio buttons in the two sets are the same
+	// or they will be removed from one group and added to the other, causing
+	// chaos and bugs and destruction of the world as we know it!
+
+	QVariantMap data;
+	foreach(QString column, columns)
+		data[column] = defaultValue;
+
+	RadioButtonMap selectors = selectors_and_columns;
+	selectors.unite(selector_edits_and_columns);
+
+	QVariantMap bindInfo;
+	bindInfo["data"] = data;
+	bindInfo["static_data"] = data;
+	bindInfo["columns"] = columns;
+	bindInfo["default"] = defaultValue;
+	bindInfo["view"] = qVariantFromValue(view);
+	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["selectors"] = qVariantFromValue(selectors);
+	bindInfo["view_selectors"] = qVariantFromValue(selectors_and_columns);
+	bindInfo["edit_selectors"] = qVariantFromValue(selector_edits_and_columns);
+
+	bindInfo["view_current"] = defaultSelector ? selectors_and_columns.value(
+		defaultSelector) : columns.first();
+	bindInfo["edit_current"] = defaultEditSelector ?
+		selector_edits_and_columns.value(defaultEditSelector) : columns.first();
+
+	QButtonGroup *bg_group = group, *bg_edit_group = edit_group;
+	if(!bg_group)
+	{
+		bg_group = new QButtonGroup;
+
+		QList<QRadioButton*> buttons = selectors_and_columns.keys();
+		foreach(QRadioButton *button, buttons)
+			bg_group->addButton(button);
+	}
+	if(!bg_edit_group)
+	{
+		bg_edit_group = new QButtonGroup;
+
+		QList<QRadioButton*> buttons = selector_edits_and_columns.keys();
+		foreach(QRadioButton *button, buttons)
+			bg_edit_group->addButton(button);
+	}
+
+	bindInfo["view_group"] = qVariantFromValue(bg_group);
+	bindInfo["edit_group"] = qVariantFromValue(bg_edit_group);
+	bindInfo["type"] = qVariantFromValue(AjaxView::BindNumberSelector);
+
+	mBinds[field] = bindInfo;
+
+	connect(bg_group, SIGNAL(buttonClicked(QAbstractButton*)),
+		this, SLOT(updateNumberSelection()));
+	connect(bg_edit_group, SIGNAL(buttonClicked(QAbstractButton*)),
+		this, SLOT(updateNumberSelection()));
+	connect(edit, SIGNAL(valueChanged(int)),
+		this, SLOT(updateNumberSelectionValue()));
+
+	// Set the default radio button to checked
+	QString column = bindInfo.value("view_current").toString();
+	selectors_and_columns.key(column)->setChecked(true);
+	column = bindInfo.value("edit_current").toString();
+	selector_edits_and_columns.key(column)->setChecked(true);
+};
+
+void AjaxView::updateNumberSelection()
+{
+	QButtonGroup *group = qobject_cast<QButtonGroup*>( sender() );
+	Q_ASSERT(group);
+
+	QMapIterator<QString, QVariantMap> i(mBinds);
+
+	while( i.hasNext() )
+	{
+		i.next();
+
+		QString field = i.key();
+		QVariantMap map = i.value();
+
+		if(map.value("type", AjaxView::BindText).value<AjaxView::BindType>()
+			!= AjaxView::BindNumberSelector)
+				continue;
+
+		QRadioButton *radio = qobject_cast<QRadioButton*>(
+			group->checkedButton() );
+		Q_ASSERT(radio);
+
+		if(map.value("view_group", 0).value<QButtonGroup*>() == group)
+		{
+			QVariantMap data = map.value("static_data").toMap();
+
+			RadioButtonMap buttons = map.value(
+				"view_selectors").value<RadioButtonMap>();
+
+			QString column = buttons.value(radio);
+			QLabel *view = map.value("view", 0).value<QLabel*>();
+			Q_ASSERT(view);
+
+			view->setText( QString::number( data.value(column).toInt() ) );
+
+			map["view_current"] = column;
+		}
+		else if(map.value("edit_group", 0).value<QButtonGroup*>() == group)
+		{
+			QVariantMap data = map.value("data").toMap();
+
+			RadioButtonMap buttons = map.value(
+				"edit_selectors").value<RadioButtonMap>();
+
+			QString column = buttons.value(radio);
+			QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
+			Q_ASSERT(edit);
+
+			bool block = edit->blockSignals(true);
+			edit->setValue( data.value(column).toInt() );
+			edit->blockSignals(block);
+
+			map["edit_current"] = column;
+		}
+		else
+		{
+			continue;
+		}
+
+		// Save the change
+		mBinds[field] = map;
+	}
+};
+
+void AjaxView::updateNumberSelectionValue()
+{
+	QSpinBox *edit = qobject_cast<QSpinBox*>( sender() );
+	Q_ASSERT(edit);
+
+	QMapIterator<QString, QVariantMap> i(mBinds);
+
+	while( i.hasNext() )
+	{
+		i.next();
+
+		QString field = i.key();
+		QVariantMap map = i.value();
+
+		if( map.value("type", AjaxView::BindText).value<AjaxView::BindType>()
+			!= AjaxView::BindNumberSelector ||
+			map.value("edit", 0).value<QSpinBox*>() != edit )
+				continue;
+
+		QString column = map.value("edit_current").toString();
+		QVariantMap data = map.value("data").toMap();
+
+		data[column] = edit->value();
+
+		// Save the change
+		map["data"] = data;
+		mBinds[field] = map;
+	}
 };
 
 void AjaxView::refreshRelationCache(const QString& field)
@@ -711,6 +937,8 @@ void AjaxView::refreshRelationCache(const QString& field)
 
 QVariantMap AjaxView::createViewAction() const
 {
+	// TODO: Make sure we don't have duplicates
+
 	QVariantList columns;
 	columns << QString("id");
 
@@ -726,6 +954,7 @@ QVariantMap AjaxView::createViewAction() const
 		switch( map.value("type", AjaxView::BindText).value<AjaxView::BindType>() )
 		{
 			case AjaxView::BindNumberSet:
+			case AjaxView::BindNumberSelector:
 				columns << map.value("columns").toList();
 				break;
 			default:
@@ -751,6 +980,8 @@ QVariantMap AjaxView::createViewAction() const
 
 QVariantMap AjaxView::createUpdateAction() const
 {
+	// TODO: Make sure we don't have duplicates
+
 	QMapIterator<QString, QVariantMap> i(mBinds);
 
 	QVariantMap row;
@@ -826,6 +1057,7 @@ QVariantMap AjaxView::createUpdateAction() const
 				break;
 			}
 			case AjaxView::BindNumberSet:
+			case AjaxView::BindNumberSelector:
 			{
 				columns << map.value("columns").toList();
 				row = row.unite( map.value("data").toMap() );
@@ -1076,6 +1308,39 @@ void AjaxView::processBindValues(const QVariantMap& values)
 					}
 					i++;
 				}
+
+				break;
+			}
+			case AjaxView::BindNumberSelector:
+			{
+				//std::cout << "AjaxView::BindNumberSelector" << std::endl;
+
+				QVariantMap data = map.value("data").toMap();
+				QStringList columns = map.value("columns").toStringList();
+
+				foreach(QString column, columns)
+					data[column] = values.value(column).toInt();
+
+				// Save the data
+				map["data"] = data;
+				map["static_data"] = data;
+				mBinds[field] = map;
+
+				QLabel *view = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view != 0);
+
+				QString column = map.value("view_current").toString();
+
+				view->setText( QString::number( data.value(column).toInt() ) );
+
+				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit != 0);
+
+				column = map.value("edit_current").toString();
+
+				bool block = edit->blockSignals(true);
+				edit->setValue( data.value(column).toInt() );
+				edit->blockSignals(block);
 
 				break;
 			}

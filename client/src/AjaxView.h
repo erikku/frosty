@@ -31,8 +31,12 @@ class QTextEdit;
 class QCheckBox;
 class QComboBox;
 class QPushButton;
+class QRadioButton;
+class QButtonGroup;
 class QStackedWidget;
 class IconEdit;
+
+typedef QMap<QRadioButton*, QString> RadioButtonMap;
 
 class AjaxView : public QWidget
 {
@@ -50,7 +54,8 @@ public:
 		BindNumber,
 		BindBool,
 		BindRelation,
-		BindNumberSet
+		BindNumberSet,
+		BindNumberSelector
 	}BindType;
 
 public slots:
@@ -68,6 +73,8 @@ public slots:
 	void refreshRelationCombo();
 	void updateNumberSetValues();
 	void updateNumberSetSelection();
+	void updateNumberSelectionValue();
+	void updateNumberSelection();
 
 protected slots:
 	void ajaxResponse(const QVariant& resp);
@@ -99,12 +106,18 @@ protected:
 		int defaultValue = -1);
 	void bindBool(const QString& field, QLabel *view, QCheckBox *edit);
 	void bindRelation(const QString& field, QLabel *view, QComboBox *edit,
-		const QString& table, QPushButton *browseButton,
-		const QString& listTitle, const QString& column = QString());
+		const QString& table, const QString& column = QString(),
+		QPushButton *browseButton = 0, const QString& listTitle = QString());
 	void bindNumberSet(const QString& field, QLabel *view, QSpinBox *edit,
 		QComboBox *selector, const QStringList& columns,
 		const QStringList& patterns, const QString& separator = QString(),
 		int defaultValue = 0);
+	void bindNumberSelector(const QString& field, QLabel *view, QSpinBox *edit,
+		const RadioButtonMap& selectors_and_columns,
+		const RadioButtonMap& selector_edits_and_columns,
+		QButtonGroup *group = 0, QButtonGroup *edit_group = 0,
+		int defaultValue = 0, QRadioButton *defaultSelector = 0,
+		QRadioButton *defaultEditSelector = 0);
 
 	void darkenWidget(QWidget *widget);
 
