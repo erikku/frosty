@@ -24,6 +24,7 @@
 #include "LogWidget.h"
 #include "DevilWindow.h"
 #include "SkillWindow.h"
+#include "ImportExport.h"
 #include "ajax.h"
 
 #include <QtGui/QSystemTrayIcon>
@@ -31,8 +32,8 @@
 #include <QtGui/QMenu>
 
 Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
-	mLogWidget(0), mDevilWindow(0), mSkillWindow(0), mAdminSep(0),
-	mUsersAction(0)
+	mLogWidget(0), mDevilWindow(0), mSkillWindow(0), mImportExportWindow(0),
+	mAdminSep(0), mUsersAction(0)
 {
 	ui.setupUi(this);
 
@@ -69,6 +70,15 @@ Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
 	connect(mUsersAction, SIGNAL(triggered()), this, SLOT(showUsersWindow()));
 	connect(ui.usersButton, SIGNAL(clicked(bool)),
 		this, SLOT(showUsersWindow()));
+
+	// Import / Export Action
+	mImportExportAction = menu->addAction(/* icon, */tr("&Import / Export") );
+	mImportExportAction->setEnabled(false);
+	mImportExportAction->setVisible(false);
+	connect(mImportExportAction, SIGNAL(triggered()),
+		this, SLOT(showImportExportWindow()));
+	connect(ui.importExportButton, SIGNAL(clicked(bool)),
+		this, SLOT(showImportExportWindow()));
 
 	action = menu->addSeparator();
 
@@ -174,6 +184,18 @@ void Taskbar::showOptionsWindow()
 	mOptions->raise();
 };
 
+void Taskbar::showImportExportWindow()
+{
+	if(!mImportExportWindow)
+		mImportExportWindow = new ImportExport;
+
+	Q_ASSERT(mImportExportWindow != 0);
+
+	mImportExportWindow->show();
+	mImportExportWindow->activateWindow();
+	mImportExportWindow->raise();
+};
+
 void Taskbar::ajaxResponse(const QVariant& resp)
 {
 	QVariantMap result = resp.toMap();
@@ -190,6 +212,8 @@ void Taskbar::ajaxResponse(const QVariant& resp)
 			mAdminSep->setEnabled(true);
 			mUsersAction->setEnabled(true);
 			mUsersAction->setVisible(true);
+			mImportExportAction->setEnabled(true);
+			mImportExportAction->setVisible(true);
 		}
 	}
 };

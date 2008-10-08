@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/ImportExport.h                                                   *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,50 +17,32 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __ImportExport_h__
+#define __ImportExport_h__
 
-#include "ui_Taskbar.h"
+#include "ui_ImportExport.h"
 
-class Options;
-class UserList;
-class LogWidget;
-class DevilWindow;
-class SkillWindow;
-class ImportExport;
-class QAction;
-
-class Taskbar : public QWidget
+class ImportExport : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
+	ImportExport(QWidget *parent = 0);
 
 public slots:
-	void showLogWindow();
-	void showDevilWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showOptionsWindow();
-	void showImportExportWindow();
+	void pathChanged();
+	void toggleView();
+	void browse();
 
-protected slots:
+	void importDB();
+	void exportDB();
+
 	void ajaxResponse(const QVariant& resp);
 
 protected:
-	Ui::Taskbar ui;
+	Ui::ImportExport ui;
 
-	Options *mOptions;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	DevilWindow *mDevilWindow;
-	SkillWindow *mSkillWindow;
-	ImportExport *mImportExportWindow;
-
-	QAction *mAdminSep;
-	QAction *mUsersAction;
-	QAction *mImportExportAction;
+	QString mImportPath, mExportPath;
 };
 
-#endif // __Taskbar_h__
+#endif // __ImportExport_h__

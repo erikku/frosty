@@ -34,6 +34,7 @@ FORMS       += ui/PaletteEditor.ui \
                ui/DevilView.ui \
                ui/SkillView.ui \
                ui/IconSelect.ui \
+               ui/ImportExport.ui \
                ui/RelationEdit.ui \
                ui/RelationList.ui \
                ui/Options.ui \
@@ -57,6 +58,7 @@ HEADERS     += src/ajax.h \
                src/SearchEdit.h \
                src/IconEdit.h \
                src/IconSelect.h \
+               src/ImportExport.h \
                src/RelationEdit.h \
                src/RelationList.h \
                src/Settings.h \
@@ -85,6 +87,7 @@ SOURCES     += src/main.cpp \
                src/SkillWindow.cpp \
                src/IconEdit.cpp \
                src/IconSelect.cpp \
+               src/ImportExport.cpp \
                src/SearchEdit.cpp \
                src/RelationEdit.cpp \
                src/RelationList.cpp \
