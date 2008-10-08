@@ -183,6 +183,20 @@ void AjaxView::clear()
 
 				break;
 			}
+			case BindNumberRange:
+			{
+				QSpinBox *from = map.value("from", 0).value<QSpinBox*>();
+				Q_ASSERT(from != 0);
+
+				from->setValue( map.value("min").toInt() );
+
+				QSpinBox *to = map.value("to", 0).value<QSpinBox*>();
+				Q_ASSERT(to != 0);
+
+				to->setValue( map.value("to").toInt() );
+
+				break;
+			}
 			case BindEnum:
 			{
 				QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
@@ -642,6 +656,23 @@ void AjaxView::bindNumber(const QString& field, QLabel *view, QSpinBox *edit,
 	mBinds[field] = bindInfo;
 };
 
+void AjaxView::bindNumberRange(const QString& field, QLabel *view,
+	QSpinBox *from, QSpinBox *to, const QString& minColumn,
+	const QString& maxColumn, int defaultMin, int defaultMax)
+{
+	QVariantMap bindInfo;
+	bindInfo["view"] = qVariantFromValue(view);
+	bindInfo["from"] = qVariantFromValue(from);
+	bindInfo["to"] = qVariantFromValue(to);
+	bindInfo["min"] = defaultMin;
+	bindInfo["max"] = defaultMax;
+	bindInfo["min_column"] = minColumn;
+	bindInfo["max_column"] = maxColumn;
+	bindInfo["type"] = qVariantFromValue(AjaxView::BindNumberRange);
+
+	mBinds[field] = bindInfo;
+};
+
 void AjaxView::bindEnum(const QString& field, QLabel *view, QComboBox *edit,
 	const QMap<int, QString>& items, int defaultValue)
 {
@@ -1005,6 +1036,9 @@ QVariantMap AjaxView::createViewAction() const
 
 		switch( map.value("type", AjaxView::BindText).value<AjaxView::BindType>() )
 		{
+			case AjaxView::BindNumberRange:
+				columns << map.value("min_column") << map.value("max_column");
+				break;
 			case AjaxView::BindNumberSet:
 			case AjaxView::BindNumberSelector:
 				columns << map.value("columns").toList();
@@ -1085,6 +1119,20 @@ QVariantMap AjaxView::createUpdateAction() const
 
 				columns << field;
 				row[field] = edit->value();
+
+				break;
+			}
+			case AjaxView::BindNumberRange:
+			{
+				QSpinBox *from = map.value("from", 0).value<QSpinBox*>();
+				Q_ASSERT(from != 0);
+
+				QSpinBox *to = map.value("to", 0).value<QSpinBox*>();
+				Q_ASSERT(to != 0);
+
+				columns << map.value("min_column") << map.value("max_column");
+				row[map.value("min_column").toString()] = from->value();
+				row[map.value("max_column").toString()] = to->value();
 
 				break;
 			}
@@ -1262,6 +1310,31 @@ void AjaxView::processBindValues(const QVariantMap& values)
 				Q_ASSERT(edit != 0);
 
 				edit->setValue(number);
+
+				break;
+			}
+			case AjaxView::BindNumberRange:
+			{
+				//std::cout << "AjaxView::BindNumberRange" << std::endl;
+
+				int min = values.value(
+					map.value("min_column").toString() ).toInt();
+				int max = values.value(
+					map.value("max_column").toString() ).toInt();
+
+				QLabel *view = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view != 0);
+
+				view->setText( QString("%1 - %2").arg(min).arg(max) );
+
+				QSpinBox *from = map.value("from", 0).value<QSpinBox*>();
+				Q_ASSERT(from != 0);
+
+				QSpinBox *to = map.value("to", 0).value<QSpinBox*>();
+				Q_ASSERT(to != 0);
+
+				from->setValue(min);
+				to->setValue(max);
 
 				break;
 			}
