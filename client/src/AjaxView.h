@@ -110,7 +110,9 @@ protected:
 	void bindBool(const QString& field, QLabel *view, QCheckBox *edit);
 	void bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 		const QString& table, const QString& column = QString(),
-		QPushButton *browseButton = 0, const QString& listTitle = QString());
+		QPushButton *browseButton = 0, const QString& listTitle = QString(),
+		const QString& noneName = QString(), const QVariantList& filters =
+		QVariantList());
 	void bindNumberSet(const QString& field, QLabel *view, QSpinBox *edit,
 		QComboBox *selector, const QStringList& columns,
 		const QStringList& patterns, const QString& separator = QString(),

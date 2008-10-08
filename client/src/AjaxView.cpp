@@ -210,6 +210,8 @@ void AjaxView::clear()
 				//Q_ASSERT(edit != 0);
 
 				// edit->clear();
+				//if( map.contains("none_name") )
+					//edit->addItem(map.value("none_name").toString(), 0);
 
 				break;
 			}
@@ -672,7 +674,8 @@ void AjaxView::bindBool(const QString& field, QLabel *view, QCheckBox *edit)
 
 void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 	const QString& table, const QString& column, QPushButton *browseButton,
-	const QString& listTitle)
+	const QString& listTitle, const QString& noneName,
+	const QVariantList& filters)
 {
 	RelationList *list = new RelationList;
 	Q_ASSERT(list != 0);
@@ -687,11 +690,21 @@ void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 	bindInfo["title"] = listTitle;
 	bindInfo["cache"] = QVariantMap();
 
+	if( !noneName.isEmpty() )
+	{
+		bindInfo["none_name"] = noneName;
+
+		edit->addItem(noneName, 0);
+	}
+
 	if(browseButton)
 	{
 		bindInfo["list"] = qVariantFromValue(list);
 		bindInfo["button"] = qVariantFromValue(browseButton);
 	}
+
+	if( !filters.isEmpty() )
+		bindInfo["filters"] = filters;
 
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindRelation);
 
@@ -956,6 +969,9 @@ void AjaxView::refreshRelationCache(const QString& field)
 		action["order_by"] = QVariantList() << orderby_name << orderby_id;
 		action["user_data"] = ( bindInfo.value("table").toString()
 			+ QString("_relation_cache") );
+
+		if( bindInfo.contains("filters") )
+			action["where"] = bindInfo.value("filters");
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
@@ -1481,6 +1497,9 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 			QVariantList rows = result.value("rows").toList();
 
 			edit->clear();
+
+			if( bindInfo.contains("none_name") )
+				edit->addItem(bindInfo.value("none_name").toString(), 0);
 
 			int index = -1;
 
