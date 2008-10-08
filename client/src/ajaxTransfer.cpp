@@ -89,7 +89,7 @@ ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 	header.addValue("Host", url.host());
 
 	connect( transfer->mHttp, SIGNAL(requestFinished(int, bool)),
-		transfer, SLOT(requestFinished(int, bool)) );
+		transfer, SLOT(requestFinished(int, bool)), Qt::QueuedConnection );
 
 	connect( transfer->mHttp, SIGNAL(readyRead(const QHttpResponseHeader&)),
 		transfer, SLOT(readyRead(const QHttpResponseHeader&)) );
