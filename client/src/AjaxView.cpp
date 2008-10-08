@@ -183,6 +183,15 @@ void AjaxView::clear()
 
 				break;
 			}
+			case BindEnum:
+			{
+				QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
+				Q_ASSERT(edit != 0);
+
+				edit->setCurrentIndex( edit->findData( map.value("default") ) );
+
+				break;
+			}
 			case BindBool:
 			{
 				QCheckBox *edit = map.value("edit", 0).value<QCheckBox*>();
@@ -631,6 +640,26 @@ void AjaxView::bindNumber(const QString& field, QLabel *view, QSpinBox *edit,
 	mBinds[field] = bindInfo;
 };
 
+void AjaxView::bindEnum(const QString& field, QLabel *view, QComboBox *edit,
+	const QMap<int, QString>& items, int defaultValue)
+{
+	QVariantMap bindInfo;
+	bindInfo["default"] = defaultValue;
+	bindInfo["view"] = qVariantFromValue(view);
+	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["type"] = qVariantFromValue(AjaxView::BindEnum);
+
+	QMapIterator<int, QString> i = items;
+
+	while( i.hasNext() )
+	{
+		i.next();
+		edit->addItem( i.value(), i.key() );
+	}
+
+	mBinds[field] = bindInfo;
+};
+
 void AjaxView::bindBool(const QString& field, QLabel *view, QCheckBox *edit)
 {
 	QVariantMap bindInfo;
@@ -1036,6 +1065,16 @@ QVariantMap AjaxView::createUpdateAction() const
 
 				break;
 			}
+			case AjaxView::BindEnum:
+			{
+				QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
+				Q_ASSERT(edit != 0);
+
+				columns << field;
+				row[field] = edit->itemData( edit->currentIndex() );
+
+				break;
+			}
 			case AjaxView::BindBool:
 			{
 				QCheckBox *edit = map.value("edit", 0).value<QCheckBox*>();
@@ -1200,6 +1239,28 @@ void AjaxView::processBindValues(const QVariantMap& values)
 				Q_ASSERT(edit != 0);
 
 				edit->setValue(number);
+
+				break;
+			}
+			case AjaxView::BindEnum:
+			{
+				//std::cout << "AjaxView::BindEnum" << std::endl;
+
+				int number = values.value(field).toInt();
+
+				QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
+				Q_ASSERT(edit != 0);
+
+				int index = edit->findData(number);
+				if(index == -1)
+					index = edit->findData( map.value("default") );
+
+				edit->setCurrentIndex(index);
+
+				QLabel *view = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view != 0);
+
+				view->setText( edit->itemText(index) );
 
 				break;
 			}

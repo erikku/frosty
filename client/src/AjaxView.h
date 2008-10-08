@@ -52,6 +52,7 @@ public:
 		BindTextBox,
 		BindIcon,
 		BindNumber,
+		BindEnum,
 		BindBool,
 		BindRelation,
 		BindNumberSet,
@@ -104,6 +105,8 @@ protected:
 		const QString& path, const QString& searchPath);
 	void bindNumber(const QString& field, QLabel *view, QSpinBox *edit,
 		int defaultValue = -1);
+	void bindEnum(const QString& field, QLabel *view, QComboBox *edit,
+		const QMap<int, QString>& items, int defaultValue = 0);
 	void bindBool(const QString& field, QLabel *view, QCheckBox *edit);
 	void bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 		const QString& table, const QString& column = QString(),
