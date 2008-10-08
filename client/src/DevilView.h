@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/DevilView.h                                                      *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,46 +17,34 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __DevilView_h__
+#define __DevilView_h__
 
-#include "ui_Taskbar.h"
+#include "AjaxView.h"
+#include "ui_DevilView.h"
 
-class Options;
-class UserList;
-class LogWidget;
-class DevilWindow;
-class SkillWindow;
-class QAction;
+#include <QtCore/QVariant>
+#include <QtCore/QList>
+#include <QtCore/QMap>
 
-class Taskbar : public QWidget
+class DevilView : public AjaxView
 {
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
-
-public slots:
-	void showLogWindow();
-	void showDevilWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showOptionsWindow();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	DevilView(QWidget *parent = 0);
 
 protected:
-	Ui::Taskbar ui;
+	virtual bool checkValues();
+	virtual QString table() const;
 
-	Options *mOptions;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	DevilWindow *mDevilWindow;
-	SkillWindow *mSkillWindow;
+	virtual QString addWarningTitle() const;
+	virtual QString addWarningMessage() const;
 
-	QAction *mAdminSep;
-	QAction *mUsersAction;
+	RadioButtonMap radioMap(const QString& field,
+		const QList<QRadioButton*>& selectors) const;
+
+	Ui::DevilView ui;
 };
 
-#endif // __Taskbar_h__
+#endif // __DevilView_h__

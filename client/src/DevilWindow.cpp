@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/DevilWindow.cpp                                                  *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,46 +17,42 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#include "DevilWindow.h"
+#include "DevilList.h"
+#include "DevilView.h"
+#include "UserList.h"
+#include "Options.h"
 
-#include "ui_Taskbar.h"
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QSplitter>
 
-class Options;
-class UserList;
-class LogWidget;
-class DevilWindow;
-class SkillWindow;
-class QAction;
-
-class Taskbar : public QWidget
+DevilWindow::DevilWindow(QWidget *parent) : QWidget(parent)
 {
-	Q_OBJECT
+	mDevilView = new DevilView;
+	mDevilList = new DevilList(mDevilView);
 
-public:
-	Taskbar(QWidget *parent = 0);
+	QSplitter *mainSplitter = new QSplitter;
+	mainSplitter->addWidget(mDevilList);
+	mainSplitter->addWidget(mDevilView);
 
-public slots:
-	void showLogWindow();
-	void showDevilWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showOptionsWindow();
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->addWidget(mainSplitter);
 
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	connect(mDevilList, SIGNAL(itemClicked(int)), mDevilView, SLOT(view(int)));
+	connect(mDevilView, SIGNAL(viewChanged()), mDevilList, SLOT(refresh()));
+	connect(mDevilList, SIGNAL(addItemRequested()), mDevilView, SLOT(add()));
+	connect(Options::getSingletonPtr(), SIGNAL(optionsChanged()),
+		this, SLOT(refresh()));
 
-protected:
-	Ui::Taskbar ui;
+	setLayout(mainLayout);
+	setWindowTitle( tr("%1 - Devil List").arg(
+		tr("Shin Megami Tensei IMAGINE DB") ) );
 
-	Options *mOptions;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	DevilWindow *mDevilWindow;
-	SkillWindow *mSkillWindow;
-
-	QAction *mAdminSep;
-	QAction *mUsersAction;
+	resize(800, 600);
 };
 
-#endif // __Taskbar_h__
+void DevilWindow::refresh()
+{
+	mDevilList->refresh();
+	mDevilView->refresh();
+};

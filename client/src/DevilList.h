@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/DevilList.h                                                      *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,46 +17,41 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __DevilList_h__
+#define __DevilList_h__
 
-#include "ui_Taskbar.h"
+#include "AjaxList.h"
 
-class Options;
-class UserList;
-class LogWidget;
-class DevilWindow;
-class SkillWindow;
-class QAction;
+#include <QtCore/QMap>
+#include <QtCore/QVariant>
 
-class Taskbar : public QWidget
+class DevilView;
+class QListWidgetItem;
+
+class DevilList : public AjaxList
 {
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
-
-public slots:
-	void showLogWindow();
-	void showDevilWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showOptionsWindow();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	DevilList(DevilView *view = 0, QWidget *parent = 0);
 
 protected:
-	Ui::Taskbar ui;
+	virtual QVariant filterAction() const;
+	virtual QVariant filterUserData() const;
 
-	Options *mOptions;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	DevilWindow *mDevilWindow;
-	SkillWindow *mSkillWindow;
+	virtual QVariant listAction() const;
+	virtual QVariant listUserData() const;
 
-	QAction *mAdminSep;
-	QAction *mUsersAction;
+	virtual QString switchTitle() const;
+	virtual QString switchMessage() const;
+
+	virtual QString deleteTitle() const;
+	virtual QString deleteMessage() const;
+	virtual QVariant deleteAction(int id) const;
+	virtual QVariant deleteUserData() const;
+
+	virtual int filterID(const QVariantMap& map) const;
+	virtual QString itemIcon(const QVariantMap& map) const;
 };
 
-#endif // __Taskbar_h__
+#endif // __DevilList_h__

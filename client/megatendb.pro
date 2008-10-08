@@ -31,6 +31,7 @@ TRANSLATIONS = trans/megatendb_en.ts \
                trans/megatendb_ja.ts
 FORMS       += ui/PaletteEditor.ui \
                ui/AjaxList.ui \
+               ui/DevilView.ui \
                ui/SkillView.ui \
                ui/IconSelect.ui \
                ui/RelationEdit.ui \
@@ -46,9 +47,12 @@ HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/PaletteEditor.h \
                src/AjaxList.h \
+               src/DevilList.h \
                src/SkillList.h \
                src/AjaxView.h \
+               src/DevilView.h \
                src/SkillView.h \
+               src/DevilWindow.h \
                src/SkillWindow.h \
                src/SearchEdit.h \
                src/IconEdit.h \
@@ -72,12 +76,15 @@ SOURCES     += src/main.cpp \
                src/json.cpp \
                src/PaletteEditor.cpp \
                src/AjaxList.cpp \
+               src/DevilList.cpp \
                src/SkillList.cpp \
                src/AjaxView.cpp \
+               src/DevilView.cpp \
                src/SkillView.cpp \
+               src/DevilWindow.cpp\
+               src/SkillWindow.cpp \
                src/IconEdit.cpp \
                src/IconSelect.cpp \
-               src/SkillWindow.cpp \
                src/SearchEdit.cpp \
                src/RelationEdit.cpp \
                src/RelationList.cpp \

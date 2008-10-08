@@ -22,6 +22,7 @@
 #include "UserList.h"
 #include "Settings.h"
 #include "LogWidget.h"
+#include "DevilWindow.h"
 #include "SkillWindow.h"
 #include "ajax.h"
 
@@ -30,7 +31,8 @@
 #include <QtGui/QMenu>
 
 Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
-	mLogWidget(0), mSkillWindow(0), mAdminSep(0), mUsersAction(0)
+	mLogWidget(0), mDevilWindow(0), mSkillWindow(0), mAdminSep(0),
+	mUsersAction(0)
 {
 	ui.setupUi(this);
 
@@ -43,6 +45,12 @@ Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
 
 	QMenu *menu = new QMenu( tr("MegatenDB") );
 	QAction *action;
+
+	// Devils Action
+	action = menu->addAction(/* icon, */tr("&Devils") );
+	connect(action, SIGNAL(triggered()), this, SLOT(showDevilWindow()));
+	connect(ui.devilsButton, SIGNAL(clicked(bool)),
+		this, SLOT(showDevilWindow()));
 
 	// Skills Action
 	action = menu->addAction(/* icon, */tr("&Skills") );
@@ -110,6 +118,18 @@ void Taskbar::showLogWindow()
 	mLogWidget->show();
 	mLogWidget->activateWindow();
 	mLogWidget->raise();
+};
+
+void Taskbar::showDevilWindow()
+{
+	if(!mDevilWindow)
+		mDevilWindow = new DevilWindow;
+
+	Q_ASSERT(mDevilWindow != 0);
+
+	mDevilWindow->show();
+	mDevilWindow->activateWindow();
+	mDevilWindow->raise();
 };
 
 void Taskbar::showSkillWindow()

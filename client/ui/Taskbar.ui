@@ -21,6 +21,13 @@
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_2" >
        <item>
+        <widget class="QPushButton" name="devilsButton" >
+         <property name="text" >
+          <string>&amp;Devils</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="skillsButton" >
          <property name="text" >
           <string>&amp;Skills</string>

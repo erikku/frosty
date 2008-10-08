@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/DevilWindow.h                                                    *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,46 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __DevilWindow_h__
+#define __DevilWindow_h__
 
-#include "ui_Taskbar.h"
+#include <QtGui/QWidget>
+#include <QtCore/QVariant>
+#include <QtCore/QMap>
 
-class Options;
-class UserList;
-class LogWidget;
-class DevilWindow;
-class SkillWindow;
-class QAction;
+class DevilList;
+class DevilView;
+class QListWidgetItem;
 
-class Taskbar : public QWidget
+class DevilWindow : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
+	DevilWindow(QWidget *parent = 0);
 
 public slots:
-	void showLogWindow();
-	void showDevilWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showOptionsWindow();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void refresh();
 
 protected:
-	Ui::Taskbar ui;
-
-	Options *mOptions;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	DevilWindow *mDevilWindow;
-	SkillWindow *mSkillWindow;
-
-	QAction *mAdminSep;
-	QAction *mUsersAction;
+	DevilList *mDevilList;
+	DevilView *mDevilView;
 };
 
-#endif // __Taskbar_h__
+#endif // __DevilWindow_h__
