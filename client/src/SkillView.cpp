@@ -68,7 +68,8 @@ SkillView::SkillView(QWidget *parent) : AjaxView(parent)
 		"icons/skills");
 	bindNumber("class", ui.skill_class, ui.classEdit);
 	bindNumber("rank", ui.rank, ui.rankEdit);
-	bindBool("player_only", ui.playerOnly, ui.playerOnlyEdit);
+	bindBool("player_only", ui.playerOnly, ui.playerOnlyEdit,
+		tr("YES"), tr("NO"));
 	bindTextBox("desc_en", ui.desc_en, ui.desc_enEdit);
 	bindTextBox("desc_ja", ui.desc_ja, ui.desc_jaEdit);
 	bindRelation("action_type", ui.type, ui.typeEdit, "db_action_type",

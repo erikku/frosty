@@ -107,7 +107,8 @@ protected:
 		int defaultValue = -1);
 	void bindEnum(const QString& field, QLabel *view, QComboBox *edit,
 		const QMap<int, QString>& items, int defaultValue = 0);
-	void bindBool(const QString& field, QLabel *view, QCheckBox *edit);
+	void bindBool(const QString& field, QLabel *view, QCheckBox *edit,
+		const QString& yes = QString(), const QString& no = QString());
 	void bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 		const QString& table, const QString& column = QString(),
 		QPushButton *browseButton = 0, const QString& listTitle = QString(),

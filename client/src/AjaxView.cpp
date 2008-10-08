@@ -662,12 +662,19 @@ void AjaxView::bindEnum(const QString& field, QLabel *view, QComboBox *edit,
 	mBinds[field] = bindInfo;
 };
 
-void AjaxView::bindBool(const QString& field, QLabel *view, QCheckBox *edit)
+void AjaxView::bindBool(const QString& field, QLabel *view, QCheckBox *edit,
+	const QString& yes, const QString& no)
 {
 	QVariantMap bindInfo;
 	bindInfo["view"] = qVariantFromValue(view);
 	bindInfo["edit"] = qVariantFromValue(edit);
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindBool);
+
+	if( !yes.isEmpty() && !no.isEmpty() )
+	{
+		bindInfo["yes"] = yes;
+		bindInfo["no"] = no;
+	}
 
 	mBinds[field] = bindInfo;
 };
@@ -1289,7 +1296,15 @@ void AjaxView::processBindValues(const QVariantMap& values)
 				QLabel *view = map.value("view", 0).value<QLabel*>();
 				Q_ASSERT(view != 0);
 
-				view->setText( cond ? tr("YES") : tr("NO") );
+				if( map.contains("yes") )
+				{
+					view->setText( cond ? map.value("yes").toString() :
+						map.value("no").toString() );
+				}
+				else
+				{
+					view->setText( cond ? tr("x") : tr("-") );
+				}
 
 				QCheckBox *edit = map.value("edit", 0).value<QCheckBox*>();
 				Q_ASSERT(edit != 0);
