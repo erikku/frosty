@@ -645,13 +645,16 @@ void AjaxView::bindIcon(const QString& field, QLabel *view, IconEdit *edit,
 };
 
 void AjaxView::bindNumber(const QString& field, QLabel *view, QSpinBox *edit,
-	int defaultValue)
+	int defaultValue, const QString& pattern)
 {
 	QVariantMap bindInfo;
 	bindInfo["default"] = defaultValue;
 	bindInfo["view"] = qVariantFromValue(view);
 	bindInfo["edit"] = qVariantFromValue(edit);
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindNumber);
+
+	if( !pattern.isEmpty() )
+		bindInfo["pattern"] = pattern;
 
 	mBinds[field] = bindInfo;
 };
@@ -1302,9 +1305,21 @@ void AjaxView::processBindValues(const QVariantMap& values)
 				Q_ASSERT(view != 0);
 
 				if( number < 0 )
+				{
 					view->setText( tr("N/A") );
+				}
 				else
-					view->setText( QString::number(number) );
+				{
+					if( map.contains("pattern") )
+					{
+						view->setText(
+							map.value("pattern").toString().arg(number) );
+					}
+					else
+					{
+						view->setText( QString::number(number) );
+					}
+				}
 
 				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
 				Q_ASSERT(edit != 0);

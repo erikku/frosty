@@ -105,7 +105,7 @@ protected:
 	void bindIcon(const QString& field, QLabel *view, IconEdit *edit,
 		const QString& path, const QString& searchPath);
 	void bindNumber(const QString& field, QLabel *view, QSpinBox *edit,
-		int defaultValue = -1);
+		int defaultValue = -1, const QString& pattern = QString());
 	void bindNumberRange(const QString& field, QLabel *view, QSpinBox *from,
 		QSpinBox *to, const QString& minColumn, const QString& maxColumn,
 		int defaultMin = 0, int defaultMax = 100);
