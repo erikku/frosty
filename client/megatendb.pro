@@ -34,6 +34,8 @@ FORMS       += ui/PaletteEditor.ui \
                ui/DevilView.ui \
                ui/SkillView.ui \
                ui/IconSelect.ui \
+               ui/InfoListWidget.ui \
+               ui/InfoListWidgetItem.ui \
                ui/ImportExport.ui \
                ui/RelationEdit.ui \
                ui/RelationList.ui \
@@ -47,6 +49,7 @@ FORMS       += ui/PaletteEditor.ui \
 HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/PaletteEditor.h \
+               src/ClickableLabel.h \
                src/AjaxList.h \
                src/DevilList.h \
                src/SkillList.h \
@@ -59,6 +62,8 @@ HEADERS     += src/ajax.h \
                src/IconEdit.h \
                src/IconSelect.h \
                src/ImportExport.h \
+               src/InfoListWidget.h \
+               src/InfoListWidgetItem.h \
                src/RelationEdit.h \
                src/RelationList.h \
                src/Settings.h \
@@ -77,6 +82,7 @@ SOURCES     += src/main.cpp \
                src/ajaxTransfer.cpp \
                src/json.cpp \
                src/PaletteEditor.cpp \
+               src/ClickableLabel.cpp \
                src/AjaxList.cpp \
                src/DevilList.cpp \
                src/SkillList.cpp \
@@ -88,6 +94,8 @@ SOURCES     += src/main.cpp \
                src/IconEdit.cpp \
                src/IconSelect.cpp \
                src/ImportExport.cpp \
+               src/InfoListWidget.cpp \
+               src/InfoListWidgetItem.cpp \
                src/SearchEdit.cpp \
                src/RelationEdit.cpp \
                src/RelationList.cpp \

@@ -1,5 +1,9 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
+	<file alias="up1.png">res/up1.png</file>
+	<file alias="up2.png">res/up2.png</file>
+	<file alias="down1.png">res/down1.png</file>
+	<file alias="down2.png">res/down2.png</file>
 	<file alias="dark.xml">res/dark.xml</file>
 	<file alias="blank.png">res/blank.png</file>
 	<file alias="edit.png">res/edit.png</file>
