@@ -132,7 +132,7 @@ void Updater::downloadFile(const QString& path)
 
 	QSettings settings;
 	QUrl url = settings.value("backend",
-		"http://gigadelic.homelinux.net:10900/megaten/backend.php").toUrl();
+		"https://gigadelic.homelinux.net:55517/backend.php").toUrl();
 
 	url.setPath( QFileInfo(url.path()).dir().path() +
 		QString("/updates/%1").arg(path) );

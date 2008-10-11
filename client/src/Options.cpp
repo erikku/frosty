@@ -85,6 +85,17 @@ void Options::saveSettings()
 		settings->setLang("ja");
 
 	hide();
+
+	QMessageBox::StandardButton button = QMessageBox::warning(this,
+		tr("Options Change"),
+		tr("Some of these options may not take effect until the application "
+		"is restarted. Do you wish to close the application now?"),
+		QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+	if(button == QMessageBox::No)
+		return;
+
+	qApp->quit();
 };
 
 void Options::clearLoginInfo()

@@ -36,7 +36,7 @@ Settings::Settings(QObject *parent) : QObject(parent)
 	{
 		// http://www.troopersklan.jp/megaten/backend.php
 		QString text = QInputDialog::getText(0, tr("MegaTen Database Location"),
-			tr("URL:"), QLineEdit::Normal, "http://gigadelic.homelinux.net:10900/megaten/backend.php");
+			tr("URL:"), QLineEdit::Normal, "https://gigadelic.homelinux.net:55517/backend.php");
 
 		if( !text.isEmpty() )
 			mURL = QUrl(text);

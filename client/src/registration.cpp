@@ -33,8 +33,12 @@ void registration::loadValidationImage(const QUrl& url)
 	header.addValue("User-Agent", "Qt4 JSON");
 	header.addValue("Host", url.host());
 
-	QHttp *http = new QHttp(url.host(), QHttp::ConnectionModeHttp, url.port(80), 0);
+	QHttp *http = new QHttp(url.host(),
+		(url.scheme() == "https") ? QHttp::ConnectionModeHttps :
+		QHttp::ConnectionModeHttp, url.port(80), 0);
 
+	connect( http, SIGNAL(sslErrors(const QList<QSslError>&)),
+		this, SLOT(sslErrors(const QList<QSslError>&)) );
 	connect( http, SIGNAL(readyRead(const QHttpResponseHeader&)),
 		this, SLOT(readyRead(const QHttpResponseHeader&)) );
 
@@ -67,8 +71,12 @@ void registration::registerUser(const QUrl& url, const QString& email, const QSt
 	header.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
 	header.setContentLength( data.length() );
 
-	QHttp *http = new QHttp(url.host(), QHttp::ConnectionModeHttp, url.port(80), 0);
+	QHttp *http = new QHttp(url.host(),
+		(url.scheme() == "https") ? QHttp::ConnectionModeHttps :
+		QHttp::ConnectionModeHttp, url.port(80), 0);
 
+	connect( http, SIGNAL(sslErrors(const QList<QSslError>&)),
+		this, SLOT(sslErrors(const QList<QSslError>&)) );
 	connect( http, SIGNAL(readyRead(const QHttpResponseHeader&)),
 		this, SLOT(readyRead(const QHttpResponseHeader&)) );
 
@@ -108,4 +116,14 @@ void registration::readyRead(const QHttpResponseHeader& resp)
 	}
 
 	http->deleteLater();
+};
+
+void registration::sslErrors(const QList<QSslError>& errors)
+{
+	QStringList list;
+	foreach(QSslError err, errors)
+		list << err.errorString();
+
+	QMessageBox::critical(0, tr("AJAX Error"), tr("The AJAX backend has "
+		"encountered the following SSL errors:\n%1").arg( list.join("\n") ));
 };

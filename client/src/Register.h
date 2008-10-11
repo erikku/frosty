@@ -37,6 +37,7 @@ public:
 public slots:
 	void showLogin();
 	void guestLogin();
+	void showOptions();
 	void sendRequest();
 	void registrationComplete();
 	void validationImage(const QPixmap& image, const QString& error);

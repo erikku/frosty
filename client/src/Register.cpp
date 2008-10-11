@@ -20,6 +20,7 @@
 #include "Register.h"
 #include "Settings.h"
 #include "Taskbar.h"
+#include "Options.h"
 #include "registration.h"
 #include "Login.h"
 #include "sha1.h"
@@ -54,6 +55,7 @@ Register::Register(QWidget *parent) : QWidget(parent), mFirst(true)
 	connect(ui.passwordEdit2, SIGNAL(returnPressed()), this, SLOT(sendRequest()));
 	connect(ui.validationEdit, SIGNAL(returnPressed()), this, SLOT(sendRequest()));
 	connect(ui.guestButton, SIGNAL(clicked(bool)), this, SLOT(guestLogin()));
+	connect(ui.optionsButton, SIGNAL(clicked(bool)), this, SLOT(showOptions()));
 
 	connect(mRegistration, SIGNAL(registrationComplete()), this,
 		SLOT(registrationComplete()));
@@ -68,7 +70,10 @@ Register::Register(QWidget *parent) : QWidget(parent), mFirst(true)
 	setWindowTitle( tr("%1 - Registration").arg(
 		tr("Shin Megami Tensei IMAGINE DB") ) );
 
-	setEnabled(false);
+	ui.grid->setEnabled(false);
+	ui.guestButton->setEnabled(false);
+	ui.existingButton->setEnabled(false);
+	ui.registerButton->setEnabled(false);
 };
 
 Register::~Register()
@@ -131,7 +136,10 @@ void Register::validationImage(const QPixmap& image, const QString& error)
 	ui.validationEdit->clear();
 
 	mFirst = false;
-	setEnabled(true);
+	ui.grid->setEnabled(true);
+	ui.guestButton->setEnabled(true);
+	ui.existingButton->setEnabled(true);
+	ui.registerButton->setEnabled(true);
 };
 
 void Register::sendRequest()
@@ -174,7 +182,10 @@ void Register::sendRequest()
 		return;
 	}
 
-	setEnabled(false);
+	ui.grid->setEnabled(false);
+	ui.guestButton->setEnabled(false);
+	ui.existingButton->setEnabled(false);
+	ui.registerButton->setEnabled(false);
 
 	pass = mRegistration->salt() + pass;
 
@@ -213,4 +224,9 @@ void Register::guestLogin()
 
 	deleteLater();
 	close();
+};
+
+void Register::showOptions()
+{
+	Options::getSingletonPtr()->loadSettings();
 };

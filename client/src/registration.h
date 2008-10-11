@@ -27,6 +27,7 @@
 #include <QtGui/QPixmap>
 
 #include <QtNetwork/QHttpResponseHeader>
+#include <QtNetwork/QSslError>
 
 class registration : public QObject
 {
@@ -48,6 +49,7 @@ signals:
 
 protected slots:
 	void readyRead(const QHttpResponseHeader& resp);
+	void sslErrors(const QList<QSslError>& errors);
 
 protected:
 	QString mCookie, mSalt;
