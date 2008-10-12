@@ -23,12 +23,18 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QFileSystemWatcher>
 #include <QtXml/QDomDocument>
 
 static Config *g_config_inst = 0;
 
 Config::Config(QObject *parent) : QObject(parent)
 {
+	mWatcher = new QFileSystemWatcher;
+
+	connect(mWatcher, SIGNAL(fileChanged(const QString&)),
+		this, SLOT(loadConfig(const QString&)));
+
 	loadDefaults();
 };
 
@@ -66,30 +72,40 @@ void Config::loadDefaults()
 	mSslEnabled = false;
 };
 
-bool Config::loadConfig(const QString& path)
+void Config::loadConfig(const QString& path)
 {
+	if( mWatcher->files().isEmpty() )
+	{
+		mWatcher->addPath(path);
+	}
+	else if(mWatcher->files().first() != path)
+	{
+		mWatcher->removePath( mWatcher->files().first() );
+		mWatcher->addPath(path);
+	}
+
 	QFileInfo info(path);
 
 	if( !info.exists() )
 	{
-		LOG_ERROR( tr("Config file '%1' does not exist.").arg(path) );
+		LOG_ERROR( tr("Config file '%1' does not exist.\n").arg(path) );
 
-		return false;
+		return;
 	}
 
 	if( !info.isReadable() )
 	{
-		LOG_ERROR( tr("Can not read config file '%1'.").arg(path) );
+		LOG_ERROR( tr("Can not read config file '%1'.\n").arg(path) );
 
-		return false;
+		return;
 	}
 
 	QFile configFile(path);
 	if( !configFile.open(QIODevice::ReadOnly) )
 	{
-		LOG_ERROR( tr("Failed to open config file '%1'.").arg(path) );
+		LOG_ERROR( tr("Failed to open config file '%1'.\n").arg(path) );
 
-		return false;
+		return;
 	}
 
 	QString errorMsg;
@@ -99,104 +115,106 @@ bool Config::loadConfig(const QString& path)
 	if( !doc.setContent(&configFile, false, &errorMsg, &errorLine,
 		&errorColumn) )
 	{
-		LOG_ERROR( tr("Failed to parse config file:\n%1:%2: %3").arg(
+		LOG_ERROR( tr("Failed to parse config file:\n%1:%2: %3\n").arg(
 			path).arg(errorLine).arg(errorMsg) );
 
 		configFile.close();
 
-		return false;
+		return;
 	}
 
 	QList<QDomNode> nodes;
-
-	// <connection><address>
-	nodes = elementsByXPath(doc, "/connection/address");
-	if( nodes.count() && nodes.first().isElement() )
-		mAddress = nodes.first().toElement().text().trimmed().toLower();
-	else
-		LOG_WARNING( tr("Failed to find address in config file") );
-
-	// <connection><port>
-	nodes = elementsByXPath(doc, "/connection/port");
-	if( nodes.count() && nodes.first().isElement() )
-		mPort = nodes.first().toElement().text().trimmed().toInt();
-	else
-		LOG_WARNING( tr("Failed to find port in config file") );
 
 	// <log><path>
 	nodes = elementsByXPath(doc, "/log/path");
 	if( nodes.count() && nodes.first().isElement() )
 		mLogPath = nodes.first().toElement().text().trimmed();
 	else
-		LOG_WARNING( tr("Failed to find log path in config file") );
-
-	// <auth><admin>
-	nodes = elementsByXPath(doc, "/auth/admin");
-	if( nodes.count() && nodes.first().isElement() )
-		mAuthAdminUser = nodes.first().toElement().text().trimmed();
-	else
-		LOG_WARNING( tr("Failed to find auth admin in config file") );
+		LOG_WARNING( tr("Failed to find log path in config file\n") );
 
 	// <log><levels><critical>
 	nodes = elementsByXPath(doc, "/log/levels/critical");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <critical>, default will be used") );
+		LOG_WARNING( tr("Error parsing <critical>, default will be used\n") );
 	else
 		mLogCritical = nodeToBool(nodes.first(), mLogCritical);
 
 	// <log><levels><error>
 	nodes = elementsByXPath(doc, "/log/levels/error");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <error>, default will be used") );
+		LOG_WARNING( tr("Error parsing <error>, default will be used\n") );
 	else
 		mLogError = nodeToBool(nodes.first(), mLogInfo);
 
 	// <log><levels><warning>
 	nodes = elementsByXPath(doc, "/log/levels/warning");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <warning>, default will be used") );
+		LOG_WARNING( tr("Error parsing <warning>, default will be used\n") );
 	else
 		mLogWarning = nodeToBool(nodes.first(), mLogWarning);
 
 	// <log><levels><info>
 	nodes = elementsByXPath(doc, "/log/levels/info");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <info>, default will be used") );
+		LOG_WARNING( tr("Error parsing <info>, default will be used\n") );
 	else
 		mLogInfo = nodeToBool(nodes.first(), mLogInfo);
 
 	// <log><levels><debug>
 	nodes = elementsByXPath(doc, "/log/levels/debug");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <debug>, default will be used") );
+		LOG_WARNING( tr("Error parsing <debug>, default will be used\n") );
 	else
 		mLogDebug = nodeToBool(nodes.first(), mLogDebug);
+
+	Log::getSingletonPtr()->loadConfig();
+
+	// <connection><address>
+	nodes = elementsByXPath(doc, "/connection/address");
+	if( nodes.count() && nodes.first().isElement() )
+		mAddress = nodes.first().toElement().text().trimmed().toLower();
+	else
+		LOG_WARNING( tr("Failed to find address in config file\n") );
+
+	// <connection><port>
+	nodes = elementsByXPath(doc, "/connection/port");
+	if( nodes.count() && nodes.first().isElement() )
+		mPort = nodes.first().toElement().text().trimmed().toInt();
+	else
+		LOG_WARNING( tr("Failed to find port in config file\n") );
+
+	// <auth><admin>
+	nodes = elementsByXPath(doc, "/auth/admin");
+	if( nodes.count() && nodes.first().isElement() )
+		mAuthAdminUser = nodes.first().toElement().text().trimmed();
+	else
+		LOG_WARNING( tr("Failed to find auth admin in config file\n") );
 
 	// <auth><defaults><admin>
 	nodes = elementsByXPath(doc, "/auth/defaults/admin");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <admin>, default will be used") );
+		LOG_WARNING( tr("Error parsing <admin>, default will be used\n") );
 	else
 		mAuthAdmin = nodeToBool(nodes.first(), mAuthAdmin);
 
 	// <auth><defaults><view_db>
 	nodes = elementsByXPath(doc, "/auth/defaults/view_db");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <view_db>, default will be used") );
+		LOG_WARNING( tr("Error parsing <view_db>, default will be used\n") );
 	else
 		mAuthViewDB = nodeToBool(nodes.first(), mAuthViewDB);
 
 	// <auth><defaults><modify_db>
 	nodes = elementsByXPath(doc, "/auth/defaults/modify_db");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <modify_db>, default will be used") );
+		LOG_WARNING( tr("Error parsing <modify_db>, default will be used\n") );
 	else
 		mAuthModifyDB = nodeToBool(nodes.first(), mAuthModifyDB);
 
 	// <auth><defaults><admin_db>
 	nodes = elementsByXPath(doc, "/auth/defaults/admin_db");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <admin_db>, default will be used") );
+		LOG_WARNING( tr("Error parsing <admin_db>, default will be used\n") );
 	else
 		mAuthAdminDB = nodeToBool(nodes.first(), mAuthAdminDB);
 
@@ -205,124 +223,124 @@ bool Config::loadConfig(const QString& path)
 	if( nodes.count() && nodes.first().isElement() )
 		mDBType = nodes.first().toElement().text().trimmed().toLower();
 	else
-		LOG_WARNING( tr("Failed to find database type in config file") );
+		LOG_WARNING( tr("Failed to find database type in config file\n") );
 
 	// <database><path>
 	nodes = elementsByXPath(doc, "/database/path");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBPath = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "sqlite")
-		LOG_WARNING( tr("Failed to find database path in config file") );
+		LOG_WARNING( tr("Failed to find database path in config file\n") );
 
 	// <database><host>
 	nodes = elementsByXPath(doc, "/database/host");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBPath = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "mysql")
-		LOG_WARNING( tr("Failed to find database host in config file") );
+		LOG_WARNING( tr("Failed to find database host in config file\n") );
 
 	// <database><user>
 	nodes = elementsByXPath(doc, "/database/user");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBUser = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "mysql")
-		LOG_WARNING( tr("Failed to find database user in config file") );
+		LOG_WARNING( tr("Failed to find database user in config file\n") );
 
 	// <database><pass>
 	nodes = elementsByXPath(doc, "/database/pass");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBPass = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "mysql")
-		LOG_WARNING( tr("Failed to find database password in config file") );
+		LOG_WARNING( tr("Failed to find database password in config file\n") );
 
 	// <database><db>
 	nodes = elementsByXPath(doc, "/database/db");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBName = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "mysql")
-		LOG_WARNING( tr("Failed to find database name in config file") );
+		LOG_WARNING( tr("Failed to find database name in config file\n") );
 
 	// <auth><database><type>
 	nodes = elementsByXPath(doc, "/auth/database/type");
 	if( nodes.count() && nodes.first().isElement() )
 		mAuthDBType = nodes.first().toElement().text().trimmed().toLower();
 	else
-		LOG_WARNING( tr("Failed to find auth database type in config file") );
+		LOG_WARNING( tr("Failed to find auth database type in config file\n") );
 
 	// <auth><database><path>
 	nodes = elementsByXPath(doc, "/auth/database/path");
 	if( nodes.count() && nodes.first().isElement() )
 		mAuthDBPath = nodes.first().toElement().text().trimmed();
 	else if(mAuthDBType == "sqlite")
-		LOG_WARNING( tr("Failed to find auth database path in config file") );
+		LOG_WARNING( tr("Failed to find auth database path in config file\n") );
 
 	// <auth><database><host>
 	nodes = elementsByXPath(doc, "/auth/database/host");
 	if( nodes.count() && nodes.first().isElement() )
 		mAuthDBPath = nodes.first().toElement().text().trimmed();
 	else if(mAuthDBType == "mysql")
-		LOG_WARNING( tr("Failed to find auth database host in config file") );
+		LOG_WARNING( tr("Failed to find auth database host in config file\n") );
 
 	// <auth><database><user>
 	nodes = elementsByXPath(doc, "/auth/database/user");
 	if( nodes.count() && nodes.first().isElement() )
 		mAuthDBUser = nodes.first().toElement().text().trimmed();
 	else if(mAuthDBType == "mysql")
-		LOG_WARNING( tr("Failed to find auth database user in config file") );
+		LOG_WARNING( tr("Failed to find auth database user in config file\n") );
 
 	// <auth><database><pass>
 	nodes = elementsByXPath(doc, "/auth/database/pass");
 	if( nodes.count() && nodes.first().isElement() )
 		mAuthDBPass = nodes.first().toElement().text().trimmed();
 	else if(mAuthDBType == "mysql")
-		LOG_WARNING( tr("Failed to find auth database pass in config file") );
+		LOG_WARNING( tr("Failed to find auth database pass in config file\n") );
 
 	// <auth><database><db>
 	nodes = elementsByXPath(doc, "/auth/database/db");
 	if( nodes.count() && nodes.first().isElement() )
 		mAuthDBName = nodes.first().toElement().text().trimmed();
 	else if(mAuthDBType == "mysql")
-		LOG_WARNING( tr("Failed to find auth database name in config file") );
+		LOG_WARNING( tr("Failed to find auth database name in config file\n") );
 
 	// <salts><pass>
 	nodes = elementsByXPath(doc, "/salts/pass");
 	if( nodes.count() && nodes.first().isElement() )
 		mSaltPass = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "sqlite")
-		LOG_WARNING( tr("Failed to find password salt in config file") );
+		LOG_WARNING( tr("Failed to find password salt in config file\n") );
 
 	// <salts><img>
 	nodes = elementsByXPath(doc, "/salts/img");
 	if( nodes.count() && nodes.first().isElement() )
 		mSaltImg = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "sqlite")
-		LOG_WARNING( tr("Failed to find image salt in config file") );
+		LOG_WARNING( tr("Failed to find image salt in config file\n") );
 
 	// <signature>
 	nodes = elementsByXPath(doc, "/signature");
 	if( nodes.count() && nodes.first().isElement() )
 		mSignature = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "sqlite")
-		LOG_WARNING( tr("Failed to find server signature in config file") );
+		LOG_WARNING( tr("Failed to find server signature in config file\n") );
 
 	// <captcha><letters>
 	nodes = elementsByXPath(doc, "/captcha/letters");
 	if( nodes.count() && nodes.first().isElement() )
 		mCaptchaLetters = nodes.first().toElement().text().trimmed().split(",");
 	else if(mDBType == "sqlite")
-		LOG_WARNING( tr("Failed to find captcha letters in config file") );
+		LOG_WARNING( tr("Failed to find captcha letters in config file\n") );
 
 	// <captcha><font>
 	nodes = elementsByXPath(doc, "/captcha/font");
 	if( nodes.count() && nodes.first().isElement() )
 		mCaptchaFont = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "sqlite")
-		LOG_WARNING( tr("Failed to find captcha font in config file") );
+		LOG_WARNING( tr("Failed to find captcha font in config file\n") );
 
 	// <ssl><enabled>
 	nodes = elementsByXPath(doc, "/ssl/enabled");
 	if( nodes.isEmpty() )
-		LOG_WARNING( tr("Error parsing <enabled>, default will be used") );
+		LOG_WARNING( tr("Error parsing <enabled>, default will be used\n") );
 	else
 		mSslEnabled = nodeToBool(nodes.first(), mSslEnabled);
 
@@ -330,7 +348,9 @@ bool Config::loadConfig(const QString& path)
 	nodes = elementsByXPath(doc, "/ssl/cert");
 	if( nodes.count() && nodes.first().isElement() )
 	{
-		QFile cert_file( nodes.first().toElement().text().trimmed() );
+		mCertPath = nodes.first().toElement().text().trimmed();
+
+		QFile cert_file(mCertPath);
 	    cert_file.open(QIODevice::ReadOnly);
 
 		QSslCertificate cert(&cert_file);
@@ -340,13 +360,15 @@ bool Config::loadConfig(const QString& path)
 		mCert = cert;
 	}
 	else
-		LOG_WARNING( tr("Failed to find SSL certificate path in config file") );
+		LOG_WARNING( tr("Failed to find SSL cert path in config file\n") );
 
 	// <ssl><key>
 	nodes = elementsByXPath(doc, "/ssl/key");
 	if( nodes.count() && nodes.first().isElement() )
 	{
-		QFile key_file( nodes.first().toElement().text().trimmed() );
+		mKeyPath = nodes.first().toElement().text().trimmed();
+
+		QFile key_file(mKeyPath);
 	    key_file.open(QIODevice::ReadOnly);
 
 		QSslKey key(&key_file, QSsl::Rsa);
@@ -356,9 +378,9 @@ bool Config::loadConfig(const QString& path)
 		mKey = key;
 	}
 	else
-		LOG_WARNING( tr("Failed to find SSL key path in config file") );
+		LOG_WARNING( tr("Failed to find SSL key path in config file\n") );
 
-	return true;
+	LOG_INFO( tr("Config file loaded\n") );
 };
 
 bool Config::nodeToBool(const QDomNode& node, bool def)
@@ -370,20 +392,89 @@ bool Config::nodeToBool(const QDomNode& node, bool def)
 	else if(val.toLower() == "false" || val == "0")
 		return false;
 	else
-		LOG_WARNING( tr("Error parsing <%1>, default will be used").arg(
+		LOG_WARNING( tr("Error parsing <%1>, default will be used\n").arg(
 			node.nodeName()) );
 
 	return def;
 };
 
-bool Config::saveConfig(const QString& path)
+void Config::saveConfig(const QString& path)
 {
-	Q_UNUSED(path);
+	QFile configFile(path);
+	if( !configFile.open(QIODevice::ReadOnly) )
+	{
+		LOG_ERROR( tr("Failed to open config file '%1'.\n").arg(path) );
 
-	// TODO: Add this (if we ever do a GUI that allows the user to change
-	// the config from inside the GUI
+		return;
+	}
 
-	return false;
+	QString errorMsg;
+	int errorLine, errorColumn;
+
+	QDomDocument doc;
+	if( !doc.setContent(&configFile, false, &errorMsg, &errorLine,
+		&errorColumn) )
+	{
+		LOG_ERROR( tr("Failed to parse config file:\n%1:%2: %3\n").arg(
+			path).arg(errorLine).arg(errorMsg) );
+
+		configFile.close();
+
+		return;
+	}
+
+	configFile.close();
+
+	writeXPath(doc, "/connection/address", mAddress);
+	writeXPath(doc, "/connection/port", QString::number(mPort));
+
+	writeXPath(doc, "/database/type", mDBType);
+	writeXPath(doc, "/database/path", mDBPath);
+	writeXPath(doc, "/database/host", mDBHost);
+	writeXPath(doc, "/database/user", mDBUser);
+	writeXPath(doc, "/database/pass", mDBPass);
+	writeXPath(doc, "/database/name", mDBName);
+
+	writeXPath(doc, "/log/levels/debug", mLogDebug ? "true" : "false");
+	writeXPath(doc, "/log/levels/info", mLogInfo ? "true" : "false");
+	writeXPath(doc, "/log/levels/warning", mLogWarning ? "true" : "false");
+	writeXPath(doc, "/log/levels/error", mLogError ? "true" : "false");
+	writeXPath(doc, "/log/levels/critical", mLogCritical ? "true" : "false");
+	writeXPath(doc, "/log/path", mLogPath);
+
+	writeXPath(doc, "/signature", mSignature);
+
+	writeXPath(doc, "/salt/img", mSaltImg);
+	writeXPath(doc, "/salt/pass", mSaltPass);
+
+	writeXPath(doc, "/captcha/letters", mCaptchaLetters.join(","));
+	writeXPath(doc, "/captcha/font", mCaptchaFont);
+
+	writeXPath(doc, "/auth/admin", mAuthAdminUser);
+	writeXPath(doc, "/auth/defaults/admin", mAuthAdmin ? "true" : "false");
+	writeXPath(doc, "/auth/defaults/view_db", mAuthViewDB ? "true" : "false");
+	writeXPath(doc, "/auth/defaults/modify_db",
+		mAuthModifyDB ? "true" : "false");
+	writeXPath(doc, "/auth/defaults/admin_db", mAuthAdminDB ? "true" : "false");
+	writeXPath(doc, "/auth/database/type", mAuthDBType);
+	writeXPath(doc, "/auth/database/path", mAuthDBPath);
+	writeXPath(doc, "/auth/database/host", mAuthDBHost);
+	writeXPath(doc, "/auth/database/user", mAuthDBUser);
+	writeXPath(doc, "/auth/database/pass", mAuthDBPass);
+	writeXPath(doc, "/auth/database/name", mAuthDBName);
+
+	writeXPath(doc, "/ssl/enabled", mSslEnabled ? "true" : "false");
+	writeXPath(doc, "/ssl/cert", mCertPath);
+	writeXPath(doc, "/ssl/key", mKeyPath);
+
+	if( !configFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
+	{
+		LOG_ERROR( tr("Failed to open '%1' for writing.\n").arg(path) );
+
+		return;
+	}
+
+	configFile.write( doc.toString(4).toUtf8() );
 };
 
 QString Config::address() const

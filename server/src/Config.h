@@ -27,15 +27,21 @@
 #include <QtNetwork/QSslCertificate>
 #include <QtNetwork/QSslKey>
 
+class QFileSystemWatcher;
+
 class Config : public QObject
 {
+	Q_OBJECT
+
 public:
 	static Config* getSingletonPtr();
 
+public slots:
 	void loadDefaults();
-	bool loadConfig(const QString& path);
-	bool saveConfig(const QString& path);
+	void loadConfig(const QString& path);
+	void saveConfig(const QString& path);
 
+public:
 	QString address() const;
 	void setAddress(const QString& address);
 
@@ -59,7 +65,7 @@ public:
 	bool logCritical() const;
 	void setLogCritical(bool log);
 
-	Q_PROPERTY(bool mLogCritical READ logCritical WRITE setLogCritial)
+	Q_PROPERTY(bool mLogCritical READ logCritical WRITE setLogCritical)
 
 	bool logError() const;
 	void setLogError(bool log);
@@ -247,8 +253,11 @@ protected:
 
 	QSslKey mKey;
 	QSslCertificate mCert;
+	QString mKeyPath, mCertPath;
 
 	bool mSslEnabled;
+
+	QFileSystemWatcher *mWatcher;
 };
 
 #define conf ( Config::getSingletonPtr() )

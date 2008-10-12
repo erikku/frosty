@@ -45,7 +45,7 @@ Log* Log::getSingletonPtr()
 
 void Log::loadConfig()
 {
-	if( !conf->logPath().isEmpty() )
+	if(!conf->logPath().isEmpty() && !mLogFile)
 	{
 		mLogFile = new QFile( conf->logPath() );
 		mLogFile->open(QIODevice::WriteOnly | QIODevice::Truncate);

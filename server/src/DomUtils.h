@@ -30,7 +30,11 @@ QDomNode childElementByName(const QDomNode& node, const QString& name);
 QList<QDomNode> childElementsByName(const QDomNode& node, const QString& name);
 
 QString nodeToXPath(const QDomNode& node);
-QList<QDomNode> elementsByXPath(const QDomDocument& doc, const QString& xpath);
-QList<QDomNode> elementsByXPathNode(const QDomNode& node, const QString& xpath);
+QList<QDomNode> elementsByXPath(QDomDocument& doc, const QString& xpath,
+	bool create = false);
+QList<QDomNode> elementsByXPathNode(QDomNode& node, const QString& xpath,
+	bool create = false);
+
+void writeXPath(QDomDocument& doc, const QString& xpath, const QString& value);
 
 #endif // __DomUtils_h__

@@ -52,8 +52,6 @@ void Server::init()
 {
 	conf->loadConfig("config.xml");
 
-	Log::getSingletonPtr()->loadConfig();
-
 	mConnection = new SslServer;
 
 	connect(mConnection, SIGNAL(newConnection(QTcpSocket*)),

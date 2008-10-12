@@ -22,13 +22,18 @@
 #include <QtXml/QDomElement>
 #include <QtXml/QDomNodeList>
 
-QList<QDomNode> elementsByXPath(const QDomDocument& doc, const QString& xpath)
+QList<QDomNode> elementsByXPath(QDomDocument& doc, const QString& xpath,
+	bool create)
 {
 	if( xpath.left(1) == "/" )
 	{
 		QStringList path = xpath.mid(1).split("/");
 		if( path.count() )
-			return elementsByXPathNode(doc.documentElement(), xpath);
+		{
+			QDomElement root = doc.documentElement();
+
+			return elementsByXPathNode(root, xpath, create);
+		}
 	}
 	else
 	{
@@ -46,6 +51,8 @@ QList<QDomNode> elementsByXPath(const QDomDocument& doc, const QString& xpath)
 			if( node_path.contains(xpath) )
 				nodes << list.at(i);
 		}
+
+		// We will only create the path if it's an absolute path
 
 		return nodes;
 	}
@@ -80,7 +87,8 @@ QList<QDomNode> childElementsByName(const QDomNode& node, const QString& name)
 	return nodes;
 };
 
-QList<QDomNode> elementsByXPathNode(const QDomNode& node, const QString& xpath)
+QList<QDomNode> elementsByXPathNode(QDomNode& node, const QString& xpath,
+	bool create)
 {
 	QStringList path;
 	if( xpath.left(1) == "/" )
@@ -100,13 +108,21 @@ QList<QDomNode> elementsByXPathNode(const QDomNode& node, const QString& xpath)
 			nodes << node.childNodes().at(i);
 	}
 
+	if(nodes.isEmpty() && create)
+	{
+		QDomNode new_node = node.ownerDocument().createElement( path.first() );
+
+		node.appendChild(new_node);
+		nodes << new_node;
+	}
+
 	path.removeFirst();
 	if( path.count() )
 	{
 		QList<QDomNode> finalNodes;
 
 		foreach(QDomNode child, nodes)
-			finalNodes << elementsByXPathNode( child, path.join("/") );
+			finalNodes << elementsByXPathNode(child, path.join("/"), create);
 
 		return finalNodes;
 	}
@@ -132,4 +148,19 @@ QString nodeToXPath(const QDomNode& node)
 	path = "/" + path + node.toElement().tagName();
 
 	return path;
+};
+
+void writeXPath(QDomDocument& doc, const QString& xpath, const QString& value)
+{
+	QList<QDomNode> nodes = elementsByXPath(doc, xpath, true);
+	if( nodes.isEmpty() )
+		return;
+
+	QDomNode node = nodes.first();
+	QDomNode text = doc.createTextNode(value);
+
+	if( node.hasChildNodes() )
+		node.replaceChild(text, node.firstChild());
+	else
+		node.appendChild(text);
 };
