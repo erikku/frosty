@@ -20,11 +20,11 @@
 #ifndef __Updater_h__
 #define __Updater_h__
 
+#include "ui_Updater.h"
+
 #include <QtCore/QMap>
 #include <QtGui/QWidget>
 #include <QtNetwork/QHttpResponseHeader>
-
-class Progress;
 
 class Updater : public QWidget
 {
@@ -32,7 +32,6 @@ class Updater : public QWidget
 
 public:
 	Updater(QWidget *parent = 0);
-	~Updater();
 
 	QString fileChecksum(const QString& path) const;
 	QMap<QString, QString> checkFiles(const QString& checksums) const;
@@ -40,16 +39,18 @@ public:
 	void downloadFile(const QString& path);
 
 protected slots:
+	void startApp();
 	void transferFailed();
 	void transferFinished(const QString& checksum);
 
 protected:
 	int mCount;
-	Progress *mProgress;
 
 	QString mChecksums;
 	QString mCurrentPath;
 	QMap<QString, QString> mBadList;
+
+	Ui::Updater ui;
 };
 
 #endif // __Updater_h__

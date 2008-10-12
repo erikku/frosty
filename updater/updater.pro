@@ -15,7 +15,7 @@
 #  Free Software Foundation, Inc.,
 #  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-QT          += network
+QT          += network webkit xml
 TEMPLATE     = app
 TARGET       = megatendb_updater
 INCLUDEPATH += src
@@ -25,12 +25,15 @@ MOC_DIR     = .moc
 RCC_DIR     = .rcc
 UI_DIR      = .ui
 
-FORMS       += ui/Progress.ui
+RESOURCES    = \#updater.rc \
+               updater.qrc
+FORMS       += ui/PaletteEditor.ui \
+               ui/Updater.ui
 HEADERS     += src/HttpTransfer.h \
-               src/Progress.h \
+               src/PaletteEditor.h \
                src/Updater.h
 SOURCES     += src/main.cpp \
                src/sha1.c \
                src/HttpTransfer.cpp \
-               src/Progress.cpp \
+               src/PaletteEditor.cpp \
                src/Updater.cpp

@@ -18,7 +18,6 @@
 \******************************************************************************/
 
 #include "Updater.h"
-#include "Progress.h"
 #include "HttpTransfer.h"
 #include "sha1.h"
 
@@ -31,6 +30,7 @@
 #include <QtCore/QSettings>
 #include <QtCore/QRegExp>
 #include <QtGui/QApplication>
+#include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
 #include <QtNetwork/QHttp>
 
@@ -42,21 +42,36 @@
 #define EXE_FILE "megatendb"
 #endif
 
-Updater::Updater(QWidget *parent) : QWidget(parent)
+Updater::Updater(QWidget *parent) : QWidget(parent), mCount(0)
 {
 	QCoreApplication::setOrganizationName("MegatenDB");
 	QCoreApplication::setOrganizationDomain("troopersklan.jp");
 	QCoreApplication::setApplicationName("Megaten DB");
 
-	mCount = 0;
-	mProgress = new Progress;
+	ui.setupUi(this);
+	setWindowTitle( tr("Megaten DB Updater") );
+
+	// http://www.troopersklan.jp/megaten/updates
+	QUrl url("http://gigadelic.homelinux.net:10900/megatendb/updates");
+
+	QSettings settings;
+	if( !settings.contains("update_url") )
+	{
+		QString text = QInputDialog::getText(0, tr("Megaten DB Update "
+			"Location"), tr("URL:"), QLineEdit::Normal, url.toString());
+
+		if( !text.isEmpty() )
+			url = text;
+
+		settings.setValue("update_url", url);
+	}
+
+	ui.logView->load( QUrl(url.toString() + "/index.php") );
+
+	connect(ui.startButton, SIGNAL(clicked(bool)), this, SLOT(startApp()));
 
 	downloadFile(UPDATE_FILE);
-};
-
-Updater::~Updater()
-{
-	delete mProgress;
+	show();
 };
 
 QString Updater::fileChecksum(const QString& path) const
@@ -127,21 +142,19 @@ QMap<QString, QString> Updater::checkFiles(const QString& checksums) const
 
 void Updater::downloadFile(const QString& path)
 {
-	mProgress->setProgress(path, mCount);
-	mProgress->show();
+	ui.fileLabel->setText(path);
 
 	QSettings settings;
-	QUrl url = settings.value("backend",
-		"https://gigadelic.homelinux.net:55517/backend.php").toUrl();
+	QUrl url = settings.value("update_url").toUrl();
 
-	url.setPath( QFileInfo(url.path()).dir().path() +
-		QString("/updates/%1").arg(path) );
+	url = QString("%1/%2").arg(url.toString()).arg(path);
 
 	HttpTransfer *transfer = HttpTransfer::start(url, path);
 
 	connect(transfer, SIGNAL(transferFinished(const QString&)),
 		this, SLOT(transferFinished(const QString&)));
-
+	connect(transfer, SIGNAL(progressChanged(int)),
+		ui.fileProgress, SLOT(setValue(int)));
 	connect(transfer, SIGNAL(transferFailed()),
 		this, SLOT(transferFailed()));
 };
@@ -171,6 +184,8 @@ void Updater::transferFinished(const QString& checksum)
 	transfer->deleteLater();
 
 	mCount++;
+	ui.totalProgress->setValue(mCount);
+
 	if( mChecksums.isEmpty() )
 	{
 		QFile file(UPDATE_FILE);
@@ -181,8 +196,10 @@ void Updater::transferFinished(const QString& checksum)
 		file.close();
 		file.remove();
 
+		mCount = 0;
 		mBadList = checkFiles(mChecksums);
-		mProgress->setMaxFiles(mBadList.count() + 1);
+		ui.totalProgress->setValue(0);
+		ui.totalProgress->setMaximum(mBadList.count());
 	}
 	else
 	{
@@ -210,7 +227,13 @@ void Updater::transferFinished(const QString& checksum)
 			QFile::ExeOwner | QFile::ReadGroup | QFile::ExeGroup |
 			QFile::ReadOther | QFile::ExeOther);
 
-		QProcess::startDetached( QDir::current().filePath(EXE_FILE) );
-		qApp->quit();
+		ui.fileLabel->setText( tr("Update Finished") );
+		ui.startButton->setEnabled(true);
 	}
+};
+
+void Updater::startApp()
+{
+	QProcess::startDetached( QDir::current().filePath(EXE_FILE) );
+	qApp->quit();
 };

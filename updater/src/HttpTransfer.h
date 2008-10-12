@@ -47,15 +47,18 @@ protected slots:
 
 signals:
 	void transferFailed();
+	void progressChanged(int progress);
 	void transferFinished(const QString& checksum);
 
 protected:
 	HttpTransfer(QObject *parent = 0);
 
 	QHttp *mHttp;
+	int mWritten;
 	int mRequestID;
 	QUrl mSourceURL;
 	QString mDestPath;
+	int mContentLength;
 	QFile *mDestHandle;
 	sha1_context mChecksumContext;
 };

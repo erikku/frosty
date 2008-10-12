@@ -141,6 +141,10 @@ void HttpTransfer::readyRead(const QHttpResponseHeader& resp)
 
 	sha1_update(&mChecksumContext, (uchar*)buffer.data(), buffer.size());
 	mDestHandle->write(buffer);
+	mWritten += buffer.size();
+
+	emit progressChanged( qRound((double)mWritten /
+		(double)mContentLength * 100.0f) );
 };
 
 void HttpTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
@@ -193,4 +197,9 @@ void HttpTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 
 		return;
 	}
+
+	mWritten = 0;
+	mContentLength = resp.value("Content-Length").toInt();
+
+	emit progressChanged(0);
 };

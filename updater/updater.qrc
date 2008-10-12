@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+	<file alias="dark.xml">res/dark.xml</file>
+</qresource>
+</RCC>
