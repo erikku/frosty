@@ -66,6 +66,8 @@ Updater::Updater(QWidget *parent) : QWidget(parent), mCount(0)
 		settings.setValue("update_url", url);
 	}
 
+	url = settings.value("update_url").toUrl();
+
 	ui.logView->load( QUrl(url.toString() + "/index.php") );
 
 	connect(ui.startButton, SIGNAL(clicked(bool)), this, SLOT(startApp()));
