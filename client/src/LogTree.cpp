@@ -36,6 +36,8 @@ LogTree::LogTree(QWidget *parent) : QWidget(parent)
 	mValueLabel = new QLabel;
 	mValueLabel->setWordWrap(true);
 	mValueLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+	mValueLabel->setTextInteractionFlags(Qt::LinksAccessibleByMouse |
+		Qt::TextSelectableByMouse);
 
 	QVBoxLayout *groupLayout = new QVBoxLayout;
 	groupLayout->addWidget(mValueLabel);
