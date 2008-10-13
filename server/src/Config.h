@@ -208,6 +208,36 @@ public:
 
 	Q_PROPERTY(QSslKey mKey READ sslKey WRITE setSslKey)
 
+	QString clientWin32() const;
+	void setClientWin32(const QString& sha1);
+
+	Q_PROPERTY(QString mClientWin32 READ clientWin32 WRITE setClientWin32)
+
+	QString clientMacOSX() const;
+	void setClientMacOSX(const QString& sha1);
+
+	Q_PROPERTY(QString mClientMacOSX READ clientMacOSX WRITE setClientMacOSX)
+
+	QString clientLinux() const;
+	void setClientLinux(const QString& sha1);
+
+	Q_PROPERTY(QString mClientLinux READ clientLinux WRITE setClientLinux)
+
+	QString updaterWin32() const;
+	void setUpdaterWin32(const QString& sha1);
+
+	Q_PROPERTY(QString mUpdaterWin32 READ updaterWin32 WRITE setUpdaterWin32)
+
+	QString updaterMacOSX() const;
+	void setUpdaterMacOSX(const QString& sha1);
+
+	Q_PROPERTY(QString mUpdaterMacOSX READ updaterMacOSX WRITE setUpdaterMacOSX)
+
+	QString updaterLinux() const;
+	void setUpdaterLinux(const QString& sha1);
+
+	Q_PROPERTY(QString mUpdaterLinux READ updaterLinux WRITE setUpdaterLinux)
+
 protected:
 	Config(QObject *parent = 0);
 	bool nodeToBool(const QDomNode& node, bool def);
@@ -256,6 +286,9 @@ protected:
 	QString mKeyPath, mCertPath;
 
 	bool mSslEnabled;
+
+	QString mClientWin32, mClientMacOSX, mClientLinux;
+	QString mUpdaterWin32, mUpdaterMacOSX, mUpdaterLinux;
 
 	QFileSystemWatcher *mWatcher;
 };

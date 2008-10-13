@@ -55,6 +55,7 @@ SOURCES     += src/main.cpp \
                src/DomUtils.cpp \
                src/Log.cpp \
                src/Server.cpp \
+               src/ServerActions.cpp \
                src/Session.cpp \
                src/Utils.cpp \
                src/sha1.c \

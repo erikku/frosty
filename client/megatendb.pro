@@ -59,6 +59,7 @@ HEADERS     += src/ajax.h \
                src/DevilWindow.h \
                src/SkillWindow.h \
                src/SearchEdit.h \
+               src/HttpTransfer.h \
                src/IconEdit.h \
                src/IconSelect.h \
                src/ImportExport.h \
@@ -76,7 +77,8 @@ HEADERS     += src/ajax.h \
                src/UserList.h \
                src/LogTree.h \
                src/LogView.h \
-               src/LogWidget.h
+               src/LogWidget.h \
+               src/VersionCheck.h
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
@@ -91,6 +93,7 @@ SOURCES     += src/main.cpp \
                src/SkillView.cpp \
                src/DevilWindow.cpp\
                src/SkillWindow.cpp \
+               src/HttpTransfer.cpp \
                src/IconEdit.cpp \
                src/IconSelect.cpp \
                src/ImportExport.cpp \
@@ -110,4 +113,5 @@ SOURCES     += src/main.cpp \
                src/UserList.cpp \
                src/LogTree.cpp \
                src/LogView.cpp \
-               src/LogWidget.cpp
+               src/LogWidget.cpp \
+               src/VersionCheck.cpp

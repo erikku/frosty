@@ -380,6 +380,48 @@ void Config::loadConfig(const QString& path)
 	else
 		LOG_WARNING( tr("Failed to find SSL key path in config file\n") );
 
+	// <updates><client><win32>
+	nodes = elementsByXPath(doc, "/updates/client/win32");
+	if( nodes.count() && nodes.first().isElement() )
+		mClientWin32 = nodes.first().toElement().text().trimmed();
+	else
+		LOG_WARNING( tr("Failed to find win32 client sha1 in config\n") );
+
+	// <updates><client><macosx>
+	nodes = elementsByXPath(doc, "/updates/client/macosx");
+	if( nodes.count() && nodes.first().isElement() )
+		mClientMacOSX = nodes.first().toElement().text().trimmed();
+	else
+		LOG_WARNING( tr("Failed to find macosx client sha1 in config\n") );
+
+	// <updates><client><linux>
+	nodes = elementsByXPath(doc, "/updates/client/linux");
+	if( nodes.count() && nodes.first().isElement() )
+		mClientLinux = nodes.first().toElement().text().trimmed();
+	else
+		LOG_WARNING( tr("Failed to find linux client sha1 in config\n") );
+
+	// <updates><updater><win32>
+	nodes = elementsByXPath(doc, "/updates/updater/win32");
+	if( nodes.count() && nodes.first().isElement() )
+		mUpdaterWin32 = nodes.first().toElement().text().trimmed();
+	else
+		LOG_WARNING( tr("Failed to find win32 updater sha1 in config\n") );
+
+	// <updates><updater><macosx>
+	nodes = elementsByXPath(doc, "/updates/updater/macosx");
+	if( nodes.count() && nodes.first().isElement() )
+		mUpdaterMacOSX = nodes.first().toElement().text().trimmed();
+	else
+		LOG_WARNING( tr("Failed to find macosx updater sha1 in config\n") );
+
+	// <updates><updater><linux>
+	nodes = elementsByXPath(doc, "/updates/updater/linux");
+	if( nodes.count() && nodes.first().isElement() )
+		mUpdaterLinux = nodes.first().toElement().text().trimmed();
+	else
+		LOG_WARNING( tr("Failed to find linux updater sha1 in config\n") );
+
 	LOG_INFO( tr("Config file loaded\n") );
 };
 
@@ -466,6 +508,13 @@ void Config::saveConfig(const QString& path)
 	writeXPath(doc, "/ssl/enabled", mSslEnabled ? "true" : "false");
 	writeXPath(doc, "/ssl/cert", mCertPath);
 	writeXPath(doc, "/ssl/key", mKeyPath);
+
+	writeXPath(doc, "/updates/client/win32", mClientWin32);
+	writeXPath(doc, "/updates/client/macosx", mClientMacOSX);
+	writeXPath(doc, "/updates/client/linux", mClientLinux);
+	writeXPath(doc, "/updates/updater/win32", mUpdaterWin32);
+	writeXPath(doc, "/updates/updater/macosx", mUpdaterMacOSX);
+	writeXPath(doc, "/updates/updater/linux", mUpdaterLinux);
 
 	if( !configFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
 	{
@@ -805,4 +854,64 @@ QSslKey Config::sslKey() const
 void Config::setSslKey(const QSslKey& key)
 {
 	mKey = key;
+};
+
+QString Config::clientWin32() const
+{
+	return mClientWin32;
+};
+
+void Config::setClientWin32(const QString& sha1)
+{
+	mClientWin32 = sha1;
+};
+
+QString Config::clientMacOSX() const
+{
+	return mClientMacOSX;
+};
+
+void Config::setClientMacOSX(const QString& sha1)
+{
+	mClientMacOSX = sha1;
+};
+
+QString Config::clientLinux() const
+{
+	return mClientLinux;
+};
+
+void Config::setClientLinux(const QString& sha1)
+{
+	mClientLinux = sha1;
+};
+
+QString Config::updaterWin32() const
+{
+	return mUpdaterWin32;
+};
+
+void Config::setUpdaterWin32(const QString& sha1)
+{
+	mUpdaterWin32 = sha1;
+};
+
+QString Config::updaterMacOSX() const
+{
+	return mUpdaterMacOSX;
+};
+
+void Config::setUpdaterMacOSX(const QString& sha1)
+{
+	mUpdaterMacOSX = sha1;
+};
+
+QString Config::updaterLinux() const
+{
+	return mUpdaterLinux;
+};
+
+void Config::setUpdaterLinux(const QString& sha1)
+{
+	mUpdaterLinux = sha1;
 };

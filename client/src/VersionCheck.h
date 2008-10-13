@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/main.cpp                                                         *
+*  client/src/VersionCheck.h                                                   *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,53 +17,33 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include <QtGui/QApplication>
-#include <QtGui/QPalette>
+#ifndef __VersionCheck_h__
+#define __VersionCheck_h__
 
-#include <QtCore/QTranslator>
-#include <QtCore/QFile>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QVariant>
 
-#include "PaletteEditor.h"
-#include "VersionCheck.h"
-#include "Settings.h"
-#include "Register.h"
-#include "Taskbar.h"
-
-#include <QtNetwork/QSslSocket>
-#include <QtNetwork/QSslCertificate>
-
-int main(int argc, char *argv[])
+class VersionCheck : public QObject
 {
-	QApplication::setStyle("plastique");
+	Q_OBJECT
 
-	QApplication app(argc, argv);
+public:
+	static VersionCheck* getSingletonPtr();
 
-	QApplication::setWindowIcon( QIcon( ":/megatendb.ico") );
+protected slots:
+	void transferFailed();
+	void transferFinished(const QString& checksum);
 
-	QTranslator translator;
-	translator.load( QString("megatendb_%1").arg(settings->lang()) );
-	app.installTranslator(&translator);
+	void ajaxResponse(const QVariant& resp);
 
-	QFile paletteFile(":/dark.xml");
-	paletteFile.open(QIODevice::ReadOnly);
-	QPalette palette = PaletteEditor::importPalette( paletteFile.readAll() );
-	paletteFile.close();
+protected:
+	VersionCheck(QObject *parent = 0);
 
-	app.setPalette(palette);
+	QString sha1HashFile(const QString& path) const;
 
-	QFile cert_file(":/ca.crt");
-    cert_file.open(QIODevice::ReadOnly);
-
-	QSslCertificate cert(&cert_file);
-	QSslSocket::addDefaultCaCertificate(cert);
-
-	if( settings->email().isEmpty() )
-		(new Register)->show();
-	else
-		(new Taskbar)->show();
-
-	if( !app.arguments().contains("--no-check") )
-		VersionCheck::getSingletonPtr();
-
-	return app.exec();
+	QString mUpdaterPath;
+	QString mUpdaterHash;
 };
+
+#endif // __VersionCheck_h__

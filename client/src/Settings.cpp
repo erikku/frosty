@@ -51,6 +51,7 @@ Settings::Settings(QObject *parent) : QObject(parent)
 	if( !qsettings.contains("lang") )
 		qsettings.setValue("lang", "ja");
 
+	mUpdateURL = qsettings.value("update_url").toUrl();
 	mLang = qsettings.value("lang", "ja").toString();
 	mEmail = qsettings.value("email").toString();
 	mPass = qsettings.value("pass").toString();
@@ -85,6 +86,11 @@ QString Settings::email() const
 QString Settings::pass() const
 {
 	return mPass;
+};
+
+QUrl Settings::updateUrl() const
+{
+	return mUpdateURL;
 };
 
 bool Settings::canDelete() const
@@ -124,4 +130,9 @@ void Settings::setPass(const QString& pass)
 
 	QSettings qsettings;
 	qsettings.setValue("pass", mPass);
+};
+
+void Settings::setUpdateUrl(const QUrl& url)
+{
+	mUpdateURL = url;
 };

@@ -37,6 +37,8 @@ public:
 	QString email() const;
 	QString pass() const;
 
+	QUrl updateUrl() const;
+
 	bool canDelete() const;
 
 	static Settings* getSingletonPtr();
@@ -45,11 +47,13 @@ public slots:
 	void setUrl(const QUrl& url);
 	void setLang(const QString& lang);
 
+	void setUpdateUrl(const QUrl& url);
+
 	void setEmail(const QString& email);
 	void setPass(const QString& pass);
 
 protected:
-	QUrl mURL;
+	QUrl mURL, mUpdateURL;
 	QString mLang, mEmail, mPass;
 };
 

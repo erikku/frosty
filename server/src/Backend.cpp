@@ -25,6 +25,7 @@
 #include "AuthActions.h"
 #include "BackendActions.h"
 #include "DatabaseActions.h"
+#include "ServerActions.h"
 
 #include "json.h"
 
@@ -48,6 +49,9 @@ Backend::Backend()
 	mActionHandlers["auth_make_inactive"] = authActionMakeInactive;
 	mActionHandlers["auth_make_active"] = authActionMakeActive;
 	mActionHandlers["auth_modify_user"] = authActionModifyUser;
+
+	// Server Actions
+	mActionHandlers["server_updates"] = serverActionUpdates;
 };
 
 QVariantList Backend::parseRequest(QTcpSocket *connection,

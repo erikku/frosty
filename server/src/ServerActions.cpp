@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/main.cpp                                                         *
+*  server/src/ServerActions.cpp                                                *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,53 +17,25 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include <QtGui/QApplication>
-#include <QtGui/QPalette>
+#include "ServerActions.h"
+#include "Config.h"
 
-#include <QtCore/QTranslator>
-#include <QtCore/QFile>
-
-#include "PaletteEditor.h"
-#include "VersionCheck.h"
-#include "Settings.h"
-#include "Register.h"
-#include "Taskbar.h"
-
-#include <QtNetwork/QSslSocket>
-#include <QtNetwork/QSslCertificate>
-
-int main(int argc, char *argv[])
+QVariantMap serverActionUpdates(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
-	QApplication::setStyle("plastique");
+	Q_UNUSED(i);
+	Q_UNUSED(db);
+	Q_UNUSED(email);
+	Q_UNUSED(action);
+	Q_UNUSED(connection);
 
-	QApplication app(argc, argv);
+	QVariantMap map;
+	map["client_win32"]   = conf->clientWin32();
+	map["client_macosx"]  = conf->clientMacOSX();
+	map["client_linux"]   = conf->clientLinux();
+	map["updater_win32"]  = conf->updaterWin32();
+	map["updater_macosx"] = conf->updaterMacOSX();
+	map["updater_linux"]  = conf->updaterLinux();
 
-	QApplication::setWindowIcon( QIcon( ":/megatendb.ico") );
-
-	QTranslator translator;
-	translator.load( QString("megatendb_%1").arg(settings->lang()) );
-	app.installTranslator(&translator);
-
-	QFile paletteFile(":/dark.xml");
-	paletteFile.open(QIODevice::ReadOnly);
-	QPalette palette = PaletteEditor::importPalette( paletteFile.readAll() );
-	paletteFile.close();
-
-	app.setPalette(palette);
-
-	QFile cert_file(":/ca.crt");
-    cert_file.open(QIODevice::ReadOnly);
-
-	QSslCertificate cert(&cert_file);
-	QSslSocket::addDefaultCaCertificate(cert);
-
-	if( settings->email().isEmpty() )
-		(new Register)->show();
-	else
-		(new Taskbar)->show();
-
-	if( !app.arguments().contains("--no-check") )
-		VersionCheck::getSingletonPtr();
-
-	return app.exec();
+	return map;
 };

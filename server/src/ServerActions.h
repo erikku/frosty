@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/main.cpp                                                         *
+*  server/src/ServerActions.h                                                  *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,53 +17,17 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include <QtGui/QApplication>
-#include <QtGui/QPalette>
+#ifndef __ServerActions_h__
+#define __ServerActions_h__
 
-#include <QtCore/QTranslator>
-#include <QtCore/QFile>
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QVariant>
+#include <QtSql/QSqlDatabase>
 
-#include "PaletteEditor.h"
-#include "VersionCheck.h"
-#include "Settings.h"
-#include "Register.h"
-#include "Taskbar.h"
+class QTcpSocket;
 
-#include <QtNetwork/QSslSocket>
-#include <QtNetwork/QSslCertificate>
+QVariantMap serverActionUpdates(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 
-int main(int argc, char *argv[])
-{
-	QApplication::setStyle("plastique");
-
-	QApplication app(argc, argv);
-
-	QApplication::setWindowIcon( QIcon( ":/megatendb.ico") );
-
-	QTranslator translator;
-	translator.load( QString("megatendb_%1").arg(settings->lang()) );
-	app.installTranslator(&translator);
-
-	QFile paletteFile(":/dark.xml");
-	paletteFile.open(QIODevice::ReadOnly);
-	QPalette palette = PaletteEditor::importPalette( paletteFile.readAll() );
-	paletteFile.close();
-
-	app.setPalette(palette);
-
-	QFile cert_file(":/ca.crt");
-    cert_file.open(QIODevice::ReadOnly);
-
-	QSslCertificate cert(&cert_file);
-	QSslSocket::addDefaultCaCertificate(cert);
-
-	if( settings->email().isEmpty() )
-		(new Register)->show();
-	else
-		(new Taskbar)->show();
-
-	if( !app.arguments().contains("--no-check") )
-		VersionCheck::getSingletonPtr();
-
-	return app.exec();
-};
+#endif // __ServerActions_h__
