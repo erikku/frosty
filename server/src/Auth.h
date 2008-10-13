@@ -20,27 +20,45 @@
 #ifndef __Auth_h__
 #define __Auth_h__
 
+#include "Backend.h"
+
 #include <QtCore/QMap>
 #include <QtCore/QString>
 #include <QtCore/QVariant>
+#include <QtSql/QSqlDatabase>
 
-void auth_start();
-bool auth_authenticate(const QString& email, const QString& data,
-	const QString& hash);
-bool auth_validate_request(const QString& email, const QVariant& action);
+class Auth
+{
+public:
+	static Auth* getSingletonPtr();
 
-QVariant auth_query_perms(const QString& email);
-QVariant auth_query_users(const QString& email);
-QVariant auth_query_user(const QString& email, const QString& target_email);
+	void start(const QMap<QString, BackendActionHandler>& actionHandlers);
+	bool authenticate(const QString& email, const QString& data,
+		const QString& hash) const;
+	bool validateRequest(const QString& email, const QVariant& action) const;
 
-QString auth_register(const QString& email, const QString& name,
-	const QString& pass);
+	QVariant queryPerms(const QString& email) const;
+	QVariant queryUsers(const QString& email) const;
+	QVariant queryUser(const QString& email, const QString& target) const;
 
-bool auth_make_inactive(const QString& email, const QString& target_email);
-bool auth_make_active(const QString& email, const QString& target_email);
+	QString registerUser(const QString& email, const QString& name,
+		const QString& pass) const;
 
-bool auth_modify_user(const QString& email, const QString& target_email,
-	const QString& new_email, const QString& name, const QString& pass,
-	const QVariantMap& perms);
+	bool makeInactive(const QString& email, const QString& target_email) const;
+	bool makeActive(const QString& email, const QString& target_email) const;
+
+	bool modifyUser(const QString& email, const QString& target_email,
+		const QString& new_email, const QString& name, const QString& pass,
+		const QVariantMap& perms) const;
+
+protected:
+	Auth();
+
+	QSqlDatabase mAuthDB;
+	QVariantMap mDefaultPerms;
+	QMap<QString, QString> mActionPermissions;
+};
+
+#define auth ( Auth::getSingletonPtr() )
 
 #endif // __Auth_h__

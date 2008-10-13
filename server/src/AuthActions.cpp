@@ -31,7 +31,7 @@ QVariantMap authActionQueryPerms(int i, QTcpSocket *connection,
 	{
 		QVariantMap map;
 		map["email"] = action.value("email");
-		map["perms"] = auth_query_perms( action.value("email").toString() );
+		map["perms"] = auth->queryPerms( action.value("email").toString() );
 
 		return map;
 	}
@@ -39,7 +39,7 @@ QVariantMap authActionQueryPerms(int i, QTcpSocket *connection,
 	{
 		QVariantMap map;
 		map["email"] = email;
-		map["perms"] = auth_query_perms(email);
+		map["perms"] = auth->queryPerms(email);
 
 		return map;
 	}
@@ -54,7 +54,7 @@ QVariantMap authActionQueryUsers(int i, QTcpSocket *connection,
 	Q_UNUSED(connection);
 
 	QVariantMap map;
-	map["users"] = auth_query_users(email);
+	map["users"] = auth->queryUsers(email);
 
 	return map;
 };
@@ -69,7 +69,7 @@ QVariantMap authActionQueryUser(int i, QTcpSocket *connection,
 	QString target_email = action.value("email").toString();
 
 	QVariantMap map;
-	map["user"] = auth_query_user(email, target_email);
+	map["user"] = auth->queryUser(email, target_email);
 
 	return map;
 };
@@ -82,7 +82,7 @@ QVariantMap authActionMakeInactive(int i, QTcpSocket *connection,
 	Q_UNUSED(connection);
 
 	QString target_email = action.value("email").toString();
-	auth_make_inactive(email, target_email);
+	auth->makeInactive(email, target_email);
 
 	return QVariantMap();
 };
@@ -95,7 +95,7 @@ QVariantMap authActionMakeActive(int i, QTcpSocket *connection,
 	Q_UNUSED(connection);
 
 	QString target_email = action.value("email").toString();
-	auth_make_active(email, target_email);
+	auth->makeActive(email, target_email);
 
 	return QVariantMap();
 };
@@ -113,7 +113,7 @@ QVariantMap authActionModifyUser(int i, QTcpSocket *connection,
 	QString pass = action.value("pass").toString();
 	QVariantMap perms = action.value("perms").toMap();
 
-	auth_modify_user(email, target_email, new_email, name, pass, perms);
+	auth->modifyUser(email, target_email, new_email, name, pass, perms);
 
 	return QVariantMap();
 };

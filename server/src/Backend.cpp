@@ -29,7 +29,7 @@
 
 #include "json.h"
 
-Backend::Backend()
+Backend::Backend(QObject *parent) : QObject(parent)
 {
 	// Standard Actions
 	mActionHandlers["salt"] = backendActionSalt;
@@ -52,6 +52,8 @@ Backend::Backend()
 
 	// Server Actions
 	mActionHandlers["server_updates"] = serverActionUpdates;
+
+	auth->start(mActionHandlers);
 };
 
 QVariantList Backend::parseRequest(QTcpSocket *connection,
@@ -80,7 +82,7 @@ QVariantList Backend::parseRequest(QTcpSocket *connection,
 	{
 		email = post.value("email");
 
-		if(  !auth_authenticate(email, post.value("request"),
+		if(  !auth->authenticate(email, post.value("request"),
 			post.value("pass")) )
 		{
 			QVariantMap error;
@@ -130,7 +132,7 @@ QVariantList Backend::parseRequest(QTcpSocket *connection,
 		if( mActionHandlers.contains(name) )
 		{
 			QVariantMap request_result;
-			if( auth_validate_request(email, action) )
+			if( auth->validateRequest(email, action) )
 			{
 				request_result = mActionHandlers.value(name)(i, connection, db,
 					action, email);

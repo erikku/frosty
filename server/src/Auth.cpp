@@ -22,52 +22,95 @@
 #include "Utils.h"
 #include "Log.h"
 
-#include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlRecord>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 
-QSqlDatabase auth_db;
+static Auth *g_auth_inst = 0;
 
-QVariantMap default_perms()
+Auth::Auth()
 {
-	QVariantMap map;
-	map["admin"] = conf->authAdmin();
-	map["view_db"] = conf->authViewDB();
-	map["modify_db"] = conf->authModifyDB();
-	map["admin_db"] = conf->authAdminDB();
-
-	return map;
+	// Nothing to see here
 };
 
-void auth_start()
+Auth* Auth::getSingletonPtr()
 {
+	if(!g_auth_inst)
+		g_auth_inst = new Auth;
+
+	Q_ASSERT(g_auth_inst);
+
+	return g_auth_inst;
+};
+
+void Auth::start(const QMap<QString, BackendActionHandler>& actionHandlers)
+{
+	// Standard Actions
+	mActionPermissions["salt"] = "any";
+	mActionPermissions["delete"] = "admin_db";
+	mActionPermissions["insert"] = "modify_db";
+	mActionPermissions["update"] = "modify_db";
+	mActionPermissions["select"] = "view_db";
+
+	// Database Actions
+	mActionPermissions["db_export"] = "admin";
+	mActionPermissions["db_import"] = "admin";
+
+	// Auth Actions
+	mActionPermissions["auth_query_perms"] = "any";
+	mActionPermissions["auth_query_users"] = "admin";
+	mActionPermissions["auth_query_user"] = "admin";
+	mActionPermissions["auth_make_inactive"] = "admin";
+	mActionPermissions["auth_make_active"] = "admin";
+	mActionPermissions["auth_modify_user"] = "admin";
+
+	// Server Actions
+	mActionPermissions["server_updates"] = "any";
+
+	mDefaultPerms["any"] = true;
+	mDefaultPerms["admin"] = conf->authAdmin();
+	mDefaultPerms["view_db"] = conf->authViewDB();
+	mDefaultPerms["modify_db"] = conf->authModifyDB();
+	mDefaultPerms["admin_db"] = conf->authAdminDB();
+
+	QMapIterator<QString, BackendActionHandler> i = actionHandlers;
+	while( i.hasNext() )
+	{
+		i.next();
+		if( !mActionPermissions.contains( i.key() ) )
+		{
+			LOG_CRITICAL( QObject::tr("Action '%1' is not in the auth "
+				"permissions list.\n").arg( i.key() ) );
+			Q_ASSERT(!"auth permissions list action missing");
+		}
+	}
+
 	if(conf->authDBType() == "sqlite")
 	{
-		auth_db = QSqlDatabase::addDatabase("QSQLITE", "auth");
-		auth_db.setDatabaseName( conf->authDBPath() );
-		auth_db.open();
+		mAuthDB = QSqlDatabase::addDatabase("QSQLITE", "auth");
+		mAuthDB.setDatabaseName( conf->authDBPath() );
+		mAuthDB.open();
 	}
 	else // mysql
 	{
-		auth_db = QSqlDatabase::addDatabase("QMYSQL", "auth");
-		auth_db.setHostName( conf->authDBHost() );
-		auth_db.setDatabaseName( conf->authDBName() );
-		auth_db.setUserName( conf->authDBUser() );
-		auth_db.setPassword( conf->authDBPass() );
-		auth_db.open();
+		mAuthDB = QSqlDatabase::addDatabase("QMYSQL", "auth");
+		mAuthDB.setHostName( conf->authDBHost() );
+		mAuthDB.setDatabaseName( conf->authDBName() );
+		mAuthDB.setUserName( conf->authDBUser() );
+		mAuthDB.setPassword( conf->authDBPass() );
+		mAuthDB.open();
 
-		QSqlQuery query("SET CHARSET utf8", auth_db);
+		QSqlQuery query("SET CHARSET utf8", mAuthDB);
 		query.exec();
 	}
 };
 
-bool auth_authenticate(const QString& email, const QString& data,
-	const QString& hash)
+bool Auth::authenticate(const QString& email, const QString& data,
+	const QString& hash) const
 {
 	QString sql = "SELECT pass, active FROM users WHERE email = ?";
 
-	QSqlQuery query(sql, auth_db);
+	QSqlQuery query(sql, mAuthDB);
 	query.bindValue(0, email);
 
 	if( !query.exec() )
@@ -99,50 +142,37 @@ bool auth_authenticate(const QString& email, const QString& data,
 	return false;
 };
 
-bool auth_validate_request(const QString& email, const QVariant& action)
+bool Auth::validateRequest(const QString& email, const QVariant& action) const
 {
-	QVariantMap perms = auth_query_perms(email).toMap();
+	QVariantMap perms = queryPerms(email).toMap();
 	QString act = action.toMap().value("action").toString();
+	QStringList groups = mActionPermissions.value(act).split(",");
+
+	if( !mActionPermissions.contains(act) )
+		return false;
 
 	bool can_perform = false;
-	if(act == "salt")
-		can_perform = true;
-	else if(act == "delete")
-		can_perform = perms.value("admin_db").toBool();
-	else if(act == "insert")
-		can_perform = perms.value("modify_db").toBool();
-	else if(act == "update")
-		can_perform = perms.value("modify_db").toBool();
-	else if(act == "select")
-		can_perform = perms.value("view_db").toBool();
-	else if(act == "db_export")
-		can_perform = perms.value("admin").toBool();
-	else if(act == "db_import")
-		can_perform = perms.value("admin").toBool();
-	else if(act == "auth_query_perms")
-		can_perform = true;
-	else if(act == "auth_query_users")
-		can_perform = perms.value("admin").toBool();
-	else if(act == "auth_query_user")
-		can_perform = perms.value("admin").toBool();
-	else if(act == "auth_make_inactive")
-		can_perform = perms.value("admin").toBool();
-	else if(act == "auth_make_active")
-		can_perform = perms.value("admin").toBool();
-	else if(act == "auth_modify_user")
-		can_perform = perms.value("admin").toBool();
+	foreach(QString group, groups)
+	{
+		if( perms.value(group).toBool() )
+		{
+			can_perform = true;
+			break;
+		}
+	}
 
-	return can_perform | perms.value("admin").toBool();;
+	return can_perform | perms.value("admin").toBool();
 };
 
-QVariant auth_query_perms(const QString& email)
+QVariant Auth::queryPerms(const QString& email) const
 {
 	if( email.isEmpty() )
-		return default_perms();
+		return mDefaultPerms;
 
 	if(conf->authAdminUser() == email)
 	{
 		QVariantMap map;
+		map["any"] = true;
 		map["admin"] = true;
 		map["view_db"] = true;
 		map["modify_db"] = true;
@@ -154,19 +184,19 @@ QVariant auth_query_perms(const QString& email)
 	QString sql = "SELECT admin, view_db, modify_db, admin_db FROM "
 		"users WHERE email = ?";
 
-	QSqlQuery query(sql, auth_db);
+	QSqlQuery query(sql, mAuthDB);
 	query.bindValue(0, email);
 
 	if( !query.exec() )
 	{
 		LOG_DEBUG( query.lastError().text() );
-		return default_perms();
+		return mDefaultPerms;
 	}
 
 	if( !query.next() )
 	{
 		LOG_DEBUG( query.lastError().text() );
-		return default_perms();
+		return mDefaultPerms;
 	}
 
 	QSqlRecord record = query.record();
@@ -175,19 +205,21 @@ QVariant auth_query_perms(const QString& email)
 	for(int j = 0; j < record.count(); j++)
 		perms[record.fieldName(j)] = record.value(j);
 
+	perms["any"] = true;
+
 	return perms;
 };
 
-QVariant auth_query_users(const QString& email)
+QVariant Auth::queryUsers(const QString& email) const
 {
-	QVariantMap perms = auth_query_perms(email).toMap();
+	QVariantMap perms = queryPerms(email).toMap();
 
 	if(perms.value("admin").toBool() != true)
 		return QVariantList();
 
 	QString sql = "SELECT email, name, active, type, last_login FROM users";
 
-	QSqlQuery query(sql, auth_db);
+	QSqlQuery query(sql, mAuthDB);
 	if( !query.exec() )
 	{
 		LOG_DEBUG( query.lastError().text() );
@@ -210,11 +242,11 @@ QVariant auth_query_users(const QString& email)
 	return users;
 };
 
-QString auth_register(const QString& email, const QString& name,
-	const QString& pass)
+QString Auth::registerUser(const QString& email, const QString& name,
+	const QString& pass) const
 {
 	{
-		QSqlQuery query(auth_db);
+		QSqlQuery query(mAuthDB);
 		query.prepare("SELECT id FROM users WHERE email = :email");
 		query.bindValue(":email", email);
 
@@ -226,7 +258,7 @@ QString auth_register(const QString& email, const QString& name,
 	}
 
 	{
-		QSqlQuery query(auth_db);
+		QSqlQuery query(mAuthDB);
 		query.prepare("SELECT id FROM users WHERE name = :name");
 		query.bindValue(":name", name);
 
@@ -239,7 +271,7 @@ QString auth_register(const QString& email, const QString& name,
 
 	// Insert the account
 	{
-		QSqlQuery query(auth_db);
+		QSqlQuery query(mAuthDB);
 		query.prepare("INSERT INTO users(email, name, pass, admin, view_db, "
 			"modify_db, admin_db, type) VALUES(:email, :name, :pass, :admin, "
 			":view_db, :modify_db, :admin_db, :type)");
@@ -259,18 +291,18 @@ QString auth_register(const QString& email, const QString& name,
 	return QString();
 };
 
-QVariant auth_query_user(const QString& email, const QString& target_email)
+QVariant Auth::queryUser(const QString& email, const QString& target) const
 {
-	QVariantMap perms = auth_query_perms(email).toMap();
+	QVariantMap perms = queryPerms(email).toMap();
 	if( !perms.value("admin").toBool() )
 		return QVariant();
 
 	QString sql = "SELECT email, name, active, type, last_login FROM users "
 		"WHERE email = :email";
 
-	QSqlQuery query(auth_db);
+	QSqlQuery query(mAuthDB);
 	query.prepare(sql);
-	query.bindValue(":email", target_email);
+	query.bindValue(":email", target);
 
 	if( !query.exec() )
 		return QVariant();
@@ -290,15 +322,16 @@ QVariant auth_query_user(const QString& email, const QString& target_email)
 	return map;
 };
 
-bool auth_make_inactive(const QString& email, const QString& target_email)
+bool Auth::makeInactive(const QString& email,
+	const QString& target_email) const
 {
-	QVariantMap perms = auth_query_perms(email).toMap();
+	QVariantMap perms = queryPerms(email).toMap();
 	if( !perms.value("admin").toBool() )
 		return false;
 
 	QString sql = "UPDATE users SET active = :active WHERE email = :email";
 
-	QSqlQuery query(auth_db);
+	QSqlQuery query(mAuthDB);
 	query.prepare(sql);
 	query.bindValue(":active", false);
 	query.bindValue(":email", target_email);
@@ -312,15 +345,15 @@ bool auth_make_inactive(const QString& email, const QString& target_email)
 	return true;
 };
 
-bool auth_make_active(const QString& email, const QString& target_email)
+bool Auth::makeActive(const QString& email, const QString& target_email) const
 {
-	QVariantMap perms = auth_query_perms(email).toMap();
+	QVariantMap perms = queryPerms(email).toMap();
 	if( !perms.value("admin").toBool() )
 		return false;
 
 	QString sql = "UPDATE users SET active = :active WHERE email = :email";
 
-	QSqlQuery query(auth_db);
+	QSqlQuery query(mAuthDB);
 	query.prepare(sql);
 	query.bindValue(":active", true);
 	query.bindValue(":email", target_email);
@@ -334,11 +367,11 @@ bool auth_make_active(const QString& email, const QString& target_email)
 	return true;
 };
 
-bool auth_modify_user(const QString& email, const QString& target_email,
+bool Auth::modifyUser(const QString& email, const QString& target_email,
 	const QString& new_email, const QString& name, const QString& pass,
-	const QVariantMap& perms)
+	const QVariantMap& perms) const
 {
-	QVariantMap admin_perms = auth_query_perms(email).toMap();
+	QVariantMap admin_perms = queryPerms(email).toMap();
 	if( !admin_perms.value("admin").toBool() )
 		return false;
 
@@ -356,7 +389,7 @@ bool auth_modify_user(const QString& email, const QString& target_email,
 			"admin_db = :admin_db, pass = :pass WHERE email = :email";
 	}
 
-	QSqlQuery query(auth_db);
+	QSqlQuery query(mAuthDB);
 	query.prepare(sql);
 	query.bindValue(":name", name);
 	query.bindValue(":email", target_email);

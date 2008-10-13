@@ -34,8 +34,10 @@ typedef QVariantMap (*BackendActionHandler)(int, QTcpSocket*,
 
 class Backend : public QObject
 {
+	Q_OBJECT
+
 public:
-	Backend();
+	Backend(QObject *parent = 0);
 
 	QVariantList parseRequest(QTcpSocket *connection,
 		const QSqlDatabase& db, const QMap<QString, QString>& post) const;

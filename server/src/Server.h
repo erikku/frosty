@@ -28,6 +28,7 @@
 #include <QtNetwork/QTcpServer>
 #include <QtSql/QSqlDatabase>
 
+class Backend;
 class QTcpSocket;
 
 class SslServer : public QTcpServer
@@ -79,6 +80,7 @@ protected:
 	QHttpResponseHeader basicResponseHeader() const;
 
 	QSqlDatabase db;
+	Backend *mBackend;
 	SslServer *mConnection;
 	QMap<QTcpSocket*, ConnectionData*> mConnections;
 };

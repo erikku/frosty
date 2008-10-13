@@ -52,6 +52,7 @@ void Server::init()
 {
 	conf->loadConfig("config.xml");
 
+	mBackend = new Backend;
 	mConnection = new SslServer;
 
 	connect(mConnection, SIGNAL(newConnection(QTcpSocket*)),
@@ -83,9 +84,6 @@ void Server::init()
 		QSqlQuery query("SET CHARSET utf8", db);
 		query.exec();
 	}
-
-	// Start the authentication module
-	auth_start();
 
 	//db.close();
 	//QSqlDatabase::removeDatabase("master");
@@ -237,8 +235,7 @@ void Server::finalize(QTcpSocket *connection)
 	if(post.contains("request") && header.method() == "POST"
 		&& header.path() == "/backend.php")
 	{
-		Backend b;
-		QVariantList set = b.parseRequest(connection, db, post);
+		QVariantList set = mBackend->parseRequest(connection, db, post);
 		QVariant response = set;
 
 		respond(connection, response);
@@ -320,7 +317,7 @@ void Server::finalize(QTcpSocket *connection)
 				return;
 			}
 
-			QString error = auth_register(post.value("email"),
+			QString error = auth->registerUser(post.value("email"),
 				post.value("name"), post.value("pass"));
 			if( !error.isEmpty() )
 			{
