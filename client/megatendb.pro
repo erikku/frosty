@@ -66,7 +66,9 @@ HEADERS     += src/ajax.h \
                src/InfoListWidget.h \
                src/InfoListWidgetItem.h \
                src/RelationEdit.h \
+               src/BasicRelationEdit.h \
                src/RelationList.h \
+               src/BasicRelationList.h \
                src/Settings.h \
                src/Options.h \
                src/registration.h \
@@ -101,7 +103,9 @@ SOURCES     += src/main.cpp \
                src/InfoListWidgetItem.cpp \
                src/SearchEdit.cpp \
                src/RelationEdit.cpp \
+               src/BasicRelationEdit.cpp \
                src/RelationList.cpp \
+               src/BasicRelationList.cpp \
                src/Settings.cpp \
                src/Options.cpp \
                src/registration.cpp \

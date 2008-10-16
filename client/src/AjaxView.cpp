@@ -26,6 +26,7 @@
 #include <QtGui/QTextEdit>
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
+#include <QtGui/QPushButton>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QRadioButton>
@@ -36,7 +37,8 @@
 #include "Settings.h"
 #include "IconEdit.h"
 #include "IconSelect.h"
-#include "RelationList.h"
+#include "BasicRelationEdit.h"
+#include "BasicRelationList.h"
 #include "ajax.h"
 
 Q_DECLARE_METATYPE(AjaxView::BindType);
@@ -718,7 +720,8 @@ void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 	const QString& listTitle, const QString& noneName,
 	const QVariantList& filters)
 {
-	RelationList *list = new RelationList;
+	// TODO: Allow the developer to set the list and edit
+	RelationList *list = new BasicRelationList(new BasicRelationEdit);
 	Q_ASSERT(list != 0);
 
 	QVariantMap bindInfo;

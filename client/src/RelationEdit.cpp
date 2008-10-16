@@ -18,23 +18,13 @@
 \******************************************************************************/
 
 #include "RelationEdit.h"
-#include "Settings.h"
 #include "ajax.h"
 
-#include <QtGui/QMessageBox>
+#include <QtGui/QLabel>
 
 RelationEdit::RelationEdit(QWidget *parent) : QWidget(parent), mID(-1)
 {
-	ui.setupUi(this);
-
-	darkenWidget(ui.nameLabel);
-	darkenWidget(ui.japaneseNameLabel);
-	darkenWidget(ui.englishNameLabel);
-
 	setWindowModality(Qt::ApplicationModal);
-
-	connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(close()));
-	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(submitRelation()));
 
 	ajax::getSingletonPtr()->subscribe(this);
 };
@@ -50,73 +40,14 @@ void RelationEdit::darkenWidget(QWidget *widget)
 	widget->setPalette(dark_palette);
 };
 
-void RelationEdit::submitRelation()
-{
-	setEnabled(false);
-
-	QVariantList columns;
-	columns << QString("name_en") << QString("name_ja");
-
-	QVariantMap where;
-	where["type"] = "equals";
-	where["column"] = "id";
-	where["value"] = QVariant(mID);
-
-	QVariantMap row;
-	row["name_ja"] = ui.japaneseNameEdit->text();
-	row["name_en"] = ui.englishNameEdit->text();
-
-	QVariantMap action;
-
-	if(mID < 0)
-		action["action"] = QString("insert");
-	else
-		action["action"] = QString("update");
-
-	action["table"] = mTable;
-	action["columns"] = columns;
-	action["user_data"] = QString("%1_relation_updated").arg(mTable);
-	action["rows"] = QVariantList() << row;
-
-	if(mID > 0)
-		action["where"] = QVariantList() << where;
-
-	ajax::getSingletonPtr()->request(settings->url(), action);
-};
-
 void RelationEdit::showEdit(const QString& windowTitle, const QString& table, int id)
 {
 	mID = id;
 	mTable = table;
 
-	ui.japaneseNameEdit->clear();
-	ui.englishNameEdit->clear();
-
 	setWindowTitle(windowTitle);
-	setEnabled(true);
+	refresh();
 	show();
-
-	if(mID < 0)
-		return;
-
-	setEnabled(false);
-
-	QVariantList columns;
-	columns << QString("id") << QString("name_en") << QString("name_ja");
-
-	QVariantMap where;
-	where["type"] = "equals";
-	where["column"] = "id";
-	where["value"] = QVariant(mID);
-
-	QVariantMap action;
-	action["action"] = QString("select");
-	action["table"] = mTable;
-	action["columns"] = columns;
-	action["user_data"] = QString("%1_entry").arg(mTable);
-	action["where"] = QVariantList() << where;
-
-	ajax::getSingletonPtr()->request(settings->url(), action);
 };
 
 void RelationEdit::ajaxResponse(const QVariant& resp)
@@ -133,19 +64,5 @@ void RelationEdit::ajaxResponse(const QVariant& resp)
 		emit relationsUpdated();
 
 		close();
-	}
-	else if(result.value("user_data").toString() ==
-		QString("%1_entry").arg(mTable))
-	{
-		QVariantMap map = result.value("rows").toList().first().toMap();
-		if(map["id"].toInt() != mID)
-			return;
-
-		ui.japaneseNameEdit->setText(
-			map["name_ja"].toString() );
-		ui.englishNameEdit->setText(
-			map["name_en"].toString() );
-
-		setEnabled(true);
 	}
 };

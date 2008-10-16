@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/RelationList.h                                                   *
+*  client/src/BasicRelationEdit.h                                              *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,39 +17,28 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __RelationList_h__
-#define __RelationList_h__
+#ifndef __BasicRelationEdit_h__
+#define __BasicRelationEdit_h__
 
-#include <QtGui/QWidget>
+#include "RelationEdit.h"
+#include "ui_RelationEdit.h"
 
-class RelationEdit;
-
-class RelationList : public QWidget
+class BasicRelationEdit : public RelationEdit
 {
 	Q_OBJECT
 
 public:
-	RelationList(RelationEdit *edit, QWidget *parent = 0);
-	virtual ~RelationList();
+	BasicRelationEdit(QWidget *parent = 0);
 
 public slots:
-	virtual void refresh() = 0;
-	virtual void showList(const QString& windowTitle, const QString& table);
-
-	virtual void addRelation();
-	virtual void editRelation(int id = -1);
-	virtual void deleteRelation(int id = -1, const QString& name = QString());
-
-signals:
-	void relationsUpdated();
+	virtual void submitRelation();
 
 protected slots:
-	virtual void itemSelectionChanged() = 0;
+	virtual void refresh();
 	virtual void ajaxResponse(const QVariant& resp);
 
 protected:
-	QString mTable;
-	RelationEdit *mEdit;
+	Ui::RelationEdit ui;
 };
 
-#endif // __RelationList_h__
+#endif // __BasicRelationEdit_h__

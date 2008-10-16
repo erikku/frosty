@@ -20,7 +20,7 @@
 #ifndef __RelationEdit_h__
 #define __RelationEdit_h__
 
-#include "ui_RelationEdit.h"
+#include <QtGui/QWidget>
 
 class RelationEdit : public QWidget
 {
@@ -30,19 +30,19 @@ public:
 	RelationEdit(QWidget *parent = 0);
 
 public slots:
-	void submitRelation();
-	void showEdit(const QString& windowTitle, const QString& table, int id = -1);
+	virtual void submitRelation() = 0;
+	virtual void showEdit(const QString& windowTitle, const QString& table,
+		int id = -1);
 
 protected slots:
-	void ajaxResponse(const QVariant& resp);
+	virtual void refresh() = 0;
+	virtual void ajaxResponse(const QVariant& resp);
 
 signals:
 	void relationsUpdated();
 
 protected:
 	void darkenWidget(QWidget *widget);
-
-	Ui::RelationEdit ui;
 
 	int mID;
 	QString mTable;
