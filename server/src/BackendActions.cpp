@@ -282,52 +282,59 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 			return herror("insert action", tr("parmater 'relations' for action "
 				"%1 is not an object").arg(i));
 
-		QVariantMap relations = action.value("relations").toMap();
+		QVariantList relations = action.value("relations").toList();
+		int relations_count = relations.count();
 
-		if(relations.count() < 1)
-			return herror("select action", tr("paramater 'relations' for "
+		if(relations_count < 1)
+			return herror("insert action", tr("paramater 'relations' for "
 				"action %1 exists but contains no relations").arg(i));
 
-		foreach(QString foreign_table, relations.keys())
+		for(int z = 0; z < relations_count; z++)
 		{
-			QVariantMap relation = relations.value(foreign_table).toMap();
+			QVariantMap relation = relations.at(z).toMap();
+
+			if( !relation.contains("table") )
+				return param_error("insert action", "table", tr("relation "
+					"%1 in action %2").arg(z).arg(i));
+
+			QString foreign_table = relation.value("table").toString();
 
 			if( tables_blacklist().contains(foreign_table) ||
 				!db.tables().contains(foreign_table) )
-					return herror("select action", tr("table '%1' for "
+					return herror("insert action", tr("table '%1' for "
 						"relation '%2' in action %3 does not exist").arg(
 						foreign_table).arg(foreign_table).arg(i));
 
 			if( !relation.contains("id") )
-				return param_error("select action", "id", tr("relation "
+				return param_error("insert action", "id", tr("relation "
 					"'%1' in action %2").arg(foreign_table).arg(i));
 
 			QString relation_id = relation.value("id").toString();
 
-			if( !check_column(relation_id, foreign_table, db) )
-				return herror("select action", tr("column '%1' on table '%2' "
+			if( !check_column(relation_id, table, db) )
+				return herror("insert action", tr("column '%1' on table '%2' "
 				"for relation '%3' in action %4 does not exist").arg(
 				relation_id).arg(table).arg(foreign_table).arg(i));
 
 			if( !relation.contains("foreign_id") )
-				return param_error("select action", "foreign_id", tr("relation "
+				return param_error("insert action", "foreign_id", tr("relation "
 					"'%1' in action %2").arg(foreign_table).arg(i));
 
 			QString foreign_id = relation.value("foreign_id").toString();
 
 			if( !check_column(foreign_id, foreign_table, db) )
-				return herror("select action", tr("column '%1' on table '%2' "
+				return herror("insert action", tr("column '%1' on table '%2' "
 				"for relation '%3' in action %3 does not exist").arg(
 				foreign_id).arg(foreign_table).arg(foreign_table).arg(i));
 
 			if( !relation.contains("columns") )
-				return param_error("select action", "columns", tr("relation "
+				return param_error("insert action", "columns", tr("relation "
 					"'%1' in action %2").arg(foreign_table).arg(i));
 
 			QVariantMap columns_and_aliases = relation.value("columns").toMap();
 
 			if(columns_and_aliases.count() <= 0)
-				return herror("select action", tr("paramater 'columns' for "
+				return herror("insert action", tr("paramater 'columns' for "
 					"relation '%1' in action %2 exists but contains no "
 					"columns").arg(foreign_table).arg(i));
 
@@ -339,7 +346,7 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 					relation_column).toString();
 
 				if( !check_column(relation_column, foreign_table, db) )
-					return herror("select action", tr("invalid column '%1' for "
+					return herror("insert action", tr("invalid column '%1' for "
 					"relation '%2' in action %3").arg(
 					relation_column).arg(foreign_table).arg(i));
 
@@ -348,7 +355,7 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 						relation_column);
 
 				if(columns.contains(alias) || relation_aliases.contains(alias))
-					return herror("select action", tr("alias '%1' of column"
+					return herror("insert action", tr("alias '%1' of column"
  						"'%2' for relation '%3' in action %4 conflicts with an "
  						"existing column or alias").arg(alias).arg(
  						relation_column).arg(foreign_table).arg(i));
@@ -418,12 +425,13 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 
 	if( action.contains("relations") )
 	{
-		QVariantMap relations = action.value("relations").toMap();
+		QVariantList relations = action.value("relations").toList();
+		int relations_count = relations.count();
 
-		foreach(QString foreign_table, relations.keys())
+		for(int z = 0; z < relations_count; z++)
 		{
-			QVariantMap relation = relations.value(foreign_table).toMap();
-
+			QVariantMap relation = relations.at(z).toMap();
+			QString foreign_table = relation.value("table").toString();
 			QVariantMap columns_and_aliases = relation.value("columns").toMap();
 			QStringList where_columns;
 
@@ -623,52 +631,59 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 			return herror("update action", tr("parmater 'relations' for action "
 				"%1 is not an object").arg(i));
 
-		QVariantMap relations = action.value("relations").toMap();
+		QVariantList relations = action.value("relations").toList();
+		int relations_count = relations.count();
 
-		if(relations.count() < 1)
+		if(relations_count < 1)
 			return herror("update action", tr("paramater 'relations' for "
 				"action %1 exists but contains no relations").arg(i));
 
-		foreach(QString foreign_table, relations.keys())
+		for(int z = 0; z < relations_count; z++)
 		{
-			QVariantMap relation = relations.value(foreign_table).toMap();
+			QVariantMap relation = relations.at(z).toMap();
+
+			if( !relation.contains("table") )
+				return param_error("update action", "table", tr("relation "
+					"%1 in action %2").arg(z).arg(i));
+
+			QString foreign_table = relation.value("table").toString();
 
 			if( tables_blacklist().contains(foreign_table) ||
 				!db.tables().contains(foreign_table) )
-					return herror("insert action", tr("table '%1' for "
+					return herror("update action", tr("table '%1' for "
 						"relation '%2' in action %3 does not exist").arg(
 						foreign_table).arg(foreign_table).arg(i));
 
 			if( !relation.contains("id") )
-				return param_error("insert action", "id", tr("relation "
+				return param_error("update action", "id", tr("relation "
 					"'%1' in action %2").arg(foreign_table).arg(i));
 
 			QString relation_id = relation.value("id").toString();
 
-			if( !check_column(relation_id, foreign_table, db) )
-				return herror("insert action", tr("column '%1' on table '%2' "
+			if( !check_column(relation_id, table, db) )
+				return herror("update action", tr("column '%1' on table '%2' "
 				"for relation '%3' in action %4 does not exist").arg(
 				relation_id).arg(table).arg(foreign_table).arg(i));
 
 			if( !relation.contains("foreign_id") )
-				return param_error("insert action", "foreign_id", tr("relation "
+				return param_error("update action", "foreign_id", tr("relation "
 					"'%1' in action %2").arg(foreign_table).arg(i));
 
 			QString foreign_id = relation.value("foreign_id").toString();
 
 			if( !check_column(foreign_id, foreign_table, db) )
-				return herror("insert action", tr("column '%1' on table '%2' "
+				return herror("update action", tr("column '%1' on table '%2' "
 				"for relation '%3' in action %3 does not exist").arg(
 				foreign_id).arg(foreign_table).arg(foreign_table).arg(i));
 
 			if( !relation.contains("columns") )
-				return param_error("insert action", "columns", tr("relation "
+				return param_error("update action", "columns", tr("relation "
 					"'%1' in action %2").arg(foreign_table).arg(i));
 
 			QVariantMap columns_and_aliases = relation.value("columns").toMap();
 
 			if(columns_and_aliases.count() <= 0)
-				return herror("insert action", tr("paramater 'columns' for "
+				return herror("update action", tr("paramater 'columns' for "
 					"relation '%1' in action %2 exists but contains no "
 					"columns").arg(foreign_table).arg(i));
 
@@ -680,7 +695,7 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 					relation_column).toString();
 
 				if( !check_column(relation_column, foreign_table, db) )
-					return herror("insert action", tr("invalid column '%1' for "
+					return herror("update action", tr("invalid column '%1' for "
 					"relation '%2' in action %3").arg(
 					relation_column).arg(foreign_table).arg(i));
 
@@ -689,7 +704,7 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 						relation_column);
 
 				if(columns.contains(alias) || relation_aliases.contains(alias))
-					return herror("insert action", tr("alias '%1' of column"
+					return herror("update action", tr("alias '%1' of column"
  						"'%2' for relation '%3' in action %4 conflicts with an "
  						"existing column or alias").arg(alias).arg(
  						relation_column).arg(foreign_table).arg(i));
@@ -987,12 +1002,13 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 
 	if( action.contains("relations") )
 	{
-		QVariantMap relations = action.value("relations").toMap();
+		QVariantList relations = action.value("relations").toList();
+		int relations_count = relations.count();
 
-		foreach(QString foreign_table, relations.keys())
+		for(int z = 0; z < relations_count; z++)
 		{
-			QVariantMap relation = relations.value(foreign_table).toMap();
-
+			QVariantMap relation = relations.at(z).toMap();
+			QString foreign_table = relation.value("table").toString();
 			QVariantMap columns_and_aliases = relation.value("columns").toMap();
 			QStringList where_columns;
 
@@ -1208,17 +1224,23 @@ QVariantMap backendActionSelect(int i, QTcpSocket *connection,
 		columns = new_columns;
 		}
 
-		QVariantMap relations = action.value("relations").toMap();
+		QStringList relation_ids;
+		QVariantList relations = action.value("relations").toList();
+		int relations_count = relations.count();
 
-		if(relations.count() < 1)
+		if(relations_count < 1)
 			return herror("select action", tr("paramater 'relations' for "
 				"action %1 exists but contains no relations").arg(i));
 
-		QStringList relation_ids;
-
-		foreach(QString foreign_table, relations.keys())
+		for(int z = 0; z < relations_count; z++)
 		{
-			QVariantMap relation = relations.value(foreign_table).toMap();
+			QVariantMap relation = relations.at(z).toMap();
+
+			if( !relation.contains("table") )
+				return param_error("select action", "table", tr("relation "
+					"%1 in action %2").arg(z).arg(i));
+
+			QString foreign_table = relation.value("table").toString();
 
 			if( tables_blacklist().contains(foreign_table) ||
 				!db.tables().contains(foreign_table) )
@@ -1232,7 +1254,7 @@ QVariantMap backendActionSelect(int i, QTcpSocket *connection,
 
 			QString relation_id = relation.value("id").toString();
 
-			if( !check_column(relation_id, foreign_table, db) )
+			if( !check_column(relation_id, table, db) )
 				return herror("select action", tr("column '%1' on table '%2' "
 				"for relation '%3' in action %4 does not exist").arg(
 				relation_id).arg(table).arg(foreign_table).arg(i));
@@ -1285,12 +1307,26 @@ QVariantMap backendActionSelect(int i, QTcpSocket *connection,
 			}
 
 			relation_tables << foreign_table;
-			relation_ids << QString("%1.%2 = %3.%4").arg(foreign_table).arg(
-				foreign_id).arg(table).arg(relation_id);
+			if( !relation_id.contains(".") )
+				relation_ids << QString("%1.%2 = %3.%4").arg(foreign_table).arg(
+					foreign_id).arg(table).arg(relation_id);
+			else
+				relation_ids << QString("%1.%2 = %3").arg(foreign_table).arg(
+					foreign_id).arg(relation_id);
 		}
 
-		relation_join_sql = QString(" LEFT JOIN (%1) ON (%2)").arg(
-			relation_tables.join(", ") ).arg( relation_ids.join(" AND ") );
+		// This syntax works for MySQL but not SQLite
+		//relation_join_sql = QString(" LEFT JOIN (%1) ON (%2)").arg(
+			//relation_tables.join(", ") ).arg( relation_ids.join(" AND ") );
+
+		Q_ASSERT( relation_tables.count() == relation_ids.count() );
+
+		QStringList relation_joins;
+		for(int i = 0; i < relation_tables.count(); i++)
+			relation_joins << QString("LEFT JOIN %1 ON %2").arg(
+				relation_tables.at(i) ).arg( relation_ids.at(i) );
+
+		relation_join_sql = QString(" %1").arg( relation_joins.join(" ") );
 	}
 
 	columns  << relation_columns;
@@ -1368,9 +1404,12 @@ QVariantMap backendActionSelect(int i, QTcpSocket *connection,
 				return param_error("select action", "value", tr("where "
 					"expression %1 in action %2").arg(j).arg(i));
 
+			QString bind_safe_column = column;
+			bind_safe_column.replace(".", "_");
+
 			where_expr << QString("%1 %2 :where_%3").arg(column).arg(
-				where_type).arg(column);
-			where_values[column] = expr.value("value");
+				where_type).arg(bind_safe_column);
+			where_values[bind_safe_column] = expr.value("value");
 		}
 
 		where = QString(" WHERE %1").arg( where_expr.join(where_connect_type) );
