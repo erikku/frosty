@@ -99,6 +99,8 @@ class Snoopy
 												// library functions built into php,
 												// as these functions are not stable
 												// as of this Snoopy release.
+	var $curl_cmdline_params = "";
+												// extra command line options to pass to cURL
 	
 	/**** Private variables ****/	
 	
@@ -1013,6 +1015,7 @@ class Snoopy
 		$headerfile = tempnam($temp_dir, "sno");
 
 		$safer_URI = strtr( $URI, "\"", " " ); // strip quotes from the URI to avoid shell access
+		$cmdline_params .= " {$this->curl_cmdline_params}";
 		exec($this->curl_path." -D \"$headerfile\"".$cmdline_params." \"".$safer_URI."\"",$results,$return);
 		
 		if($return)
