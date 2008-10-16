@@ -157,7 +157,7 @@ bool check_column(const QString& col, const QString& table,
 	if( col.contains('.') )
 	{
 		QString real_table = col.split('.').first();
-		QString real_col = col.split('.').at(1);
+		real_col = col.split('.').at(1);
 
 		column_cache = cache_columns(real_table, db);
 	}
