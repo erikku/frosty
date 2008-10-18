@@ -1,0 +1,4 @@
+*.html
+*.html.utf8
+*.pyc
+cache
