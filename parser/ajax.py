@@ -54,10 +54,10 @@ class ajax:
 		# Check the action argument is valid (to some extent)
 		if type(action) == dict:
 			post = { "request" : demjson.encode({u"actions":[action]},
-				escape_unicode=False, encoding="ascii") }
+				escape_unicode=True, encoding="ascii") }
 		elif type(action) == list:
 			post = { "request" : demjson.encode({u"actions":action},
-				escape_unicode=False, encoding="ascii") }
+				escape_unicode=True, encoding="ascii") }
 		else:
 			return [{u"error":u"The argument is not an object or array."}]
 
@@ -124,17 +124,28 @@ class ajax:
 
 		return json
 
-	def login(self, backend_url = False, email = False, password = False):
+	def login(self, backend_url = False, email = False, password = False,
+		prompt = True):
+
 		if self.__login_ok:
 			return
 
-		print u"Please enter the following info (leaving an entry blank will " \
-			u"use the value shown in brackets)"
-		print u""
+		if prompt:
+			print u"Please enter the following info (leaving an entry " \
+				u"blank will use the value shown in brackets)"
+			print u""
 
 		default_url = backend_url if backend_url else self.__backend_url
 		default_password = password if password else self.__password
 		default_email = email if email else self.__email
+
+		if not prompt:
+			self.__get_salt()
+			self.__backend_url = default_url
+			self.__password = default_password
+			self.__email = default_email
+			self.__login_ok = True
+			return
 
 		# Backend URL
 		sys.stdout.write(u"Backend URL [%s]: " % default_url)
