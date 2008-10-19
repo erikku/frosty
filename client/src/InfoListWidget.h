@@ -42,7 +42,7 @@ public:
 		SingleSelection,
 		MultiSelection,
 		ExtendedSelection,
-		ContiguousSelection,
+		ContiguousSelection
 	}SelectionMode;
 
 	void addItem(InfoListWidgetItem *item);
@@ -55,8 +55,8 @@ public:
 		const QString& text2 = QString(), const QString& text3 = QString(),
 		const QString& text4 = QString());
 
-	InfoListWidgetItem* item(int row) const;
-	int row(const InfoListWidgetItem *item) const;
+	InfoListWidgetItem* itemAt(int row) const;
+	int row(InfoListWidgetItem *item) const;
 
 	QList<InfoListWidgetItem*> selectedItems() const;
 

@@ -19,14 +19,14 @@
 
 #include "LogView.h"
 
-LogView::LogView(QWidget *parent) : QWidget(parent)
+LogView::LogView(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	ui.setupUi(this);
 
 	darkenWidget(ui.requestLabel);
 	darkenWidget(ui.responseLabel);
 	darkenWidget(ui.contentLabel);
-};
+}
 
 void LogView::darkenWidget(QWidget *widget)
 {
@@ -37,17 +37,17 @@ void LogView::darkenWidget(QWidget *widget)
 	qobject_cast<QLabel*>(widget)->setMargin(5);
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
-};
+}
 
 void LogView::loadRequest(const QVariant& request)
 {
 	ui.request->loadJSON(request);
-};
+}
 
 void LogView::loadResponse(const QVariant& response)
 {
 	ui.response->loadJSON(response);
-};
+}
 
 void LogView::loadContent(const QString& content)
 {
@@ -55,4 +55,4 @@ void LogView::loadContent(const QString& content)
 		ui.content->setText( tr("(None)") );
 	else
 		ui.content->setText(content);
-};
+}

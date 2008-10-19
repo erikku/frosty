@@ -23,14 +23,15 @@
 #include "ajax.h"
 
 BasicRelationList::BasicRelationList(RelationEdit *edit,
-	QWidget *parent) : RelationList(edit, parent)
+	QWidget *parent_widget) : RelationList(edit, parent_widget)
 {
 	ui.setupUi(this);
 
 	connect(ui.closeButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 	connect(ui.addButton, SIGNAL(clicked(bool)), this, SLOT(addRelation()));
 	connect(ui.editButton, SIGNAL(clicked(bool)), this, SLOT(editRelation()));
-	connect(ui.deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteRelation()));
+	connect(ui.deleteButton, SIGNAL(clicked(bool)),
+		this, SLOT(deleteRelation()));
 	connect(ui.relationList, SIGNAL(itemSelectionChanged()),
 		this, SLOT(itemSelectionChanged()));
 
@@ -40,12 +41,12 @@ BasicRelationList::BasicRelationList(RelationEdit *edit,
 		ui.deleteButton->setVisible(false);
 		ui.deleteButton->setEnabled(false);
 	}
-};
+}
 
 void BasicRelationList::itemSelectionChanged()
 {
 	ui.editButton->setEnabled( !ui.relationList->selectedItems().isEmpty() );
-};
+}
 
 void BasicRelationList::editRelation(int id)
 {
@@ -59,7 +60,7 @@ void BasicRelationList::editRelation(int id)
 		return;
 
 	RelationList::editRelation( item->data(Qt::UserRole).toInt() );
-};
+}
 
 void BasicRelationList::deleteRelation(int id, const QString& name)
 {
@@ -75,7 +76,7 @@ void BasicRelationList::deleteRelation(int id, const QString& name)
 
 	RelationList::deleteRelation( item->data(Qt::UserRole).toInt(),
 		item->text() );
-};
+}
 
 void BasicRelationList::ajaxResponse(const QVariant& resp)
 {
@@ -103,7 +104,7 @@ void BasicRelationList::ajaxResponse(const QVariant& resp)
 
 		setEnabled(true);
 	}
-};
+}
 
 void BasicRelationList::refresh()
 {
@@ -129,4 +130,4 @@ void BasicRelationList::refresh()
 	action["user_data"] = QString("%1_relation_list").arg(mTable);
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
-};
+}

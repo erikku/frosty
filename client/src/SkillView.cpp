@@ -21,7 +21,7 @@
 
 #include <QtGui/QMessageBox>
 
-SkillView::SkillView(QWidget *parent) : AjaxView(parent)
+SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 {
 	ui.setupUi(this);
 
@@ -94,7 +94,7 @@ SkillView::SkillView(QWidget *parent) : AjaxView(parent)
 	// Init the view
 	initView(ui.stackedWidget, ui.editButton, ui.cancelButton,
 		ui.refreshButton, ui.updateButton);
-};
+}
 
 bool SkillView::checkValues()
 {
@@ -157,21 +157,21 @@ bool SkillView::checkValues()
 	}
 
 	return true;
-};
+}
 
 QString SkillView::table() const
 {
 	return QString("db_skills");
-};
+}
 
 QString SkillView::addWarningTitle() const
 {
 	return tr("Add Skill");
-};
+}
 
 QString SkillView::addWarningMessage() const
 {
 	return tr("You are attemping to add another skill while editing a skill. "
 			"If you continue you will lose any changes you made to the skill. "
 			"Are you sure you want to continue?");
-};
+}

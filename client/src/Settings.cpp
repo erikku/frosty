@@ -25,7 +25,7 @@
 
 Settings *g_settings = 0;
 
-Settings::Settings(QObject *parent) : QObject(parent)
+Settings::Settings(QObject *parent_object) : QObject(parent_object)
 {
 	QCoreApplication::setOrganizationName("MegatenDB");
 	QCoreApplication::setOrganizationDomain("troopersklan.jp");
@@ -36,7 +36,8 @@ Settings::Settings(QObject *parent) : QObject(parent)
 	{
 		// http://www.troopersklan.jp/megaten/backend.php
 		QString text = QInputDialog::getText(0, tr("MegaTen Database Location"),
-			tr("URL:"), QLineEdit::Normal, "https://gigadelic.homelinux.net:55517/backend.php");
+			tr("URL:"), QLineEdit::Normal,
+			"https://gigadelic.homelinux.net:55517/backend.php");
 
 		if( !text.isEmpty() )
 			mURL = QUrl(text);
@@ -58,7 +59,7 @@ Settings::Settings(QObject *parent) : QObject(parent)
 
 	Q_ASSERT(g_settings == 0);
 	g_settings = this;
-};
+}
 
 Settings* Settings::getSingletonPtr()
 {
@@ -66,73 +67,76 @@ Settings* Settings::getSingletonPtr()
 		g_settings = new Settings;
 
 	return g_settings;
-};
+}
 
 QUrl Settings::url() const
 {
 	return mURL;
-};
+}
 
 QString Settings::lang() const
 {
 	return mLang;
-};
+}
 
 QString Settings::email() const
 {
 	return mEmail;
-};
+}
 
 QString Settings::pass() const
 {
 	return mPass;
-};
+}
 
 QUrl Settings::updateUrl() const
 {
 	return mUpdateURL;
-};
+}
 
 bool Settings::canDelete() const
 {
 	QStringList args = QCoreApplication::instance()->arguments();
 
 	return (args.contains("-d") || args.contains("--delete"));
-};
+}
 
-void Settings::setUrl(const QUrl& url)
+void Settings::setUrl(const QUrl& u)
 {
-	mURL = url;
+	mURL = u;
 
 	QSettings qsettings;
-	qsettings.setValue("backend", mURL);
-};
+	qsettings.setValue("backend", u);
+}
 
-void Settings::setLang(const QString& lang)
+void Settings::setLang(const QString& l)
 {
-	mLang = lang;
+	mLang = l;
 
 	QSettings qsettings;
-	qsettings.setValue("lang", mLang);
-};
+	qsettings.setValue("lang", l);
+}
 
-void Settings::setEmail(const QString& email)
+void Settings::setEmail(const QString& e)
 {
-	mEmail = email;
+	mEmail = e;
 
 	QSettings qsettings;
-	qsettings.setValue("email", mEmail);
-};
+	qsettings.setValue("email", e);
+}
 
-void Settings::setPass(const QString& pass)
+void Settings::setPass(const QString& p)
 {
-	mPass = pass;
+	mPass = p;
 
 	QSettings qsettings;
-	qsettings.setValue("pass", mPass);
-};
+	qsettings.setValue("pass", p);
+}
 
-void Settings::setUpdateUrl(const QUrl& url)
+void Settings::setUpdateUrl(const QUrl& u)
 {
-	mUpdateURL = url;
-};
+	mUpdateURL = u;
+
+	QSettings qsettings;
+	qsettings.setValue("update_url", u);
+}

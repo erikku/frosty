@@ -25,7 +25,7 @@
 
 static Options* g_options_inst = 0;
 
-Options::Options(QWidget *parent) : QWidget(parent)
+Options::Options(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	ui.setupUi(this);
 
@@ -42,7 +42,7 @@ Options::Options(QWidget *parent) : QWidget(parent)
 
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
 	connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(close()));
-};
+}
 
 Options* Options::getSingletonPtr()
 {
@@ -52,7 +52,7 @@ Options* Options::getSingletonPtr()
 	Q_ASSERT(g_options_inst != 0);
 
 	return g_options_inst;
-};
+}
 
 void Options::darkenWidget(QWidget *widget)
 {
@@ -63,7 +63,7 @@ void Options::darkenWidget(QWidget *widget)
 	qobject_cast<QLabel*>(widget)->setMargin(5);
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
-};
+}
 
 void Options::loadSettings()
 {
@@ -71,7 +71,7 @@ void Options::loadSettings()
 	ui.interfaceLanguage->setCurrentIndex(settings->lang() == "ja" ? 0 : 1);
 
 	show();
-};
+}
 
 void Options::saveSettings()
 {
@@ -96,7 +96,7 @@ void Options::saveSettings()
 		return;
 
 	qApp->quit();
-};
+}
 
 void Options::clearLoginInfo()
 {
@@ -113,4 +113,4 @@ void Options::clearLoginInfo()
 	settings->setPass( QString() );
 
 	qApp->quit();
-};
+}

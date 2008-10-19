@@ -19,24 +19,24 @@
 
 #include "IconEdit.h"
 
-IconEdit::IconEdit(QWidget *parent) : QLabel(parent)
+IconEdit::IconEdit(QWidget *parent_widget) : QLabel(parent_widget)
 {
 	// Nothing to see here
-};
+}
 
-void IconEdit::setValue(const QString& value)
+void IconEdit::setValue(const QString& val)
 {
-	mValue = value;
-};
+	mValue = val;
+}
 
 QString IconEdit::value() const
 {
 	return mValue;
-};
+}
 
-void IconEdit::mouseDoubleClickEvent(QMouseEvent *event)
+void IconEdit::mouseDoubleClickEvent(QMouseEvent *evt)
 {
 	emit iconDoubleClicked();
 
-	QLabel::mouseDoubleClickEvent(event);
-};
+	QLabel::mouseDoubleClickEvent(evt);
+}

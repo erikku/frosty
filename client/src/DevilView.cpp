@@ -22,7 +22,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QButtonGroup>
 
-DevilView::DevilView(QWidget *parent) : AjaxView(parent)
+DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 {
 	ui.setupUi(this);
 
@@ -343,7 +343,7 @@ DevilView::DevilView(QWidget *parent) : AjaxView(parent)
 	// Init the view
 	initView(ui.stackedWidget, ui.editButton, ui.cancelButton,
 		ui.refreshButton, ui.updateButton);
-};
+}
 
 bool DevilView::checkValues()
 {
@@ -366,24 +366,24 @@ bool DevilView::checkValues()
 	}
 
 	return true;
-};
+}
 
 QString DevilView::table() const
 {
 	return QString("db_devils");
-};
+}
 
 QString DevilView::addWarningTitle() const
 {
 	return tr("Add Devil");
-};
+}
 
 QString DevilView::addWarningMessage() const
 {
 	return tr("You are attemping to add another devil while editing a devil. "
 			"If you continue you will lose any changes you made to the devil. "
 			"Are you sure you want to continue?");
-};
+}
 
 RadioButtonMap DevilView::radioMap(const QString& field,
 	const QList<QRadioButton*>& selectors) const
@@ -395,4 +395,4 @@ RadioButtonMap DevilView::radioMap(const QString& field,
 		map[selector] = QString("loyalty%1_%2").arg(++i).arg(field);
 
 	return map;
-};
+}

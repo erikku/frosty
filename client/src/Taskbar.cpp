@@ -31,9 +31,9 @@
 #include <QtGui/QAction>
 #include <QtGui/QMenu>
 
-Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
-	mLogWidget(0), mDevilWindow(0), mSkillWindow(0), mImportExportWindow(0),
-	mAdminSep(0), mUsersAction(0)
+Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
+	mUserList(0), mLogWidget(0), mDevilWindow(0), mSkillWindow(0),
+	mImportExportWindow(0), mAdminSep(0), mUsersAction(0)
 {
 	ui.setupUi(this);
 
@@ -45,17 +45,17 @@ Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
 	QApplication::setQuitOnLastWindowClosed(false);
 
 	QMenu *menu = new QMenu( tr("MegatenDB") );
-	QAction *action;
+	QAction *act;
 
 	// Devils Action
-	action = menu->addAction(/* icon, */tr("&Devils") );
-	connect(action, SIGNAL(triggered()), this, SLOT(showDevilWindow()));
+	act = menu->addAction(/* icon, */tr("&Devils") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showDevilWindow()));
 	connect(ui.devilsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showDevilWindow()));
 
 	// Skills Action
-	action = menu->addAction(/* icon, */tr("&Skills") );
-	connect(action, SIGNAL(triggered()), this, SLOT(showSkillWindow()));
+	act = menu->addAction(/* icon, */tr("&Skills") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showSkillWindow()));
 	connect(ui.skillsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showSkillWindow()));
 
@@ -80,25 +80,25 @@ Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
 	connect(ui.importExportButton, SIGNAL(clicked(bool)),
 		this, SLOT(showImportExportWindow()));
 
-	action = menu->addSeparator();
+	act = menu->addSeparator();
 
 	// Options Action
-	action = menu->addAction(/* icon, */tr("&Options") );
-	connect(action, SIGNAL(triggered()), this, SLOT(showOptionsWindow()));
+	act = menu->addAction(/* icon, */tr("&Options") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showOptionsWindow()));
 	connect(ui.optionsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showOptionsWindow()));
 
 	// Log Action
-	action = menu->addAction(/* icon, */tr("&Log") );
-	connect(action, SIGNAL(triggered()), this, SLOT(showLogWindow()));
+	act = menu->addAction(/* icon, */tr("&Log") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showLogWindow()));
 	connect(ui.logButton, SIGNAL(clicked(bool)),
 		this, SLOT(showLogWindow()));
 
-	action = menu->addSeparator();
+	act = menu->addSeparator();
 
 	// Quit Action
-	action = menu->addAction(/* icon, */tr("&Quit") );
-	connect(action, SIGNAL(triggered()), qApp, SLOT(quit()));
+	act = menu->addAction(/* icon, */tr("&Quit") );
+	connect(act, SIGNAL(triggered()), qApp, SLOT(quit()));
 
 	QSystemTrayIcon *tray = new QSystemTrayIcon( QApplication::windowIcon() );
 	tray->setContextMenu(menu);
@@ -111,12 +111,12 @@ Taskbar::Taskbar(QWidget *parent) : QWidget(parent), mOptions(0), mUserList(0),
 
 	{
 		QVariantMap action;
-		action["action"] = "auth_query_perms";
+		action["act"] = "auth_query_perms";
 		action["user_data"] = "auth_query_perms";
 
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(settings->url(), act);
 	}
-};
+}
 
 void Taskbar::showLogWindow()
 {
@@ -128,7 +128,7 @@ void Taskbar::showLogWindow()
 	mLogWidget->show();
 	mLogWidget->activateWindow();
 	mLogWidget->raise();
-};
+}
 
 void Taskbar::showDevilWindow()
 {
@@ -140,7 +140,7 @@ void Taskbar::showDevilWindow()
 	mDevilWindow->show();
 	mDevilWindow->activateWindow();
 	mDevilWindow->raise();
-};
+}
 
 void Taskbar::showSkillWindow()
 {
@@ -152,7 +152,7 @@ void Taskbar::showSkillWindow()
 	mSkillWindow->show();
 	mSkillWindow->activateWindow();
 	mSkillWindow->raise();
-};
+}
 
 void Taskbar::showUsersWindow()
 {
@@ -167,7 +167,7 @@ void Taskbar::showUsersWindow()
 	mUserList->show();
 	mUserList->activateWindow();
 	mUserList->raise();
-};
+}
 
 void Taskbar::showOptionsWindow()
 {
@@ -182,7 +182,7 @@ void Taskbar::showOptionsWindow()
 	mOptions->show();
 	mOptions->activateWindow();
 	mOptions->raise();
-};
+}
 
 void Taskbar::showImportExportWindow()
 {
@@ -194,7 +194,7 @@ void Taskbar::showImportExportWindow()
 	mImportExportWindow->show();
 	mImportExportWindow->activateWindow();
 	mImportExportWindow->raise();
-};
+}
 
 void Taskbar::ajaxResponse(const QVariant& resp)
 {
@@ -216,4 +216,4 @@ void Taskbar::ajaxResponse(const QVariant& resp)
 			mImportExportAction->setVisible(true);
 		}
 	}
-};
+}

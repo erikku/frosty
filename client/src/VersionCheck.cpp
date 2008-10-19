@@ -31,7 +31,7 @@
 
 static VersionCheck *g_versioncheck_inst = 0;
 
-VersionCheck::VersionCheck(QObject *parent) : QObject(parent)
+VersionCheck::VersionCheck(QObject *parent_object) : QObject(parent_object)
 {
 	ajax::getSingletonPtr()->subscribe(this);
 
@@ -42,7 +42,7 @@ VersionCheck::VersionCheck(QObject *parent) : QObject(parent)
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
-};
+}
 
 VersionCheck* VersionCheck::getSingletonPtr()
 {
@@ -52,7 +52,7 @@ VersionCheck* VersionCheck::getSingletonPtr()
 	Q_ASSERT(g_versioncheck_inst);
 
 	return g_versioncheck_inst;
-};
+}
 
 void VersionCheck::ajaxResponse(const QVariant& resp)
 {
@@ -115,7 +115,7 @@ void VersionCheck::ajaxResponse(const QVariant& resp)
 			}
 		}
 	}
-};
+}
 
 QString VersionCheck::sha1HashFile(const QString& path) const
 {
@@ -139,14 +139,14 @@ QString VersionCheck::sha1HashFile(const QString& path) const
 		hash += QString("%1").arg(((int)checksum[i]), 2, 16, QLatin1Char('0'));
 
 	return hash;
-};
+}
 
 void VersionCheck::transferFailed()
 {
 	QMessageBox::critical(0, tr("Updater Download Failed"),
 		tr("The updater failed to download from the update server. Please make "
 		"sure your settings are correct and try again."));
-};
+}
 
 void VersionCheck::transferFinished(const QString& checksum)
 {
@@ -174,4 +174,4 @@ void VersionCheck::transferFinished(const QString& checksum)
 			qApp->quit();
 		}
 	}
-};
+}

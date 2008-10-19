@@ -22,12 +22,13 @@
 
 #include <QtGui/QLabel>
 
-RelationEdit::RelationEdit(QWidget *parent) : QWidget(parent), mID(-1)
+RelationEdit::RelationEdit(QWidget *parent_widget) :
+	QWidget(parent_widget), mID(-1)
 {
 	setWindowModality(Qt::ApplicationModal);
 
 	ajax::getSingletonPtr()->subscribe(this);
-};
+}
 
 void RelationEdit::darkenWidget(QWidget *widget)
 {
@@ -38,17 +39,18 @@ void RelationEdit::darkenWidget(QWidget *widget)
 	qobject_cast<QLabel*>(widget)->setMargin(5);
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
-};
+}
 
-void RelationEdit::showEdit(const QString& windowTitle, const QString& table, int id)
+void RelationEdit::showEdit(const QString& window_title,
+	const QString& table, int id)
 {
 	mID = id;
 	mTable = table;
 
-	setWindowTitle(windowTitle);
+	setWindowTitle(window_title);
 	refresh();
 	show();
-};
+}
 
 void RelationEdit::ajaxResponse(const QVariant& resp)
 {
@@ -65,4 +67,4 @@ void RelationEdit::ajaxResponse(const QVariant& resp)
 
 		close();
 	}
-};
+}

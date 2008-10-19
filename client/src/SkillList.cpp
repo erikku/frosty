@@ -25,10 +25,11 @@
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
 
-SkillList::SkillList(SkillView *view, QWidget *parent) : AjaxList(view, parent)
+SkillList::SkillList(SkillView *view,
+	QWidget *parent_widget) : AjaxList(view, parent_widget)
 {
 	refresh();
-};
+}
 
 QVariant SkillList::filterAction() const
 {
@@ -42,12 +43,12 @@ QVariant SkillList::filterAction() const
 	action["user_data"] = filterUserData();
 
 	return action;
-};
+}
 
 QVariant SkillList::filterUserData() const
 {
 	return QString("expert_cache");
-};
+}
 
 QVariant SkillList::listAction() const
 {
@@ -80,35 +81,35 @@ QVariant SkillList::listAction() const
 	action["user_data"] = listUserData();
 
 	return action;
-};
+}
 
 QVariant SkillList::listUserData() const
 {
 	return QString("skills");
-};
+}
 
 QString SkillList::switchTitle() const
 {
 	return tr("Switching Skills");
-};
+}
 
 QString SkillList::switchMessage() const
 {
 	return tr("You are attemping to view another skill while editing a skill. "
 			"If you continue you will lose any changes you made to the skill. "
 			"Are you sure you want to continue?");
-};
+}
 
 QString SkillList::deleteTitle() const
 {
 	return tr("Deleting Skill");
-};
+}
 
 QString SkillList::deleteMessage() const
 {
 	return tr("You are about to delete the skill '%1'. Are you sure you want "
 		"to delete this?");
-};
+}
 
 QVariant SkillList::deleteAction(int id) const
 {
@@ -124,19 +125,19 @@ QVariant SkillList::deleteAction(int id) const
 	action["user_data"] = deleteUserData();
 
 	return action;
-};
+}
 
 QVariant SkillList::deleteUserData() const
 {
 	return QString("skill_delete");
-};
+}
 
 int SkillList::filterID(const QVariantMap& map) const
 {
 	return map["expert"].toInt();
-};
+}
 
 QString SkillList::itemIcon(const QVariantMap& map) const
 {
 	return QString("icons/skills/icon_%1.png").arg( map["icon"].toString() );
-};
+}

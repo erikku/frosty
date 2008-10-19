@@ -25,7 +25,8 @@
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
 
-AjaxList::AjaxList(AjaxView *view, QWidget *parent) : QWidget(parent), mFilterID(-1),
+AjaxList::AjaxList(AjaxView *view,
+	QWidget *parent_widget) : QWidget(parent_widget), mFilterID(-1),
 	mCurrentID(-1), mDataLoaded(-1), mAjaxView(view), mLastItem(0)
 {
 	ui.setupUi(this);
@@ -68,7 +69,7 @@ AjaxList::AjaxList(AjaxView *view, QWidget *parent) : QWidget(parent), mFilterID
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
-};
+}
 
 void AjaxList::handleItemSelected()
 {
@@ -118,7 +119,7 @@ void AjaxList::handleItemSelected()
 
 	emit itemClicked(
 		itemID( mItems.at( item->data(Qt::UserRole).toInt() ).toMap() ) );
-};
+}
 
 void AjaxList::updateFilter()
 {
@@ -165,7 +166,7 @@ void AjaxList::updateFilter()
 	}
 
 	updateSearch();
-};
+}
 
 void AjaxList::refresh()
 {
@@ -185,7 +186,7 @@ void AjaxList::refresh()
 	ajax::getSingletonPtr()->request(settings->url(), listAction());
 
 	setEnabled(false);
-};
+}
 
 void AjaxList::updateSearch()
 {
@@ -208,7 +209,7 @@ void AjaxList::updateSearch()
 
 		item->setHidden( !itemMatches(map, search) );
 	}
-};
+}
 
 void AjaxList::deleteAjax()
 {
@@ -231,7 +232,7 @@ void AjaxList::deleteAjax()
 		return;
 
 	ajax::getSingletonPtr()->request(settings->url(), deleteAction(id));
-};
+}
 
 void AjaxList::ajaxResponse(const QVariant& resp)
 {
@@ -299,21 +300,21 @@ void AjaxList::ajaxResponse(const QVariant& resp)
 		updateSearch();
 		setEnabled(true);
 	}
-};
+}
 
 int AjaxList::itemID(const QVariantMap& map) const
 {
 	return map["id"].toInt();
-};
+}
 
 QString AjaxList::itemText(const QVariantMap& map) const
 {
 	return map[QString("name_%1").arg(settings->lang())].toString();
-};
+}
 
 bool AjaxList::itemMatches(const QVariantMap& map, const QString& search)
 {
 	return (map["name_en"].toString().contains(search, Qt::CaseInsensitive) ||
 		map[QString("name_%1").arg(settings->lang())].toString().contains(
 		search, Qt::CaseInsensitive));
-};
+}

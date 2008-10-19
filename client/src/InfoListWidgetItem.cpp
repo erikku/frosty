@@ -22,7 +22,7 @@
 
 #include <QtGui/QMouseEvent>
 
-InfoListWidgetItem::InfoListWidgetItem(InfoListWidget *parent) :
+InfoListWidgetItem::InfoListWidgetItem(InfoListWidget *parent_widget) :
 	QWidget(0), mSelected(false)
 {
 	ui.setupUi(this);
@@ -33,9 +33,9 @@ InfoListWidgetItem::InfoListWidgetItem(InfoListWidget *parent) :
 	mUpperFont = ui.text1->font();
 	mLowerFont = ui.text3->font();
 
-	mInfoListWidget = parent;
-	if(parent)
-		parent->addItem(this);
+	mInfoListWidget = parent_widget;
+	if(parent_widget)
+		parent_widget->addItem(this);
 
 	QPalette pal = palette();
 
@@ -54,11 +54,11 @@ InfoListWidgetItem::InfoListWidgetItem(InfoListWidget *parent) :
 		QBrush( QColor("#404040") ));
 
 	setPalette(pal);
-};
+}
 
-InfoListWidgetItem::InfoListWidgetItem(const QIcon& icon, const QString& text1,
-	const QString& text2, const QString& text3, const QString& text4,
-	InfoListWidget *parent) : QWidget(0), mSelected(false)
+InfoListWidgetItem::InfoListWidgetItem(const QIcon& ico, const QString& t1,
+	const QString& t2, const QString& t3, const QString& t4,
+	InfoListWidget *parent_widget) : QWidget(0), mSelected(false)
 {
 	ui.setupUi(this);
 
@@ -68,15 +68,15 @@ InfoListWidgetItem::InfoListWidgetItem(const QIcon& icon, const QString& text1,
 	mUpperFont = ui.text1->font();
 	mLowerFont = ui.text3->font();
 
-	ui.icon->setPixmap( icon.pixmap(32, 32) );
-	ui.text1->setText(text1);
-	ui.text2->setText(text2);
-	ui.text3->setText(text3);
-	ui.text4->setText(text4);
+	ui.icon->setPixmap( ico.pixmap(32, 32) );
+	ui.text1->setText(t1);
+	ui.text2->setText(t2);
+	ui.text3->setText(t3);
+	ui.text4->setText(t4);
 
-	mInfoListWidget = parent;
-	if(parent)
-		parent->addItem(this);
+	mInfoListWidget = parent_widget;
+	if(parent_widget)
+		parent_widget->addItem(this);
 
 	QPalette pal = palette();
 
@@ -95,11 +95,11 @@ InfoListWidgetItem::InfoListWidgetItem(const QIcon& icon, const QString& text1,
 		QBrush( QColor("#404040") ));
 
 	setPalette(pal);
-};
+}
 
-void InfoListWidgetItem::mouseMoveEvent(QMouseEvent *event)
+void InfoListWidgetItem::mouseMoveEvent(QMouseEvent *evt)
 {
-	event->accept();
+	evt->accept();
 	grabMouse();
 
 	if(mInfoListWidget)
@@ -110,8 +110,8 @@ void InfoListWidgetItem::mouseMoveEvent(QMouseEvent *event)
 		QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
 			viewport->mapToGlobal(bottom_left) );
 
-		if( area.contains( event->globalPos() ) &&
-			rect().contains( event->pos() ) )
+		if( area.contains( evt->globalPos() ) &&
+			rect().contains( evt->pos() ) )
 		{
 			setBackgroundRole(QPalette::Highlight);
 		}
@@ -129,9 +129,9 @@ void InfoListWidgetItem::mouseMoveEvent(QMouseEvent *event)
 	{
 		releaseMouse();
 	}
-};
+}
 
-void InfoListWidgetItem::mousePressEvent(QMouseEvent *event)
+void InfoListWidgetItem::mousePressEvent(QMouseEvent *evt)
 {
 	if(!mInfoListWidget)
 		return;
@@ -142,14 +142,14 @@ void InfoListWidgetItem::mousePressEvent(QMouseEvent *event)
 	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
 		viewport->mapToGlobal(bottom_left) );
 
-	if( area.contains( event->globalPos() ) && rect().contains( event->pos() ) )
+	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
 	{
 		window()->activateWindow();
 		window()->raise();
 	}
-};
+}
 
-void InfoListWidgetItem::mouseReleaseEvent(QMouseEvent *event)
+void InfoListWidgetItem::mouseReleaseEvent(QMouseEvent *evt)
 {
 	if(!mInfoListWidget)
 		return;
@@ -160,14 +160,14 @@ void InfoListWidgetItem::mouseReleaseEvent(QMouseEvent *event)
 	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
 		viewport->mapToGlobal(bottom_left) );
 
-	if( area.contains( event->globalPos() ) && rect().contains( event->pos() ) )
+	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
 	{
-		event->accept();
+		evt->accept();
 		emit clicked();
 	}
-};
+}
 
-void InfoListWidgetItem::mouseDoubleClickEvent(QMouseEvent *event)
+void InfoListWidgetItem::mouseDoubleClickEvent(QMouseEvent *evt)
 {
 	if(!mInfoListWidget)
 		return;
@@ -178,17 +178,17 @@ void InfoListWidgetItem::mouseDoubleClickEvent(QMouseEvent *event)
 	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
 		viewport->mapToGlobal(bottom_left) );
 
-	if( area.contains( event->globalPos() ) && rect().contains( event->pos() ) )
+	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
 	{
-		event->accept();
+		evt->accept();
 		emit doubleClicked();
 	}
-};
+}
 
 bool InfoListWidgetItem::isSelected() const
 {
 	return mSelected;
-};
+}
 
 void InfoListWidgetItem::setSelected(bool selected)
 {
@@ -203,27 +203,27 @@ void InfoListWidgetItem::setSelected(bool selected)
 		setBackgroundRole(QPalette::NoRole);
 
 	emit selectionChanged();
-};
+}
 
 QString InfoListWidgetItem::text1() const
 {
 	return ui.text1->text();
-};
+}
 
 QString InfoListWidgetItem::text2() const
 {
 	return ui.text2->text();
-};
+}
 
 QString InfoListWidgetItem::text3() const
 {
 	return ui.text3->text();
-};
+}
 
 QString InfoListWidgetItem::text4() const
 {
 	return ui.text4->text();
-};
+}
 
 QString InfoListWidgetItem::textAt(int index) const
 {
@@ -246,27 +246,27 @@ QString InfoListWidgetItem::textAt(int index) const
 	}
 
 	return QString();
-};
+}
 
 void InfoListWidgetItem::setText1(const QString& text)
 {
 	ui.text1->setText(text);
-};
+}
 
 void InfoListWidgetItem::setText2(const QString& text)
 {
 	ui.text2->setText(text);
-};
+}
 
 void InfoListWidgetItem::setText3(const QString& text)
 {
 	ui.text3->setText(text);
-};
+}
 
 void InfoListWidgetItem::setText4(const QString& text)
 {
 	ui.text4->setText(text);
-};
+}
 
 void InfoListWidgetItem::setTextAt(int index, const QString& text)
 {
@@ -287,60 +287,60 @@ void InfoListWidgetItem::setTextAt(int index, const QString& text)
 		default:
 			break;
 	}
-};
+}
 
 QIcon InfoListWidgetItem::icon() const
 {
 	return QIcon( *ui.icon->pixmap() );
-};
+}
 
 InfoListWidgetItem* InfoListWidgetItem::clone() const
 {
 	return new InfoListWidgetItem(icon(), text1(), text2(), text3(), text4());
-};
+}
 
 InfoListWidget* InfoListWidgetItem::infoListWidget() const
 {
 	return mInfoListWidget;
-};
+}
 
-void InfoListWidgetItem::setIcon(const QIcon& icon)
+void InfoListWidgetItem::setIcon(const QIcon& ico)
 {
-	ui.icon->setPixmap( icon.pixmap(32, 32) );
-};
+	ui.icon->setPixmap( ico.pixmap(32, 32) );
+}
 
 QVariant InfoListWidgetItem::data() const
 {
 	return mData;
-};
+}
 
-void InfoListWidgetItem::setData(const QVariant& data)
+void InfoListWidgetItem::setData(const QVariant& d)
 {
-	mData = data;
-};
+	mData = d;
+}
 
 QFont InfoListWidgetItem::upperFont() const
 {
 	return mUpperFont;
-};
+}
 
 QFont InfoListWidgetItem::lowerFont() const
 {
 	return mLowerFont;
-};
+}
 
-void InfoListWidgetItem::setUpperFont(const QFont& font)
+void InfoListWidgetItem::setUpperFont(const QFont& fnt)
 {
-	mUpperFont = font;
+	mUpperFont = fnt;
 
-	ui.text1->setFont(font);
-	ui.text2->setFont(font);
-};
+	ui.text1->setFont(fnt);
+	ui.text2->setFont(fnt);
+}
 
-void InfoListWidgetItem::setLowerFont(const QFont& font)
+void InfoListWidgetItem::setLowerFont(const QFont& fnt)
 {
-	mLowerFont = font;
+	mLowerFont = fnt;
 
-	ui.text3->setFont(font);
-	ui.text4->setFont(font);
-};
+	ui.text3->setFont(fnt);
+	ui.text4->setFont(fnt);
+}

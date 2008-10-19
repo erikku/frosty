@@ -22,9 +22,10 @@
 #include <QtGui/QMessageBox>
 #include <QtNetwork/QHttp>
 #include <iostream>
-registration::registration(QObject *parent) : QObject(parent)
+registration::registration(QObject *parent_object) : QObject(parent_object)
 {
-};
+	// Nothing to see here
+}
 
 void registration::loadValidationImage(const QUrl& url)
 {
@@ -43,12 +44,12 @@ void registration::loadValidationImage(const QUrl& url)
 		this, SLOT(readyRead(const QHttpResponseHeader&)) );
 
 	http->request(header);
-};
+}
 
 QString registration::salt() const
 {
 	return mSalt;
-};
+}
 
 void registration::registerUser(const QUrl& url, const QString& email, const QString& name,
 	const QString& pass, const QString& code)
@@ -81,7 +82,7 @@ void registration::registerUser(const QUrl& url, const QString& email, const QSt
 		this, SLOT(readyRead(const QHttpResponseHeader&)) );
 
 	http->request(header, data);
-};
+}
 
 void registration::readyRead(const QHttpResponseHeader& resp)
 {
@@ -116,7 +117,7 @@ void registration::readyRead(const QHttpResponseHeader& resp)
 	}
 
 	http->deleteLater();
-};
+}
 
 void registration::sslErrors(const QList<QSslError>& errors)
 {
@@ -126,4 +127,4 @@ void registration::sslErrors(const QList<QSslError>& errors)
 
 	QMessageBox::critical(0, tr("AJAX Error"), tr("The AJAX backend has "
 		"encountered the following SSL errors:\n%1").arg( list.join("\n") ));
-};
+}

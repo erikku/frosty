@@ -24,10 +24,10 @@
 #include <QtCore/QStringList>
 #include <QtGui/QMessageBox>
 
-HttpTransfer::HttpTransfer(QObject *parent) : QObject(parent)
+HttpTransfer::HttpTransfer(QObject *parent_object) : QObject(parent_object)
 {
 	// Nothing to see here
-};
+}
 
 HttpTransfer::~HttpTransfer()
 {
@@ -36,7 +36,7 @@ HttpTransfer::~HttpTransfer()
 		delete mHttp;
 		mHttp = 0;
 	}
-};
+}
 
 HttpTransfer* HttpTransfer::start(const QUrl& url, const QString& path,
 	const QMap<QString, QString>& post)
@@ -91,7 +91,7 @@ HttpTransfer* HttpTransfer::start(const QUrl& url, const QString& path,
 	transfer->mRequestID = transfer->mHttp->request(header, data);
 
 	return transfer;
-};
+}
 
 void HttpTransfer::requestFinished(int id, bool error)
 {
@@ -123,7 +123,7 @@ void HttpTransfer::requestFinished(int id, bool error)
 	}
 
 	emit transferFinished(checksum);
-};
+}
 
 void HttpTransfer::readyRead(const QHttpResponseHeader& resp)
 {
@@ -145,7 +145,7 @@ void HttpTransfer::readyRead(const QHttpResponseHeader& resp)
 
 	emit progressChanged( qRound((double)mWritten /
 		(double)mContentLength * 100.0f) );
-};
+}
 
 void HttpTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 {
@@ -202,4 +202,4 @@ void HttpTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 	mContentLength = resp.value("Content-Length").toInt();
 
 	emit progressChanged(0);
-};
+}

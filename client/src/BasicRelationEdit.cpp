@@ -23,7 +23,8 @@
 
 #include <QtGui/QMessageBox>
 
-BasicRelationEdit::BasicRelationEdit(QWidget *parent) : RelationEdit(parent)
+BasicRelationEdit::BasicRelationEdit(QWidget *parent_widget) :
+	RelationEdit(parent_widget)
 {
 	ui.setupUi(this);
 
@@ -33,7 +34,7 @@ BasicRelationEdit::BasicRelationEdit(QWidget *parent) : RelationEdit(parent)
 
 	connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(close()));
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(submitRelation()));
-};
+}
 
 void BasicRelationEdit::submitRelation()
 {
@@ -67,7 +68,7 @@ void BasicRelationEdit::submitRelation()
 		action["where"] = QVariantList() << where;
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
-};
+}
 
 void BasicRelationEdit::refresh()
 {
@@ -97,7 +98,7 @@ void BasicRelationEdit::refresh()
 	action["where"] = QVariantList() << where;
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
-};
+}
 
 void BasicRelationEdit::ajaxResponse(const QVariant& resp)
 {
@@ -122,4 +123,4 @@ void BasicRelationEdit::ajaxResponse(const QVariant& resp)
 
 		setEnabled(true);
 	}
-};
+}

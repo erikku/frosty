@@ -24,10 +24,10 @@
 #include <QtCore/QStringList>
 #include <QtGui/QMessageBox>
 
-ajaxTransfer::ajaxTransfer(QObject *parent) : QObject(parent)
+ajaxTransfer::ajaxTransfer(QObject *parent_object) : QObject(parent_object)
 {
 	// Nothing to see here
-};
+}
 
 ajaxTransfer::~ajaxTransfer()
 {
@@ -36,7 +36,7 @@ ajaxTransfer::~ajaxTransfer()
 		delete mHttp;
 		mHttp = 0;
 	}
-};
+}
 
 void ajaxTransfer::sslErrors(const QList<QSslError>& errors)
 {
@@ -46,7 +46,7 @@ void ajaxTransfer::sslErrors(const QList<QSslError>& errors)
 
 	QMessageBox::critical(0, tr("AJAX Error"), tr("The AJAX backend has "
 		"encountered the following SSL errors:\n%1").arg( list.join("\n") ));
-};
+}
 
 ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 	const QMap<QString, QString>& post)
@@ -101,7 +101,7 @@ ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 	transfer->mRequestID = transfer->mHttp->request(header, data);
 
 	return transfer;
-};
+}
 
 void ajaxTransfer::requestFinished(int id, bool error)
 {
@@ -145,14 +145,14 @@ void ajaxTransfer::requestFinished(int id, bool error)
 
 	foreach(QVariant action, mResponse.toList())
 		emit transferFinished(action);
-};
+}
 
 void ajaxTransfer::readyRead(const QHttpResponseHeader& resp)
 {
 	Q_UNUSED(resp);
 
 	mContent += mHttp->readAll();
-};
+}
 
 void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 {
@@ -211,4 +211,4 @@ void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 			return;
 		}
 	}
-};
+}

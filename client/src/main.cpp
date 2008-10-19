@@ -66,4 +66,4 @@ int main(int argc, char *argv[])
 		VersionCheck::getSingletonPtr();
 
 	return app.exec();
-};
+}

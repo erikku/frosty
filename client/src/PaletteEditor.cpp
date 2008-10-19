@@ -95,9 +95,10 @@ PaletteData::PaletteData()
 	descriptions[QPalette::HighlightedText] = "A text color that contrasts with Highlight. By default, the highlighted text color is Qt::white.";
 	descriptions[QPalette::Link] = "A text color used for unvisited hyperlinks. By default, the link color is Qt::blue.";
 	descriptions[QPalette::LinkVisited] = "A text color used for already visited hyperlinks. By default, the linkvisited color is Qt::magenta.";
-};
+}
 
-PaletteEditor::PaletteEditor(const QPalette& pal, QWidget *parent) : QWidget(parent), mPalette(pal)
+PaletteEditor::PaletteEditor(const QPalette& pal,
+	QWidget *parent_widget) : QWidget(parent_widget), mPalette(pal)
 {
 	ui.setupUi(this);
 
@@ -114,17 +115,17 @@ PaletteEditor::PaletteEditor(const QPalette& pal, QWidget *parent) : QWidget(par
 	connect(ui.GBox, SIGNAL(valueChanged(int)), this, SLOT(updatePalette()));
 	connect(ui.BBox, SIGNAL(valueChanged(int)), this, SLOT(updatePalette()));
 	connect(ui.ColorButton, SIGNAL(clicked()), this, SLOT(promptColor()));
-};
+}
 
 QPalette PaletteEditor::currentPalette() const
 {
 	return mPalette;
-};
+}
 
 void PaletteEditor::setCurrentPalette(const QPalette& pal)
 {
 	mPalette = pal;
-};
+}
 
 void PaletteEditor::promptColor()
 {
@@ -135,7 +136,7 @@ void PaletteEditor::promptColor()
 	ui.RBox->setValue( color.red()   );
 	ui.GBox->setValue( color.green() );
 	ui.BBox->setValue( color.blue()  );
-};
+}
 
 QPalette PaletteEditor::importPalette(const QString& xml)
 {
@@ -167,7 +168,7 @@ QPalette PaletteEditor::importPalette(const QString& xml)
 	}
 
 	return pal;
-};
+}
 
 QString PaletteEditor::exportPalette(const QPalette& pal)
 {
@@ -179,8 +180,12 @@ QString PaletteEditor::exportPalette(const QPalette& pal)
 	QGradientStops stops;
 
 	xml += "<palette>\n";
-	foreach(QString role, data.colorRoles.keys())
+
+	QStringListIterator color_roles( data.colorRoles.keys() );
+	while( color_roles.hasNext() )
 	{
+		QString role = color_roles.next();
+
 		xml += "  <role name=\"" + role + "\">\n";
 		foreach(QString group, data.colorGroups.keys())
 		{
@@ -228,7 +233,7 @@ QString PaletteEditor::exportPalette(const QPalette& pal)
 	xml += "</palette>\n";
 
 	return xml;
-};
+}
 
 void PaletteEditor::updateColor()
 {
@@ -247,7 +252,7 @@ void PaletteEditor::updateColor()
 	ui.ColorButton->setIcon( QIcon(pix) );
 
 	ui.Description->setText( data.descriptions.value(cr) );
-};
+}
 
 void PaletteEditor::updatePalette()
 {
@@ -266,4 +271,4 @@ void PaletteEditor::updatePalette()
 
 	ui.PreviewBox->setPalette(mPalette);
 	ui.PreviewBox->repaint();
-};
+}

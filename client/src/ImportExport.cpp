@@ -28,7 +28,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 
-ImportExport::ImportExport(QWidget *parent) : QWidget(parent)
+ImportExport::ImportExport(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	ui.setupUi(this);
 
@@ -46,7 +46,7 @@ ImportExport::ImportExport(QWidget *parent) : QWidget(parent)
 	connect(ui.exportButton, SIGNAL(clicked(bool)), this, SLOT(exportDB()));
 
 	ajax::getSingletonPtr()->subscribe(this);
-};
+}
 
 void ImportExport::pathChanged()
 {
@@ -98,7 +98,7 @@ void ImportExport::pathChanged()
 		mImportPath = path;
 	else
 		mExportPath = path;
-};
+}
 
 void ImportExport::toggleView()
 {
@@ -114,7 +114,7 @@ void ImportExport::toggleView()
 		ui.exportButton->setVisible(true);
 		ui.pathEdit->setText(mExportPath);
 	}
-};
+}
 
 void ImportExport::browse()
 {
@@ -135,7 +135,7 @@ void ImportExport::browse()
 
 	if( !path.isEmpty() )
 		ui.pathEdit->setText(path);
-};
+}
 
 void ImportExport::importDB()
 {
@@ -159,7 +159,7 @@ void ImportExport::importDB()
 	ajax::getSingletonPtr()->request(settings->url(), action);
 
 	setEnabled(false);
-};
+}
 
 void ImportExport::exportDB()
 {
@@ -183,7 +183,7 @@ void ImportExport::exportDB()
 	ajax::getSingletonPtr()->request(settings->url(), action);
 
 	setEnabled(false);
-};
+}
 
 void ImportExport::ajaxResponse(const QVariant& resp)
 {
@@ -193,7 +193,7 @@ void ImportExport::ajaxResponse(const QVariant& resp)
 
 	if(result.value("user_data").toString() == "db_export")
 	{
-		QString data = json::toJSON( result.value("export") );
+		QString export_data = json::toJSON( result.value("export") );
 
 		QFile file(mExportPath);
 		if( !file.open(QIODevice::WriteOnly) )
@@ -205,7 +205,7 @@ void ImportExport::ajaxResponse(const QVariant& resp)
 		}
 		else
 		{
-			file.write( data.toUtf8() );
+			file.write( export_data.toUtf8() );
 			file.close();
 		}
 
@@ -221,4 +221,4 @@ void ImportExport::ajaxResponse(const QVariant& resp)
 
 		setEnabled(true);
 	}
-};
+}

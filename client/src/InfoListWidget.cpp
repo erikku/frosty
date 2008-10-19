@@ -26,27 +26,27 @@ bool defaultSortFunction1(const InfoListWidgetItem *item1,
 	const InfoListWidgetItem *item2)
 {
 	return item1->text1() < item2->text1();
-};
+}
 
 bool defaultSortFunction2(const InfoListWidgetItem *item1,
 	const InfoListWidgetItem *item2)
 {
 	return item1->text2() < item2->text2();
-};
+}
 
 bool defaultSortFunction3(const InfoListWidgetItem *item1,
 	const InfoListWidgetItem *item2)
 {
 	return item1->text3() < item2->text3();
-};
+}
 
 bool defaultSortFunction4(const InfoListWidgetItem *item1,
 	const InfoListWidgetItem *item2)
 {
 	return item1->text4() < item2->text4();
-};
+}
 
-InfoListWidget::InfoListWidget(QWidget *parent) : QWidget(parent)
+InfoListWidget::InfoListWidget(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	ui.setupUi(this);
 
@@ -94,7 +94,7 @@ InfoListWidget::InfoListWidget(QWidget *parent) : QWidget(parent)
 	connect(ui.sortArrow2, SIGNAL(clicked()), this, SLOT(toggleSort2()));
 	connect(ui.sortArrow3, SIGNAL(clicked()), this, SLOT(toggleSort3()));
 	connect(ui.sortArrow4, SIGNAL(clicked()), this, SLOT(toggleSort4()));
-};
+}
 
 void InfoListWidget::addItem(InfoListWidgetItem *item)
 {
@@ -122,21 +122,21 @@ void InfoListWidget::addItem(InfoListWidgetItem *item)
 		this, SLOT(handleItemDoubleClicked()));
 	connect(item, SIGNAL(selectionChanged()),
 		this, SLOT(handleSelectionChanged()));
-};
+}
 
 void InfoListWidget::addItem(const QIcon& icon, const QString& text1,
 	const QString& text2, const QString& text3, const QString& text4)
 {
 	addItem(new InfoListWidgetItem(icon, text1, text2, text3, text4));
-};
+}
 
-void InfoListWidget::insertItem(int row, InfoListWidgetItem *item)
+void InfoListWidget::insertItem(int r, InfoListWidgetItem *item)
 {
 	if( mItems.contains(item) )
 		return;
 
-	mLayout->insertWidget(row, item);
-	mItems.insert(row, item);
+	mLayout->insertWidget(r, item);
+	mItems.insert(r, item);
 
 	item->mInfoListWidget = this;
 
@@ -145,44 +145,44 @@ void InfoListWidget::insertItem(int row, InfoListWidgetItem *item)
 		this, SLOT(handleItemDoubleClicked()));
 	connect(item, SIGNAL(selectionChanged()),
 		this, SLOT(handleSelectionChanged()));
-};
+}
 
-void InfoListWidget::insertItem(int row, const QIcon& icon,
+void InfoListWidget::insertItem(int r, const QIcon& icon,
 	const QString& text1, const QString& text2, const QString& text3,
 	const QString& text4)
 {
-	insertItem(row, new InfoListWidgetItem(icon, text1, text2, text3, text4));
-};
+	insertItem(r, new InfoListWidgetItem(icon, text1, text2, text3, text4));
+}
 
-InfoListWidgetItem* InfoListWidget::item(int row) const
+InfoListWidgetItem* InfoListWidget::itemAt(int r) const
 {
-	if(mItems.count() >= row)
+	if(mItems.count() >= r)
 		return 0;
 
-	return mItems.at(row);
-};
+	return mItems.at(r);
+}
 
-int InfoListWidget::row(const InfoListWidgetItem *item) const
+int InfoListWidget::row(InfoListWidgetItem *item) const
 {
 	return mItems.indexOf( (InfoListWidgetItem*)item );
-};
+}
 
-void InfoListWidget::removeItem(int row)
+void InfoListWidget::removeItem(int r)
 {
-	delete takeItem(row);
-};
+	delete takeItem(r);
+}
 
 void InfoListWidget::removeItem(InfoListWidgetItem *item)
 {
 	delete takeItem(item);
-};
+}
 
-InfoListWidgetItem* InfoListWidget::takeItem(int row)
+InfoListWidgetItem* InfoListWidget::takeItem(int r)
 {
-	if(mItems.count() >= row)
+	if(mItems.count() >= r)
 		return 0;
 
-	InfoListWidgetItem *item = mItems.takeAt(row);
+	InfoListWidgetItem *item = mItems.takeAt(r);
 	mLayout->removeWidget(item);
 
 	item->mInfoListWidget = 0;
@@ -194,7 +194,7 @@ InfoListWidgetItem* InfoListWidget::takeItem(int row)
 		this, SLOT(handleSelectionChanged()));
 
 	return item;
-};
+}
 
 InfoListWidgetItem* InfoListWidget::takeItem(InfoListWidgetItem *item)
 {
@@ -213,12 +213,12 @@ InfoListWidgetItem* InfoListWidget::takeItem(InfoListWidgetItem *item)
 		this, SLOT(handleSelectionChanged()));
 
 	return item;
-};
+}
 
 int InfoListWidget::count() const
 {
 	return mItems.count();
-};
+}
 
 QList<InfoListWidgetItem*> InfoListWidget::selectedItems() const
 {
@@ -231,18 +231,18 @@ QList<InfoListWidgetItem*> InfoListWidget::selectedItems() const
 	}
 
 	return selected;
-};
+}
 
-void InfoListWidget::setCurrentRow(int row)
+void InfoListWidget::setCurrentRow(int r)
 {
-	if(mItems.count() >= row)
+	if(mItems.count() >= r)
 		return;
 
 	foreach(InfoListWidgetItem *item, mItems)
 		item->setSelected(false);
 
-	mItems.at(row)->setSelected(true);
-};
+	mItems.at(r)->setSelected(true);
+}
 
 void InfoListWidget::setCurrentItem(InfoListWidgetItem *item)
 {
@@ -253,7 +253,7 @@ void InfoListWidget::setCurrentItem(InfoListWidgetItem *item)
 		i->setSelected(false);
 
 	item->setSelected(true);
-};
+}
 
 void InfoListWidget::clear()
 {
@@ -264,7 +264,7 @@ void InfoListWidget::clear()
 	}
 
 	mItems.clear();
-};
+}
 
 void InfoListWidget::handleItemClicked()
 {
@@ -294,7 +294,7 @@ void InfoListWidget::handleItemClicked()
 	}
 
 	emit itemClicked(item);
-};
+}
 
 void InfoListWidget::handleItemDoubleClicked()
 {
@@ -303,7 +303,7 @@ void InfoListWidget::handleItemDoubleClicked()
 		return;
 
 	emit itemDoubleClicked(item);
-};
+}
 
 void InfoListWidget::handleSelectionChanged()
 {
@@ -312,7 +312,7 @@ void InfoListWidget::handleSelectionChanged()
 		return;
 
 	emit selectionChanged(item);
-};
+}
 
 void InfoListWidget::setSortHeaders(const QString& name1, const QString& name2,
 		const QString& name3, const QString& name4)
@@ -330,27 +330,27 @@ void InfoListWidget::setSortHeaders(const QString& name1, const QString& name2,
 	ui.sortArrow2->setVisible( !name2.isEmpty() );
 	ui.sortArrow3->setVisible( !name3.isEmpty() );
 	ui.sortArrow4->setVisible( !name4.isEmpty() );
-};
+}
 
 void InfoListWidget::setSortFunction1(InfoItemSortFunc func)
 {
 	mSortFunctions[0] = func;
-};
+}
 
 void InfoListWidget::setSortFunction2(InfoItemSortFunc func)
 {
 	mSortFunctions[1] = func;
-};
+}
 
 void InfoListWidget::setSortFunction3(InfoItemSortFunc func)
 {
 	mSortFunctions[2] = func;
-};
+}
 
 void InfoListWidget::setSortFunction4(InfoItemSortFunc func)
 {
 	mSortFunctions[3] = func;
-};
+}
 
 bool InfoListWidget::lessThen(const InfoListWidgetItem *item1,
 	const InfoListWidgetItem *item2)
@@ -373,22 +373,22 @@ bool InfoListWidget::lessThen(const InfoListWidgetItem *item1,
 
 	// They are exactly the same, so return false
 	return false;
-};
+}
 
 bool InfoListWidget::isSortingEnabled() const
 {
 	return mSortingEnabled;
-};
+}
 
 void InfoListWidget::setSortingEnabled(bool enable)
 {
 	mSortingEnabled = enable;
-};
+}
 
 InfoListWidget::SelectionMode InfoListWidget::selectionMode() const
 {
 	return mSelectionMode;
-};
+}
 
 void InfoListWidget::setSelectionMode(SelectionMode mode)
 {
@@ -404,7 +404,7 @@ void InfoListWidget::setSelectionMode(SelectionMode mode)
 	}
 
 	mSelectionMode = mode;
-};
+}
 
 void InfoListWidget::sort()
 {
@@ -415,21 +415,21 @@ void InfoListWidget::sort()
 
 	foreach(InfoListWidgetItem *item, mItems)
 		mLayout->addWidget(item);
-};
+}
 
 void InfoListWidget::mergeSort(QList<InfoListWidgetItem*>& list)
 {
-	int count = list.count();
+	int list_count = list.count();
 
-	if(count < 2)
+	if(list_count < 2)
 		return;
 
 	// Use insertion sort on small lists (faster)
-	if(count < 64)
+	if(list_count < 64)
 	{
 		InfoListWidgetItem *temp;
 
-		for(int i = 1; i < count; i++)
+		for(int i = 1; i < list_count; i++)
 		{
 			temp = list[i];
 
@@ -443,7 +443,7 @@ void InfoListWidget::mergeSort(QList<InfoListWidgetItem*>& list)
 		return;
 	}
 
-	int half = count / 2;
+	int half = list_count / 2;
 
     QList<InfoListWidgetItem*> half1 = list.mid(0, half);
     QList<InfoListWidgetItem*> half2 = list.mid(half);
@@ -453,7 +453,7 @@ void InfoListWidget::mergeSort(QList<InfoListWidgetItem*>& list)
 	mergeSort(half2);
 
 	int i = 0, j = 0;
-	int count2 = count - half;
+	int count2 = list_count - half;
 	while(i < half && j < count2)
 	{
 		if( lessThen(half1[i], half2[j]) )
@@ -469,7 +469,7 @@ void InfoListWidget::mergeSort(QList<InfoListWidgetItem*>& list)
 		temp << half2[j++];
 
 	list = temp;
-};
+}
 
 QLabel* InfoListWidget::arrowAt(int index)
 {
@@ -492,7 +492,7 @@ QLabel* InfoListWidget::arrowAt(int index)
 	}
 
 	return 0;
-};
+}
 
 void InfoListWidget::toggleSort(int num)
 {
@@ -517,24 +517,24 @@ void InfoListWidget::toggleSort(int num)
 
 	// Now sort the items
 	sort();
-};
+}
 
 void InfoListWidget::toggleSort1()
 {
 	toggleSort(0);
-};
+}
 
 void InfoListWidget::toggleSort2()
 {
 	toggleSort(1);
-};
+}
 
 void InfoListWidget::toggleSort3()
 {
 	toggleSort(2);
-};
+}
 
 void InfoListWidget::toggleSort4()
 {
 	toggleSort(3);
-};
+}

@@ -27,7 +27,7 @@
 #include <QtCore/QFileInfo>
 #include <QtGui/QMessageBox>
 
-Login::Login(QWidget *parent) : QWidget(parent)
+Login::Login(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	ui.setupUi(this);
 
@@ -42,7 +42,7 @@ Login::Login(QWidget *parent) : QWidget(parent)
 	connect(ui.passwordEdit, SIGNAL(returnPressed()), this, SLOT(login()));
 
 	mRegistration = 0;
-};
+}
 
 void Login::darkenWidget(QWidget *widget)
 {
@@ -53,7 +53,7 @@ void Login::darkenWidget(QWidget *widget)
 	qobject_cast<QLabel*>(widget)->setMargin(5);
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
-};
+}
 
 void Login::login()
 {
@@ -94,7 +94,7 @@ void Login::login()
 		this, SLOT(validationImage(const QPixmap&, const QString&)));
 
 	setEnabled(false);
-};
+}
 
 void Login::validationImage(const QPixmap& image, const QString& error)
 {
@@ -128,4 +128,4 @@ void Login::validationImage(const QPixmap& image, const QString& error)
 	mRegistration->deleteLater();
 	deleteLater();
 	close();
-};
+}

@@ -24,7 +24,7 @@
 
 #include <QtGui/QMessageBox>
 
-IconSelect::IconSelect(QWidget *parent) : QWidget(parent)
+IconSelect::IconSelect(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	ui.setupUi(this);
 
@@ -32,7 +32,7 @@ IconSelect::IconSelect(QWidget *parent) : QWidget(parent)
 	connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(handleClose()));
 
 	setWindowModality(Qt::ApplicationModal);
-};
+}
 
 void IconSelect::selectIcon(const QString& path)
 {
@@ -57,7 +57,7 @@ void IconSelect::selectIcon(const QString& path)
 	}
 
 	show();
-};
+}
 
 void IconSelect::handleIcon()
 {
@@ -74,11 +74,11 @@ void IconSelect::handleIcon()
 		item->text() );
 
 	close();
-};
+}
 
 void IconSelect::handleClose()
 {
 	emit iconCanceled();
 
 	close();
-};
+}

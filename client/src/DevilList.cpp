@@ -25,10 +25,11 @@
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
 
-DevilList::DevilList(DevilView *view, QWidget *parent) : AjaxList(view, parent)
+DevilList::DevilList(DevilView *view,
+	QWidget *parent_widget) : AjaxList(view, parent_widget)
 {
 	refresh();
-};
+}
 
 QVariant DevilList::filterAction() const
 {
@@ -42,12 +43,12 @@ QVariant DevilList::filterAction() const
 	action["user_data"] = filterUserData();
 
 	return action;
-};
+}
 
 QVariant DevilList::filterUserData() const
 {
 	return QString("genus_cache");
-};
+}
 
 QVariant DevilList::listAction() const
 {
@@ -76,35 +77,35 @@ QVariant DevilList::listAction() const
 	action["user_data"] = listUserData();
 
 	return action;
-};
+}
 
 QVariant DevilList::listUserData() const
 {
 	return QString("devils");
-};
+}
 
 QString DevilList::switchTitle() const
 {
 	return tr("Switching Devils");
-};
+}
 
 QString DevilList::switchMessage() const
 {
 	return tr("You are attemping to view another devil while editing a devil. "
 			"If you continue you will lose any changes you made to the devil. "
 			"Are you sure you want to continue?");
-};
+}
 
 QString DevilList::deleteTitle() const
 {
 	return tr("Deleting Devil");
-};
+}
 
 QString DevilList::deleteMessage() const
 {
 	return tr("You are about to delete the devil '%1'. Are you sure you want "
 		"to delete this?");
-};
+}
 
 QVariant DevilList::deleteAction(int id) const
 {
@@ -120,19 +121,19 @@ QVariant DevilList::deleteAction(int id) const
 	action["user_data"] = deleteUserData();
 
 	return action;
-};
+}
 
 QVariant DevilList::deleteUserData() const
 {
 	return QString("devil_delete");
-};
+}
 
 int DevilList::filterID(const QVariantMap& map) const
 {
 	return map["genus"].toInt();
-};
+}
 
 QString DevilList::itemIcon(const QVariantMap& map) const
 {
 	return QString("icons/devils/icon_%1.png").arg( map["icon"].toString() );
-};
+}

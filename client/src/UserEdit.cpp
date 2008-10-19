@@ -24,7 +24,7 @@
 
 #include <QtGui/QMessageBox>
 
-UserEdit::UserEdit(QWidget *parent) : QWidget(parent, Qt::Dialog),
+UserEdit::UserEdit(QWidget *parent_widget) : QWidget(parent_widget, Qt::Dialog),
 	mHaveUser(false), mHavePerms(false), mHaveSalt(false)
 {
 	ui.setupUi(this);
@@ -40,7 +40,7 @@ UserEdit::UserEdit(QWidget *parent) : QWidget(parent, Qt::Dialog),
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(updateUser()));
 
 	ajax::getSingletonPtr()->subscribe(this);
-};
+}
 
 void UserEdit::darkenWidget(QWidget *widget)
 {
@@ -51,7 +51,7 @@ void UserEdit::darkenWidget(QWidget *widget)
 	qobject_cast<QLabel*>(widget)->setMargin(5);
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
-};
+}
 
 void UserEdit::showEdit(const QString& email)
 {
@@ -61,7 +61,7 @@ void UserEdit::showEdit(const QString& email)
 	mEmail = email;
 	refresh();
 	show();
-};
+}
 
 void UserEdit::clear()
 {
@@ -74,7 +74,7 @@ void UserEdit::clear()
 	ui.nameEdit->clear();
 	ui.passwordEdit->clear();
 	ui.permissionsList->clear();
-};
+}
 
 void UserEdit::refresh()
 {
@@ -97,7 +97,7 @@ void UserEdit::refresh()
 	action["user_data"] = "salt";
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
-};
+}
 
 void UserEdit::updateUser()
 {
@@ -163,7 +163,7 @@ void UserEdit::updateUser()
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
 	setEnabled(false);
-};
+}
 
 void UserEdit::ajaxResponse(const QVariant& resp)
 {
@@ -213,4 +213,4 @@ void UserEdit::ajaxResponse(const QVariant& resp)
 
 	if(mHaveUser && mHavePerms && mHaveSalt)
 		setEnabled(true);
-};
+}

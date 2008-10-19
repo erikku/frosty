@@ -29,7 +29,8 @@
 #include <QtCore/QFileInfo>
 #include <QtGui/QMessageBox>
 
-Register::Register(QWidget *parent) : QWidget(parent), mFirst(true)
+Register::Register(QWidget *parent_widget) : QWidget(parent_widget),
+	mFirst(true)
 {
 	ui.setupUi(this);
 
@@ -74,12 +75,12 @@ Register::Register(QWidget *parent) : QWidget(parent), mFirst(true)
 	ui.guestButton->setEnabled(false);
 	ui.existingButton->setEnabled(false);
 	ui.registerButton->setEnabled(false);
-};
+}
 
 Register::~Register()
 {
 	delete mRegistration;
-};
+}
 
 void Register::registrationComplete()
 {
@@ -102,7 +103,7 @@ void Register::registrationComplete()
 
 	deleteLater();
 	close();
-};
+}
 
 void Register::darkenWidget(QWidget *widget)
 {
@@ -113,7 +114,7 @@ void Register::darkenWidget(QWidget *widget)
 	qobject_cast<QLabel*>(widget)->setMargin(5);
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
-};
+}
 
 void Register::validationImage(const QPixmap& image, const QString& error)
 {
@@ -140,7 +141,7 @@ void Register::validationImage(const QPixmap& image, const QString& error)
 	ui.guestButton->setEnabled(true);
 	ui.existingButton->setEnabled(true);
 	ui.registerButton->setEnabled(true);
-};
+}
 
 void Register::sendRequest()
 {
@@ -209,14 +210,14 @@ void Register::sendRequest()
 	mRegistration->registerUser(url,
 		ui.emailEdit->text(), ui.nameEdit->text(), pass,
 		ui.validationEdit->text());
-};
+}
 
 void Register::showLogin()
 {
 	(new Login)->show();
 	deleteLater();
 	close();
-};
+}
 
 void Register::guestLogin()
 {
@@ -224,9 +225,9 @@ void Register::guestLogin()
 
 	deleteLater();
 	close();
-};
+}
 
 void Register::showOptions()
 {
 	Options::getSingletonPtr()->loadSettings();
-};
+}

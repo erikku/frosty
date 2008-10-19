@@ -39,7 +39,8 @@ public:
 
 static LogWidget *g_log_inst = 0;
 
-LogWidget::LogWidget(QWidget *parent) : QWidget(parent, Qt::Dialog)
+LogWidget::LogWidget(QWidget *parent_widget) :
+	QWidget(parent_widget, Qt::Dialog)
 {
 	mLogList = new QListWidget;
 	mLogView = new LogView;
@@ -65,7 +66,7 @@ LogWidget::LogWidget(QWidget *parent) : QWidget(parent, Qt::Dialog)
 	mLogList->setContextMenuPolicy(Qt::ActionsContextMenu);
 
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(resendRequest()));
-};
+}
 
 LogWidget* LogWidget::getSingletonPtr()
 {
@@ -75,7 +76,7 @@ LogWidget* LogWidget::getSingletonPtr()
 	Q_ASSERT(g_log_inst != 0);
 
 	return g_log_inst;
-};
+}
 
 void LogWidget::updateCurrentRequest()
 {
@@ -86,7 +87,7 @@ void LogWidget::updateCurrentRequest()
 	mLogView->loadRequest( mRequests.value(item)->request );
 	mLogView->loadResponse( mRequests.value(item)->response );
 	mLogView->loadContent( mRequests.value(item)->content );
-};
+}
 
 void LogWidget::resendRequest()
 {
@@ -96,11 +97,11 @@ void LogWidget::resendRequest()
 	QListWidgetItem *item = mLogList->selectedItems().first();
 
 	QVariantMap request = mRequests.value(item)->request.toMap();
-	QVariantList actions = request.value("actions").toList();
+	QVariantList acts = request.value("actions").toList();
 
-	foreach(QVariant action, actions)
-		ajax::getSingletonPtr()->request(settings->url(), action);
-};
+	foreach(QVariant act, acts)
+		ajax::getSingletonPtr()->request(settings->url(), act);
+}
 
 void LogWidget::registerRequest(ajaxTransfer *transfer, const QVariant& request)
 {
@@ -118,7 +119,7 @@ void LogWidget::registerRequest(ajaxTransfer *transfer, const QVariant& request)
 	mRequestMap[transfer] = item;
 
 	mLogList->addItem(item);
-};
+}
 
 void LogWidget::transferInfo(const QString& content, const QVariant& response)
 {
@@ -133,4 +134,4 @@ void LogWidget::transferInfo(const QString& content, const QVariant& response)
 
 	mRequests.value(item)->content = content;
 	mRequests.value(item)->response = response;
-};
+}

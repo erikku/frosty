@@ -28,7 +28,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QSplitter>
 
-LogTree::LogTree(QWidget *parent) : QWidget(parent)
+LogTree::LogTree(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	mTree = new QTreeWidget;
 	mTree->headerItem()->setHidden(true);
@@ -62,7 +62,7 @@ LogTree::LogTree(QWidget *parent) : QWidget(parent)
 
 	connect(mTree, SIGNAL(itemCollapsed(QTreeWidgetItem*)),
 		this, SLOT(resizeToContents()));
-};
+}
 
 void LogTree::loadJSON(const QVariant& json)
 {
@@ -75,12 +75,12 @@ void LogTree::loadJSON(const QVariant& json)
 	mTree->addTopLevelItems( json::toTree(json) );
 	mTree->resizeColumnToContents(0);
 	mTree->expandAll();
-};
+}
 
 void LogTree::resizeToContents()
 {
 	mTree->resizeColumnToContents(0);
-};
+}
 
 void LogTree::updateValueLabel()
 {
@@ -89,4 +89,4 @@ void LogTree::updateValueLabel()
 
 	QTreeWidgetItem *item = mTree->selectedItems().first();
 	mValueLabel->setText( item->data(0, Qt::UserRole).toString() );
-};
+}

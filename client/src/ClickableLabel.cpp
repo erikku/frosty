@@ -21,16 +21,16 @@
 
 #include <QtGui/QMouseEvent>
 
-ClickableLabel::ClickableLabel(QWidget *parent) : QLabel(parent)
+ClickableLabel::ClickableLabel(QWidget *parent_widget) : QLabel(parent_widget)
 {
 	// Nothing to see here
-};
+}
 
-void ClickableLabel::mouseReleaseEvent(QMouseEvent *event)
+void ClickableLabel::mouseReleaseEvent(QMouseEvent *evt)
 {
 	emit clicked();
 
-	event->accept();
+	evt->accept();
 
-	QLabel::mouseReleaseEvent(event);
-};
+	QLabel::mouseReleaseEvent(evt);
+}

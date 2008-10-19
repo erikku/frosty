@@ -24,7 +24,7 @@
 
 #include <QtGui/QListWidget>
 
-UserList::UserList(QWidget *parent) : QWidget(parent)
+UserList::UserList(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	mUserEdit = new UserEdit;
 
@@ -69,7 +69,7 @@ UserList::UserList(QWidget *parent) : QWidget(parent)
 		tr("Shin Megami Tensei IMAGINE DB") ) );
 
 	ajax::getSingletonPtr()->subscribe(this);
-};
+}
 
 void UserList::makeUserActive()
 {
@@ -86,7 +86,7 @@ void UserList::makeUserActive()
 	ajax::getSingletonPtr()->request(settings->url(), action);
 
 	clear();
-};
+}
 
 void UserList::makeUserInactive()
 {
@@ -103,7 +103,7 @@ void UserList::makeUserInactive()
 	ajax::getSingletonPtr()->request(settings->url(), action);
 
 	clear();
-};
+}
 
 void UserList::updateSelection()
 {
@@ -112,7 +112,7 @@ void UserList::updateSelection()
 
 	ui.activeEditButton->setEnabled( ui.activeList->selectedItems().count() );
 	ui.inactiveEditButton->setEnabled( ui.inactiveList->selectedItems().count() );
-};
+}
 
 void UserList::darkenWidget(QWidget *widget)
 {
@@ -123,7 +123,7 @@ void UserList::darkenWidget(QWidget *widget)
 	qobject_cast<QLabel*>(widget)->setMargin(5);
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
-};
+}
 
 void UserList::clear()
 {
@@ -132,7 +132,7 @@ void UserList::clear()
 
 	ui.activeList->setEnabled(false);
 	ui.inactiveList->setEnabled(false);
-};
+}
 
 void UserList::editActiveUser()
 {
@@ -142,7 +142,7 @@ void UserList::editActiveUser()
 	QListWidgetItem *item = ui.activeList->selectedItems().first();
 
 	mUserEdit->showEdit( item->data(Qt::UserRole).toString() );
-};
+}
 
 void UserList::editInactiveUser()
 {
@@ -152,7 +152,7 @@ void UserList::editInactiveUser()
 	QListWidgetItem *item = ui.inactiveList->selectedItems().first();
 
 	mUserEdit->showEdit( item->data(Qt::UserRole).toString() );
-};
+}
 
 void UserList::refresh()
 {
@@ -163,7 +163,7 @@ void UserList::refresh()
 	action["user_data"] = "auth_query_users";
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
-};
+}
 
 void UserList::ajaxResponse(const QVariant& resp)
 {
@@ -196,4 +196,4 @@ void UserList::ajaxResponse(const QVariant& resp)
 	{
 		refresh();
 	}
-};
+}

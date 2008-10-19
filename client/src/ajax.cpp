@@ -35,7 +35,7 @@
 
 static ajax *g_ajax_inst = 0;
 
-ajax::ajax(QObject *parent) : QObject(parent)
+ajax::ajax(QObject *parent_object) : QObject(parent_object)
 {
 	Q_ASSERT(g_ajax_inst == 0);
 
@@ -46,17 +46,17 @@ ajax::ajax(QObject *parent) : QObject(parent)
 	connect(mRequestQueueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueue()));
 
 	g_ajax_inst = this;
-};
+}
 
 ajax::~ajax()
 {
 	g_ajax_inst = 0;
-};
+}
 
 void ajax::showLog()
 {
 	mLog->show();
-};
+}
 
 ajax* ajax::getSingletonPtr()
 {
@@ -66,16 +66,16 @@ ajax* ajax::getSingletonPtr()
 	Q_ASSERT(g_ajax_inst != 0);
 
 	return g_ajax_inst;
-};
+}
 
-void ajax::request(const QUrl& url, const QVariant& request)
+void ajax::request(const QUrl& url, const QVariant& req)
 {
 	if( mRequestQueue.value(url).count() >= 4 )
 		dispatchQueue(url);
 
-	mRequestQueue[url].append(request);
+	mRequestQueue[url].append(req);
 	mRequestQueueTimer->start();
-};
+}
 
 void ajax::dispatchQueue(const QUrl& url)
 {
@@ -87,10 +87,10 @@ void ajax::dispatchQueue(const QUrl& url)
 		{
 			i.next();
 
-			QVariantMap request;
-			request["actions"] = i.value();
+			QVariantMap req;
+			req["actions"] = i.value();
 
-			dispatchRequest(i.key(), request);
+			dispatchRequest(i.key(), req);
 		}
 
 		mRequestQueue.clear();
@@ -98,20 +98,20 @@ void ajax::dispatchQueue(const QUrl& url)
 	}
 	else
 	{
-		QVariantMap request;
-		request["actions"] = mRequestQueue.take(url);
+		QVariantMap m_request;
+		m_request["actions"] = mRequestQueue.take(url);
 
-		dispatchRequest(url, request);
+		dispatchRequest(url, m_request);
 
 		if( mRequestQueue.isEmpty() )
 			mRequestQueueTimer->stop();
 	}
-};
+}
 
-void ajax::dispatchRequest(const QUrl& url, const QVariant& request)
+void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 {
 	// TODO: Error checking here
-	QString json_request = json::toJSON(request);
+	QString json_request = json::toJSON(req);
 
 	//QMessageBox::information(0, "JSON Request", json_request);
 	//cout << json_request.toLocal8Bit().data() << endl << endl;
@@ -142,8 +142,8 @@ void ajax::dispatchRequest(const QUrl& url, const QVariant& request)
 	connect(transfer, SIGNAL(transferFinished(const QVariant&)),
 		this, SIGNAL(response(const QVariant&)) );
 
-	mLog->registerRequest(transfer, request);
-};
+	mLog->registerRequest(transfer, req);
+}
 
 void ajax::subscribe(QObject *obj)
 {
@@ -161,4 +161,4 @@ void ajax::subscribe(QObject *obj)
 
 	connect(this, SIGNAL(response(const QVariant&)), obj,
 		SLOT(ajaxResponse(const QVariant&)));
-};
+}

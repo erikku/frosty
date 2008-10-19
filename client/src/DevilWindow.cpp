@@ -26,7 +26,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QSplitter>
 
-DevilWindow::DevilWindow(QWidget *parent) : QWidget(parent)
+DevilWindow::DevilWindow(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	mDevilView = new DevilView;
 	mDevilList = new DevilList(mDevilView);
@@ -49,10 +49,10 @@ DevilWindow::DevilWindow(QWidget *parent) : QWidget(parent)
 		tr("Shin Megami Tensei IMAGINE DB") ) );
 
 	resize(800, 600);
-};
+}
 
 void DevilWindow::refresh()
 {
 	mDevilList->refresh();
 	mDevilView->refresh();
-};
+}

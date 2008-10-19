@@ -41,21 +41,21 @@
 #include "BasicRelationList.h"
 #include "ajax.h"
 
-Q_DECLARE_METATYPE(AjaxView::BindType);
-Q_DECLARE_METATYPE(QButtonGroup*);
-Q_DECLARE_METATYPE(QPushButton*);
-Q_DECLARE_METATYPE(QComboBox*);
-Q_DECLARE_METATYPE(QCheckBox*);
-Q_DECLARE_METATYPE(QLineEdit*);
-Q_DECLARE_METATYPE(QTextEdit*);
-Q_DECLARE_METATYPE(QSpinBox*);
-Q_DECLARE_METATYPE(QLabel*);
-Q_DECLARE_METATYPE(IconEdit*);
-Q_DECLARE_METATYPE(IconSelect*);
-Q_DECLARE_METATYPE(RelationList*);
-Q_DECLARE_METATYPE(RadioButtonMap);
+Q_DECLARE_METATYPE(AjaxView::BindType)
+Q_DECLARE_METATYPE(QButtonGroup*)
+Q_DECLARE_METATYPE(QPushButton*)
+Q_DECLARE_METATYPE(QComboBox*)
+Q_DECLARE_METATYPE(QCheckBox*)
+Q_DECLARE_METATYPE(QLineEdit*)
+Q_DECLARE_METATYPE(QTextEdit*)
+Q_DECLARE_METATYPE(QSpinBox*)
+Q_DECLARE_METATYPE(QLabel*)
+Q_DECLARE_METATYPE(IconEdit*)
+Q_DECLARE_METATYPE(IconSelect*)
+Q_DECLARE_METATYPE(RelationList*)
+Q_DECLARE_METATYPE(RadioButtonMap)
 
-AjaxView::AjaxView(QWidget *parent) : QWidget(parent), mID(-1)
+AjaxView::AjaxView(QWidget *parent_widget) : QWidget(parent_widget), mID(-1)
 {
 	ui.stackedWidget = 0;
 
@@ -63,7 +63,7 @@ AjaxView::AjaxView(QWidget *parent) : QWidget(parent), mID(-1)
 	ui.cancelButton = 0;
 	ui.refreshButton = 0;
 	ui.updateButton = 0;
-};
+}
 
 void AjaxView::initView(QStackedWidget *stackedWidget, QPushButton *editButton,
 	QPushButton *cancelButton, QPushButton *refreshButton,
@@ -88,7 +88,7 @@ void AjaxView::initView(QStackedWidget *stackedWidget, QPushButton *editButton,
 	ajax::getSingletonPtr()->subscribe(this);
 	setEnabled(false);
 	refresh();
-};
+}
 
 void AjaxView::darkenWidget(QWidget *widget)
 {
@@ -105,12 +105,12 @@ void AjaxView::darkenWidget(QWidget *widget)
 
 	widget->setAutoFillBackground(true);
 	widget->setPalette(dark_palette);
-};
+}
 
 bool AjaxView::checkValues()
 {
 	return true;
-};
+}
 
 void AjaxView::update()
 {
@@ -123,7 +123,7 @@ void AjaxView::update()
 
 	cancel();
 	clear();
-};
+}
 
 void AjaxView::clear()
 {
@@ -141,47 +141,50 @@ void AjaxView::clear()
 		QString field = i.key();
 		QVariantMap map = i.value();
 
-		QLabel *view = map.value("view", 0).value<QLabel*>();
-		Q_ASSERT(view != 0);
+		QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+		Q_ASSERT(view_widget != 0);
 
-		view->clear();
+		view_widget->clear();
 
-		switch( map.value("type", AjaxView::BindText).value<AjaxView::BindType>() )
+		switch( map.value("type",
+			AjaxView::BindText).value<AjaxView::BindType>() )
 		{
 			case BindText:
 			{
-				QLineEdit *edit = map.value("edit", 0).value<QLineEdit*>();
-				Q_ASSERT(edit != 0);
+				QLineEdit *edit_widget = map.value(
+					"edit", 0).value<QLineEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->clear();
+				edit_widget->clear();
 
 				break;
 			}
 			case BindTextBox:
 			{
-				QTextEdit *edit = map.value("edit", 0).value<QTextEdit*>();
-				Q_ASSERT(edit != 0);
+				QTextEdit *edit_widget = map.value(
+					"edit", 0).value<QTextEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->clear();
+				edit_widget->clear();
 
 				break;
 			}
 			case BindIcon:
 			{
-				IconEdit *edit = map.value("edit", 0).value<IconEdit*>();
-				Q_ASSERT(edit != 0);
+				IconEdit *edit_widget = map.value("edit", 0).value<IconEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
-				view->setPixmap( QPixmap(":/blank.png") );
-				edit->setPixmap( QPixmap(":/blank.png") );
+				view_widget->setPixmap( QPixmap(":/blank.png") );
+				edit_widget->setPixmap( QPixmap(":/blank.png") );
 
 				break;
 			}
 			case BindNumber:
 			{
-				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-				Q_ASSERT(edit != 0);
+				QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->setValue( map.value("default").toInt() );
+				edit_widget->setValue( map.value("default").toInt() );
 
 				break;
 			}
@@ -201,19 +204,22 @@ void AjaxView::clear()
 			}
 			case BindEnum:
 			{
-				QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
-				Q_ASSERT(edit != 0);
+				QComboBox *edit_widget = map.value(
+					"edit", 0).value<QComboBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->setCurrentIndex( edit->findData( map.value("default") ) );
+				edit_widget->setCurrentIndex(
+					edit_widget->findData( map.value("default") ) );
 
 				break;
 			}
 			case BindBool:
 			{
-				QCheckBox *edit = map.value("edit", 0).value<QCheckBox*>();
-				Q_ASSERT(edit != 0);
+				QCheckBox *edit_widget = map.value(
+					"edit", 0).value<QCheckBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->setCheckState(Qt::Unchecked);
+				edit_widget->setCheckState(Qt::Unchecked);
 
 				break;
 			}
@@ -222,12 +228,14 @@ void AjaxView::clear()
 				// We don't really want to do this because they
 				// don't always get re-loaded after calling clear()
 
-				//QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
-				//Q_ASSERT(edit != 0);
+				//QComboBox *edit _widget= map.value(
+					//"edit", 0).value<QComboBox*>();
+				//Q_ASSERT(edit_widget != 0);
 
-				// edit->clear();
+				// edit_widget->clear();
 				//if( map.contains("none_name") )
-					//edit->addItem(map.value("none_name").toString(), 0);
+					//edit_widget->addItem(
+						//map.value("none_name").toString(), 0);
 
 				break;
 			}
@@ -235,27 +243,24 @@ void AjaxView::clear()
 			{
 				int defaultValue = map.value("default").toInt();
 
-				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-				Q_ASSERT(edit != 0);
+				QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				bool block = edit->blockSignals(true);
-				edit->setValue(defaultValue);
-				edit->blockSignals(block);
+				bool block = edit_widget->blockSignals(true);
+				edit_widget->setValue(defaultValue);
+				edit_widget->blockSignals(block);
 
-				QStringList columns = map.value("columns").toStringList();
+				QStringList cols = map.value("columns").toStringList();
 
-				QVariantMap data;
-				foreach(QString column, columns)
-					data[column] = defaultValue;
+				QVariantMap col_data;
+				foreach(QString col, cols)
+					col_data[col] = defaultValue;
 
 				// Save the defaults
-				map["data"] = data;
+				map["data"] = col_data;
 				mBinds[field] = map;
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
-
-				view->clear();
+				view_widget->clear();
 
 				break;
 			}
@@ -263,28 +268,25 @@ void AjaxView::clear()
 			{
 				int defaultValue = map.value("default").toInt();
 
-				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-				Q_ASSERT(edit != 0);
+				QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				bool block = edit->blockSignals(true);
-				edit->setValue(defaultValue);
-				edit->blockSignals(block);
+				bool block = edit_widget->blockSignals(true);
+				edit_widget->setValue(defaultValue);
+				edit_widget->blockSignals(block);
 
-				QStringList columns = map.value("columns").toStringList();
+				QStringList cols = map.value("columns").toStringList();
 
-				QVariantMap data;
-				foreach(QString column, columns)
-					data[column] = defaultValue;
+				QVariantMap col_data;
+				foreach(QString col, cols)
+					col_data[col] = defaultValue;
 
 				// Save the defaults
-				map["data"] = data;
-				map["static_data"] = data;
+				map["data"] = col_data;
+				map["static_data"] = col_data;
 				mBinds[field] = map;
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
-
-				view->clear();
+				view_widget->clear();
 
 				break;
 			}
@@ -295,7 +297,7 @@ void AjaxView::clear()
 			}
 		}
 	}
-};
+}
 
 void AjaxView::refresh()
 {
@@ -308,7 +310,7 @@ void AjaxView::refresh()
 	clear();
 	if(id > 0)
 		view(id, false);
-};
+}
 
 void AjaxView::view(int id, bool switchView)
 {
@@ -342,7 +344,7 @@ void AjaxView::view(int id, bool switchView)
 	}
 
 	setEnabled(false);
-};
+}
 
 void AjaxView::edit()
 {
@@ -352,7 +354,7 @@ void AjaxView::edit()
 	ui.updateButton->setVisible(true);
 	ui.cancelButton->setVisible(true);
 	ui.stackedWidget->setCurrentIndex(1);
-};
+}
 
 void AjaxView::cancel()
 {
@@ -364,7 +366,7 @@ void AjaxView::cancel()
 
 	if(mID < 0)
 		setEnabled(false);
-};
+}
 
 void AjaxView::add()
 {
@@ -387,17 +389,17 @@ void AjaxView::add()
 	ui.cancelButton->setVisible(true);
 	ui.stackedWidget->setCurrentIndex(1);
 	setEnabled(true);
-};
+}
 
 bool AjaxView::isEditing() const
 {
 	return (ui.stackedWidget->currentIndex() == 1);
-};
+}
 
 void AjaxView::updateNumberSetValues()
 {
-	QSpinBox *edit = qobject_cast<QSpinBox*>( sender() );
-	Q_ASSERT(edit != 0);
+	QSpinBox *edit_widget = qobject_cast<QSpinBox*>( sender() );
+	Q_ASSERT(edit_widget != 0);
 
 	// Find the number set bind entry
 	QMapIterator<QString, QVariantMap> i(mBinds);
@@ -411,17 +413,17 @@ void AjaxView::updateNumberSetValues()
 
 		if( map.value("type", AjaxView::BindText).value<AjaxView::BindType>()
 			!= AjaxView::BindNumberSet ||
-			map.value("edit", 0).value<QSpinBox*>() != edit )
+			map.value("edit", 0).value<QSpinBox*>() != edit_widget )
 				continue;
 
-		QVariantMap data = map.value("data").toMap();
-		data[map.value("current").toString()] = edit->value();
+		QVariantMap col_data = map.value("data").toMap();
+		col_data[map.value("current").toString()] = edit_widget->value();
 
 		// Save the change
-		map["data"] = data;
+		map["data"] = col_data;
 		mBinds[field] = map;
 	}
-};
+}
 
 void AjaxView::updateNumberSetSelection()
 {
@@ -446,24 +448,25 @@ void AjaxView::updateNumberSetSelection()
 			map.value("selector", 0).value<QComboBox*>() != selector )
 				continue;
 
-		QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-		Q_ASSERT(edit != 0);
+		QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+		Q_ASSERT(edit_widget != 0);
 
-		QVariantMap data = map.value("data").toMap();
+		QVariantMap col_data = map.value("data").toMap();
 
 		int index = selector->currentIndex();
-		Q_ASSERT(index < data.count());
+		Q_ASSERT(index < col_data.count());
 
 		map["current"] = map.value("columns").toStringList().at(index);
 
 		// Save the change
 		mBinds[field] = map;
 
-		bool block = edit->blockSignals(true);
-		edit->setValue( data.value(	map.value("current").toString() ).toInt() );
-		edit->blockSignals(block);
+		bool block = edit_widget->blockSignals(true);
+		edit_widget->setValue( col_data.value(
+			map.value("current").toString() ).toInt() );
+		edit_widget->blockSignals(block);
 	}
-};
+}
 
 void AjaxView::browseRelationList()
 {
@@ -491,7 +494,7 @@ void AjaxView::browseRelationList()
 		list->showList( map.value("title").toString(),
 			map.value("table").toString() );
 	}
-};
+}
 
 void AjaxView::updateIcon(const QString& path, const QString& value)
 {
@@ -513,18 +516,18 @@ void AjaxView::updateIcon(const QString& path, const QString& value)
 			map.value("selector", 0).value<IconSelect*>() != selector )
 				continue;
 
-		IconEdit *edit = map.value("edit", 0).value<IconEdit*>();
-		Q_ASSERT(edit != 0);
+		IconEdit *edit_widget = map.value("edit", 0).value<IconEdit*>();
+		Q_ASSERT(edit_widget != 0);
 
-		edit->setValue(value);
-		edit->setPixmap(path);
+		edit_widget->setValue(value);
+		edit_widget->setPixmap(path);
 	}
-};
+}
 
 void AjaxView::showIconSelect()
 {
-	IconEdit *edit = qobject_cast<IconEdit*>( sender() );
-	Q_ASSERT(edit != 0);
+	IconEdit *edit_widget = qobject_cast<IconEdit*>( sender() );
+	Q_ASSERT(edit_widget != 0);
 
 	// Find the icon bind entry
 	QMapIterator<QString, QVariantMap> i(mBinds);
@@ -538,7 +541,7 @@ void AjaxView::showIconSelect()
 
 		if( map.value("type", AjaxView::BindText).value<AjaxView::BindType>()
 			!= AjaxView::BindIcon || map.value("edit", 0).value<IconEdit*>()
-			!= edit )
+			!= edit_widget )
 				continue;
 
 		IconSelect *selector = map.value("selector", 0).value<IconSelect*>();
@@ -548,12 +551,12 @@ void AjaxView::showIconSelect()
 		// the data into the table
 		selector->selectIcon( map.value("searchPath").toString() );
 	}
-};
+}
 
 void AjaxView::updateRelationCombo()
 {
-	QComboBox *edit = qobject_cast<QComboBox*>( sender() );
-	Q_ASSERT(edit != 0);
+	QComboBox *edit_widget = qobject_cast<QComboBox*>( sender() );
+	Q_ASSERT(edit_widget != 0);
 
 	// Find the relation bind entry
 	QMapIterator<QString, QVariantMap> i(mBinds);
@@ -567,15 +570,15 @@ void AjaxView::updateRelationCombo()
 
 		if( map.value("type", AjaxView::BindText).value<AjaxView::BindType>()
 			!= AjaxView::BindRelation ||
-			map.value("edit", 0).value<QComboBox*>() != edit )
+			map.value("edit", 0).value<QComboBox*>() != edit_widget )
 				continue;
 
-		map["last_id"] = edit->itemData( edit->currentIndex() );
+		map["last_id"] = edit_widget->itemData( edit_widget->currentIndex() );
 
 		// Save the changes
 		mBinds[field] = map;
 	}
-};
+}
 
 void AjaxView::refreshRelationCombo()
 {
@@ -599,30 +602,32 @@ void AjaxView::refreshRelationCombo()
 
 		refreshRelationCache(field);
 	}
-};
+}
 
-void AjaxView::bindText(const QString& field, QLabel *view, QLineEdit *edit)
+void AjaxView::bindText(const QString& field, QLabel *view_widget,
+	QLineEdit *edit_widget)
 {
 	QVariantMap bindInfo;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindText);
 
 	mBinds[field] = bindInfo;
-};
+}
 
-void AjaxView::bindTextBox(const QString& field, QLabel *view, QTextEdit *edit)
+void AjaxView::bindTextBox(const QString& field, QLabel *view_widget,
+	QTextEdit *edit_widget)
 {
 	QVariantMap bindInfo;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindTextBox);
 
 	mBinds[field] = bindInfo;
-};
+}
 
-void AjaxView::bindIcon(const QString& field, QLabel *view, IconEdit *edit,
-	const QString& path, const QString& searchPath)
+void AjaxView::bindIcon(const QString& field, QLabel *view_widget,
+	IconEdit *edit_widget, const QString& path, const QString& searchPath)
 {
 	IconSelect *selector = new IconSelect;
 	Q_ASSERT(selector != 0);
@@ -630,8 +635,8 @@ void AjaxView::bindIcon(const QString& field, QLabel *view, IconEdit *edit,
 	QVariantMap bindInfo;
 	bindInfo["path"] = path;
 	bindInfo["searchPath"] = searchPath;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
 	bindInfo["selector"] = qVariantFromValue(selector);
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindIcon);
 
@@ -640,33 +645,34 @@ void AjaxView::bindIcon(const QString& field, QLabel *view, IconEdit *edit,
 	connect(selector, SIGNAL(iconReady(const QString&, const QString&)),
 		this, SLOT(updateIcon(const QString&, const QString&)));
 
-	connect(edit, SIGNAL(iconDoubleClicked()), this, SLOT(showIconSelect()));
+	connect(edit_widget, SIGNAL(iconDoubleClicked()),
+		this, SLOT(showIconSelect()));
 
-	view->setPixmap( QPixmap(":/blank.png") );
-	edit->setPixmap( QPixmap(":/blank.png") );
-};
+	view_widget->setPixmap( QPixmap(":/blank.png") );
+	edit_widget->setPixmap( QPixmap(":/blank.png") );
+}
 
-void AjaxView::bindNumber(const QString& field, QLabel *view, QSpinBox *edit,
-	int defaultValue, const QString& pattern)
+void AjaxView::bindNumber(const QString& field, QLabel *view_widget,
+	QSpinBox *edit_widget, int defaultValue, const QString& pattern)
 {
 	QVariantMap bindInfo;
 	bindInfo["default"] = defaultValue;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindNumber);
 
 	if( !pattern.isEmpty() )
 		bindInfo["pattern"] = pattern;
 
 	mBinds[field] = bindInfo;
-};
+}
 
-void AjaxView::bindNumberRange(const QString& field, QLabel *view,
+void AjaxView::bindNumberRange(const QString& field, QLabel *view_widget,
 	QSpinBox *from, QSpinBox *to, const QString& minColumn,
 	const QString& maxColumn, int defaultMin, int defaultMax)
 {
 	QVariantMap bindInfo;
-	bindInfo["view"] = qVariantFromValue(view);
+	bindInfo["view"] = qVariantFromValue(view_widget);
 	bindInfo["from"] = qVariantFromValue(from);
 	bindInfo["to"] = qVariantFromValue(to);
 	bindInfo["min"] = defaultMin;
@@ -676,15 +682,15 @@ void AjaxView::bindNumberRange(const QString& field, QLabel *view,
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindNumberRange);
 
 	mBinds[field] = bindInfo;
-};
+}
 
-void AjaxView::bindEnum(const QString& field, QLabel *view, QComboBox *edit,
-	const QMap<int, QString>& items, int defaultValue)
+void AjaxView::bindEnum(const QString& field, QLabel *view_widget,
+	QComboBox *edit_widget, const QMap<int, QString>& items, int defaultValue)
 {
 	QVariantMap bindInfo;
 	bindInfo["default"] = defaultValue;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindEnum);
 
 	QMapIterator<int, QString> i = items;
@@ -692,18 +698,18 @@ void AjaxView::bindEnum(const QString& field, QLabel *view, QComboBox *edit,
 	while( i.hasNext() )
 	{
 		i.next();
-		edit->addItem( i.value(), i.key() );
+		edit_widget->addItem( i.value(), i.key() );
 	}
 
 	mBinds[field] = bindInfo;
-};
+}
 
-void AjaxView::bindBool(const QString& field, QLabel *view, QCheckBox *edit,
-	const QString& yes, const QString& no)
+void AjaxView::bindBool(const QString& field, QLabel *view_widget,
+	QCheckBox *edit_widget, const QString& yes, const QString& no)
 {
 	QVariantMap bindInfo;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindBool);
 
 	if( !yes.isEmpty() && !no.isEmpty() )
@@ -713,21 +719,21 @@ void AjaxView::bindBool(const QString& field, QLabel *view, QCheckBox *edit,
 	}
 
 	mBinds[field] = bindInfo;
-};
+}
 
-void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
-	const QString& table, const QString& column, QPushButton *browseButton,
-	const QString& listTitle, const QString& noneName,
-	const QVariantList& filters)
+void AjaxView::bindRelation(const QString& field, QLabel *view_widget,
+	QComboBox *edit_widget, const QString& rel_table, const QString& column,
+	QPushButton *browseButton, const QString& listTitle,
+	const QString& noneName, const QVariantList& filters)
 {
 	// TODO: Allow the developer to set the list and edit
 	RelationList *list = new BasicRelationList(new BasicRelationEdit);
 	Q_ASSERT(list != 0);
 
 	QVariantMap bindInfo;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
-	bindInfo["table"] = table;
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
+	bindInfo["table"] = rel_table;
 	bindInfo["last_id"] = 0;
 	bindInfo["filled"] = false;
 	bindInfo["column"] = column;
@@ -738,7 +744,7 @@ void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 	{
 		bindInfo["none_name"] = noneName;
 
-		edit->addItem(noneName, 0);
+		edit_widget->addItem(noneName, 0);
 	}
 
 	if(browseButton)
@@ -754,7 +760,7 @@ void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 
 	mBinds[field] = bindInfo;
 
-	connect(edit, SIGNAL(currentIndexChanged(int)),
+	connect(edit_widget, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(updateRelationCombo()));
 
 	if(browseButton)
@@ -767,45 +773,45 @@ void AjaxView::bindRelation(const QString& field, QLabel *view, QComboBox *edit,
 	}
 
 	refreshRelationCache(field);
-};
+}
 
 // For this one the feild value is just used for keeping track of the number set
-void AjaxView::bindNumberSet(const QString& field, QLabel *view, QSpinBox *edit,
-	QComboBox *selector, const QStringList& columns,
+void AjaxView::bindNumberSet(const QString& field, QLabel *view_widget,
+	QSpinBox *edit_widget, QComboBox *selector, const QStringList& columns,
 	const QStringList& patterns, const QString& separator, int defaultValue)
 {
 	Q_ASSERT(selector->count() && !columns.isEmpty());
 	Q_ASSERT(selector->count() == columns.count());
 	Q_ASSERT(selector->count() == patterns.count());
 
-	QVariantMap data;
+	QVariantMap col_data;
 	foreach(QString column, columns)
-		data[column] = defaultValue;
+		col_data[column] = defaultValue;
 
 	QVariantMap bindInfo;
-	bindInfo["data"] = data;
+	bindInfo["data"] = col_data;
 	bindInfo["columns"] = columns;
 	bindInfo["patterns"] = patterns;
 	bindInfo["separator"] = separator;
 	bindInfo["default"] = defaultValue;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
 	bindInfo["selector"] = qVariantFromValue(selector);
 	bindInfo["current"] = columns.first();
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindNumberSet);
 
 	mBinds[field] = bindInfo;
 
-	connect(edit, SIGNAL(valueChanged(int)),
+	connect(edit_widget, SIGNAL(valueChanged(int)),
 		this, SLOT(updateNumberSetValues()));
 
 	connect(selector, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(updateNumberSetSelection()));
-};
+}
 
 // For this one the feild value is just used for keeping track of the number set
-void AjaxView::bindNumberSelector(const QString& field, QLabel *view,
-	QSpinBox *edit, const RadioButtonMap& selectors_and_columns,
+void AjaxView::bindNumberSelector(const QString& field, QLabel *view_widget,
+	QSpinBox *edit_widget, const RadioButtonMap& selectors_and_columns,
 	const RadioButtonMap& selector_edits_and_columns,
 	QButtonGroup *group, QButtonGroup *edit_group, int defaultValue,
 	QRadioButton *defaultSelector, QRadioButton *defaultEditSelector)
@@ -821,20 +827,20 @@ void AjaxView::bindNumberSelector(const QString& field, QLabel *view,
 	// or they will be removed from one group and added to the other, causing
 	// chaos and bugs and destruction of the world as we know it!
 
-	QVariantMap data;
+	QVariantMap col_data;
 	foreach(QString column, columns)
-		data[column] = defaultValue;
+		col_data[column] = defaultValue;
 
 	RadioButtonMap selectors = selectors_and_columns;
 	selectors.unite(selector_edits_and_columns);
 
 	QVariantMap bindInfo;
-	bindInfo["data"] = data;
-	bindInfo["static_data"] = data;
+	bindInfo["data"] = col_data;
+	bindInfo["static_data"] = col_data;
 	bindInfo["columns"] = columns;
 	bindInfo["default"] = defaultValue;
-	bindInfo["view"] = qVariantFromValue(view);
-	bindInfo["edit"] = qVariantFromValue(edit);
+	bindInfo["view"] = qVariantFromValue(view_widget);
+	bindInfo["edit"] = qVariantFromValue(edit_widget);
 	bindInfo["selectors"] = qVariantFromValue(selectors);
 	bindInfo["view_selectors"] = qVariantFromValue(selectors_and_columns);
 	bindInfo["edit_selectors"] = qVariantFromValue(selector_edits_and_columns);
@@ -872,7 +878,7 @@ void AjaxView::bindNumberSelector(const QString& field, QLabel *view,
 		this, SLOT(updateNumberSelection()));
 	connect(bg_edit_group, SIGNAL(buttonClicked(QAbstractButton*)),
 		this, SLOT(updateNumberSelection()));
-	connect(edit, SIGNAL(valueChanged(int)),
+	connect(edit_widget, SIGNAL(valueChanged(int)),
 		this, SLOT(updateNumberSelectionValue()));
 
 	// Set the default radio button to checked
@@ -880,7 +886,7 @@ void AjaxView::bindNumberSelector(const QString& field, QLabel *view,
 	selectors_and_columns.key(column)->setChecked(true);
 	column = bindInfo.value("edit_current").toString();
 	selector_edits_and_columns.key(column)->setChecked(true);
-};
+}
 
 void AjaxView::updateNumberSelection()
 {
@@ -906,33 +912,34 @@ void AjaxView::updateNumberSelection()
 
 		if(map.value("view_group", 0).value<QButtonGroup*>() == group)
 		{
-			QVariantMap data = map.value("static_data").toMap();
+			QVariantMap static_data = map.value("static_data").toMap();
 
 			RadioButtonMap buttons = map.value(
 				"view_selectors").value<RadioButtonMap>();
 
 			QString column = buttons.value(radio);
-			QLabel *view = map.value("view", 0).value<QLabel*>();
-			Q_ASSERT(view);
+			QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+			Q_ASSERT(view_widget);
 
-			view->setText( QString::number( data.value(column).toInt() ) );
+			view_widget->setText( QString::number(
+				static_data.value(column).toInt() ) );
 
 			map["view_current"] = column;
 		}
 		else if(map.value("edit_group", 0).value<QButtonGroup*>() == group)
 		{
-			QVariantMap data = map.value("data").toMap();
+			QVariantMap col_data = map.value("data").toMap();
 
 			RadioButtonMap buttons = map.value(
 				"edit_selectors").value<RadioButtonMap>();
 
 			QString column = buttons.value(radio);
-			QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-			Q_ASSERT(edit);
+			QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+			Q_ASSERT(edit_widget);
 
-			bool block = edit->blockSignals(true);
-			edit->setValue( data.value(column).toInt() );
-			edit->blockSignals(block);
+			bool block = edit_widget->blockSignals(true);
+			edit_widget->setValue( col_data.value(column).toInt() );
+			edit_widget->blockSignals(block);
 
 			map["edit_current"] = column;
 		}
@@ -944,12 +951,12 @@ void AjaxView::updateNumberSelection()
 		// Save the change
 		mBinds[field] = map;
 	}
-};
+}
 
 void AjaxView::updateNumberSelectionValue()
 {
-	QSpinBox *edit = qobject_cast<QSpinBox*>( sender() );
-	Q_ASSERT(edit);
+	QSpinBox *edit_widget = qobject_cast<QSpinBox*>( sender() );
+	Q_ASSERT(edit_widget);
 
 	QMapIterator<QString, QVariantMap> i(mBinds);
 
@@ -962,19 +969,19 @@ void AjaxView::updateNumberSelectionValue()
 
 		if( map.value("type", AjaxView::BindText).value<AjaxView::BindType>()
 			!= AjaxView::BindNumberSelector ||
-			map.value("edit", 0).value<QSpinBox*>() != edit )
+			map.value("edit", 0).value<QSpinBox*>() != edit_widget )
 				continue;
 
 		QString column = map.value("edit_current").toString();
-		QVariantMap data = map.value("data").toMap();
+		QVariantMap col_data = map.value("data").toMap();
 
-		data[column] = edit->value();
+		col_data[column] = edit_widget->value();
 
 		// Save the change
-		map["data"] = data;
+		map["data"] = col_data;
 		mBinds[field] = map;
 	}
-};
+}
 
 void AjaxView::refreshRelationCache(const QString& field)
 {
@@ -985,10 +992,10 @@ void AjaxView::refreshRelationCache(const QString& field)
 	bindInfo["cache"] = QVariantMap();
 	bindInfo["filled"] = false;
 
-	QComboBox *edit = bindInfo.value("edit", 0).value<QComboBox*>();
-	Q_ASSERT(edit != 0);
+	QComboBox *edit_widget = bindInfo.value("edit", 0).value<QComboBox*>();
+	Q_ASSERT(edit_widget != 0);
 
-	edit->clear();
+	edit_widget->clear();
 
 	{
 		QString column_name = bindInfo.value("column").toString();
@@ -1022,7 +1029,7 @@ void AjaxView::refreshRelationCache(const QString& field)
 
 	// Save the data back
 	mBinds[field] = bindInfo;
-};
+}
 
 QVariantMap AjaxView::createViewAction() const
 {
@@ -1068,7 +1075,7 @@ QVariantMap AjaxView::createViewAction() const
 	action["where"] = QVariantList() << where;
 
 	return action;
-};
+}
 
 QVariantMap AjaxView::createUpdateAction() const
 {
@@ -1086,45 +1093,49 @@ QVariantMap AjaxView::createUpdateAction() const
 		QString field = i.key();
 		QVariantMap map = i.value();
 
-		switch( map.value("type", AjaxView::BindText).value<AjaxView::BindType>() )
+		switch( map.value("type",
+			AjaxView::BindText).value<AjaxView::BindType>() )
 		{
 			case AjaxView::BindText:
 			{
-				QLineEdit *edit = map.value("edit", 0).value<QLineEdit*>();
-				Q_ASSERT(edit != 0);
+				QLineEdit *edit_widget = map.value(
+					"edit", 0).value<QLineEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
 				columns << field;
-				row[field] = edit->text();
+				row[field] = edit_widget->text();
 
 				break;
 			}
 			case AjaxView::BindTextBox:
 			{
-				QTextEdit *edit = map.value("edit", 0).value<QTextEdit*>();
-				Q_ASSERT(edit != 0);
+				QTextEdit *edit_widget = map.value(
+					"edit", 0).value<QTextEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
 				columns << field;
-				row[field] = edit->toPlainText();
+				row[field] = edit_widget->toPlainText();
 
 				break;
 			}
 			case AjaxView::BindIcon:
 			{
-				IconEdit *edit = map.value("edit", 0).value<IconEdit*>();
-				Q_ASSERT(edit != 0);
+				IconEdit *edit_widget = map.value(
+					"edit", 0).value<IconEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
 				columns << field;
-				row[field] = edit->value();
+				row[field] = edit_widget->value();
 
 				break;
 			}
 			case AjaxView::BindNumber:
 			{
-				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-				Q_ASSERT(edit != 0);
+				QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit_widget != 0);
 
 				columns << field;
-				row[field] = edit->value();
+				row[field] = edit_widget->value();
 
 				break;
 			}
@@ -1144,31 +1155,37 @@ QVariantMap AjaxView::createUpdateAction() const
 			}
 			case AjaxView::BindEnum:
 			{
-				QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
-				Q_ASSERT(edit != 0);
+				QComboBox *edit_widget = map.value(
+					"edit", 0).value<QComboBox*>();
+				Q_ASSERT(edit_widget != 0);
 
 				columns << field;
-				row[field] = edit->itemData( edit->currentIndex() );
+				row[field] = edit_widget->itemData(
+					edit_widget->currentIndex() );
 
 				break;
 			}
 			case AjaxView::BindBool:
 			{
-				QCheckBox *edit = map.value("edit", 0).value<QCheckBox*>();
-				Q_ASSERT(edit != 0);
+				QCheckBox *edit_widget = map.value(
+					"edit", 0).value<QCheckBox*>();
+				Q_ASSERT(edit_widget != 0);
 
 				columns << field;
-				row[field] = edit->checkState() == Qt::Checked ? true : false;
+				row[field] = edit_widget->checkState() ==
+					Qt::Checked ? true : false;
 
 				break;
 			}
 			case AjaxView::BindRelation:
 			{
-				QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
-				Q_ASSERT(edit != 0);
+				QComboBox *edit_widget = map.value(
+					"edit", 0).value<QComboBox*>();
+				Q_ASSERT(edit_widget != 0);
 
 				columns << field;
-				row[field] = edit->itemData( edit->currentIndex() );
+				row[field] = edit_widget->itemData(
+					edit_widget->currentIndex() );
 
 				break;
 			}
@@ -1217,7 +1234,7 @@ QVariantMap AjaxView::createUpdateAction() const
 	action["rows"] = QVariantList() << row;
 
 	return action;
-};
+}
 
 void AjaxView::processBindValues(const QVariantMap& values)
 {
@@ -1238,15 +1255,16 @@ void AjaxView::processBindValues(const QVariantMap& values)
 
 				QString text = values.value(field).toString();
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
-				view->setText(text);
+				view_widget->setText(text);
 
-				QLineEdit *edit = map.value("edit", 0).value<QLineEdit*>();
-				Q_ASSERT(edit != 0);
+				QLineEdit *edit_widget = map.value(
+					"edit", 0).value<QLineEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->setText(text);
+				edit_widget->setText(text);
 
 				break;
 			}
@@ -1256,15 +1274,16 @@ void AjaxView::processBindValues(const QVariantMap& values)
 
 				QString text = values.value(field).toString();
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
-				view->setText(text);
+				view_widget->setText(text);
 
-				QTextEdit *edit = map.value("edit", 0).value<QTextEdit*>();
-				Q_ASSERT(edit != 0);
+				QTextEdit *edit_widget = map.value(
+					"edit", 0).value<QTextEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->setPlainText(text);
+				edit_widget->setPlainText(text);
 
 				break;
 			}
@@ -1272,28 +1291,27 @@ void AjaxView::processBindValues(const QVariantMap& values)
 			{
 				//std::cout << "AjaxView::BindIcon" << std::endl;
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
-				IconEdit *edit = map.value("edit", 0).value<IconEdit*>();
-				Q_ASSERT(edit != 0);
+				IconEdit *edit_widget = map.value(
+					"edit", 0).value<IconEdit*>();
+				Q_ASSERT(edit_widget != 0);
 
 				QString icon_path = map.value("path").toString().arg(
 					values.value(field).toString() );
 
 				if( QFileInfo(icon_path).exists() )
 				{
-					view->setPixmap( QPixmap(icon_path) );
-
-					edit->setValue( values.value(field).toString() );
-					edit->setPixmap( QPixmap(icon_path) );
+					view_widget->setPixmap( QPixmap(icon_path) );
+					edit_widget->setValue( values.value(field).toString() );
+					edit_widget->setPixmap( QPixmap(icon_path) );
 				}
 				else
 				{
-					view->setPixmap( QPixmap(":/blank.png") );
-
-					edit->setValue( QString() );
-					edit->setPixmap( QPixmap(":/blank.png") );
+					view_widget->setPixmap( QPixmap(":/blank.png") );
+					edit_widget->setValue( QString() );
+					edit_widget->setPixmap( QPixmap(":/blank.png") );
 				}
 
 				break;
@@ -1304,30 +1322,30 @@ void AjaxView::processBindValues(const QVariantMap& values)
 
 				int number = values.value(field).toInt();
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
 				if( number < 0 )
 				{
-					view->setText( tr("N/A") );
+					view_widget->setText( tr("N/A") );
 				}
 				else
 				{
 					if( map.contains("pattern") )
 					{
-						view->setText(
+						view_widget->setText(
 							map.value("pattern").toString().arg(number) );
 					}
 					else
 					{
-						view->setText( QString::number(number) );
+						view_widget->setText( QString::number(number) );
 					}
 				}
 
-				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-				Q_ASSERT(edit != 0);
+				QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->setValue(number);
+				edit_widget->setValue(number);
 
 				break;
 			}
@@ -1340,10 +1358,10 @@ void AjaxView::processBindValues(const QVariantMap& values)
 				int max = values.value(
 					map.value("max_column").toString() ).toInt();
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
-				view->setText( QString("%1 - %2").arg(min).arg(max) );
+				view_widget->setText( QString("%1 - %2").arg(min).arg(max) );
 
 				QSpinBox *from = map.value("from", 0).value<QSpinBox*>();
 				Q_ASSERT(from != 0);
@@ -1362,19 +1380,20 @@ void AjaxView::processBindValues(const QVariantMap& values)
 
 				int number = values.value(field).toInt();
 
-				QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
-				Q_ASSERT(edit != 0);
+				QComboBox *edit_widget = map.value(
+					"edit", 0).value<QComboBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				int index = edit->findData(number);
+				int index = edit_widget->findData(number);
 				if(index == -1)
-					index = edit->findData( map.value("default") );
+					index = edit_widget->findData( map.value("default") );
 
-				edit->setCurrentIndex(index);
+				edit_widget->setCurrentIndex(index);
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
-				view->setText( edit->itemText(index) );
+				view_widget->setText( edit_widget->itemText(index) );
 
 				break;
 			}
@@ -1384,23 +1403,24 @@ void AjaxView::processBindValues(const QVariantMap& values)
 
 				bool cond = values.value(field).toBool();
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
 				if( map.contains("yes") )
 				{
-					view->setText( cond ? map.value("yes").toString() :
+					view_widget->setText( cond ? map.value("yes").toString() :
 						map.value("no").toString() );
 				}
 				else
 				{
-					view->setText( cond ? tr("x") : tr("-") );
+					view_widget->setText( cond ? tr("x") : tr("-") );
 				}
 
-				QCheckBox *edit = map.value("edit", 0).value<QCheckBox*>();
-				Q_ASSERT(edit != 0);
+				QCheckBox *edit_widget = map.value(
+					"edit", 0).value<QCheckBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				edit->setCheckState( cond ? Qt::Checked : Qt::Unchecked );
+				edit_widget->setCheckState(cond ? Qt::Checked : Qt::Unchecked);
 
 				break;
 			}
@@ -1418,15 +1438,16 @@ void AjaxView::processBindValues(const QVariantMap& values)
 				{
 					QString text = map.value("cache").toMap().key(id);
 
-					QLabel *view = map.value("view", 0).value<QLabel*>();
-					Q_ASSERT(view != 0);
+					QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+					Q_ASSERT(view_widget != 0);
 
-					view->setText(text);
+					view_widget->setText(text);
 
-					QComboBox *edit = map.value("edit", 0).value<QComboBox*>();
-					Q_ASSERT(edit != 0);
+					QComboBox *edit_widget = map.value(
+						"edit", 0).value<QComboBox*>();
+					Q_ASSERT(edit_widget != 0);
 
-					edit->setCurrentIndex( edit->findData(id) );
+					edit_widget->setCurrentIndex( edit_widget->findData(id) );
 				}
 
 				break;
@@ -1435,61 +1456,61 @@ void AjaxView::processBindValues(const QVariantMap& values)
 			{
 				//std::cout << "AjaxView::BindNumberSet" << std::endl;
 
-				QVariantMap data = map.value("data").toMap();
+				QVariantMap col_data = map.value("data").toMap();
 				QStringList columns = map.value("columns").toStringList();
 				QStringList patterns = map.value("patterns").toStringList();
 				QStringList final;
 
-				int i = 0;
+				int j = 0;
 				foreach(QString column, columns)
 				{
 					int number = values.value(column).toInt();
-					QString pattern = patterns.at(i);
+					QString pattern = patterns.at(j);
 
 					// Save the number
-					data[column] = number;
+					col_data[column] = number;
 
 					// If we have a number greater then 0, add it to the view
 					if(number > 0)
 						final << pattern.arg( QString::number(number) );
 
-					i++;
+					j++;
 				}
 
 				// Save the data
-				map["data"] = data;
+				map["data"] = col_data;
 				mBinds[field] = map;
 
 				if( final.isEmpty() )
 					final << tr("N/A");
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
-				view->setText(
+				view_widget->setText(
 					final.join( map.value("separator").toString() ) );
 
-				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-				Q_ASSERT(edit != 0);
+				QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit_widget != 0);
 
-				bool block = edit->blockSignals(true);
-				edit->setValue( data.value(
+				bool block = edit_widget->blockSignals(true);
+				edit_widget->setValue( col_data.value(
 					map.value("current").toString() ).toInt() );
-				edit->blockSignals(block);
+				edit_widget->blockSignals(block);
 
 				QComboBox *selector = map.value("selector", 0).value<QComboBox*>();
-				Q_ASSERT(view != 0);
+				Q_ASSERT(selector != 0);
 
 				// Select the first item that is > 0 (if there is one)
-				i = 0;
+				j = 0;
 				foreach(QString column, columns)
 				{
 					if(values.value(column).toInt() > 0)
 					{
-						selector->setCurrentIndex(i);
+						selector->setCurrentIndex(j);
 						break;
 					}
-					i++;
+					j++;
 				}
 
 				break;
@@ -1498,32 +1519,33 @@ void AjaxView::processBindValues(const QVariantMap& values)
 			{
 				//std::cout << "AjaxView::BindNumberSelector" << std::endl;
 
-				QVariantMap data = map.value("data").toMap();
+				QVariantMap col_data = map.value("data").toMap();
 				QStringList columns = map.value("columns").toStringList();
 
 				foreach(QString column, columns)
-					data[column] = values.value(column).toInt();
+					col_data[column] = values.value(column).toInt();
 
 				// Save the data
-				map["data"] = data;
-				map["static_data"] = data;
+				map["data"] = col_data;
+				map["static_data"] = col_data;
 				mBinds[field] = map;
 
-				QLabel *view = map.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
 				QString column = map.value("view_current").toString();
 
-				view->setText( QString::number( data.value(column).toInt() ) );
+				view_widget->setText( QString::number(
+					col_data.value(column).toInt() ) );
 
-				QSpinBox *edit = map.value("edit", 0).value<QSpinBox*>();
-				Q_ASSERT(edit != 0);
+				QSpinBox *edit_widget = map.value("edit", 0).value<QSpinBox*>();
+				Q_ASSERT(edit_widget != 0);
 
 				column = map.value("edit_current").toString();
 
-				bool block = edit->blockSignals(true);
-				edit->setValue( data.value(column).toInt() );
-				edit->blockSignals(block);
+				bool block = edit_widget->blockSignals(true);
+				edit_widget->setValue( col_data.value(column).toInt() );
+				edit_widget->blockSignals(block);
 
 				break;
 			}
@@ -1534,7 +1556,7 @@ void AjaxView::processBindValues(const QVariantMap& values)
 			}
 		}
 	}
-};
+}
 
 void AjaxView::ajaxResponse(const QVariant& resp)
 {
@@ -1595,39 +1617,41 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 			if( column_name.isEmpty() )
 				column_name = QString("name_%1").arg( settings->lang() );
 
-			QComboBox *edit = bindInfo.value("edit", 0).value<QComboBox*>();
-			Q_ASSERT(edit != 0);
+			QComboBox *edit_widget = bindInfo.value(
+				"edit", 0).value<QComboBox*>();
+			Q_ASSERT(edit_widget != 0);
 
 			QVariantMap cache;
 			QVariantList rows = result.value("rows").toList();
 
-			edit->clear();
+			edit_widget->clear();
 
 			if( bindInfo.contains("none_name") )
-				edit->addItem(bindInfo.value("none_name").toString(), 0);
+				edit_widget->addItem(bindInfo.value("none_name").toString(), 0);
 
 			int index = -1;
 
-			for(int i = 0; i < rows.count(); i++)
+			for(int j = 0; j < rows.count(); j++)
 			{
-				QVariantMap map = rows.at(i).toMap();
+				QVariantMap map = rows.at(j).toMap();
 				int id = map.value("id").toInt();
 
 				cache[ map.value(column_name).toString() ] = id;
-				edit->addItem( map.value(column_name).toString() );
-				edit->setItemData(i, id);
+				edit_widget->addItem( map.value(column_name).toString() );
+				edit_widget->setItemData(j, id);
 
 				if( id == bindInfo.value("last_id") )
-					index = i;
+					index = j;
 			}
 
 			if(index != -1)
 			{
-				QLabel *view = bindInfo.value("view", 0).value<QLabel*>();
-				Q_ASSERT(view != 0);
+				QLabel *view_widget = bindInfo.value(
+					"view", 0).value<QLabel*>();
+				Q_ASSERT(view_widget != 0);
 
-				view->setText( edit->itemText(index) );
-				edit->setCurrentIndex(index);
+				view_widget->setText( edit_widget->itemText(index) );
+				edit_widget->setCurrentIndex(index);
 			}
 
 			bindInfo["cache"] = cache;
@@ -1668,4 +1692,4 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 		processBindValues(map);
 		setEnabled(true);
 	}
-};
+}

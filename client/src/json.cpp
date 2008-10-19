@@ -33,7 +33,7 @@ json::json(const QString& string)
 {
 	pos = 0;
 	str = string;
-};
+}
 
 QVariant json::parse(const QString& str)
 {
@@ -46,7 +46,7 @@ QVariant json::parse(const QString& str)
 	}
 
 	return QVariant();
-};
+}
 
 QString json::toJSON(const QVariant& obj)
 {
@@ -64,7 +64,7 @@ QString json::toJSON(const QVariant& obj)
 		return "null";
 
 	return QString();
-};
+}
 
 #ifdef QT_GUI_LIB
 QList<QTreeWidgetItem*> json::toTree(const QVariant& obj)
@@ -85,7 +85,7 @@ QList<QTreeWidgetItem*> json::toTree(const QVariant& obj)
 		list << new QTreeWidgetItem(QStringList() << "null");
 
 	return list;
-};
+}
 
 QList<QTreeWidgetItem*> json::mapToTree(const QVariant& obj)
 {
@@ -117,7 +117,7 @@ QList<QTreeWidgetItem*> json::mapToTree(const QVariant& obj)
 	}
 
 	return list;
-};
+}
 #endif
 
 QString json::mapToJSON(const QVariant& obj)
@@ -137,7 +137,7 @@ QString json::mapToJSON(const QVariant& obj)
 	}
 
 	return QString("{%1}").arg( result.join(",") );
-};
+}
 
 #ifdef QT_GUI_LIB
 QList<QTreeWidgetItem*> json::listToTree(const QVariant& obj)
@@ -169,7 +169,7 @@ QList<QTreeWidgetItem*> json::listToTree(const QVariant& obj)
 	}
 
 	return list;
-};
+}
 #endif
 
 QString json::listToJSON(const QVariant& obj)
@@ -181,7 +181,7 @@ QString json::listToJSON(const QVariant& obj)
 		result << toJSON( list.at(i) );
 
 	return QString("[%1]").arg( result.join(",") );
-};
+}
 
 QString json::stringToJSON(const QVariant& obj)
 {
@@ -207,7 +207,7 @@ QString json::stringToJSON(const QVariant& obj)
 	}
 
 	return QString("\"%1\"").arg(result);
-};
+}
 
 QVariant json::parse_any()
 {
@@ -238,7 +238,7 @@ QVariant json::parse_any()
 	}
 
 	return QVariant();
-};
+}
 
 QVariant json::parse_object()
 {
@@ -298,7 +298,7 @@ QVariant json::parse_object()
 	pos++;
 
 	return QVariant(map);
-};
+}
 
 QVariant json::parse_array()
 {
@@ -332,7 +332,7 @@ QVariant json::parse_array()
 	pos++;
 
 	return QVariant(list);
-};
+}
 
 QVariant json::parse_string()
 {
@@ -379,7 +379,7 @@ QVariant json::parse_string()
 
 	pos = end + 1;
 	return QVariant(result);
-};
+}
 
 QVariant json::parse_null()
 {
@@ -398,7 +398,7 @@ QVariant json::parse_null()
 	pos += null_str.length();
 
 	return QVariant();
-};
+}
 
 QVariant json::parse_true()
 {
@@ -417,7 +417,7 @@ QVariant json::parse_true()
 	pos += true_str.length();
 
 	return QVariant(true);
-};
+}
 
 QVariant json::parse_false()
 {
@@ -436,7 +436,7 @@ QVariant json::parse_false()
 	pos += false_str.length();
 
 	return QVariant(false);
-};
+}
 
 QVariant json::parse_number()
 {
@@ -510,4 +510,4 @@ QVariant json::parse_number()
 
 		return final;
 	}
-};
+}

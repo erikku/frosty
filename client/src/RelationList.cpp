@@ -24,7 +24,8 @@
 
 #include <QtGui/QMessageBox>
 
-RelationList::RelationList(RelationEdit *edit, QWidget *parent) : QWidget(parent)
+RelationList::RelationList(RelationEdit *edit,
+	QWidget *parent_widget) : QWidget(parent_widget)
 {
 	Q_ASSERT(edit);
 	mEdit = edit;
@@ -35,24 +36,24 @@ RelationList::RelationList(RelationEdit *edit, QWidget *parent) : QWidget(parent
 
 	connect(mEdit, SIGNAL(relationsUpdated()), this, SLOT(refresh()));
 	connect(mEdit, SIGNAL(relationsUpdated()), this, SIGNAL(relationsUpdated()));
-};
+}
 
 RelationList::~RelationList()
 {
 	delete mEdit;
-};
+}
 
 void RelationList::addRelation()
 {
 	mEdit->showEdit(tr("Add %1").arg( windowTitle() ), mTable, -1);
-};
+}
 
 void RelationList::editRelation(int id)
 {
 	Q_ASSERT(id > 0);
 
 	mEdit->showEdit(tr("Edit %1").arg( windowTitle() ), mTable, id);
-};
+}
 
 void RelationList::deleteRelation(int id, const QString& name)
 {
@@ -80,16 +81,16 @@ void RelationList::deleteRelation(int id, const QString& name)
 	action["user_data"] = QString("%1_relation_delete").arg(mTable);
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
-};
+}
 
-void RelationList::showList(const QString& windowTitle, const QString& table)
+void RelationList::showList(const QString& window_title, const QString& table)
 {
-	setWindowTitle(windowTitle);
+	setWindowTitle(window_title);
 	mTable = table;
 
 	refresh();
 	show();
-};
+}
 
 void RelationList::ajaxResponse(const QVariant& resp)
 {
@@ -103,4 +104,4 @@ void RelationList::ajaxResponse(const QVariant& resp)
 	{
 		refresh();
 	}
-};
+}

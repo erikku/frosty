@@ -26,7 +26,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QSplitter>
 
-SkillWindow::SkillWindow(QWidget *parent) : QWidget(parent)
+SkillWindow::SkillWindow(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	mSkillView = new SkillView;
 	mSkillList = new SkillList(mSkillView);
@@ -49,10 +49,10 @@ SkillWindow::SkillWindow(QWidget *parent) : QWidget(parent)
 		tr("Shin Megami Tensei IMAGINE DB") ) );
 
 	resize(800, 600);
-};
+}
 
 void SkillWindow::refresh()
 {
 	mSkillList->refresh();
 	mSkillView->refresh();
-};
+}
