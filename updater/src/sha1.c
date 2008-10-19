@@ -6,7 +6,7 @@
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
- *  
+ *
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
@@ -15,7 +15,7 @@
  *    * Neither the name of XySSL nor the names of its contributors may be
  *      used to endorse or promote products derived from this software
  *      without specific prior written permission.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -77,7 +77,7 @@ void sha1_starts( sha1_context *ctx )
     ctx->state[4] = 0xC3D2E1F0;
 }
 
-static void sha1_process( sha1_context *ctx, unsigned char data[64] )
+static void sha1_process( sha1_context *ctx, const unsigned char data[64] )
 {
     unsigned long temp, W[16], A, B, C, D, E;
 
@@ -236,7 +236,7 @@ static void sha1_process( sha1_context *ctx, unsigned char data[64] )
 /*
  * SHA-1 process buffer
  */
-void sha1_update( sha1_context *ctx, unsigned char *input, int ilen )
+void sha1_update( sha1_context *ctx, const unsigned char *input, int ilen )
 {
     int fill;
     unsigned long left;
@@ -256,7 +256,7 @@ void sha1_update( sha1_context *ctx, unsigned char *input, int ilen )
     if( left && ilen >= fill )
     {
         memcpy( (void *) (ctx->buffer + left),
-                (void *) input, fill );
+                (const void *) input, (size_t)fill );
         sha1_process( ctx, ctx->buffer );
         input += fill;
         ilen  -= fill;
@@ -273,7 +273,7 @@ void sha1_update( sha1_context *ctx, unsigned char *input, int ilen )
     if( ilen > 0 )
     {
         memcpy( (void *) (ctx->buffer + left),
-                (void *) input, ilen );
+                (const void *) input, (size_t)ilen );
     }
 }
 
@@ -304,7 +304,7 @@ void sha1_finish( sha1_context *ctx, unsigned char output[20] )
     last = ctx->total[0] & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
-    sha1_update( ctx, (unsigned char *) sha1_padding, padn );
+    sha1_update( ctx, sha1_padding, (int)padn );
     sha1_update( ctx, msglen, 8 );
 
     PUT_ULONG_BE( ctx->state[0], output,  0 );
@@ -434,7 +434,7 @@ void sha1_hmac( unsigned char *key, int keylen,
 /*
  * FIPS-180-1 test vectors
  */
-static unsigned char sha1_test_buf[3][57] = 
+static unsigned char sha1_test_buf[3][57] =
 {
     { "abc" },
     { "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq" },
