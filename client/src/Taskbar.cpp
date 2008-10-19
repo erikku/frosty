@@ -111,10 +111,10 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 	{
 		QVariantMap action;
-		action["act"] = "auth_query_perms";
+		action["action"] = "auth_query_perms";
 		action["user_data"] = "auth_query_perms";
 
-		ajax::getSingletonPtr()->request(settings->url(), act);
+		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
 }
 
