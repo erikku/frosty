@@ -525,7 +525,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Name  Modifier</string>
+              <string>Name Modifier</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
