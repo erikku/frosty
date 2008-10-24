@@ -110,19 +110,19 @@ def parse_skill(page, ajax_inst, done = 1, total = 1):
 	row[u"desc_ja"] = desc
 	row[u"desc_en"] = u"依存: %s" % elements[9]
 	row[u"expert"] = ajax_inst.handle_relation(u"db_expert",
-		u"不詳", u"Unknown");
+		u"不詳", u"Unknown")
 	#row[u"expert"] = ajax_inst.handle_relation(u"db_expert",
-	#	elements[9], u"Untitled");
+	#	elements[9], u"Untitled")
 	row[u"category"] = ajax_inst.handle_relation(u"db_category",
-		elements[0], u"Untitled");
+		elements[0], u"Untitled")
 	row[u"action_type"] = ajax_inst.handle_relation(u"db_action_type",
-		elements[1], u"Untitled");
+		elements[1], u"Untitled")
 	row[u"affinity"] = ajax_inst.handle_relation(u"db_affinity",
-		elements[3], u"Untitled");
+		elements[3], u"Untitled")
 
-	row[u"power"] = -1;
+	row[u"power"] = -1
 	try:
-		row[u"power"] = int(elements[7]);
+		row[u"power"] = int(elements[7])
 	except:
 		pass
 
@@ -173,7 +173,7 @@ ajax_inst.login()
 print u""
 print u"Finding the skill list..."
 
-url = "http://artifact.sakura.ne.jp/imagine/";
+url = "http://artifact.sakura.ne.jp/imagine/"
 
 keys = ["chkbox12", "chkbox2", "chkbox31", "chkbox32", "chkbox33",
 	"chkbox34", "chkbox35", "chkbox36", "chkbox37", "chkbox38", "chkbox39",
@@ -184,13 +184,13 @@ keys = ["chkbox12", "chkbox2", "chkbox31", "chkbox32", "chkbox33",
 	"data5_4_old", "data6_1_old", "data6_2_old", "data6_3_old", "data6_4_old",
 	"data7_1_old", "data7_2_old", "data7_3_old", "data7_4_old", "data7_5_old",
 	"data7_6_old", "devil_lv", "hist", "iden_flag", "old_view", "slct1",
-	"slct1Label", "state", "state_old", "tree_list"];
+	"slct1Label", "state", "state_old", "tree_list"]
 
-post = { };
+post = { }
 for key in keys:
-	post[key] = "";
+	post[key] = ""
 
-post["state"] = 1;
+post["state"] = 1
 
 page = cache_file(url, post, "cache/index.html")
 soup = BeautifulSoup.BeautifulSoup(page)
@@ -229,7 +229,7 @@ for tag in selects[0].findAll(name=u"option", attrs={u"value":True}):
 	if value:
 		data2_2.append(value)
 
-post["data2_1_old"] = post["data2_1"];
+post["data2_1_old"] = post["data2_1"]
 
 print u"Parsing the skills..."
 
@@ -244,7 +244,7 @@ for code in data2_2:
 	filename = u"cache/%s.html" % code
 
 	# Set the POST data
-	post["data2_2"] = code.encode("euc-jp");
+	post["data2_2"] = code.encode("euc-jp")
 
 	# Get the file
 	page = cache_file(url, post, filename)
