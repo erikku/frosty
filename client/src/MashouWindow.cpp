@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/MashouWindow.cpp                                                 *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,53 +17,42 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#include "MashouWindow.h"
+#include "MashouList.h"
+#include "MashouView.h"
+#include "UserList.h"
+#include "Options.h"
 
-#include "ui_Taskbar.h"
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QSplitter>
 
-class Options;
-class UserList;
-class LogWidget;
-class DevilWindow;
-class SkillWindow;
-class MashouWindow;
-class ImportExport;
-class QAction;
-
-class Taskbar : public QWidget
+MashouWindow::MashouWindow(QWidget *parent_widget) : QWidget(parent_widget)
 {
-	Q_OBJECT
+	mMashouView = new MashouView;
+	mMashouList = new MashouList(mMashouView);
 
-public:
-	Taskbar(QWidget *parent = 0);
+	QSplitter *mainSplitter = new QSplitter;
+	mainSplitter->addWidget(mMashouList);
+	mainSplitter->addWidget(mMashouView);
 
-public slots:
-	void showLogWindow();
-	void showDevilWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showMashouWindow();
-	void showOptionsWindow();
-	void showImportExportWindow();
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->addWidget(mainSplitter);
 
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	connect(mMashouList, SIGNAL(itemClicked(int)), mMashouView, SLOT(view(int)));
+	connect(mMashouView, SIGNAL(viewChanged()), mMashouList, SLOT(refresh()));
+	connect(mMashouList, SIGNAL(addItemRequested()), mMashouView, SLOT(add()));
+	connect(Options::getSingletonPtr(), SIGNAL(optionsChanged()),
+		this, SLOT(refresh()));
 
-protected:
-	Ui::Taskbar ui;
+	setLayout(mainLayout);
+	setWindowTitle( tr("%1 - Mashou List").arg(
+		tr("Shin Megami Tensei IMAGINE DB") ) );
 
-	Options *mOptions;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	DevilWindow *mDevilWindow;
-	SkillWindow *mSkillWindow;
-	MashouWindow *mMashouWindow;
-	ImportExport *mImportExportWindow;
+	resize(800, 600);
+}
 
-	QAction *mAdminSep;
-	QAction *mUsersAction;
-	QAction *mImportExportAction;
-};
-
-#endif // __Taskbar_h__
+void MashouWindow::refresh()
+{
+	mMashouList->refresh();
+	mMashouView->refresh();
+}

@@ -108,7 +108,7 @@ protected:
 		int defaultValue = -1, const QString& pattern = QString());
 	void bindNumberRange(const QString& field, QLabel *view, QSpinBox *from,
 		QSpinBox *to, const QString& minColumn, const QString& maxColumn,
-		int defaultMin = 0, int defaultMax = 100);
+		int defaultMin = 0, int defaultMax = 100, bool hideNegative = false);
 	void bindEnum(const QString& field, QLabel *view, QComboBox *edit,
 		const QMap<int, QString>& items, int defaultValue = 0);
 	void bindBool(const QString& field, QLabel *view, QCheckBox *edit,

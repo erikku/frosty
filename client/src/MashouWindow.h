@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/MashouWindow.h                                                   *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,53 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __MashouWindow_h__
+#define __MashouWindow_h__
 
-#include "ui_Taskbar.h"
+#include <QtGui/QWidget>
+#include <QtCore/QVariant>
+#include <QtCore/QMap>
 
-class Options;
-class UserList;
-class LogWidget;
-class DevilWindow;
-class SkillWindow;
-class MashouWindow;
-class ImportExport;
-class QAction;
+class MashouList;
+class MashouView;
+class QListWidgetItem;
 
-class Taskbar : public QWidget
+class MashouWindow : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
+	MashouWindow(QWidget *parent = 0);
 
 public slots:
-	void showLogWindow();
-	void showDevilWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showMashouWindow();
-	void showOptionsWindow();
-	void showImportExportWindow();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void refresh();
 
 protected:
-	Ui::Taskbar ui;
-
-	Options *mOptions;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	DevilWindow *mDevilWindow;
-	SkillWindow *mSkillWindow;
-	MashouWindow *mMashouWindow;
-	ImportExport *mImportExportWindow;
-
-	QAction *mAdminSep;
-	QAction *mUsersAction;
-	QAction *mImportExportAction;
+	MashouList *mMashouList;
+	MashouView *mMashouView;
 };
 
-#endif // __Taskbar_h__
+#endif // __MashouWindow_h__

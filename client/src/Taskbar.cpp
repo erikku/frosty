@@ -24,6 +24,7 @@
 #include "LogWidget.h"
 #include "DevilWindow.h"
 #include "SkillWindow.h"
+#include "MashouWindow.h"
 #include "ImportExport.h"
 #include "ajax.h"
 
@@ -33,7 +34,7 @@
 
 Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	mUserList(0), mLogWidget(0), mDevilWindow(0), mSkillWindow(0),
-	mImportExportWindow(0), mAdminSep(0), mUsersAction(0)
+	mMashouWindow(0), mImportExportWindow(0), mAdminSep(0), mUsersAction(0)
 {
 	ui.setupUi(this);
 
@@ -58,6 +59,12 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	connect(act, SIGNAL(triggered()), this, SLOT(showSkillWindow()));
 	connect(ui.skillsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showSkillWindow()));
+
+	// Mashou Action
+	act = menu->addAction(/* icon, */tr("&Mashou") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showMashouWindow()));
+	connect(ui.mashouButton, SIGNAL(clicked(bool)),
+		this, SLOT(showMashouWindow()));
 
 	mAdminSep = menu->addSeparator();
 	mAdminSep->setEnabled(false);
@@ -167,6 +174,18 @@ void Taskbar::showUsersWindow()
 	mUserList->show();
 	mUserList->activateWindow();
 	mUserList->raise();
+}
+
+void Taskbar::showMashouWindow()
+{
+	if(!mMashouWindow)
+		mMashouWindow = new MashouWindow;
+
+	Q_ASSERT(mMashouWindow != 0);
+
+	mMashouWindow->show();
+	mMashouWindow->activateWindow();
+	mMashouWindow->raise();
 }
 
 void Taskbar::showOptionsWindow()

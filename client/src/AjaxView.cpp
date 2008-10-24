@@ -669,7 +669,7 @@ void AjaxView::bindNumber(const QString& field, QLabel *view_widget,
 
 void AjaxView::bindNumberRange(const QString& field, QLabel *view_widget,
 	QSpinBox *from, QSpinBox *to, const QString& minColumn,
-	const QString& maxColumn, int defaultMin, int defaultMax)
+	const QString& maxColumn, int defaultMin, int defaultMax, bool hideNegative)
 {
 	QVariantMap bindInfo;
 	bindInfo["view"] = qVariantFromValue(view_widget);
@@ -679,6 +679,7 @@ void AjaxView::bindNumberRange(const QString& field, QLabel *view_widget,
 	bindInfo["max"] = defaultMax;
 	bindInfo["min_column"] = minColumn;
 	bindInfo["max_column"] = maxColumn;
+	bindInfo["hide_negative"] = hideNegative;
 	bindInfo["type"] = qVariantFromValue(AjaxView::BindNumberRange);
 
 	mBinds[field] = bindInfo;
@@ -1361,7 +1362,23 @@ void AjaxView::processBindValues(const QVariantMap& values)
 				QLabel *view_widget = map.value("view", 0).value<QLabel*>();
 				Q_ASSERT(view_widget != 0);
 
-				view_widget->setText( QString("%1 - %2").arg(min).arg(max) );
+				QString value;
+				if( map.value("hide_negative").toBool() )
+				{
+					if(min < 0 && max < 0)
+						value = tr("-");
+					else if(min < 0)
+						value = tr("- %1").arg(max);
+					else if(max < 3)
+						value = tr("%1 -").arg(min);
+					else
+						value = tr("%1 - %2").arg(min).arg(max);
+				}
+				else
+				{
+					value = tr("%1 - %2").arg(min).arg(max);
+				}
+				view_widget->setText(value);
 
 				QSpinBox *from = map.value("from", 0).value<QSpinBox*>();
 				Q_ASSERT(from != 0);

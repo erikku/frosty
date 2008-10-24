@@ -1,45 +1,53 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>Taskbar</class>
- <widget class="QWidget" name="Taskbar" >
-  <property name="geometry" >
+ <widget class="QWidget" name="Taskbar">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>96</height>
+    <height>97</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QTabWidget" name="tabWidget" >
-     <property name="currentIndex" >
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="databaseTab" >
-      <attribute name="title" >
+     <widget class="QWidget" name="databaseTab">
+      <attribute name="title">
        <string>&amp;Database</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" >
+      <layout class="QHBoxLayout">
        <item>
-        <widget class="QPushButton" name="devilsButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="devilsButton">
+         <property name="text">
           <string>&amp;Devils</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="skillsButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="skillsButton">
+         <property name="text">
           <string>&amp;Skills</string>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_2" >
-         <property name="orientation" >
+        <widget class="QPushButton" name="mashouButton">
+         <property name="text">
+          <string>&amp;Mashou</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>276</width>
            <height>20</height>
@@ -49,31 +57,31 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="adminTab" >
-      <attribute name="title" >
+     <widget class="QWidget" name="adminTab">
+      <attribute name="title">
        <string>&amp;Administration</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout" >
+      <layout class="QHBoxLayout">
        <item>
-        <widget class="QPushButton" name="usersButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="usersButton">
+         <property name="text">
           <string>&amp;Users</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="importExportButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="importExportButton">
+         <property name="text">
           <string>&amp;Import / Export</string>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer" >
-         <property name="orientation" >
+        <spacer>
+         <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>276</width>
            <height>20</height>
@@ -83,38 +91,38 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="miscTab" >
-      <attribute name="title" >
+     <widget class="QWidget" name="miscTab">
+      <attribute name="title">
        <string>&amp;Miscellaneous</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" >
+      <layout class="QHBoxLayout">
        <item>
-        <widget class="QPushButton" name="optionsButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="optionsButton">
+         <property name="text">
           <string>&amp;Options</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="logButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="logButton">
+         <property name="text">
           <string>&amp;Log</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="aboutButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="aboutButton">
+         <property name="text">
           <string>&amp;About</string>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_3" >
-         <property name="orientation" >
+        <spacer>
+         <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>195</width>
            <height>20</height>

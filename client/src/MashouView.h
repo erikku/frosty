@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/MashouView.h                                                     *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,53 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __MashouView_h__
+#define __MashouView_h__
 
-#include "ui_Taskbar.h"
+#include "AjaxView.h"
+#include "ui_MashouView.h"
 
-class Options;
-class UserList;
-class LogWidget;
-class DevilWindow;
-class SkillWindow;
-class MashouWindow;
-class ImportExport;
-class QAction;
+#include <QtCore/QVariant>
+#include <QtCore/QMap>
 
-class Taskbar : public QWidget
+class MashouView : public AjaxView
 {
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
-
-public slots:
-	void showLogWindow();
-	void showDevilWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showMashouWindow();
-	void showOptionsWindow();
-	void showImportExportWindow();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	MashouView(QWidget *parent = 0);
 
 protected:
-	Ui::Taskbar ui;
+	virtual bool checkValues();
+	virtual QString table() const;
 
-	Options *mOptions;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	DevilWindow *mDevilWindow;
-	SkillWindow *mSkillWindow;
-	MashouWindow *mMashouWindow;
-	ImportExport *mImportExportWindow;
+	virtual QString addWarningTitle() const;
+	virtual QString addWarningMessage() const;
 
-	QAction *mAdminSep;
-	QAction *mUsersAction;
-	QAction *mImportExportAction;
+	Ui::MashouView ui;
 };
 
-#endif // __Taskbar_h__
+#endif // __MashouView_h__
