@@ -28,7 +28,7 @@
 
 static Config *g_config_inst = 0;
 
-Config::Config(QObject *parent) : QObject(parent)
+Config::Config(QObject *parent_object) : QObject(parent_object)
 {
 	mWatcher = new QFileSystemWatcher;
 
@@ -36,7 +36,7 @@ Config::Config(QObject *parent) : QObject(parent)
 		this, SLOT(loadConfig(const QString&)));
 
 	loadDefaults();
-};
+}
 
 Config* Config::getSingletonPtr()
 {
@@ -46,7 +46,7 @@ Config* Config::getSingletonPtr()
 	Q_ASSERT(g_config_inst);
 
 	return g_config_inst;
-};
+}
 
 void Config::loadDefaults()
 {
@@ -70,7 +70,7 @@ void Config::loadDefaults()
 	mDBPath = "master.db";
 
 	mSslEnabled = false;
-};
+}
 
 void Config::loadConfig(const QString& path)
 {
@@ -423,7 +423,7 @@ void Config::loadConfig(const QString& path)
 		LOG_WARNING( tr("Failed to find linux updater sha1 in config\n") );
 
 	LOG_INFO( tr("Config file loaded\n") );
-};
+}
 
 bool Config::nodeToBool(const QDomNode& node, bool def)
 {
@@ -438,7 +438,7 @@ bool Config::nodeToBool(const QDomNode& node, bool def)
 			node.nodeName()) );
 
 	return def;
-};
+}
 
 void Config::saveConfig(const QString& path)
 {
@@ -524,394 +524,394 @@ void Config::saveConfig(const QString& path)
 	}
 
 	configFile.write( doc.toString(4).toUtf8() );
-};
+}
 
 QString Config::address() const
 {
 	return mAddress;
-};
+}
 
-void Config::setAddress(const QString& address)
+void Config::setAddress(const QString& addr)
 {
-	mAddress = address;
-};
+	mAddress = addr;
+}
 
 int Config::port() const
 {
 	return mPort;
-};
+}
 
-void Config::setPort(int port)
+void Config::setPort(int p)
 {
-	mPort = port;
-};
+	mPort = p;
+}
 
 QString Config::logPath() const
 {
 	return mLogPath;
-};
+}
 
 void Config::setLogPath(const QString& path)
 {
 	mLogPath = path;
-};
+}
 
 QString Config::authAdminUser() const
 {
 	return mAuthAdminUser;
-};
+}
 
 void Config::setAuthAdminUser(const QString& user)
 {
 	mAuthAdminUser = user;
-};
+}
 
 bool Config::logCritical() const
 {
 	return mLogCritical;
-};
+}
 
 void Config::setLogCritical(bool log)
 {
 	mLogCritical = log;
-};
+}
 
 bool Config::logError() const
 {
 	return mLogError;
-};
+}
 
 void Config::setLogError(bool log)
 {
 	mLogError = log;
-};
+}
 
 bool Config::logWarning() const
 {
 	return mLogWarning;
-};
+}
 
 void Config::setLogWarning(bool log)
 {
 	mLogWarning = log;
-};
+}
 
 bool Config::logInfo() const
 {
 	return mLogInfo;
-};
+}
 
 void Config::setLogInfo(bool log)
 {
 	mLogInfo = log;
-};
+}
 
 bool Config::logDebug() const
 {
 	return mLogDebug;
-};
+}
 
 void Config::setLogDebug(bool log)
 {
 	mLogDebug = log;
-};
+}
 
 bool Config::authAdmin() const
 {
 	return mAuthAdmin;
-};
+}
 
 void Config::setAuthAdmin(bool ok)
 {
 	mAuthAdmin = ok;
-};
+}
 
 bool Config::authViewDB() const
 {
 	return mAuthViewDB;
-};
+}
 
 void Config::setAuthViewDB(bool ok)
 {
 	mAuthViewDB = ok;
-};
+}
 
 bool Config::authModifyDB() const
 {
 	return mAuthModifyDB;
-};
+}
 
 void Config::setAuthModifyDB(bool ok)
 {
 	mAuthModifyDB = ok;
-};
+}
 
 bool Config::authAdminDB() const
 {
 	return mAuthAdminDB;
-};
+}
 
 void Config::setAuthAdminDB(bool ok)
 {
 	mAuthAdminDB = ok;
-};
+}
 
 QString Config::dbType() const
 {
 	return mDBType;
-};
+}
 
 void Config::setDBType(const QString& type)
 {
 	mDBType = type;
-};
+}
 
 QString Config::dbPath() const
 {
 	return mDBPath;
-};
+}
 
 void Config::setDBPath(const QString& path)
 {
 	mDBPath = path;
-};
+}
 
 QString Config::dbHost() const
 {
 	return mDBHost;
-};
+}
 
 void Config::setDBHost(const QString& host)
 {
 	mDBHost = host;
-};
+}
 
 QString Config::dbUser() const
 {
 	return mDBUser;
-};
+}
 
 void Config::setDBUser(const QString& user)
 {
 	mDBUser = user;
-};
+}
 
 QString Config::dbPass() const
 {
 	return mDBPass;
-};
+}
 
 void Config::setDBPass(const QString& pass)
 {
 	mDBPass = pass;
-};
+}
 
 QString Config::dbName() const
 {
 	return mDBName;
-};
+}
 
 void Config::setDBName(const QString& name)
 {
 	mDBName = name;
-};
+}
 
 QString Config::authDBType() const
 {
 	return mAuthDBType;
-};
+}
 
 void Config::setAuthDBType(const QString& type)
 {
 	mAuthDBType = type;
-};
+}
 
 QString Config::authDBPath() const
 {
 	return mAuthDBPath;
-};
+}
 
 void Config::setAuthDBPath(const QString& path)
 {
 	mAuthDBPath = path;
-};
+}
 
 QString Config::authDBHost() const
 {
 	return mAuthDBHost;
-};
+}
 
 void Config::setAuthDBHost(const QString& host)
 {
 	mAuthDBHost = host;
-};
+}
 
 QString Config::authDBUser() const
 {
 	return mAuthDBUser;
-};
+}
 
 void Config::setAuthDBUser(const QString& user)
 {
 	mAuthDBUser = user;
-};
+}
 
 QString Config::authDBPass() const
 {
 	return mAuthDBPass;
-};
+}
 
 void Config::setAuthDBPass(const QString& pass)
 {
 	mAuthDBPass = pass;
-};
+}
 
 QString Config::authDBName() const
 {
 	return mAuthDBName;
-};
+}
 
 void Config::setAuthDBName(const QString& name)
 {
 	mAuthDBName = name;
-};
+}
 
 QString Config::saltPass() const
 {
 	return mSaltPass;
-};
+}
 
 void Config::setSaltPass(const QString& salt)
 {
 	mSaltPass = salt;
-};
+}
 
 QString Config::saltImg() const
 {
 	return mSaltImg;
-};
+}
 
 void Config::setSaltImg(const QString& salt)
 {
 	mSaltImg = salt;
-};
+}
 
 QString Config::signature() const
 {
 	return mSignature;
-};
+}
 
 void Config::setSignature(const QString& sig)
 {
 	mSignature = sig;
-};
+}
 
 QStringList Config::captchaLetters() const
 {
 	return mCaptchaLetters;
-};
+}
 
 void Config::setCaptchaLetters(const QStringList& letters)
 {
 	mCaptchaLetters = letters;
-};
+}
 
 QString Config::captchaFont() const
 {
 	return mCaptchaFont;
-};
+}
 
 void Config::setCaptchaFont(const QString& font)
 {
 	mCaptchaFont = font;
-};
+}
 
 bool Config::sslEnabled() const
 {
 	return mSslEnabled;
-};
+}
 
 void Config::setSslEnabled(bool enabled)
 {
 	mSslEnabled = enabled;
-};
+}
 
 QSslCertificate Config::sslCert() const
 {
 	return mCert;
-};
+}
 
 void Config::setSslCert(const QSslCertificate& cert)
 {
 	mCert = cert;
-};
+}
 
 QSslKey Config::sslKey() const
 {
 	return mKey;
-};
+}
 
 void Config::setSslKey(const QSslKey& key)
 {
 	mKey = key;
-};
+}
 
 QString Config::clientWin32() const
 {
 	return mClientWin32;
-};
+}
 
 void Config::setClientWin32(const QString& sha1)
 {
 	mClientWin32 = sha1;
-};
+}
 
 QString Config::clientMacOSX() const
 {
 	return mClientMacOSX;
-};
+}
 
 void Config::setClientMacOSX(const QString& sha1)
 {
 	mClientMacOSX = sha1;
-};
+}
 
 QString Config::clientLinux() const
 {
 	return mClientLinux;
-};
+}
 
 void Config::setClientLinux(const QString& sha1)
 {
 	mClientLinux = sha1;
-};
+}
 
 QString Config::updaterWin32() const
 {
 	return mUpdaterWin32;
-};
+}
 
 void Config::setUpdaterWin32(const QString& sha1)
 {
 	mUpdaterWin32 = sha1;
-};
+}
 
 QString Config::updaterMacOSX() const
 {
 	return mUpdaterMacOSX;
-};
+}
 
 void Config::setUpdaterMacOSX(const QString& sha1)
 {
 	mUpdaterMacOSX = sha1;
-};
+}
 
 QString Config::updaterLinux() const
 {
 	return mUpdaterLinux;
-};
+}
 
 void Config::setUpdaterLinux(const QString& sha1)
 {
 	mUpdaterLinux = sha1;
-};
+}

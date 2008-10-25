@@ -43,7 +43,7 @@ QVariantMap authActionQueryPerms(int i, QTcpSocket *connection,
 
 		return map;
 	}
-};
+}
 
 QVariantMap authActionQueryUsers(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -57,7 +57,7 @@ QVariantMap authActionQueryUsers(int i, QTcpSocket *connection,
 	map["users"] = auth->queryUsers(email);
 
 	return map;
-};
+}
 
 QVariantMap authActionQueryUser(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -72,7 +72,7 @@ QVariantMap authActionQueryUser(int i, QTcpSocket *connection,
 	map["user"] = auth->queryUser(email, target_email);
 
 	return map;
-};
+}
 
 QVariantMap authActionMakeInactive(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -85,7 +85,7 @@ QVariantMap authActionMakeInactive(int i, QTcpSocket *connection,
 	auth->makeInactive(email, target_email);
 
 	return QVariantMap();
-};
+}
 
 QVariantMap authActionMakeActive(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -98,7 +98,7 @@ QVariantMap authActionMakeActive(int i, QTcpSocket *connection,
 	auth->makeActive(email, target_email);
 
 	return QVariantMap();
-};
+}
 
 QVariantMap authActionModifyUser(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -116,4 +116,4 @@ QVariantMap authActionModifyUser(int i, QTcpSocket *connection,
 	auth->modifyUser(email, target_email, new_email, name, pass, perms);
 
 	return QVariantMap();
-};
+}

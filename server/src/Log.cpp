@@ -31,7 +31,7 @@ static Log *g_log_inst = 0;
 Log::Log() : mLogFile(0)
 {
 	// Code here
-};
+}
 
 Log* Log::getSingletonPtr()
 {
@@ -41,7 +41,7 @@ Log* Log::getSingletonPtr()
 	Q_ASSERT(g_log_inst);
 
 	return g_log_inst;
-};
+}
 
 void Log::loadConfig()
 {
@@ -52,7 +52,7 @@ void Log::loadConfig()
 		mLogFile->write( QString("Log Started!\n").toUtf8() );
 		mLogFile->flush();
 	}
-};
+}
 
 void Log::critical(const QString& msg)
 {
@@ -68,7 +68,7 @@ void Log::critical(const QString& msg)
 	}
 	else
 		cerr << final.toLocal8Bit().data() << endl;
-};
+}
 
 void Log::error(const QString& msg)
 {
@@ -84,7 +84,7 @@ void Log::error(const QString& msg)
 	}
 	else
 		cerr << final.toLocal8Bit().data() << endl;
-};
+}
 
 void Log::warning(const QString& msg)
 {
@@ -100,7 +100,7 @@ void Log::warning(const QString& msg)
 	}
 	else
 		cerr << final.toLocal8Bit().data() << endl;
-};
+}
 
 void Log::info(const QString& msg)
 {
@@ -116,7 +116,7 @@ void Log::info(const QString& msg)
 	}
 	else
 		cout << final.toLocal8Bit().data() << endl;
-};
+}
 
 void Log::debug(const QString& msg)
 {
@@ -132,4 +132,4 @@ void Log::debug(const QString& msg)
 	}
 	else
 		cout << final.toLocal8Bit().data() << endl;
-};
+}

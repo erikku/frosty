@@ -29,7 +29,7 @@
 
 #include "json.h"
 
-Backend::Backend(QObject *parent) : QObject(parent)
+Backend::Backend(QObject *parent_object) : QObject(parent_object)
 {
 	// Standard Actions
 	mActionHandlers["salt"] = backendActionSalt;
@@ -54,7 +54,7 @@ Backend::Backend(QObject *parent) : QObject(parent)
 	mActionHandlers["server_updates"] = serverActionUpdates;
 
 	auth->start(mActionHandlers);
-};
+}
 
 QVariantList Backend::parseRequest(QTcpSocket *connection,
 	const QSqlDatabase& db, const QMap<QString, QString>& post) const
@@ -160,4 +160,4 @@ QVariantList Backend::parseRequest(QTcpSocket *connection,
 	}
 
 	return request_results;
-};
+}

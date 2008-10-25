@@ -43,7 +43,7 @@ QVariantMap backendActionSalt(int i, QTcpSocket *connection,
 	map["salt"] = conf->saltPass();
 
 	return map;
-};
+}
 
 QVariantMap backendActionDelete(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -238,7 +238,7 @@ QVariantMap backendActionDelete(int i, QTcpSocket *connection,
 	m_db.commit();
 
 	return QVariantMap();
-};
+}
 
 QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -366,12 +366,17 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 	}
 
 	QStringList columns;
-	foreach(QVariant row, rows)
 	{
-		foreach(QString key, row.toMap().keys())
+		QListIterator<QVariant> it(rows);
+		while( it.hasNext() )
 		{
-			if( !columns.contains(key) )
-				columns << key;
+			QVariant row = it.next();
+
+			foreach(QString key, row.toMap().keys())
+			{
+				if( !columns.contains(key) )
+					columns << key;
+			}
 		}
 	}
 
@@ -491,11 +496,11 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 					{
 						QString where_columns_set = where_columns.join(", ");
 
-						QString sql = QString("INSERT INTO %1 SET %2").arg(
+						QString sql2 = QString("INSERT INTO %1 SET %2").arg(
 							foreign_table).arg(where_columns_set);
 
 						QSqlQuery query2(db);
-						query2.prepare(sql);
+						query2.prepare(sql2);
 
 						it.toFront();
 						while( it.hasNext() )
@@ -587,7 +592,7 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 	map["ids"] = ids;
 
 	return map;
-};
+}
 
 QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -715,12 +720,17 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 	}
 
 	QStringList columns;
-	foreach(QVariant row, rows)
 	{
-		foreach(QString key, row.toMap().keys())
+		QListIterator<QVariant> it(rows);
+		while( it.hasNext() )
 		{
-			if( !columns.contains(key) )
-				columns << key;
+			QVariant row = it.next();
+
+			foreach(QString key, row.toMap().keys())
+			{
+				if( !columns.contains(key) )
+					columns << key;
+			}
 		}
 	}
 
@@ -1068,11 +1078,11 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 					{
 						QString where_columns_set = where_columns.join(", ");
 
-						QString sql = QString("INSERT INTO %1 SET %2").arg(
+						QString sql2 = QString("INSERT INTO %1 SET %2").arg(
 							foreign_table).arg(where_columns_set);
 
 						QSqlQuery query2(db);
-						query2.prepare(sql);
+						query2.prepare(sql2);
 
 						it.toFront();
 						while( it.hasNext() )
@@ -1171,7 +1181,7 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 	map["ids"] = ids;
 
 	return map;
-};
+}
 
 QVariantMap backendActionSelect(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -1322,9 +1332,9 @@ QVariantMap backendActionSelect(int i, QTcpSocket *connection,
 		Q_ASSERT( relation_tables.count() == relation_ids.count() );
 
 		QStringList relation_joins;
-		for(int i = 0; i < relation_tables.count(); i++)
+		for(int i_rel = 0; i_rel < relation_tables.count(); i_rel++)
 			relation_joins << QString("LEFT JOIN %1 ON %2").arg(
-				relation_tables.at(i) ).arg( relation_ids.at(i) );
+				relation_tables.at(i_rel) ).arg( relation_ids.at(i_rel) );
 
 		relation_join_sql = QString(" %1").arg( relation_joins.join(" ") );
 	}
@@ -1589,4 +1599,4 @@ QVariantMap backendActionSelect(int i, QTcpSocket *connection,
 	map["rows"] = rows;
 
 	return map;
-};
+}

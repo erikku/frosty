@@ -46,7 +46,7 @@
 Server::Server(int argc, char *argv[]) : QCoreApplication(argc, argv)
 {
 	qsrand( QDateTime::currentDateTime().toTime_t() );
-};
+}
 
 void Server::init()
 {
@@ -87,7 +87,7 @@ void Server::init()
 
 	//db.close();
 	//QSqlDatabase::removeDatabase("master");
-};
+}
 
 void SslServer::incomingConnection(int socketDescriptor)
 {
@@ -119,7 +119,7 @@ void SslServer::incomingConnection(int socketDescriptor)
 
 		emit newConnection(socket);
 	}
-};
+}
 
 void SslServer::error(QAbstractSocket::SocketError err)
 {
@@ -129,13 +129,13 @@ void SslServer::error(QAbstractSocket::SocketError err)
 	Q_ASSERT(socket);
 
 	LOG_ERROR( QString("Socket Error: %1\n").arg( socket->errorString() ) );
-};
+}
 
 void SslServer::sslErrors(const QList<QSslError>& errors)
 {
 	foreach(QSslError err, errors)
 		LOG_ERROR( QString("SSL Error: %1").arg( err.errorString() ) );
-};
+}
 
 void Server::handleNewConnection(QTcpSocket *socket)
 {
@@ -157,7 +157,7 @@ void Server::handleNewConnection(QTcpSocket *socket)
 	data->done = false;
 
 	read(connection);
-};
+}
 
 void Server::readyRead()
 {
@@ -165,7 +165,7 @@ void Server::readyRead()
 	Q_ASSERT(connection);
 
 	read(connection);
-};
+}
 
 void Server::read(QTcpSocket *connection)
 {
@@ -202,7 +202,7 @@ void Server::read(QTcpSocket *connection)
 	data->content.append( connection->readAll() );
 	if(data->content.length() >= data->contentLength)
 		finalize(connection);
-};
+}
 
 void Server::finalize(QTcpSocket *connection)
 {
@@ -348,7 +348,7 @@ void Server::finalize(QTcpSocket *connection)
 	{
 		error(connection);
 	}
-};
+}
 
 QHttpResponseHeader Server::basicResponseHeader() const
 {
@@ -369,7 +369,7 @@ QHttpResponseHeader Server::basicResponseHeader() const
 	header.setValue("X-Powered-By", powered_by);
 
 	return header;
-};
+}
 
 void Server::error(QTcpSocket *connection)
 {
@@ -391,7 +391,7 @@ void Server::error(QTcpSocket *connection)
 
 	connection->write( QString(header.toString() + content).toUtf8() );
 	connection->close();
-};
+}
 
 void Server::respond(QTcpSocket *connection, const QVariant& data)
 {
@@ -402,7 +402,7 @@ void Server::respond(QTcpSocket *connection, const QVariant& data)
 
 	connection->write( header.toString().toUtf8() );
 	connection->close();
-};
+}
 
 void Server::captcha(QTcpSocket *connection, const QString& session_key,
 	const QString& cookie, const QString& error)
@@ -474,4 +474,4 @@ void Server::captcha(QTcpSocket *connection, const QString& session_key,
 
 	gdFree(image);
 	gdImageDestroy(im);
-};
+}

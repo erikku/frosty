@@ -58,7 +58,7 @@ QList<QDomNode> elementsByXPath(QDomDocument& doc, const QString& xpath,
 	}
 
 	return QList<QDomNode>();
-};
+}
 
 QDomNode childElementByName(const QDomNode& node, const QString& name)
 {
@@ -71,7 +71,7 @@ QDomNode childElementByName(const QDomNode& node, const QString& name)
 	}
 
 	return QDomNode();
-};
+}
 
 QList<QDomNode> childElementsByName(const QDomNode& node, const QString& name)
 {
@@ -85,7 +85,7 @@ QList<QDomNode> childElementsByName(const QDomNode& node, const QString& name)
 	}
 
 	return nodes;
-};
+}
 
 QList<QDomNode> elementsByXPathNode(QDomNode& node, const QString& xpath,
 	bool create)
@@ -128,7 +128,7 @@ QList<QDomNode> elementsByXPathNode(QDomNode& node, const QString& xpath,
 	}
 
 	return nodes;
-};
+}
 
 QString nodeToXPath(const QDomNode& node)
 {
@@ -148,7 +148,7 @@ QString nodeToXPath(const QDomNode& node)
 	path = "/" + path + node.toElement().tagName();
 
 	return path;
-};
+}
 
 void writeXPath(QDomDocument& doc, const QString& xpath, const QString& value)
 {
@@ -163,4 +163,4 @@ void writeXPath(QDomDocument& doc, const QString& xpath, const QString& value)
 		node.replaceChild(text, node.firstChild());
 	else
 		node.appendChild(text);
-};
+}

@@ -59,9 +59,12 @@ QVariantMap dbActionExport(int i, QTcpSocket *connection,
 			QSqlRecord record = query.record();
 
 			QVariantMap row;
-			foreach(QString column, columns)
+			QListIterator<QString> it(columns);
+			while( it.hasNext() )
+			{
+				QString column = it.next();
 				row[column] = record.value(column);
-
+			}
 			rows << row;
 		}
 
@@ -72,7 +75,7 @@ QVariantMap dbActionExport(int i, QTcpSocket *connection,
 	map["export"] = export_tables;
 
 	return map;
-};
+}
 
 QVariantMap dbActionImport(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
@@ -91,11 +94,19 @@ QVariantMap dbActionImport(int i, QTcpSocket *connection,
 	m_db.transaction();
 
 	QVariantMap tables = action.value("export").toMap();
-	foreach(QString table, tables.keys())
+	QMapIterator<QString, QVariant> it(tables);
+
+	while( it.hasNext() )
 	{
-		QVariantList rows = tables.value(table).toList();
-		foreach(QVariant row, rows)
+		it.next();
+
+		QVariantList rows = it.value().toList();
+		QListIterator<QVariant> rows_it(rows);
+
+		while( rows_it.hasNext() )
 		{
+			QVariant row = rows_it.next();
+
 			QVariantMap map = row.toMap();
 			QStringList columns = map.keys();
 			QStringList binds;
@@ -103,7 +114,7 @@ QVariantMap dbActionImport(int i, QTcpSocket *connection,
 				binds << QString(":%1").arg(column);
 
 			QString sql = QString("INSERT INTO %1 (%2) VALUES (%3)").arg(
-				table).arg( columns.join(", ") ).arg( binds.join(", ") );
+				it.key() ).arg( columns.join(", ") ).arg( binds.join(", ") );
 
 			QSqlQuery query(db);
 			if( !query.prepare(sql) )
@@ -133,4 +144,4 @@ QVariantMap dbActionImport(int i, QTcpSocket *connection,
 	m_db.commit();
 
 	return QVariantMap();
-};
+}

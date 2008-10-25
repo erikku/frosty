@@ -31,7 +31,7 @@ static Auth *g_auth_inst = 0;
 Auth::Auth()
 {
 	// Nothing to see here
-};
+}
 
 Auth* Auth::getSingletonPtr()
 {
@@ -41,7 +41,7 @@ Auth* Auth::getSingletonPtr()
 	Q_ASSERT(g_auth_inst);
 
 	return g_auth_inst;
-};
+}
 
 void Auth::start(const QMap<QString, BackendActionHandler>& actionHandlers)
 {
@@ -103,7 +103,7 @@ void Auth::start(const QMap<QString, BackendActionHandler>& actionHandlers)
 		QSqlQuery query("SET CHARSET utf8", mAuthDB);
 		query.exec();
 	}
-};
+}
 
 bool Auth::authenticate(const QString& email, const QString& data,
 	const QString& hash) const
@@ -140,7 +140,7 @@ bool Auth::authenticate(const QString& email, const QString& data,
 	LOG_ERROR("Passwords do not match\n");
 
 	return false;
-};
+}
 
 bool Auth::validateRequest(const QString& email, const QVariant& action) const
 {
@@ -162,7 +162,7 @@ bool Auth::validateRequest(const QString& email, const QVariant& action) const
 	}
 
 	return can_perform | perms.value("admin").toBool();
-};
+}
 
 QVariant Auth::queryPerms(const QString& email) const
 {
@@ -208,7 +208,7 @@ QVariant Auth::queryPerms(const QString& email) const
 	perms["any"] = true;
 
 	return perms;
-};
+}
 
 QVariant Auth::queryUsers(const QString& email) const
 {
@@ -240,7 +240,7 @@ QVariant Auth::queryUsers(const QString& email) const
 	}
 
 	return users;
-};
+}
 
 QString Auth::registerUser(const QString& email, const QString& name,
 	const QString& pass) const
@@ -289,7 +289,7 @@ QString Auth::registerUser(const QString& email, const QString& name,
 	}
 
 	return QString();
-};
+}
 
 QVariant Auth::queryUser(const QString& email, const QString& target) const
 {
@@ -320,7 +320,7 @@ QVariant Auth::queryUser(const QString& email, const QString& target) const
 	map["last_login"] = record.value("last_login");
 
 	return map;
-};
+}
 
 bool Auth::makeInactive(const QString& email,
 	const QString& target_email) const
@@ -343,7 +343,7 @@ bool Auth::makeInactive(const QString& email,
 		return false;
 
 	return true;
-};
+}
 
 bool Auth::makeActive(const QString& email, const QString& target_email) const
 {
@@ -365,7 +365,7 @@ bool Auth::makeActive(const QString& email, const QString& target_email) const
 		return false;
 
 	return true;
-};
+}
 
 bool Auth::modifyUser(const QString& email, const QString& target_email,
 	const QString& new_email, const QString& name, const QString& pass,
@@ -408,4 +408,4 @@ bool Auth::modifyUser(const QString& email, const QString& target_email,
 		return false;
 
 	return true;
-};
+}
