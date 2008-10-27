@@ -55,6 +55,7 @@ void Auth::start(const QMap<QString, BackendActionHandler>& actionHandlers)
 	// Database Actions
 	mActionPermissions["db_export"] = "admin";
 	mActionPermissions["db_import"] = "admin";
+	mActionPermissions["db_tables"] = "admin";
 
 	// Auth Actions
 	mActionPermissions["auth_query_perms"] = "any";

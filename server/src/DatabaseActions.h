@@ -31,5 +31,7 @@ QVariantMap dbActionExport(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 QVariantMap dbActionImport(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap dbActionTables(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 
 #endif // __DatabaseActions_h__

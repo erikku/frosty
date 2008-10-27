@@ -46,6 +46,17 @@ ImportExport::ImportExport(QWidget *parent_widget) : QWidget(parent_widget)
 	connect(ui.exportButton, SIGNAL(clicked(bool)), this, SLOT(exportDB()));
 
 	ajax::getSingletonPtr()->subscribe(this);
+
+	{
+		QVariantMap action;
+		action["action"] = "db_tables";
+		action["user_data"] = "db_tables";
+
+		ajax::getSingletonPtr()->request(settings->url(), action);
+	}
+
+	toggleView();
+	setEnabled(false);
 }
 
 void ImportExport::pathChanged()
@@ -107,12 +118,16 @@ void ImportExport::toggleView()
 		ui.importButton->setVisible(true);
 		ui.exportButton->setVisible(false);
 		ui.pathEdit->setText(mImportPath);
+		ui.tableListWidget->hide();
+		setFixedSize(400, 120);
 	}
 	else // export
 	{
 		ui.importButton->setVisible(false);
 		ui.exportButton->setVisible(true);
 		ui.pathEdit->setText(mExportPath);
+		ui.tableListWidget->show();
+		setFixedSize(400, 300);
 	}
 }
 
@@ -176,9 +191,17 @@ void ImportExport::exportDB()
 			return;
 	}
 
+	QVariantList tables;
+	for(int i = 0; i < ui.tableListWidget->count(); i++)
+	{
+		if(ui.tableListWidget->item(i)->checkState() == Qt::Checked)
+			tables << ui.tableListWidget->item(i)->text();
+	}
+
 	QVariantMap action;
 	action["action"] = "db_export";
 	action["user_data"] = "db_export";
+	action["tables"] = tables;
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
 
@@ -218,6 +241,19 @@ void ImportExport::ajaxResponse(const QVariant& resp)
 	{
 		QMessageBox::information(this, tr("Import Successful"), tr("The import "
 			"has completed successfully."));
+
+		setEnabled(true);
+	}
+	else if(result.value("user_data").toString() == "db_tables")
+	{
+		QVariantList tables = result.value("tables").toList();
+		foreach(QVariant table, tables)
+		{
+			QListWidgetItem *item = new QListWidgetItem(table.toString());
+			item->setCheckState(Qt::Checked);
+
+			ui.tableListWidget->addItem(item);
+		}
 
 		setEnabled(true);
 	}

@@ -41,6 +41,7 @@ Backend::Backend(QObject *parent_object) : QObject(parent_object)
 	// Database Actions
 	mActionHandlers["db_export"] = dbActionExport;
 	mActionHandlers["db_import"] = dbActionImport;
+	mActionHandlers["db_tables"] = dbActionTables;
 
 	// Auth Actions
 	mActionHandlers["auth_query_perms"] = authActionQueryPerms;

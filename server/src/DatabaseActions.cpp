@@ -27,19 +27,50 @@
 
 #include <QtCore/QStringList>
 
+#define tr(msg) QObject::tr(msg)
+
 QVariantMap dbActionExport(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(email);
-	Q_UNUSED(action);
 	Q_UNUSED(connection);
-
-	// TODO: Restrict this to "admin" only
 
 	QVariantMap export_tables;
 
 	QStringList tables = db.tables();
+	QStringList blacklist = tables_blacklist();
+
+	foreach(QString table, blacklist)
+	{
+		int idx = tables.indexOf(table);
+		if(idx < 0)
+			tables.removeAt(idx);
+	}
+
+	if( action.contains("tables") )
+	{
+		if( !action.value("tables").canConvert(QVariant::List) )
+			return herror("db_export action", tr("paramater 'tables' for "
+				"action %1 exists but is not an array").arg(i));
+
+		QStringList requested_tables;
+		QVariantList table_list = action.value("tables").toList();
+
+		foreach(QVariant table_variant, table_list)
+		{
+			QString table = table_variant.toString();
+
+			if( !tables.contains(table) )
+				return herror("db_export action", tr("table '%1' for "
+					"action %2 does not exist").arg(table).arg(i));
+
+			requested_tables << table;
+		}
+
+		tables = requested_tables;
+	}
+
 	foreach(QString table, tables)
 	{
 		QStringList columns = cache_columns(table, db);
@@ -50,7 +81,7 @@ QVariantMap dbActionExport(int i, QTcpSocket *connection,
 		QSqlQuery query(sql, db);
 		if( !query.exec() )
 		{
-			// Error
+			// TODO: Error
 		}
 
 		QVariantList rows;
@@ -89,7 +120,6 @@ QVariantMap dbActionImport(int i, QTcpSocket *connection,
 		LOG_ERROR("Missing param 'export'");
 	}
 
-	// TODO: Add error checking and transactions
 	QSqlDatabase m_db = db;
 	m_db.transaction();
 
@@ -134,6 +164,7 @@ QVariantMap dbActionImport(int i, QTcpSocket *connection,
 			{
 				LOG_ERROR(sql);
 				LOG_ERROR( query.lastError().text() );
+
 				m_db.rollback();
 
 				return QVariantMap();
@@ -144,4 +175,30 @@ QVariantMap dbActionImport(int i, QTcpSocket *connection,
 	m_db.commit();
 
 	return QVariantMap();
+}
+
+QVariantMap dbActionTables(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+{
+	Q_UNUSED(i);
+	Q_UNUSED(email);
+	Q_UNUSED(action);
+	Q_UNUSED(connection);
+
+	QStringList tables = db.tables();
+	QStringList blacklist = tables_blacklist();
+
+	QVariantList result_tables;
+	foreach(QString table, tables)
+	{
+		if( !blacklist.contains(table) )
+			result_tables << table;
+	}
+
+	qSort(tables);
+
+	QVariantMap map;
+	map["tables"] = result_tables;
+
+	return map;
 }

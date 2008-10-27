@@ -1,40 +1,41 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ImportExport</class>
- <widget class="QWidget" name="ImportExport" >
-  <property name="geometry" >
+ <widget class="QWidget" name="ImportExport">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>402</width>
-    <height>124</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QRadioButton" name="importRadio" >
-       <property name="text" >
-        <string>Import</string>
-       </property>
-       <property name="checked" >
+      <widget class="QRadioButton" name="importRadio">
+       <property name="checked">
         <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Import</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="exportRadio" >
-       <property name="text" >
+      <widget class="QRadioButton" name="exportRadio">
+       <property name="text">
         <string>Export</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -45,28 +46,31 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="pathLabel" >
-       <property name="text" >
+      <widget class="QLabel" name="pathLabel">
+       <property name="text">
         <string>Path:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="pathEdit" />
+      <widget class="QLineEdit" name="pathEdit"/>
      </item>
      <item>
-      <widget class="QPushButton" name="pathBrowse" />
+      <widget class="QPushButton" name="pathBrowse"/>
      </item>
     </layout>
    </item>
    <item>
+    <widget class="QListWidget" name="tableListWidget"/>
+   </item>
+   <item>
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>2</height>
@@ -75,13 +79,13 @@
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -90,31 +94,31 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="exportButton" >
-       <property name="enabled" >
+      <widget class="QPushButton" name="exportButton">
+       <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>&amp;Export</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="importButton" >
-       <property name="enabled" >
+      <widget class="QPushButton" name="importButton">
+       <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>&amp;Import</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
