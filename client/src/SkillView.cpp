@@ -39,6 +39,7 @@ SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 	darkenWidget(ui.categoryLabel);
 	darkenWidget(ui.affinityLabel);
 	darkenWidget(ui.expertLabel);
+	darkenWidget(ui.relatedStatLabel);
 
 	darkenWidget(ui.desc_jaLabel);
 	darkenWidget(ui.desc_enLabel);
@@ -57,6 +58,7 @@ SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 	darkenWidget(ui.categoryLabel2);
 	darkenWidget(ui.affinityLabel2);
 	darkenWidget(ui.expertLabel2);
+	darkenWidget(ui.relatedStatLabel2);
 
 	darkenWidget(ui.desc_jaLabel2);
 	darkenWidget(ui.desc_enLabel2);
@@ -80,6 +82,9 @@ SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 		QString(), ui.affinityEditButton, tr("Affinity"));
 	bindRelation("expert", ui.expert, ui.expertEdit, "db_expert",
 		QString(), ui.expertEditButton, tr("Expert"));
+	bindRelation("related_stat", ui.relatedStat, ui.relatedStatEdit,
+		"db_related_stat", QString(), ui.relatedStatEditButton,
+		tr("Related Stat"));
 	bindNumberSet("cost_set", ui.cost, ui.costEdit, ui.costEditCombo,
 		QStringList() << "hp_cost" << "mp_cost" << "mag_cost",
 		QStringList() << tr("HP%1") << tr("MP%1") << tr("MAG%1"), tr("+"));
@@ -90,6 +95,7 @@ SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 	ui.categoryEditButton->setIcon(edit_icon);
 	ui.affinityEditButton->setIcon(edit_icon);
 	ui.expertEditButton->setIcon(edit_icon);
+	ui.relatedStatEditButton->setIcon(edit_icon);
 
 	// Init the view
 	initView(ui.stackedWidget, ui.editButton, ui.cancelButton,

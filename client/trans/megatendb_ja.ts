@@ -3,8 +3,6 @@
 <context>
     <name>AjaxList</name>
     <message>
-        <location filename="../src/AjaxList.cpp" line="34"/>
-        <location filename="../src/AjaxList.cpp" line="183"/>
         <location filename="../src/AjaxList.cpp" line="270"/>
         <source>All</source>
         <translation>全</translation>
@@ -38,40 +36,37 @@
 <context>
     <name>AjaxView</name>
     <message>
-        <location filename="../src/AjaxView.cpp" line="103"/>
+        <location filename="../src/AjaxView.cpp" line="104"/>
         <source>darkenWidget(%1) is not a QLabel</source>
         <translation>darkenWidget(%1)は「QLabel」じゃない</translation>
     </message>
     <message>
-        <location filename="../src/AjaxView.cpp" line="1331"/>
-        <location filename="../src/AjaxView.cpp" line="1502"/>
+        <location filename="../src/AjaxView.cpp" line="1505"/>
         <source>N/A</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../src/AjaxView.cpp" line="1371"/>
+        <location filename="../src/AjaxView.cpp" line="1374"/>
         <source>- %1</source>
         <translation>〜 %1</translation>
     </message>
     <message>
-        <location filename="../src/AjaxView.cpp" line="1373"/>
+        <location filename="../src/AjaxView.cpp" line="1376"/>
         <source>%1 -</source>
         <translation>%1 〜</translation>
     </message>
     <message>
-        <location filename="../src/AjaxView.cpp" line="1375"/>
-        <location filename="../src/AjaxView.cpp" line="1379"/>
+        <location filename="../src/AjaxView.cpp" line="1382"/>
         <source>%1 - %2</source>
         <translation>%1 〜%2</translation>
     </message>
     <message>
-        <location filename="../src/AjaxView.cpp" line="1433"/>
+        <location filename="../src/AjaxView.cpp" line="1436"/>
         <source>x</source>
         <translation>●</translation>
     </message>
     <message>
-        <location filename="../src/AjaxView.cpp" line="1369"/>
-        <location filename="../src/AjaxView.cpp" line="1433"/>
+        <location filename="../src/AjaxView.cpp" line="1436"/>
         <source>-</source>
         <translation>○</translation>
     </message>
@@ -84,7 +79,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DevilList.cpp" line="94"/>
+        <location filename="../src/DevilList.cpp" line="96"/>
         <source>You are attemping to view another devil while editing a devil. If you continue you will lose any changes you made to the devil. Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -94,7 +89,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DevilList.cpp" line="106"/>
+        <location filename="../src/DevilList.cpp" line="107"/>
         <source>You are about to delete the devil &apos;%1&apos;. Are you sure you want to delete this?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,7 +102,6 @@
         <translation>Law</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="114"/>
         <location filename="../ui/DevilView.ui" line="182"/>
         <source>Neutral</source>
         <translation>Neutral</translation>
@@ -118,42 +112,26 @@
         <translation>Chaos</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="118"/>
-        <location filename="../src/DevilView.cpp" line="126"/>
-        <location filename="../src/DevilView.cpp" line="149"/>
-        <location filename="../src/DevilView.cpp" line="151"/>
-        <location filename="../ui/DevilView.ui" line="639"/>
-        <location filename="../ui/DevilView.ui" line="926"/>
-        <location filename="../ui/DevilView.ui" line="936"/>
-        <location filename="../ui/DevilView.ui" line="956"/>
         <location filename="../ui/DevilView.ui" line="976"/>
         <source>N/A</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="119"/>
-        <location filename="../ui/DevilView.ui" line="906"/>
         <location filename="../ui/DevilView.ui" line="3548"/>
         <source>Earthies</source>
         <translation>アーシーズ</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="120"/>
-        <location filename="../ui/DevilView.ui" line="916"/>
         <location filename="../ui/DevilView.ui" line="3558"/>
         <source>Airies</source>
         <translation>エアロス</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="121"/>
-        <location filename="../ui/DevilView.ui" line="946"/>
         <location filename="../ui/DevilView.ui" line="3582"/>
         <source>Aquans</source>
         <translation>アクアンズ</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="122"/>
-        <location filename="../ui/DevilView.ui" line="966"/>
         <location filename="../ui/DevilView.ui" line="3599"/>
         <source>Flamies</source>
         <translation>フレイミーズ</translation>
@@ -169,25 +147,22 @@
         <translation>DOWN</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="142"/>
-        <location filename="../ui/DevilView.ui" line="152"/>
         <location filename="../ui/DevilView.ui" line="2958"/>
         <source>Genus</source>
         <translation>種族</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="353"/>
         <location filename="../src/DevilView.cpp" line="362"/>
         <source>Update Error</source>
         <translation>アップデート・エラー</translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="353"/>
+        <location filename="../src/DevilView.cpp" line="354"/>
         <source>You must both a valid Japanese and English devil name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="362"/>
+        <location filename="../src/DevilView.cpp" line="363"/>
         <source>You must set a valid icon.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -197,278 +172,171 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/DevilView.cpp" line="383"/>
+        <location filename="../src/DevilView.cpp" line="385"/>
         <source>You are attemping to add another devil while editing a devil. If you continue you will lose any changes you made to the devil. Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="61"/>
         <location filename="../ui/DevilView.ui" line="2881"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="81"/>
         <location filename="../ui/DevilView.ui" line="2901"/>
         <source>Japanese:</source>
         <translation>日本語:</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="91"/>
         <location filename="../ui/DevilView.ui" line="2914"/>
         <source>English:</source>
         <translation>英語:</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="132"/>
         <location filename="../ui/DevilView.ui" line="2938"/>
         <source>Level</source>
         <translation>Lv</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="142"/>
         <location filename="../ui/DevilView.ui" line="2948"/>
         <source>LNC</source>
         <translation>LNC</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="162"/>
         <location filename="../ui/DevilView.ui" line="2968"/>
         <source>Growth Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="172"/>
-        <location filename="../ui/DevilView.ui" line="423"/>
-        <location filename="../ui/DevilView.ui" line="433"/>
-        <location filename="../ui/DevilView.ui" line="443"/>
-        <location filename="../ui/DevilView.ui" line="453"/>
-        <location filename="../ui/DevilView.ui" line="463"/>
-        <location filename="../ui/DevilView.ui" line="473"/>
-        <location filename="../ui/DevilView.ui" line="483"/>
-        <location filename="../ui/DevilView.ui" line="493"/>
-        <location filename="../ui/DevilView.ui" line="503"/>
-        <location filename="../ui/DevilView.ui" line="513"/>
-        <location filename="../ui/DevilView.ui" line="523"/>
-        <location filename="../ui/DevilView.ui" line="533"/>
-        <location filename="../ui/DevilView.ui" line="609"/>
-        <location filename="../ui/DevilView.ui" line="619"/>
         <location filename="../ui/DevilView.ui" line="629"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="228"/>
         <location filename="../ui/DevilView.ui" line="3021"/>
         <source>Stat Points</source>
         <translation>ステータス</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="240"/>
-        <location filename="../ui/DevilView.ui" line="3033"/>
-        <source>絆</source>
-        <translation>絆</translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="247"/>
-        <location filename="../ui/DevilView.ui" line="3040"/>
-        <source>心</source>
-        <translation>心</translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="254"/>
-        <location filename="../ui/DevilView.ui" line="3047"/>
-        <source>信</source>
-        <translation>信</translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="261"/>
-        <location filename="../ui/DevilView.ui" line="3054"/>
-        <source>仲</source>
-        <translation>仲</translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="268"/>
-        <location filename="../ui/DevilView.ui" line="3061"/>
-        <source>契</source>
-        <translation>契</translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="275"/>
-        <location filename="../ui/DevilView.ui" line="3068"/>
-        <source>使</source>
-        <translation>使</translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="282"/>
-        <location filename="../ui/DevilView.ui" line="3075"/>
-        <source>隙</source>
-        <translation>隙</translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="289"/>
-        <location filename="../ui/DevilView.ui" line="3082"/>
-        <source>寝</source>
-        <translation>寝</translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="303"/>
         <location filename="../ui/DevilView.ui" line="3096"/>
         <source>PWR</source>
         <translation>力</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="313"/>
         <location filename="../ui/DevilView.ui" line="3106"/>
         <source>MPW</source>
         <translation>魔力</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="323"/>
         <location filename="../ui/DevilView.ui" line="3116"/>
         <source>VIT</source>
         <translation>体力</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="333"/>
         <location filename="../ui/DevilView.ui" line="3126"/>
         <source>INT</source>
         <translation>知力</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="343"/>
         <location filename="../ui/DevilView.ui" line="3136"/>
         <source>SPD</source>
         <translation>速さ</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="353"/>
         <location filename="../ui/DevilView.ui" line="3146"/>
         <source>LUK</source>
         <translation>運</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="363"/>
         <location filename="../ui/DevilView.ui" line="3174"/>
         <source>ATK</source>
         <translation>近接</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="373"/>
         <location filename="../ui/DevilView.ui" line="3184"/>
         <source>GUN</source>
         <translation>射撃</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="383"/>
         <location filename="../ui/DevilView.ui" line="3194"/>
         <source>MAGIC</source>
         <translation>魔法</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="393"/>
         <location filename="../ui/DevilView.ui" line="3204"/>
         <source>SUPP</source>
         <translation>補助</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="403"/>
         <location filename="../ui/DevilView.ui" line="3214"/>
         <source>DEF</source>
         <translation>物防</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="413"/>
         <location filename="../ui/DevilView.ui" line="3224"/>
         <source>MDEF</source>
         <translation>魔防</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="555"/>
         <location filename="../ui/DevilView.ui" line="3264"/>
         <source>General</source>
         <translation>ジェネラル</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="569"/>
         <location filename="../ui/DevilView.ui" line="3278"/>
         <source>HP</source>
         <translation>HP</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="579"/>
         <location filename="../ui/DevilView.ui" line="3288"/>
         <source>MP</source>
         <translation>MP</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="589"/>
         <location filename="../ui/DevilView.ui" line="3298"/>
         <source>MAG</source>
         <translation>MAG</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="599"/>
         <location filename="../ui/DevilView.ui" line="3308"/>
         <source>Result Seirei</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="656"/>
         <location filename="../ui/DevilView.ui" line="3349"/>
         <source>Parent Devil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="666"/>
         <location filename="../ui/DevilView.ui" line="3359"/>
         <source>Mashou</source>
         <translation>魔晶</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="697"/>
         <location filename="../ui/DevilView.ui" line="3396"/>
         <source>Fusion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="707"/>
         <location filename="../ui/DevilView.ui" line="3406"/>
         <source>Fusion Lv Range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="717"/>
         <location filename="../ui/DevilView.ui" line="3416"/>
         <source>Chance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="729"/>
         <location filename="../ui/DevilView.ui" line="3428"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="739"/>
-        <location filename="../ui/DevilView.ui" line="759"/>
-        <location filename="../ui/DevilView.ui" line="812"/>
-        <location filename="../ui/DevilView.ui" line="842"/>
-        <location filename="../ui/DevilView.ui" line="862"/>
-        <location filename="../ui/DevilView.ui" line="1043"/>
-        <location filename="../ui/DevilView.ui" line="1053"/>
-        <location filename="../ui/DevilView.ui" line="1063"/>
-        <location filename="../ui/DevilView.ui" line="1073"/>
-        <location filename="../ui/DevilView.ui" line="1083"/>
-        <location filename="../ui/DevilView.ui" line="1093"/>
-        <location filename="../ui/DevilView.ui" line="1103"/>
-        <location filename="../ui/DevilView.ui" line="1113"/>
         <location filename="../ui/DevilView.ui" line="1123"/>
         <source> x </source>
         <translation>●</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="749"/>
         <location filename="../ui/DevilView.ui" line="3435"/>
         <source>3</source>
         <translation>3</translation>
@@ -479,416 +347,103 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="797"/>
         <location filename="../ui/DevilView.ui" line="3477"/>
         <source>Negotiations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="822"/>
         <location filename="../ui/DevilView.ui" line="3491"/>
         <source>Greet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="832"/>
         <location filename="../ui/DevilView.ui" line="3498"/>
         <source>Provoke</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="852"/>
         <location filename="../ui/DevilView.ui" line="3505"/>
         <source>Taunt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="891"/>
         <location filename="../ui/DevilView.ui" line="3533"/>
         <source>Seirei Modifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1019"/>
-        <location filename="../ui/DevilView.ui" line="1028"/>
-        <location filename="../ui/DevilView.ui" line="3636"/>
         <location filename="../ui/DevilView.ui" line="3645"/>
         <source>Inheritance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1133"/>
-        <location filename="../ui/DevilView.ui" line="3660"/>
-        <source>息</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1143"/>
-        <location filename="../ui/DevilView.ui" line="3681"/>
-        <source>羽</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1153"/>
-        <location filename="../ui/DevilView.ui" line="3702"/>
-        <source>突</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1163"/>
-        <location filename="../ui/DevilView.ui" line="3667"/>
-        <source>牙</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1173"/>
-        <location filename="../ui/DevilView.ui" line="3688"/>
-        <source>爪</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1183"/>
-        <location filename="../ui/DevilView.ui" line="3709"/>
-        <source>針</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1193"/>
-        <location filename="../ui/DevilView.ui" line="3674"/>
-        <source>武</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1203"/>
-        <location filename="../ui/DevilView.ui" line="3695"/>
-        <source>乙</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1213"/>
-        <location filename="../ui/DevilView.ui" line="3716"/>
-        <source>目</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1239"/>
-        <location filename="../ui/DevilView.ui" line="1245"/>
-        <location filename="../ui/DevilView.ui" line="3739"/>
         <location filename="../ui/DevilView.ui" line="3758"/>
         <source>Skills</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1273"/>
-        <location filename="../ui/DevilView.ui" line="1332"/>
         <location filename="../ui/DevilView.ui" line="1391"/>
         <source>Sample</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1298"/>
-        <location filename="../ui/DevilView.ui" line="1304"/>
-        <location filename="../ui/DevilView.ui" line="3878"/>
         <location filename="../ui/DevilView.ui" line="3894"/>
         <source>Traits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1357"/>
-        <location filename="../ui/DevilView.ui" line="1363"/>
-        <location filename="../ui/DevilView.ui" line="4016"/>
         <location filename="../ui/DevilView.ui" line="4032"/>
         <source>Locations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1416"/>
-        <location filename="../ui/DevilView.ui" line="1422"/>
-        <location filename="../ui/DevilView.ui" line="4152"/>
         <location filename="../ui/DevilView.ui" line="4158"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1457"/>
         <location filename="../ui/DevilView.ui" line="4177"/>
         <source>Weaknesses &amp; Resistances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1483"/>
         <location filename="../ui/DevilView.ui" line="4203"/>
         <source>Page 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1505"/>
-        <location filename="../ui/DevilView.ui" line="2165"/>
-        <location filename="../ui/DevilView.ui" line="4212"/>
         <location filename="../ui/DevilView.ui" line="4520"/>
         <source>W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1515"/>
-        <location filename="../ui/DevilView.ui" line="2175"/>
-        <location filename="../ui/DevilView.ui" line="4225"/>
         <location filename="../ui/DevilView.ui" line="4533"/>
         <source>P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1525"/>
-        <location filename="../ui/DevilView.ui" line="2185"/>
-        <location filename="../ui/DevilView.ui" line="4238"/>
         <location filename="../ui/DevilView.ui" line="4546"/>
         <source>N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1535"/>
-        <location filename="../ui/DevilView.ui" line="2195"/>
-        <location filename="../ui/DevilView.ui" line="4251"/>
         <location filename="../ui/DevilView.ui" line="4559"/>
         <source>R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1545"/>
-        <location filename="../ui/DevilView.ui" line="2205"/>
-        <location filename="../ui/DevilView.ui" line="4264"/>
         <location filename="../ui/DevilView.ui" line="4572"/>
         <source>A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="1555"/>
-        <location filename="../ui/DevilView.ui" line="4277"/>
-        <source>全物</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1565"/>
-        <location filename="../ui/DevilView.ui" line="4299"/>
-        <source>全魔</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1575"/>
-        <location filename="../ui/DevilView.ui" line="4321"/>
-        <source>斬撃</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1585"/>
-        <location filename="../ui/DevilView.ui" line="4343"/>
-        <source>突撃</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1595"/>
-        <location filename="../ui/DevilView.ui" line="4365"/>
-        <source>打撃</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1605"/>
-        <location filename="../ui/DevilView.ui" line="4387"/>
-        <source>射撃</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1615"/>
-        <location filename="../ui/DevilView.ui" line="4409"/>
-        <source>散弾</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1625"/>
-        <location filename="../ui/DevilView.ui" line="4431"/>
-        <source>貫通</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1635"/>
-        <location filename="../ui/DevilView.ui" line="4453"/>
-        <source>火炎</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1645"/>
-        <location filename="../ui/DevilView.ui" line="4475"/>
-        <source>氷結</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="1655"/>
-        <location filename="../ui/DevilView.ui" line="1665"/>
-        <location filename="../ui/DevilView.ui" line="1675"/>
-        <location filename="../ui/DevilView.ui" line="1685"/>
-        <location filename="../ui/DevilView.ui" line="1695"/>
-        <location filename="../ui/DevilView.ui" line="1705"/>
-        <location filename="../ui/DevilView.ui" line="1715"/>
-        <location filename="../ui/DevilView.ui" line="1725"/>
-        <location filename="../ui/DevilView.ui" line="1735"/>
-        <location filename="../ui/DevilView.ui" line="1745"/>
-        <location filename="../ui/DevilView.ui" line="1755"/>
-        <location filename="../ui/DevilView.ui" line="1765"/>
-        <location filename="../ui/DevilView.ui" line="1775"/>
-        <location filename="../ui/DevilView.ui" line="1785"/>
-        <location filename="../ui/DevilView.ui" line="1795"/>
-        <location filename="../ui/DevilView.ui" line="1805"/>
-        <location filename="../ui/DevilView.ui" line="1815"/>
-        <location filename="../ui/DevilView.ui" line="1825"/>
-        <location filename="../ui/DevilView.ui" line="1835"/>
-        <location filename="../ui/DevilView.ui" line="1845"/>
-        <location filename="../ui/DevilView.ui" line="1855"/>
-        <location filename="../ui/DevilView.ui" line="1865"/>
-        <location filename="../ui/DevilView.ui" line="1875"/>
-        <location filename="../ui/DevilView.ui" line="1885"/>
-        <location filename="../ui/DevilView.ui" line="1895"/>
-        <location filename="../ui/DevilView.ui" line="1905"/>
-        <location filename="../ui/DevilView.ui" line="1915"/>
-        <location filename="../ui/DevilView.ui" line="1925"/>
-        <location filename="../ui/DevilView.ui" line="1935"/>
-        <location filename="../ui/DevilView.ui" line="1945"/>
-        <location filename="../ui/DevilView.ui" line="1955"/>
-        <location filename="../ui/DevilView.ui" line="1965"/>
-        <location filename="../ui/DevilView.ui" line="1975"/>
-        <location filename="../ui/DevilView.ui" line="1985"/>
-        <location filename="../ui/DevilView.ui" line="1995"/>
-        <location filename="../ui/DevilView.ui" line="2005"/>
-        <location filename="../ui/DevilView.ui" line="2015"/>
-        <location filename="../ui/DevilView.ui" line="2025"/>
-        <location filename="../ui/DevilView.ui" line="2035"/>
-        <location filename="../ui/DevilView.ui" line="2045"/>
-        <location filename="../ui/DevilView.ui" line="2055"/>
-        <location filename="../ui/DevilView.ui" line="2065"/>
-        <location filename="../ui/DevilView.ui" line="2075"/>
-        <location filename="../ui/DevilView.ui" line="2085"/>
-        <location filename="../ui/DevilView.ui" line="2095"/>
-        <location filename="../ui/DevilView.ui" line="2105"/>
-        <location filename="../ui/DevilView.ui" line="2115"/>
-        <location filename="../ui/DevilView.ui" line="2125"/>
-        <location filename="../ui/DevilView.ui" line="2135"/>
-        <location filename="../ui/DevilView.ui" line="2145"/>
-        <location filename="../ui/DevilView.ui" line="2328"/>
-        <location filename="../ui/DevilView.ui" line="2338"/>
-        <location filename="../ui/DevilView.ui" line="2348"/>
-        <location filename="../ui/DevilView.ui" line="2358"/>
-        <location filename="../ui/DevilView.ui" line="2368"/>
-        <location filename="../ui/DevilView.ui" line="2378"/>
-        <location filename="../ui/DevilView.ui" line="2388"/>
-        <location filename="../ui/DevilView.ui" line="2398"/>
-        <location filename="../ui/DevilView.ui" line="2408"/>
-        <location filename="../ui/DevilView.ui" line="2418"/>
-        <location filename="../ui/DevilView.ui" line="2428"/>
-        <location filename="../ui/DevilView.ui" line="2438"/>
-        <location filename="../ui/DevilView.ui" line="2448"/>
-        <location filename="../ui/DevilView.ui" line="2458"/>
-        <location filename="../ui/DevilView.ui" line="2468"/>
-        <location filename="../ui/DevilView.ui" line="2478"/>
-        <location filename="../ui/DevilView.ui" line="2488"/>
-        <location filename="../ui/DevilView.ui" line="2498"/>
-        <location filename="../ui/DevilView.ui" line="2508"/>
-        <location filename="../ui/DevilView.ui" line="2518"/>
-        <location filename="../ui/DevilView.ui" line="2528"/>
-        <location filename="../ui/DevilView.ui" line="2538"/>
-        <location filename="../ui/DevilView.ui" line="2548"/>
-        <location filename="../ui/DevilView.ui" line="2558"/>
-        <location filename="../ui/DevilView.ui" line="2568"/>
-        <location filename="../ui/DevilView.ui" line="2578"/>
-        <location filename="../ui/DevilView.ui" line="2588"/>
-        <location filename="../ui/DevilView.ui" line="2598"/>
-        <location filename="../ui/DevilView.ui" line="2608"/>
-        <location filename="../ui/DevilView.ui" line="2618"/>
-        <location filename="../ui/DevilView.ui" line="2628"/>
-        <location filename="../ui/DevilView.ui" line="2638"/>
-        <location filename="../ui/DevilView.ui" line="2648"/>
-        <location filename="../ui/DevilView.ui" line="2658"/>
-        <location filename="../ui/DevilView.ui" line="2668"/>
-        <location filename="../ui/DevilView.ui" line="2678"/>
-        <location filename="../ui/DevilView.ui" line="2688"/>
-        <location filename="../ui/DevilView.ui" line="2698"/>
-        <location filename="../ui/DevilView.ui" line="2708"/>
-        <location filename="../ui/DevilView.ui" line="2718"/>
-        <location filename="../ui/DevilView.ui" line="2728"/>
-        <location filename="../ui/DevilView.ui" line="2738"/>
-        <location filename="../ui/DevilView.ui" line="2748"/>
-        <location filename="../ui/DevilView.ui" line="2758"/>
-        <location filename="../ui/DevilView.ui" line="2768"/>
-        <location filename="../ui/DevilView.ui" line="2778"/>
-        <location filename="../ui/DevilView.ui" line="2788"/>
-        <location filename="../ui/DevilView.ui" line="2798"/>
-        <location filename="../ui/DevilView.ui" line="2808"/>
         <location filename="../ui/DevilView.ui" line="2818"/>
         <source>x</source>
         <translation>●</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="2156"/>
         <location filename="../ui/DevilView.ui" line="4511"/>
         <source>Page 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2215"/>
-        <location filename="../ui/DevilView.ui" line="4585"/>
-        <source>衝撃</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2225"/>
-        <location filename="../ui/DevilView.ui" line="4607"/>
-        <source>電撃</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2235"/>
-        <location filename="../ui/DevilView.ui" line="4629"/>
-        <source>破魔</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2245"/>
-        <location filename="../ui/DevilView.ui" line="4651"/>
-        <source>呪殺</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2255"/>
-        <location filename="../ui/DevilView.ui" line="4673"/>
-        <source>魔力</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2265"/>
-        <location filename="../ui/DevilView.ui" line="4695"/>
-        <source>神経</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2275"/>
-        <location filename="../ui/DevilView.ui" line="4717"/>
-        <source>精神</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2285"/>
-        <location filename="../ui/DevilView.ui" line="4739"/>
-        <source>自爆</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2295"/>
-        <location filename="../ui/DevilView.ui" line="4761"/>
-        <source>万能</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/DevilView.ui" line="2305"/>
-        <location filename="../ui/DevilView.ui" line="4783"/>
-        <source>特殊</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -897,22 +452,16 @@
         <translation>○</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="3773"/>
-        <location filename="../ui/DevilView.ui" line="3909"/>
         <location filename="../ui/DevilView.ui" line="4047"/>
         <source>Add</source>
         <translation>アド</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="3793"/>
-        <location filename="../ui/DevilView.ui" line="3929"/>
         <location filename="../ui/DevilView.ui" line="4067"/>
         <source>Edit</source>
         <translation>編集</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="3813"/>
-        <location filename="../ui/DevilView.ui" line="3949"/>
         <location filename="../ui/DevilView.ui" line="4087"/>
         <source>Remove</source>
         <translation>外す</translation>
@@ -923,16 +472,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="3844"/>
-        <location filename="../ui/DevilView.ui" line="3982"/>
         <location filename="../ui/DevilView.ui" line="4118"/>
         <source>&amp;Add</source>
         <translation>アド (&amp;A)</translation>
     </message>
     <message>
-        <location filename="../ui/DevilView.ui" line="3864"/>
-        <location filename="../ui/DevilView.ui" line="4002"/>
-        <location filename="../ui/DevilView.ui" line="4138"/>
         <location filename="../ui/DevilView.ui" line="4873"/>
         <source>&amp;Cancel</source>
         <translation>キャンセル (&amp;X)</translation>
@@ -962,6 +506,191 @@
         <source>&amp;Update</source>
         <translation>アップデート (&amp;U)</translation>
     </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3033"/>
+        <source>絆</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3040"/>
+        <source>心</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3047"/>
+        <source>信</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3054"/>
+        <source>仲</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3061"/>
+        <source>契</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3068"/>
+        <source>使</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3075"/>
+        <source>隙</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3082"/>
+        <source>寝</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3660"/>
+        <source>息</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3681"/>
+        <source>羽</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3702"/>
+        <source>突</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3667"/>
+        <source>牙</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3688"/>
+        <source>爪</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3709"/>
+        <source>針</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3674"/>
+        <source>武</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3695"/>
+        <source>乙</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="3716"/>
+        <source>目</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4277"/>
+        <source>全物</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4299"/>
+        <source>全魔</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4321"/>
+        <source>斬撃</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4343"/>
+        <source>突撃</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4365"/>
+        <source>打撃</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4387"/>
+        <source>射撃</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4409"/>
+        <source>散弾</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4431"/>
+        <source>貫通</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4453"/>
+        <source>火炎</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4475"/>
+        <source>氷結</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4585"/>
+        <source>衝撃</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4607"/>
+        <source>電撃</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4629"/>
+        <source>破魔</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4651"/>
+        <source>呪殺</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4673"/>
+        <source>魔力</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4695"/>
+        <source>神経</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4717"/>
+        <source>精神</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4739"/>
+        <source>自爆</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4761"/>
+        <source>万能</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/DevilView.ui" line="4783"/>
+        <source>特殊</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DevilWindow</name>
@@ -979,18 +708,17 @@
 <context>
     <name>HttpTransfer</name>
     <message>
-        <location filename="../src/HttpTransfer.cpp" line="103"/>
         <location filename="../src/HttpTransfer.cpp" line="132"/>
         <source>HTTP Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/HttpTransfer.cpp" line="103"/>
+        <location filename="../src/HttpTransfer.cpp" line="104"/>
         <source>requestFinished() called without file handle.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/HttpTransfer.cpp" line="132"/>
+        <location filename="../src/HttpTransfer.cpp" line="133"/>
         <source>readyRead() called without file handle.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1005,18 +733,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/HttpTransfer.cpp" line="176"/>
         <location filename="../src/HttpTransfer.cpp" line="190"/>
         <source>I/O Error</source>
         <translation>I/Oエラー</translation>
     </message>
     <message>
-        <location filename="../src/HttpTransfer.cpp" line="176"/>
+        <location filename="../src/HttpTransfer.cpp" line="177"/>
         <source>Failed to create directory &apos;%1&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/HttpTransfer.cpp" line="190"/>
+        <location filename="../src/HttpTransfer.cpp" line="191"/>
         <source>Failed to open file &apos;%1&apos; for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1042,89 +769,87 @@
 <context>
     <name>ImportExport</name>
     <message>
-        <location filename="../src/ImportExport.cpp" line="124"/>
-        <location filename="../src/ImportExport.cpp" line="129"/>
+        <location filename="../src/ImportExport.cpp" line="144"/>
         <source>Select an import file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="125"/>
-        <location filename="../src/ImportExport.cpp" line="130"/>
+        <location filename="../src/ImportExport.cpp" line="145"/>
         <source>Database Export Files (*.dbx)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="145"/>
+        <location filename="../src/ImportExport.cpp" line="160"/>
         <source>Import Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="145"/>
+        <location filename="../src/ImportExport.cpp" line="161"/>
         <source>Failed to open the import file for reading.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="172"/>
+        <location filename="../src/ImportExport.cpp" line="187"/>
         <source>File Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="172"/>
+        <location filename="../src/ImportExport.cpp" line="187"/>
         <source>The file already exists. Overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="201"/>
+        <location filename="../src/ImportExport.cpp" line="224"/>
         <source>Export Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="201"/>
+        <location filename="../src/ImportExport.cpp" line="225"/>
         <source>Failed to open the export file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="212"/>
+        <location filename="../src/ImportExport.cpp" line="235"/>
         <source>Export Successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="212"/>
+        <location filename="../src/ImportExport.cpp" line="236"/>
         <source>The export has completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="219"/>
+        <location filename="../src/ImportExport.cpp" line="242"/>
         <source>Import Successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ImportExport.cpp" line="219"/>
+        <location filename="../src/ImportExport.cpp" line="243"/>
         <source>The import has completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ImportExport.ui" line="18"/>
+        <location filename="../ui/ImportExport.ui" line="22"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ImportExport.ui" line="28"/>
+        <location filename="../ui/ImportExport.ui" line="29"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ImportExport.ui" line="52"/>
+        <location filename="../ui/ImportExport.ui" line="53"/>
         <source>Path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ImportExport.ui" line="98"/>
+        <location filename="../ui/ImportExport.ui" line="102"/>
         <source>&amp;Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ImportExport.ui" line="108"/>
+        <location filename="../ui/ImportExport.ui" line="112"/>
         <source>&amp;Import</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1196,19 +921,17 @@
         <translation>真・女神転生IMAGINE DB</translation>
     </message>
     <message>
-        <location filename="../src/Login.cpp" line="65"/>
-        <location filename="../src/Login.cpp" line="76"/>
         <location filename="../src/Login.cpp" line="106"/>
         <source>Login Error</source>
         <translation>ログイン・エラー</translation>
     </message>
     <message>
-        <location filename="../src/Login.cpp" line="65"/>
+        <location filename="../src/Login.cpp" line="66"/>
         <source>You must enter a valid email address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Login.cpp" line="76"/>
+        <location filename="../src/Login.cpp" line="78"/>
         <source>Invalid password. Passwords can only contain a-z, A-Z, and 0-9 and must be at least 6 characters long</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1241,7 +964,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MashouList.cpp" line="89"/>
+        <location filename="../src/MashouList.cpp" line="91"/>
         <source>You are attemping to view another mashou while editing a mashou. If you continue you will lose any changes you made to the mashou. Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1251,7 +974,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MashouList.cpp" line="101"/>
+        <location filename="../src/MashouList.cpp" line="102"/>
         <source>You are about to delete the mashou &apos;%1&apos;. Are you sure you want to delete this?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1259,8 +982,6 @@
 <context>
     <name>MashouView</name>
     <message>
-        <location filename="../src/MashouView.cpp" line="69"/>
-        <location filename="../ui/MashouView.ui" line="234"/>
         <location filename="../ui/MashouView.ui" line="619"/>
         <source>Equip Type</source>
         <translation>装備部位</translation>
@@ -1271,7 +992,7 @@
         <translation>アップデート・エラー</translation>
     </message>
     <message>
-        <location filename="../src/MashouView.cpp" line="97"/>
+        <location filename="../src/MashouView.cpp" line="98"/>
         <source>You must have both a valid Japanese and English mashou name.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1281,52 +1002,41 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MashouView.cpp" line="118"/>
+        <location filename="../src/MashouView.cpp" line="120"/>
         <source>You are attemping to add another mashou while editing a mashou. If you continue you will lose any changes you made to the mashou. Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="56"/>
         <location filename="../ui/MashouView.ui" line="425"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="76"/>
-        <location filename="../ui/MashouView.ui" line="159"/>
-        <location filename="../ui/MashouView.ui" line="461"/>
         <location filename="../ui/MashouView.ui" line="562"/>
         <source>Japanese:</source>
         <translation>日本語:</translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="96"/>
-        <location filename="../ui/MashouView.ui" line="179"/>
-        <location filename="../ui/MashouView.ui" line="445"/>
         <location filename="../ui/MashouView.ui" line="546"/>
         <source>English:</source>
         <translation>英語:</translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="141"/>
         <location filename="../ui/MashouView.ui" line="528"/>
         <source>Name Modifier</source>
         <translation>冠詞</translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="210"/>
         <location filename="../ui/MashouView.ui" line="586"/>
         <source>Difficulty</source>
         <translation>難易度</translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="251"/>
         <location filename="../ui/MashouView.ui" line="688"/>
         <source>Fusion 1</source>
         <translation>魔装術</translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="261"/>
         <location filename="../ui/MashouView.ui" line="698"/>
         <source>Fusion 2</source>
         <translation>魂合術</translation>
@@ -1342,34 +1052,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="295"/>
         <location filename="../ui/MashouView.ui" line="887"/>
         <source>Fusion 1 Description (Japanese)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="316"/>
         <location filename="../ui/MashouView.ui" line="923"/>
         <source>Fusion 2 Description (Japanese)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="337"/>
         <location filename="../ui/MashouView.ui" line="1005"/>
         <source>Fusion 1 Description (English)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="358"/>
         <location filename="../ui/MashouView.ui" line="1041"/>
         <source>Fusion 2 Description (English)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/MashouView.ui" line="745"/>
         <location filename="../ui/MashouView.ui" line="810"/>
-        <source>〜</source>
-        <translation>〜</translation>
+        <source>?</source>
+        <translation type="obsolete">〜</translation>
     </message>
     <message>
         <location filename="../ui/MashouView.ui" line="1066"/>
@@ -1390,6 +1095,11 @@
         <location filename="../ui/MashouView.ui" line="1100"/>
         <source>&amp;Cancel</source>
         <translation>キャンセル (&amp;X)</translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/MashouView.ui" line="810"/>
+        <source>〜</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1423,7 +1133,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Options.cpp" line="91"/>
+        <location filename="../src/Options.cpp" line="92"/>
         <source>Some of these options may not take effect until the application is restarted. Do you wish to close the application now?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1439,8 +1149,8 @@
     </message>
     <message>
         <location filename="../ui/Options.ui" line="64"/>
-        <source>日本語</source>
-        <translation>日本語</translation>
+        <source>???</source>
+        <translation type="obsolete">日本語</translation>
     </message>
     <message>
         <location filename="../ui/Options.ui" line="69"/>
@@ -1448,14 +1158,18 @@
         <translation>英語</translation>
     </message>
     <message>
-        <location filename="../src/Options.cpp" line="104"/>
         <location filename="../ui/Options.ui" line="84"/>
         <source>Clear Login Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Options.cpp" line="105"/>
+        <location filename="../src/Options.cpp" line="106"/>
         <source>This will clear your login information and quit the application. Are you sure you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location filename="../ui/Options.ui" line="64"/>
+        <source>日本語</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1522,8 +1236,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/PaletteEditor.ui" line="273"/>
-        <location filename="../ui/PaletteEditor.ui" line="599"/>
         <location filename="../ui/PaletteEditor.ui" line="648"/>
         <source>Item 2</source>
         <translation type="unfinished"></translation>
@@ -1559,8 +1271,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/PaletteEditor.ui" line="302"/>
-        <location filename="../ui/PaletteEditor.ui" line="604"/>
         <location filename="../ui/PaletteEditor.ui" line="653"/>
         <source>Item 3</source>
         <translation type="unfinished"></translation>
@@ -1699,22 +1409,17 @@
         <translation>真・女神転生IMAGINE DB</translation>
     </message>
     <message>
-        <location filename="../src/Register.cpp" line="125"/>
-        <location filename="../src/Register.cpp" line="130"/>
-        <location filename="../src/Register.cpp" line="150"/>
-        <location filename="../src/Register.cpp" line="160"/>
-        <location filename="../src/Register.cpp" line="168"/>
         <location filename="../src/Register.cpp" line="179"/>
         <source>Registration Error</source>
         <translation>登録エラー</translation>
     </message>
     <message>
-        <location filename="../src/Register.cpp" line="125"/>
+        <location filename="../src/Register.cpp" line="126"/>
         <source>Registration failed. Please check you entered everything correctly and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Register.cpp" line="130"/>
+        <location filename="../src/Register.cpp" line="132"/>
         <source>Registration failed. Please check you entered everything correctly and try again.
 
 The error from the server was: %1</source>
@@ -1726,17 +1431,17 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Register.cpp" line="160"/>
+        <location filename="../src/Register.cpp" line="161"/>
         <source>You must enter a valid email address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Register.cpp" line="168"/>
+        <location filename="../src/Register.cpp" line="169"/>
         <source>Passwords do notmatch.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Register.cpp" line="179"/>
+        <location filename="../src/Register.cpp" line="181"/>
         <source>Invalid password. Passwords can only contain a-z, A-Z, and 0-9 and must be at least 6 characters long</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1842,7 +1547,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RelationList.cpp" line="64"/>
+        <location filename="../src/RelationList.cpp" line="66"/>
         <source>You are about to delete the relation &apos;%1&apos;. Deleting a relation could cause problems, so make sure the relation is not in use. Are you sure you want to delete this?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1881,7 +1586,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SkillList.cpp" line="98"/>
+        <location filename="../src/SkillList.cpp" line="100"/>
         <source>You are attemping to view another skill while editing a skill. If you continue you will lose any changes you made to the skill. Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1891,7 +1596,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SkillList.cpp" line="110"/>
+        <location filename="../src/SkillList.cpp" line="111"/>
         <source>You are about to delete the skill &apos;%1&apos;. Are you sure you want to delete this?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1899,205 +1604,189 @@ The error from the server was: %1</source>
 <context>
     <name>SkillView</name>
     <message>
-        <location filename="../src/SkillView.cpp" line="76"/>
+        <location filename="../src/SkillView.cpp" line="78"/>
         <source>Action Type</source>
         <translation>行動タイプ</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="78"/>
-        <location filename="../ui/SkillView.ui" line="236"/>
-        <location filename="../ui/SkillView.ui" line="706"/>
+        <location filename="../ui/SkillView.ui" line="700"/>
         <source>Category</source>
         <translation>分類</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="80"/>
-        <location filename="../ui/SkillView.ui" line="246"/>
-        <location filename="../ui/SkillView.ui" line="716"/>
+        <location filename="../ui/SkillView.ui" line="819"/>
         <source>Affinity</source>
         <translation>相性</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="82"/>
-        <location filename="../ui/SkillView.ui" line="204"/>
-        <location filename="../ui/SkillView.ui" line="676"/>
+        <location filename="../ui/SkillView.ui" line="670"/>
         <source>Expert</source>
         <translation>エキスパート</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="85"/>
+        <location filename="../src/SkillView.cpp" line="90"/>
         <source>HP%1</source>
         <translation>HP%1</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="85"/>
+        <location filename="../src/SkillView.cpp" line="90"/>
         <source>MP%1</source>
         <translation>MP%1</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="85"/>
+        <location filename="../src/SkillView.cpp" line="90"/>
         <source>MAG%1</source>
         <translation>MAG%1</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="85"/>
+        <location filename="../src/SkillView.cpp" line="90"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="104"/>
-        <location filename="../src/SkillView.cpp" line="114"/>
-        <location filename="../src/SkillView.cpp" line="124"/>
-        <location filename="../src/SkillView.cpp" line="134"/>
-        <location filename="../src/SkillView.cpp" line="144"/>
-        <location filename="../src/SkillView.cpp" line="153"/>
+        <location filename="../src/SkillView.cpp" line="158"/>
         <source>Update Error</source>
         <translation>アップデート・エラー</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="104"/>
+        <location filename="../src/SkillView.cpp" line="110"/>
         <source>You must both a valid Japanese and English skill name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="114"/>
+        <location filename="../src/SkillView.cpp" line="120"/>
         <source>You must set a valid expert.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="124"/>
+        <location filename="../src/SkillView.cpp" line="130"/>
         <source>You must set a valid affinity.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="134"/>
+        <location filename="../src/SkillView.cpp" line="140"/>
         <source>You must set a valid category.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="144"/>
+        <location filename="../src/SkillView.cpp" line="150"/>
         <source>You must set a valid type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="153"/>
+        <location filename="../src/SkillView.cpp" line="159"/>
         <source>You must set a valid icon.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="59"/>
-        <location filename="../ui/SkillView.ui" line="368"/>
+        <location filename="../ui/SkillView.ui" line="362"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="79"/>
-        <location filename="../ui/SkillView.ui" line="388"/>
+        <location filename="../ui/SkillView.ui" line="382"/>
         <source>Japanese:</source>
         <translation>日本語:</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="99"/>
-        <location filename="../ui/SkillView.ui" line="398"/>
+        <location filename="../ui/SkillView.ui" line="392"/>
         <source>English:</source>
         <translation>英語:</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="129"/>
-        <location filename="../ui/SkillView.ui" line="424"/>
+        <location filename="../ui/SkillView.ui" line="418"/>
         <source>Class</source>
         <translation>取得クラス</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="139"/>
-        <location filename="../ui/SkillView.ui" line="434"/>
+        <location filename="../ui/SkillView.ui" line="428"/>
         <source>Rank</source>
         <translation>取得ランク</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="163"/>
-        <location filename="../ui/SkillView.ui" line="444"/>
+        <location filename="../ui/SkillView.ui" line="438"/>
         <source>PC Only</source>
         <translation>PCオンリー</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="180"/>
-        <location filename="../ui/SkillView.ui" line="454"/>
+        <location filename="../ui/SkillView.ui" line="448"/>
         <source>Cost</source>
         <translation>消費</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="226"/>
-        <location filename="../ui/SkillView.ui" line="696"/>
+        <location filename="../ui/SkillView.ui" line="690"/>
         <source>Type</source>
         <translation>タイプ</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="281"/>
-        <location filename="../ui/SkillView.ui" line="848"/>
+        <location filename="../ui/SkillView.ui" line="869"/>
         <source>Description (Japanese)</source>
         <translation>解説 (日本語)</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="302"/>
-        <location filename="../ui/SkillView.ui" line="884"/>
+        <location filename="../ui/SkillView.ui" line="905"/>
         <source>Description (English)</source>
         <translation>解説 (英語)</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="473"/>
+        <location filename="../ui/SkillView.ui" line="467"/>
         <source>HP</source>
         <translation>HP</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="478"/>
+        <location filename="../ui/SkillView.ui" line="472"/>
         <source>MP</source>
         <translation>MP</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="483"/>
+        <location filename="../ui/SkillView.ui" line="477"/>
         <source>MAG</source>
         <translation>MAG</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="905"/>
+        <location filename="../ui/SkillView.ui" line="926"/>
         <source>&amp;Refresh</source>
         <translation>リフレッシュ (&amp;R)</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="925"/>
+        <location filename="../ui/SkillView.ui" line="946"/>
         <source>&amp;Edit</source>
         <translation>編集 (&amp;E)</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="932"/>
+        <location filename="../ui/SkillView.ui" line="953"/>
         <source>&amp;Update</source>
         <translation>アップデート (&amp;U)</translation>
     </message>
     <message>
-        <location filename="../ui/SkillView.ui" line="939"/>
+        <location filename="../ui/SkillView.ui" line="960"/>
         <source>&amp;Cancel</source>
         <translation>キャンセル (&amp;X)</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="72"/>
+        <location filename="../src/SkillView.cpp" line="74"/>
         <source>YES</source>
         <translation>はい</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="72"/>
+        <location filename="../src/SkillView.cpp" line="74"/>
         <source>NO</source>
         <translation>いいえ</translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="169"/>
+        <location filename="../src/SkillView.cpp" line="174"/>
         <source>Add Skill</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SkillView.cpp" line="174"/>
+        <location filename="../src/SkillView.cpp" line="181"/>
         <source>You are attemping to add another skill while editing a skill. If you continue you will lose any changes you made to the skill. Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/SkillView.ui" line="263"/>
+        <source>Related Stat</source>
+        <translation>依存</translation>
     </message>
 </context>
 <context>
@@ -2121,43 +1810,36 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Taskbar.cpp" line="52"/>
         <location filename="../ui/Taskbar.ui" line="27"/>
         <source>&amp;Devils</source>
         <translation>悪魔 (&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/Taskbar.cpp" line="58"/>
         <location filename="../ui/Taskbar.ui" line="34"/>
         <source>&amp;Skills</source>
         <translation>スキル (&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/Taskbar.cpp" line="64"/>
         <location filename="../ui/Taskbar.ui" line="41"/>
         <source>&amp;Mashou</source>
         <translation>魔晶 (&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/Taskbar.cpp" line="74"/>
         <location filename="../ui/Taskbar.ui" line="68"/>
         <source>&amp;Users</source>
         <translation>ユーザ (&amp;U)</translation>
     </message>
     <message>
-        <location filename="../src/Taskbar.cpp" line="82"/>
         <location filename="../ui/Taskbar.ui" line="75"/>
         <source>&amp;Import / Export</source>
         <translation>インポート・エクスポート (&amp;I)</translation>
     </message>
     <message>
-        <location filename="../src/Taskbar.cpp" line="93"/>
         <location filename="../ui/Taskbar.ui" line="102"/>
         <source>&amp;Options</source>
         <translation>オプション (&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/Taskbar.cpp" line="99"/>
         <location filename="../ui/Taskbar.ui" line="109"/>
         <source>&amp;Log</source>
         <translation>ログ (&amp;L)</translation>
@@ -2178,7 +1860,6 @@ The error from the server was: %1</source>
         <translation>真・女神転生IMAGINE DB</translation>
     </message>
     <message>
-        <location filename="../src/Taskbar.cpp" line="229"/>
         <location filename="../ui/Taskbar.ui" line="62"/>
         <source>&amp;Administration</source>
         <translation>アドミニストレーション (&amp;A)</translation>
@@ -2212,18 +1893,17 @@ The error from the server was: %1</source>
         <translation>真・女神転生IMAGINE DB</translation>
     </message>
     <message>
-        <location filename="../src/UserEdit.cpp" line="109"/>
         <location filename="../src/UserEdit.cpp" line="120"/>
         <source>User Edit Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UserEdit.cpp" line="109"/>
+        <location filename="../src/UserEdit.cpp" line="110"/>
         <source>You must enter a valid email address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/UserEdit.cpp" line="120"/>
+        <location filename="../src/UserEdit.cpp" line="122"/>
         <source>Invalid password. Passwords can only contain a-z, A-Z, and 0-9 and must be at least 6 characters long</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2294,7 +1974,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/VersionCheck.cpp" line="86"/>
+        <location filename="../src/VersionCheck.cpp" line="88"/>
         <source>A new version of the client is avaliable for downloading. It is recommended you exit the client now and run the updater.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2304,7 +1984,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/VersionCheck.cpp" line="94"/>
+        <location filename="../src/VersionCheck.cpp" line="96"/>
         <source>A new version of updater is avaliable. It is recommended you this update. Would you like to download it now?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2314,7 +1994,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/VersionCheck.cpp" line="147"/>
+        <location filename="../src/VersionCheck.cpp" line="148"/>
         <source>The updater failed to download from the update server. Please make sure your settings are correct and try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2324,7 +2004,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/VersionCheck.cpp" line="160"/>
+        <location filename="../src/VersionCheck.cpp" line="161"/>
         <source>The updater checksum does not match the one provided by the server.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2334,7 +2014,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/VersionCheck.cpp" line="166"/>
+        <location filename="../src/VersionCheck.cpp" line="168"/>
         <source>The new updater has been downloaded. It is recommended you quit the client now and run the updater. Would you like to do this now?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2355,25 +2035,18 @@ The error from the server was: %1</source>
 <context>
     <name>ajaxTransfer</name>
     <message>
-        <location filename="../src/ajaxTransfer.cpp" line="47"/>
-        <location filename="../src/ajaxTransfer.cpp" line="117"/>
-        <location filename="../src/ajaxTransfer.cpp" line="133"/>
-        <location filename="../src/ajaxTransfer.cpp" line="161"/>
-        <location filename="../src/ajaxTransfer.cpp" line="174"/>
         <location filename="../src/ajaxTransfer.cpp" line="201"/>
         <source>AJAX Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ajaxTransfer.cpp" line="47"/>
+        <location filename="../src/ajaxTransfer.cpp" line="48"/>
         <source>The AJAX backend has encountered the following SSL errors:
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ajaxTransfer.cpp" line="117"/>
-        <location filename="../src/ajaxTransfer.cpp" line="133"/>
-        <location filename="../src/ajaxTransfer.cpp" line="201"/>
+        <location filename="../src/ajaxTransfer.cpp" line="202"/>
         <source>The AJAX backend has encountered one or more errors. Would you like to view the AJAX Log?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2393,7 +2066,7 @@ The error from the server was: %1</source>
     <message>
         <location filename="../src/registration.cpp" line="95"/>
         <source>Registration Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">登録エラー</translation>
     </message>
     <message>
         <location filename="../src/registration.cpp" line="96"/>
@@ -2406,7 +2079,7 @@ The error from the server was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/registration.cpp" line="128"/>
+        <location filename="../src/registration.cpp" line="129"/>
         <source>The AJAX backend has encountered the following SSL errors:
 %1</source>
         <translation type="unfinished"></translation>

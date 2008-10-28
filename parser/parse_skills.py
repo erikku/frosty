@@ -111,8 +111,8 @@ def parse_skill(page, ajax_inst, done = 1, total = 1):
 	row[u"desc_en"] = u"依存: %s" % elements[9]
 	row[u"expert"] = ajax_inst.handle_relation(u"db_expert",
 		u"不詳", u"Unknown")
-	#row[u"expert"] = ajax_inst.handle_relation(u"db_expert",
-	#	elements[9], u"Untitled")
+	row[u"related_stat"] = ajax_inst.handle_relation(u"db_related_stat",
+		elements[9], u"Untitled")
 	row[u"category"] = ajax_inst.handle_relation(u"db_category",
 		elements[0], u"Untitled")
 	row[u"action_type"] = ajax_inst.handle_relation(u"db_action_type",
