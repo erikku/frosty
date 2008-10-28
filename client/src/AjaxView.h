@@ -147,6 +147,8 @@ private:
 		QPushButton *refreshButton;
 		QPushButton *updateButton;
 	}ui;
+
+	bool mCanEdit;
 };
 
 #endif // __AjaxView_h__

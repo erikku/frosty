@@ -55,7 +55,8 @@ Q_DECLARE_METATYPE(IconSelect*)
 Q_DECLARE_METATYPE(RelationList*)
 Q_DECLARE_METATYPE(RadioButtonMap)
 
-AjaxView::AjaxView(QWidget *parent_widget) : QWidget(parent_widget), mID(-1)
+AjaxView::AjaxView(QWidget *parent_widget) : QWidget(parent_widget),
+	mID(-1), mCanEdit(false)
 {
 	ui.stackedWidget = 0;
 
@@ -358,7 +359,9 @@ void AjaxView::edit()
 
 void AjaxView::cancel()
 {
-	ui.editButton->setVisible(true);
+	if(mCanEdit)
+		ui.editButton->setVisible(true);
+
 	ui.refreshButton->setVisible(true);
 	ui.updateButton->setVisible(false);
 	ui.cancelButton->setVisible(false);
@@ -1684,6 +1687,7 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 			Q_ASSERT(ui.editButton != 0);
 
 			ui.editButton->setVisible(true);
+			mCanEdit = true;
 		}
 	}
 
