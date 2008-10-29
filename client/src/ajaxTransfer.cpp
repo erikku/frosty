@@ -183,7 +183,7 @@ void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 	}
 
 	QRegExp jsonResponse("\\((.*)\\)");
-	QString result = QUrl::fromPercentEncoding( resp.value("X-JSON").toAscii() );
+	QString result = resp.value("X-JSON").toAscii();
 
 	if( jsonResponse.exactMatch(result) )
 		result = jsonResponse.cap(1);

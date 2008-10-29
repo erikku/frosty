@@ -264,7 +264,8 @@ QVariant json::parse_object()
 				break;
 			}
 			else
-				throw "Object Parse Error";
+				throw QString("Object Parse Error: expected '\"' but got "
+					"'%1' instead").arg(str[pos]).toLocal8Bit().data();
 		}
 
 		// Skip over the :
@@ -275,7 +276,8 @@ QVariant json::parse_object()
 			else if( str[pos] == QChar(':') ) // Found the :
 				break;
 			else
-				throw "Object Parse Error";
+				throw QString("Object Parse Error: expected ':' but got "
+					"'%1' instead").arg(str[pos]).toLocal8Bit().data();
 		}
 
 		pos++;
@@ -291,7 +293,8 @@ QVariant json::parse_object()
 			else if( str[pos] == QChar('}') ) // We are done reading the object
 				break;
 			else
-				throw "Object Parse Error";
+				throw QString("Object Parse Error: expected ',' or '}' but got "
+					"'%1' instead").arg(str[pos]).toLocal8Bit().data();
 		}
 	}
 
