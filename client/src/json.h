@@ -27,6 +27,35 @@
 class QTreeWidgetItem;
 #endif
 
+class JSONParseError
+{
+public:
+	JSONParseError(const QString& type, const QString& message,
+		const QString& subject, int pos, int len = 1);
+
+	QString type() const;
+	QString message() const;
+	QString subject() const;
+
+	QString toHTML() const;
+	QString toString() const;
+
+	int from() const;
+	int fromLine() const;
+
+	int to() const;
+	int toLine() const;
+
+private:
+	QString mType;
+	QString mMessage;
+	QString mSubject;
+
+	int mPos, mLen;
+	int mFrom, mTo;
+	int mFromLine, mToLine;
+};
+
 class json
 {
 public:
@@ -38,6 +67,8 @@ public:
 #endif
 
 protected:
+	static bool isWhitespace(const QChar& c);
+
 	static QString mapToJSON(const QVariant& obj);
 	static QString listToJSON(const QVariant& obj);
 	static QString stringToJSON(const QVariant& obj);

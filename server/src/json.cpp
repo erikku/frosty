@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  server/src/json.cpp                                                         *
+*  client/src/json.cpp                                                         *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -23,30 +23,200 @@
 #include <QtCore/QStringList>
 
 #ifdef QT_GUI_LIB
+#include <QtGui/QMessageBox>
+#include <QtGui/QApplication>
 #include <QtGui/QTreeWidgetItem>
 #endif
 
 #include <iostream>
 using namespace std;
 
+JSONParseError::JSONParseError(const QString& t, const QString& msg,
+	const QString& sub, int pos, int len)
+{
+	mType = t;
+	mMessage = msg;
+	mSubject = sub;
+
+	mFrom = -1;
+	mTo = -1;
+
+	mFromLine = -1;
+	mToLine = -1;
+
+	// Calculate the line(s) the error is on
+	int max = sub.length();
+	if(len <= 0)
+		len = max;
+
+	mPos = pos;
+	mLen = len;
+
+	if(max <= 0 || pos < 0 || pos > max || (pos + len) > max)
+		throw "Invalid values in JSONParseError";
+
+	int stop_pos = pos + len - 1;
+
+	int line = 0;
+	int line_start = 0;
+	int line_end = 0;
+
+	do
+	{
+		line++;
+
+		line_end = sub.indexOf(QChar('\n'), line_start);
+		if(line_end < 0)
+			line_end = max - 1;
+
+		if(pos >= line_start && pos <= line_end)
+		{
+			mFrom = pos - line_start + 1;
+			mFromLine = line;
+		}
+
+		if(stop_pos >= line_start && stop_pos <= line_end)
+		{
+			mTo = stop_pos - line_start + 1;
+			mToLine = line;
+		}
+
+		line_start = line_end + 1;
+	} while(line_start < max && line_end < max);
+
+	if(mFrom < 0 || mFromLine < 1 || mTo < 0 || mToLine < 1)
+		throw "Error calculating line numbers in JSONParseError";
+}
+
+QString JSONParseError::type() const
+{
+	return mType;
+}
+
+QString JSONParseError::message() const
+{
+	return mMessage;
+}
+
+QString JSONParseError::subject() const
+{
+	return mSubject;
+}
+
+QString JSONParseError::toHTML() const
+{
+	QString str;
+	if( mType.isEmpty() )
+		str = QString("JSON parse error at %1-%2: %3").arg(
+			mFromLine).arg(mFrom).arg(mMessage);
+	else
+		str = QString("JSON parse error at %1-%2: %3: %4").arg(
+			mFromLine).arg(mFrom).arg(mType).arg(mMessage);
+
+	QString pre = mSubject.left(mPos);
+	int line_start = pre.lastIndexOf(QChar('\n')) + 1;
+
+	QString line = mSubject.mid(line_start);
+
+	int len = line.indexOf(QChar('\n'));
+	if(len > 80)
+		len = 80;
+
+	line = line.left(len);
+	line = QString("%1<b>%2</b>%3").arg( line.mid(0, mFrom - 1) ).arg(
+		line[mFrom - 1]).arg( line.mid(mFrom) );
+
+	str = QString("%1\n<br/>%2").arg(str).arg(line);
+
+	return str;
+}
+
+QString JSONParseError::toString() const
+{
+	QString str;
+	if( mType.isEmpty() )
+		str = QString("JSON parse error at %1-%2: %3").arg(
+			mFromLine).arg(mFrom).arg(mMessage);
+	else
+		str = QString("JSON parse error at %1-%2: %3: %4").arg(
+			mFromLine).arg(mFrom).arg(mType).arg(mMessage);
+
+	QString pre = mSubject.left(mPos);
+	int line_start = pre.lastIndexOf(QChar('\n')) + 1;
+
+	QString line = mSubject.mid(line_start);
+
+	int len = line.indexOf(QChar('\n'));
+	if(len > 80)
+		len = 80;
+
+	line = line.left(len);
+
+	QString pointer;
+	pointer.fill(QChar(' '), mFrom - 1);
+	pointer += QChar('^');
+
+	str += QString("\n%1\n%2").arg(line).arg(pointer);
+
+	return str;
+}
+
+int JSONParseError::from() const
+{
+	return mFrom;
+}
+
+int JSONParseError::fromLine() const
+{
+	return mFromLine;
+}
+
+int JSONParseError::to() const
+{
+	return mTo;
+}
+
+int JSONParseError::toLine() const
+{
+	return mToLine;
+}
+
 json::json(const QString& string)
 {
 	pos = 0;
 	str = string;
-};
+}
 
 QVariant json::parse(const QString& str)
 {
 	json j(str);
-	try {
-		return j.parse_any();
+
+	try
+	{
+		QVariant ret = j.parse_any();
+		if(j.str.length() > j.pos)
+			throw JSONParseError("Parse Error", QString("expected end of the "
+				"stream but got '%1' instead").arg(str[j.pos]), str, j.pos);
+
+		return ret;
 	}
-	catch(char *e) {
-		cerr << e << endl;
+	catch(JSONParseError e)
+	{
+#ifdef QT_GUI_LIB
+		QMessageBox box(QMessageBox::Critical, "JSON Parse Error", e.toHTML(),
+			QMessageBox::Ok);
+
+		box.setTextFormat(Qt::RichText);
+		box.exec();
+
+		qApp->quit();
+#else
+		cout << e.toString().toLocal8Bit().data() << endl;
+#endif
 	}
 
 	return QVariant();
-};
+}
 
 QString json::toJSON(const QVariant& obj)
 {
@@ -64,7 +234,7 @@ QString json::toJSON(const QVariant& obj)
 		return "null";
 
 	return QString();
-};
+}
 
 #ifdef QT_GUI_LIB
 QList<QTreeWidgetItem*> json::toTree(const QVariant& obj)
@@ -85,7 +255,7 @@ QList<QTreeWidgetItem*> json::toTree(const QVariant& obj)
 		list << new QTreeWidgetItem(QStringList() << "null");
 
 	return list;
-};
+}
 
 QList<QTreeWidgetItem*> json::mapToTree(const QVariant& obj)
 {
@@ -117,7 +287,7 @@ QList<QTreeWidgetItem*> json::mapToTree(const QVariant& obj)
 	}
 
 	return list;
-};
+}
 #endif
 
 QString json::mapToJSON(const QVariant& obj)
@@ -137,7 +307,7 @@ QString json::mapToJSON(const QVariant& obj)
 	}
 
 	return QString("{%1}").arg( result.join(",") );
-};
+}
 
 #ifdef QT_GUI_LIB
 QList<QTreeWidgetItem*> json::listToTree(const QVariant& obj)
@@ -169,7 +339,7 @@ QList<QTreeWidgetItem*> json::listToTree(const QVariant& obj)
 	}
 
 	return list;
-};
+}
 #endif
 
 QString json::listToJSON(const QVariant& obj)
@@ -181,7 +351,7 @@ QString json::listToJSON(const QVariant& obj)
 		result << toJSON( list.at(i) );
 
 	return QString("[%1]").arg( result.join(",") );
-};
+}
 
 QString json::stringToJSON(const QVariant& obj)
 {
@@ -207,7 +377,23 @@ QString json::stringToJSON(const QVariant& obj)
 	}
 
 	return QString("\"%1\"").arg(result);
-};
+}
+
+bool json::isWhitespace(const QChar& c)
+{
+	if(QChar(' ') == c)
+		return true;
+	else if(QChar(0x3000) == c)
+		return true;
+	else if(QChar('\t') == c)
+		return true;
+	else if(QChar('\n') == c)
+		return true;
+	else if(QChar('\r') == c)
+		return true;
+
+	return false;
+}
 
 QVariant json::parse_any()
 {
@@ -217,7 +403,7 @@ QVariant json::parse_any()
 
 	for(; pos < len; pos++)
 	{
-		if( str[pos] == QChar(' ') )
+		if( isWhitespace(str[pos]) )
 			continue;
 		else if( str[pos] == QChar('{') ) // Object
 			return parse_object();
@@ -234,112 +420,226 @@ QVariant json::parse_any()
 		else if( number_matcher.exactMatch( str.mid(pos, 1) ) ) // Number
 			return parse_number();
 		else
-			throw QString("Any Parse Error: %1").arg(str.mid(pos)).toLocal8Bit().data();
+			throw JSONParseError("Any Parse Error", QString("Unexpected "
+				"character '%1'").arg(str[pos]), str, pos);
 	}
 
+	throw JSONParseError("Any Parse Error", "Unexpected end of stream",
+		str + " ", len);
+
 	return QVariant();
-};
+}
 
 QVariant json::parse_object()
 {
 	int len = str.length();
 
-	if( len <= 0 || str[pos] != QChar('{') )
-		throw "Object Call Error";
+	if(len <= 0 || pos >= len)
+		throw JSONParseError("Object Parse Error", "expected '{' but got the "
+			"end of the stream instead", str + " ", len);
+
+	if(QChar('{') != str[pos])
+		throw JSONParseError("Object Parse Error", QString("expected '{' but "
+			"got '%1' instead").arg(str[pos]), str, pos);
 
 	QString key;
 	QMap<QString, QVariant> map;
+	bool haveKey = false, haveValue = false;
+	bool haveSemicolon = false;
 
-	while( str[pos] != QChar('}') )
+	while(true)
 	{
 		pos++;
 
-		for(; pos < len; pos++)
+		// Skip any whitespace
+		while( pos < len && isWhitespace(str[pos]) )
+			pos++;
+
+		if(pos >= len)
 		{
-			if( str[pos] == QChar(' ') )
-				continue;
-			else if( str[pos] == QChar('"') )
+			if(haveKey && haveValue)
+				throw JSONParseError("Object Parse Error", "expected ',' or '}'"
+					" but got the end of the stream instead", str + " ", len);
+			else if(haveKey && !haveSemicolon)
+				throw JSONParseError("Object Parse Error", "expected ':' "
+					"but got the end of the stream instead", str + " ", len);
+			else if(haveKey && haveSemicolon)
+				throw JSONParseError("Object Parse Error", "expected object "
+					"value but got the end of the stream "
+					"instead", str + " ", len);
+			else if( !map.count() )
+				throw JSONParseError("Object Parse Error", "expected object "
+					"key or '}' but got the end of the stream "
+					"instead", str + " ", len);
+		}
+
+		if(QChar('}') == str[pos]) // Found the end of the object
+		{
+			if(map.count() || haveKey)
 			{
-				key = parse_string().toString();
-				break;
+				if(!haveKey)
+					throw JSONParseError("Object Parse Error", "expected "
+						"object key but got '}' instead", str, pos);
+				else if(haveKey && !haveSemicolon)
+					throw JSONParseError("Object Parse Error", "expected "
+						"':' but got '}' instead", str, pos);
+				else if(haveKey && haveSemicolon && !haveValue)
+					throw JSONParseError("Object Parse Error", "expected "
+						"object value but got '}' instead", str, pos);
 			}
-			else
-				throw "Object Parse Error";
+
+			break;
+		}
+		else if(QChar(',') == str[pos]) // Found a new element
+		{
+			if(!haveKey)
+				throw JSONParseError("Object Parse Error", "expected "
+					"object key but got ',' instead", str, pos);
+			else if(haveKey && !haveSemicolon)
+				throw JSONParseError("Object Parse Error", "expected "
+					"':' but got ',' instead", str, pos);
+			else if(haveKey && haveSemicolon && !haveValue)
+				throw JSONParseError("Object Parse Error", "expected "
+					"object value but got ',' instead", str, pos);
+
+			haveKey = false;
+			haveValue = false;
+			haveSemicolon = false;
+
+			continue;
+		}
+		else if(QChar(':') == str[pos]) // Found the semicolon
+		{
+			if(!haveKey)
+				throw JSONParseError("Object Parse Error", "expected "
+					"object key but got ':' instead", str, pos);
+			else if(haveKey && haveSemicolon && !haveValue)
+				throw JSONParseError("Object Parse Error", "expected "
+					"object value but got ':' instead", str, pos);
+			else if(haveKey && haveValue)
+				throw JSONParseError("Object Parse Error", "expected "
+					"',' or '}' but got ':' instead", str, pos);
+
+			haveSemicolon = true;
+
+			continue;
 		}
 
-		// Skip over the :
-		for(; pos < len; pos++)
+		if(haveKey) // Looking for the value
 		{
-			if( str[pos] == QChar(' ') )
-				continue;
-			else if( str[pos] == QChar(':') ) // Found the :
-				break;
-			else
-				throw "Object Parse Error";
+			if(!haveSemicolon)
+				throw JSONParseError("Object Parse Error", QString("expected "
+					"':' but got '%1' instead").arg(str[pos]), str, pos);
+			if(haveValue)
+				throw JSONParseError("Object Parse Error", QString("expected "
+					"',' or '}' but got '%1' instead").arg(str[pos]), str, pos);
+
+			map[key] = parse_any();
+			haveValue = true;
+			pos -= 1;
 		}
-
-		pos++;
-		map[key] = parse_any();
-
-		// Find the end or another key/value pair
-		for(; pos < len; pos++)
+		else // Still need the key
 		{
-			if( str[pos] == QChar(' ') )
-				continue;
-			else if( str[pos] == QChar(',') ) // Do another key/value pair
-				break;
-			else if( str[pos] == QChar('}') ) // We are done reading the object
-				break;
-			else
-				throw "Object Parse Error";
+			key = parse_string().toString();
+			haveKey = true;
+			pos -= 1;
+
+			if( key.isEmpty() )
+				throw JSONParseError("Object Parse Error", "object key is an "
+					"empty string", str + " ", len);
+			if( map.contains(key) )
+				throw JSONParseError("Object Parse Error", QString("duplicate "
+					"key '%1' found").arg(key), str, pos - key.length() - 1);
 		}
 	}
 
 	pos++;
 
 	return QVariant(map);
-};
+}
 
 QVariant json::parse_array()
 {
 	int len = str.length();
 
-	if( len <= 0 || str[pos] != QChar('[') )
-		throw "Array Call Error";
+	if(len <= 0 || pos >= len)
+		throw JSONParseError("Array Parse Error", "expected '[' but got the "
+			"end of the stream instead", str + " ", len);
+
+	if(QChar('[') != str[pos])
+		throw JSONParseError("Array Parse Error", QString("expected '[' but "
+			"got '%1' instead").arg(str[pos]), str, pos);
 
 	QList<QVariant> list;
+	bool haveItem = false;
 
-	while( str[pos] != QChar(']') && pos < len )
+	while(true)
 	{
 		pos++;
 
 		// Skip any whitespace
-		while( str[pos] == QChar(' ') )
+		while( pos < len && isWhitespace(str[pos]) )
 			pos++;
 
-		// Found the end of the array (this only really happens for an empty array)
-		if( str[pos] == QChar(']') )
-			break;
+		if(pos >= len)
+		{
+			if(haveItem)
+				throw JSONParseError("Array Parse Error", "expected ',' or ']' "
+					"but got the end of the stream instead", str + " ", len);
+			else if( !list.count() )
+				throw JSONParseError("Array Parse Error", "expected array "
+					"value or ']' but got the end of the stream "
+					"instead", str + " ", len);
+			else
+				throw JSONParseError("Array Parse Error", "expected array value"
+					" but got the end of the stream instead", str + " ", len);
+		}
 
-		// Found a new element
-		if( str[pos] == QChar(',') )
+		if(QChar(']') == str[pos]) // Found the end of the array
+		{
+			if(list.count() && !haveItem)
+				throw JSONParseError("Array Parse Error", "expected array "
+					"value but got ']' instead", str, pos);
+
+			break;
+		}
+		else if(QChar(',') == str[pos]) // Found a new element
+		{
+			if(!haveItem)
+				throw JSONParseError("Array Parse Error", "expected array "
+					"value but got ',' instead", str, pos);
+
+			haveItem = false;
 			continue;
+		}
+
+		if(haveItem)
+			throw JSONParseError("Array Parse Error", QString("expected ',' or "
+				"']' but got '%1' instead").arg(str[pos]), str, pos);
 
 		// Add the array element
 		list << parse_any();
+		pos -= 1;
+
+		haveItem = true;
 	}
 
 	pos++;
 
 	return QVariant(list);
-};
+}
 
 QVariant json::parse_string()
 {
 	int len = str.length();
 
-	if( len <= 0 || str[pos] != QChar('"') )
-		throw "String Call Error";
+	if(len <= 0 || pos >= len)
+		throw JSONParseError("String Parse Error", "expected '[' but got the "
+			"end of the stream instead", str + " ", len);
+
+	if(QChar('"') != str[pos])
+		throw JSONParseError("String Parse Error", QString("expected '\"' but "
+			"got '%1' instead").arg(str[pos]), str, pos);
 
 	pos++;
 	int start = pos;
@@ -353,8 +653,13 @@ QVariant json::parse_string()
 			break;
 	}
 
+	// End of the string not found
+	if(index == -1)
+		throw JSONParseError("String Parse Error", "expected '\"' "
+			"but got the end of the stream instead", str + " ", len);
+
 	// Empty String
-	if( end == pos )
+	if(end == pos)
 	{
 		pos = end + 1;
 
@@ -379,115 +684,153 @@ QVariant json::parse_string()
 
 	pos = end + 1;
 	return QVariant(result);
-};
+}
 
 QVariant json::parse_null()
 {
 	int len = str.length();
 
-	if( len <= 0 || str[pos] != QChar('n') )
-		throw "Null Call Error";
+	QString keyword("null");
+	if(len <= 0 || (pos + keyword.length() - 1) >= len)
+		throw JSONParseError("Null Parse Error", "expected 'null' but got the "
+			"end of the stream instead", str + " ", len);
 
-	QString null_str("null");
-	if( (len - pos) < null_str.length() )
-		throw "Null Call Error";
+	if(str.mid(pos, keyword.length()).compare(keyword, Qt::CaseSensitive) != 0)
+		throw JSONParseError("Null Parse Error",
+			QString("expected 'null' but got '%1' instead").arg(
+			str.mid(pos, keyword.length()) ), str, pos);
 
-	if(str.mid(pos, null_str.length()) != null_str)
-		throw "Null Call Error";
-
-	pos += null_str.length();
+	pos += keyword.length();
 
 	return QVariant();
-};
+}
 
 QVariant json::parse_true()
 {
 	int len = str.length();
 
-	if( len <= 0 || str[pos] != QChar('t') )
-		throw "True Call Error";
+	QString keyword("true");
+	if(len <= 0 || (pos + keyword.length() - 1) >= len)
+		throw JSONParseError("True Parse Error", "expected 'true' but got the "
+			"end of the stream instead", str + " ", len);
 
-	QString true_str("true");
-	if( (len - pos) < true_str.length() )
-		throw "True Call Error";
+	if(str.mid(pos, keyword.length()).compare(keyword, Qt::CaseSensitive) != 0)
+		throw JSONParseError("True Parse Error",
+			QString("expected 'true' but got '%1' instead").arg(
+			str.mid(pos, keyword.length()) ), str, pos);
 
-	if(str.mid(pos, true_str.length()) != true_str)
-		throw "True Call Error";
+	pos += keyword.length();
 
-	pos += true_str.length();
-
-	return QVariant(true);
-};
+	return QVariant();
+}
 
 QVariant json::parse_false()
 {
 	int len = str.length();
 
-	if( len <= 0 || str[pos] != QChar('f') )
-		throw "False Call Error";
+	QString keyword("false");
+	if(len <= 0 || (pos + keyword.length() - 1) >= len)
+		throw JSONParseError("False Parse Error", "expected 'false' but got the "
+			"end of the stream instead", str + " ", len);
 
-	QString false_str("false");
-	if( (len - pos) < false_str.length() )
-		throw "False Call Error";
+	if(str.mid(pos, keyword.length()).compare(keyword, Qt::CaseSensitive) != 0)
+		throw JSONParseError("False Parse Error",
+			QString("expected 'false' but got '%1' instead").arg(
+			str.mid(pos, keyword.length()) ), str, pos);
 
-	if(str.mid(pos, false_str.length()) != false_str)
-		throw "False Call Error";
+	pos += keyword.length();
 
-	pos += false_str.length();
-
-	return QVariant(false);
-};
+	return QVariant();
+}
 
 QVariant json::parse_number()
 {
+	int len = str.length();
+
+	QRegExp num_matcher("[0-9]");
+
+	if(len <= 0 || pos >= len)
+		throw JSONParseError("Number Parse Error", "expected '-' or a digit "
+			"but got the end of the stream instead", str + " ", len);
+
+	if( QChar('-') != str[pos] && !num_matcher.exactMatch(str.mid(pos, 1)) )
+		throw JSONParseError("Number Parse Error", QString("expected '-' or a "
+			"digit but got '%1' instead").arg(str[pos]), str, pos);
+
 	QString num;
-	QRegExp num_matcher("[0-9\\s]");
-	QRegExp space_matcher("\\s");
+	int start = pos;
 
 	// Negative sign
-	if( str[pos] == QChar('-') )
+	if(QChar('-') == str[pos])
 	{
-		num = "-";
+		num = QChar('-');
 		pos++;
 	}
 
-	while( num_matcher.exactMatch( str.mid(pos, 1) ) )
-	{
-		if( !space_matcher.exactMatch( str.mid(pos, 1) ) )
-			num += str[pos];
+	if(pos >= len)
+		throw JSONParseError("Number Parse Error", "expected a digit but got "
+			"the end of the stream instead", str + " ", len);
 
+	if( !num_matcher.exactMatch(str.mid(pos, 1)) )
+		throw JSONParseError("Number Parse Error", QString("expected a digit "
+			"but got '%1' instead").arg(str[pos]), str, pos);
+
+	// Read in all digits
+	while( num_matcher.exactMatch(str.mid(pos, 1)) )
+	{
+		num += str[pos];
 		pos++;
 	}
 
-	if( str.mid(pos, 1).toLower() == "." )
+	if(QChar('.') == str[pos])
 	{
-		num += ".";
+		num += QChar('.');
 		pos++;
 
-		while( num_matcher.exactMatch( str.mid(pos, 1) ) )
+		if(pos >= len)
+			throw JSONParseError("Number Parse Error", "expected digit "
+				"but got the end of the stream instead", str + " ", len);
+		if( !num_matcher.exactMatch(str.mid(pos, 1)) )
+			throw JSONParseError("Number Parse Error", QString("expected digit "
+				"but got '%1' instead").arg(str[pos]), str, pos);
+
+		while( num_matcher.exactMatch(str.mid(pos, 1)) )
 		{
-			if( !space_matcher.exactMatch( str.mid(pos, 1) ) )
-				num += str[pos];
-
+			num += str[pos];
 			pos++;
 		}
 	}
-	if( str.mid(pos, 1).toLower() == "e" )
+
+	if(QChar('e') == str[pos] || QChar('E') == str[pos])
 	{
-		num += "e";
+		num += QChar('e');
 		pos++;
+
+		if(pos >= len)
+			throw JSONParseError("Number Parse Error", "expected '+' or '-' or "
+				"digit but got the end of the stream instead", str + " ", len);
 
 		if( str[pos] == QChar('+') || str[pos] == QChar('-') )
 		{
 			num += str[pos];
 			pos++;
+
+			if(pos >= len)
+				throw JSONParseError("Number Parse Error", "expected digit "
+					"but got the end of the stream instead", str + " ", len);
+			if( !num_matcher.exactMatch(str.mid(pos, 1)) )
+				throw JSONParseError("Number Parse Error", QString("expected "
+					"digit but got '%1' instead").arg(str[pos]), str, pos);
+		}
+		else if( !num_matcher.exactMatch(str.mid(pos, 1)) )
+		{
+			throw JSONParseError("Number Parse Error", QString("expected '+' or"
+				" '-' or digit but got '%1' instead").arg(str[pos]), str, pos);
 		}
 
-		while( num_matcher.exactMatch( str.mid(pos, 1) ) )
+		while( num_matcher.exactMatch(str.mid(pos, 1)) )
 		{
-			if( !space_matcher.exactMatch( str.mid(pos, 1) ) )
-				num += str[pos];
-
+			num += str[pos];
 			pos++;
 		}
 	}
@@ -497,7 +840,8 @@ QVariant json::parse_number()
 		bool ok;
 		float final = num.toFloat(&ok);
 		if(!ok)
-			throw "Number Parse Error";
+			throw JSONParseError("Number Parse Error",
+				"unknown parse error", str, start);
 
 		return final;
 	}
@@ -506,8 +850,9 @@ QVariant json::parse_number()
 		bool ok;
 		int final = num.toInt(&ok);
 		if(!ok)
-			throw "Number Parse Error";
+			throw JSONParseError("Number Parse Error",
+				"unknown parse error", str, start);
 
 		return final;
 	}
-};
+}
