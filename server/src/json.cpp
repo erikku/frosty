@@ -721,7 +721,7 @@ QVariant json::parse_true()
 
 	pos += keyword.length();
 
-	return QVariant();
+	return QVariant(true);
 }
 
 QVariant json::parse_false()
@@ -740,7 +740,7 @@ QVariant json::parse_false()
 
 	pos += keyword.length();
 
-	return QVariant();
+	return QVariant(false);
 }
 
 QVariant json::parse_number()
