@@ -319,6 +319,5 @@ QString AjaxList::itemText(const QVariantMap& map) const
 bool AjaxList::itemMatches(const QVariantMap& map, const QString& search)
 {
 	return (map["name_en"].toString().contains(search, Qt::CaseInsensitive) ||
-		map[QString("name_%1").arg(settings->lang())].toString().contains(
-		search, Qt::CaseInsensitive));
+		map["name_ja"].toString().contains(search, Qt::CaseInsensitive));
 }
