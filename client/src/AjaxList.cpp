@@ -45,6 +45,10 @@ AjaxList::AjaxList(AjaxView *view,
 	connect(ui.refreshButton, SIGNAL(clicked(bool)), this, SLOT(refresh()));
 	connect(ui.deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteAjax()));
 
+	ui.imeButton->setChecked( ui.searchEdit->romajiMode() );
+	connect(ui.imeButton, SIGNAL(toggled(bool)),
+		ui.searchEdit, SLOT(setRomajiMode(bool)));
+
 	if( !settings->canDelete() )
 	{
 		ui.deleteButton->setVisible(false);

@@ -84,7 +84,8 @@ HEADERS     += src/ajax.h \
                src/LogTree.h \
                src/LogView.h \
                src/LogWidget.h \
-               src/VersionCheck.h
+               src/VersionCheck.h \
+               src/LineEdit.h
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
@@ -125,4 +126,6 @@ SOURCES     += src/main.cpp \
                src/LogTree.cpp \
                src/LogView.cpp \
                src/LogWidget.cpp \
-               src/VersionCheck.cpp
+               src/VersionCheck.cpp \
+               src/KanaCOnversion.cpp \
+               src/LineEdit.cpp

@@ -1,49 +1,61 @@
-<ui version="4.0" >
- <author>John Eric Martin &lt;john.eric.martin@gmail.com></author>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>John Eric Martin &lt;john.eric.martin@gmail.com&gt;</author>
  <class>AjaxList</class>
- <widget class="QWidget" name="AjaxList" >
-  <property name="geometry" >
+ <widget class="QWidget" name="AjaxList">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>291</width>
+    <width>293</width>
     <height>284</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QGridLayout" >
-     <item row="0" column="0" >
-      <widget class="QLabel" name="filterLabel" >
-       <property name="text" >
+    <layout class="QGridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="filterLabel">
+       <property name="text">
         <string>Filter:</string>
        </property>
-       <property name="buddy" >
+       <property name="buddy">
         <cstring>filterCombo</cstring>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <widget class="QComboBox" name="filterCombo" />
+     <item row="0" column="1">
+      <widget class="QComboBox" name="filterCombo"/>
      </item>
-     <item row="1" column="1" >
-      <widget class="SearchEdit" name="searchEdit" />
-     </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="searchLabel" >
-       <property name="text" >
+     <item row="1" column="0">
+      <widget class="QLabel" name="searchLabel">
+       <property name="text">
         <string>Search:</string>
        </property>
-       <property name="buddy" >
-        <cstring>searchEdit</cstring>
-       </property>
       </widget>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout">
+       <item>
+        <widget class="KawaiiLineEdit" name="searchEdit"/>
+       </item>
+       <item>
+        <widget class="QToolButton" name="imeButton">
+         <property name="text">
+          <string>あ</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QListWidget" name="ajaxList" >
-     <property name="iconSize" >
+    <widget class="QListWidget" name="ajaxList">
+     <property name="iconSize">
       <size>
        <width>16</width>
        <height>16</height>
@@ -52,20 +64,20 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QPushButton" name="refreshButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="refreshButton">
+       <property name="text">
         <string>&amp;Refresh</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -74,18 +86,18 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="addButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="addButton">
+       <property name="text">
         <string>&amp;Add</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="deleteButton" >
-       <property name="enabled" >
+      <widget class="QPushButton" name="deleteButton">
+       <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>&amp;Remove</string>
        </property>
       </widget>
@@ -96,9 +108,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>SearchEdit</class>
+   <class>KawaiiLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>SearchEdit.h</header>
+   <header>LineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
