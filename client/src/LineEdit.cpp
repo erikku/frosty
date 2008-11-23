@@ -23,20 +23,28 @@
 #include <QtGui/QKeyEvent>
 
 /// @TODO Fix it from changing selection when the input box is clicked
-KawaiiLineEdit::KawaiiLineEdit(QWidget *parent) : SearchEdit(parent), mRomajiMode(false), mInsertPosition(0), mDisplayMode(Hiragana)
+KawaiiLineEdit::KawaiiLineEdit(QWidget *parent_widget) :
+	SearchEdit(parent_widget), mDisplayMode(Hiragana), mRomajiMode(false),
+	mInsertPosition(0)
 {
-	connect(this, SIGNAL(textEdited(const QString&)), this, SLOT(updateText()));
-};
+	connect(this, SIGNAL(textEdited(const QString&)),
+		this, SLOT(updateText()));
+}
 
-KawaiiLineEdit::KawaiiLineEdit(const QString& contents, QWidget *parent) : SearchEdit(parent), mRomajiMode(false), mInsertPosition(0), mDisplayMode(Hiragana)
+KawaiiLineEdit::KawaiiLineEdit(const QString& contents,
+	QWidget *parent_widget) : SearchEdit(parent_widget), mDisplayMode(Hiragana),
+	mRomajiMode(false), mInsertPosition(0)
 {
-	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(updateText()));
-};
+	connect(this, SIGNAL(textChanged(const QString&)),
+		this, SLOT(updateText()));
+
+	setText(contents);
+}
 
 bool KawaiiLineEdit::romajiMode()
 {
 	return mRomajiMode;
-};
+}
 
 void KawaiiLineEdit::setRomajiMode(bool enabled)
 {
@@ -73,7 +81,7 @@ void KawaiiLineEdit::setRomajiMode(bool enabled)
 
 	mRomajiMode = enabled;
 	updateText();
-};
+}
 
 void KawaiiLineEdit::updateText()
 {
@@ -99,14 +107,14 @@ void KawaiiLineEdit::updateText()
 
 	if( mActiveText.isEmpty() )
 		emit textChanged(mRealText);
-};
+}
 
-void KawaiiLineEdit::keyPressEvent(QKeyEvent *event)
+void KawaiiLineEdit::keyPressEvent(QKeyEvent *evt)
 {
 	if(!mRomajiMode)
-		return QLineEdit::keyPressEvent(event);
+		return QLineEdit::keyPressEvent(evt);
 
-	if(event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
+	if(evt->key() == Qt::Key_Backspace || evt->key() == Qt::Key_Delete)
 	{
 		if( mActiveText.isEmpty() )
 		{
@@ -115,18 +123,18 @@ void KawaiiLineEdit::keyPressEvent(QKeyEvent *event)
 				mRealText.remove(selectionStart(), selectedText().length());
 				mInsertPosition = selectionStart();
 			}
-			else if(event->key() == Qt::Key_Delete) // Delete after the cursor
+			else if(evt->key() == Qt::Key_Delete) // Delete after the cursor
 			{
 				mRealText.remove(cursorPosition(), 1);
 				mInsertPosition = cursorPosition();
 			}
-			else if(cursorPosition() > 0) // Delete the character before the cursor
+			else if(cursorPosition() > 0) // Delete character before cursor
 			{
 				mRealText.remove(cursorPosition() - 1, 1);
 				mInsertPosition = cursorPosition() - 1;
 			}
 
-			event->accept();
+			evt->accept();
 			updateText();
 			return;
 		}
@@ -134,15 +142,15 @@ void KawaiiLineEdit::keyPressEvent(QKeyEvent *event)
 		// Remove the last character in the string (if there is one)
 		mActiveText.chop(1);
 
-		event->accept();
+		evt->accept();
 		updateText();
 
 		return;
 	}
-	else if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+	else if(evt->key() == Qt::Key_Enter || evt->key() == Qt::Key_Return)
 	{
 		if( mActiveText.isEmpty() )
-			return QLineEdit::keyPressEvent(event);
+			return QLineEdit::keyPressEvent(evt);
 
 		mRealText.insert(mInsertPosition, mDisplayText);
 		mInsertPosition += mDisplayText.length();
@@ -151,29 +159,30 @@ void KawaiiLineEdit::keyPressEvent(QKeyEvent *event)
 		mDisplayText.clear();
 		mActiveText.clear();
 
-		event->accept();
+		evt->accept();
 		updateText();
 
 		setCursorPosition(mInsertPosition);
 
 		return;
 	}
-	else if( !mActiveText.isEmpty() && (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right ||
-		event->key() == Qt::Key_Home || event->key() == Qt::Key_End) )
+	else if( !mActiveText.isEmpty() && (evt->key() == Qt::Key_Left ||
+		evt->key() == Qt::Key_Right || evt->key() == Qt::Key_Home ||
+		evt->key() == Qt::Key_End) )
 	{
-		event->accept();
+		evt->accept();
 		return;
 	}
-	else if( !mActiveText.isEmpty() && event->key() == Qt::Key_F7)
+	else if( !mActiveText.isEmpty() && evt->key() == Qt::Key_F7)
 	{
 		mDisplayMode = (mDisplayMode == Hiragana) ? Katakana : Hiragana;
-		event->accept();
+		evt->accept();
 		updateText();
 		return;
 	}
 
 	// Normal key, clear the text first
-	if( !event->text().isEmpty() )
+	if( !evt->text().isEmpty() )
 	{
 		if( mActiveText.isEmpty() )
 			mInsertPosition = cursorPosition();
@@ -185,16 +194,16 @@ void KawaiiLineEdit::keyPressEvent(QKeyEvent *event)
 			mInsertPosition = selectionStart();
 		}
 
-		mActiveText += event->text();
-		event->accept();
+		mActiveText += evt->text();
+		evt->accept();
 		updateText();
 		return;
 	}
 
-	QLineEdit::keyPressEvent(event);
-};
+	QLineEdit::keyPressEvent(evt);
+}
 
-void KawaiiLineEdit::paintEvent(QPaintEvent *event)
+void KawaiiLineEdit::paintEvent(QPaintEvent *evt)
 {
-	QLineEdit::paintEvent(event);
-};
+	QLineEdit::paintEvent(evt);
+}

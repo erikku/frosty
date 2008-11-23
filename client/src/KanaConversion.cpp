@@ -216,7 +216,7 @@ void setupConversionTables()
 		<< QString::fromUtf8(">");
 
 	tablesLoaded = true;
-};
+}
 
 QString romajiToKana(const QString& string, bool special)
 {
@@ -405,7 +405,7 @@ QString katakanaToHiragana(const QString& string)
 	text.replace( QRegExp( QString::fromUtf8("ン") ), QString::fromUtf8("ん") );
 
 	return text;
-};
+}
 
 QString hiraganaToKatakana(const QString& string)
 {
@@ -428,7 +428,7 @@ QString hiraganaToKatakana(const QString& string)
 	text.replace( QRegExp( QString::fromUtf8("ん") ), QString::fromUtf8("ン") );
 
 	return text;
-};
+}
 
 bool containsRuby(const QString& text)
 {
@@ -446,7 +446,7 @@ bool containsRuby(const QString& text)
 		return true;
 
 	return false;
-};
+}
 
 QString parseRuby(const QString& string, RubyFormat format)
 {
@@ -539,7 +539,7 @@ QString parseRuby(const QString& string, RubyFormat format)
 	}
 
 	return final;
-};
+}
 
 QString reduceRuby(const QString& bottom, const QString& top)
 {
@@ -594,4 +594,4 @@ QString reduceRuby(const QString& bottom, const QString& top)
 	}
 
 	return final;
-};
+}
