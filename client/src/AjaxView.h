@@ -30,11 +30,15 @@ class QLineEdit;
 class QTextEdit;
 class QCheckBox;
 class QComboBox;
+class QListWidget;
 class QPushButton;
 class QRadioButton;
 class QButtonGroup;
 class QStackedWidget;
+class InfoListWidget;
+class SearchEdit;
 class IconEdit;
+class AjaxBind;
 
 typedef QMap<QRadioButton*, QString> RadioButtonMap;
 
@@ -47,19 +51,6 @@ public:
 
 	bool isEditing() const;
 
-	typedef enum _BindType {
-		BindText = 0,
-		BindTextBox,
-		BindIcon,
-		BindNumber,
-		BindNumberRange,
-		BindEnum,
-		BindBool,
-		BindRelation,
-		BindNumberSet,
-		BindNumberSelector
-	}BindType;
-
 public slots:
 	void add();
 	void edit();
@@ -69,18 +60,8 @@ public slots:
 	void refresh();
 	void view(int id, bool switchView = true);
 
-	void showIconSelect();
-	void browseRelationList();
-	void updateRelationCombo();
-	void refreshRelationCombo();
-	void updateNumberSetValues();
-	void updateNumberSetSelection();
-	void updateNumberSelectionValue();
-	void updateNumberSelection();
-
 protected slots:
 	void ajaxResponse(const QVariant& resp);
-	void updateIcon(const QString& path, const QString& value);
 
 signals:
 	void viewChanged();
@@ -97,8 +78,6 @@ protected:
 	void initView(QStackedWidget *stackedWidget, QPushButton *editButton,
 		QPushButton *cancelButton, QPushButton *refreshButton,
 		QPushButton *updateButton);
-
-	void refreshRelationCache(const QString& field);
 
 	void bindText(const QString& field, QLabel *view, QLineEdit *edit);
 	void bindTextBox(const QString& field, QLabel *view, QTextEdit *edit);
@@ -128,15 +107,31 @@ protected:
 		QButtonGroup *group = 0, QButtonGroup *edit_group = 0,
 		int defaultValue = 0, QRadioButton *defaultSelector = 0,
 		QRadioButton *defaultEditSelector = 0);
+	void bindDetailedMultiRelation(const QString& field, InfoListWidget *view,
+		InfoListWidget *edit = 0, const QString& drop_mime_type = QString(),
+		const QString& id = QString(), const QString& foreign_id = QString(),
+		const QString& foreign_table = QString(), const QString& icon_column = QString(),
+		const QString& icon_path = QString(),
+		const QStringList& columns = QStringList(),
+		QPushButton *add_button = 0, QPushButton *edit_button = 0,
+		QPushButton *remove_button = 0, QPushButton *new_button = 0,
+		QPushButton *update_button = 0, QPushButton *cancel_button = 0,
+		SearchEdit *quick_filter = 0, QListWidget *add_list = 0,
+		const QVariant& view_action = QVariant(),
+		const QVariant& search_action = QVariant(), bool allow_drops = false,
+		const QVariantList& additional_relations = QVariantList(),
+		const QString& extra_column = QString(),
+		const QString& extra_prompt = QString());
 
 	void darkenWidget(QWidget *widget);
 
-	QVariantMap createViewAction() const;
-	QVariantMap createUpdateAction() const;
+	QVariantList createViewActions() const;
+	QVariantList createUpdateActions() const;
 	void processBindValues(const QVariantMap& values);
 
 	QVariantMap mSleepingResponse;
-	QMap<QString, QVariantMap> mBinds;
+
+	QList<AjaxBind*> mBinds;
 
 private:
 	struct _ui {

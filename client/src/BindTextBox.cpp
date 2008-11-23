@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconSelect.h                                                     *
+*  client/src/BindTextBox.cpp                                                  *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,36 +17,67 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconSelect_h__
-#define __IconSelect_h__
+#include "BindTextBox.h"
 
-#include "ui_IconSelect.h"
+#include <QtGui/QLabel>
+#include <QtGui/QTextEdit>
 
-class IconSelect : public QWidget
+BindTextBox::BindTextBox(QObject *obj_parent) : AjaxBind(obj_parent),
+	mViewer(0),	mEditor(0)
 {
-	Q_OBJECT
+	// Nothing to see here
+}
 
-public:
-	IconSelect(QWidget *parent = 0);
+QWidget* BindTextBox::viewer() const
+{
+	return mViewer;
+}
 
-	QString searchPath() const;
-	void setSearchPath(const QString &path);
+void BindTextBox::setViewer(QWidget *view)
+{
+	Q_ASSERT( view->inherits("QLabel") );
 
-public slots:
-	void selectIcon();
+	mViewer = qobject_cast<QLabel*>(view);
+}
 
-protected slots:
-	void handleIcon();
-	void handleClose();
+QWidget* BindTextBox::editor() const
+{
+	return mEditor;
+}
 
-signals:
-	void iconCanceled();
-	void iconReady(const QString& path, const QString& value);
+void BindTextBox::setEditor(QWidget *edit)
+{
+	Q_ASSERT( edit->inherits("QTextEdit") );
 
-protected:
-	QString mSearchPath;
+	mEditor = qobject_cast<QTextEdit*>(edit);
+}
 
-	Ui::IconSelect ui;
-};
+void BindTextBox::clear()
+{
+	Q_ASSERT( mViewer && mEditor );
 
-#endif // __IconSelect_h__
+	mViewer->clear();
+	mEditor->clear();
+}
+
+void BindTextBox::handleViewResponse(const QVariantMap& values)
+{
+	Q_ASSERT( mViewer && mEditor );
+	Q_ASSERT( values.contains(column()) );
+
+	QVariant data = values.value(column());
+
+	Q_ASSERT( data.canConvert<QString>() );
+
+	QString text = data.toString();
+
+	mViewer->setText(text);
+	mEditor->setPlainText(text);
+}
+
+void BindTextBox::retrieveUpdateData(QVariantMap& row)
+{
+	Q_ASSERT( mViewer && mEditor );
+
+	row[column()] = mEditor->toPlainText();
+}

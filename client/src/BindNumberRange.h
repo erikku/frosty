@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconSelect.h                                                     *
+*  client/src/BindNumberRange.h                                                *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,36 +17,66 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconSelect_h__
-#define __IconSelect_h__
+#ifndef __BindNumberRange_h__
+#define __BindNumberRange_h__
 
-#include "ui_IconSelect.h"
+#include "AjaxBind.h"
 
-class IconSelect : public QWidget
+class QLabel;
+class QSpinBox;
+
+class BindNumberRange : public AjaxBind
 {
 	Q_OBJECT
 
 public:
-	IconSelect(QWidget *parent = 0);
+	BindNumberRange(QObject *parent = 0);
 
-	QString searchPath() const;
-	void setSearchPath(const QString &path);
+	virtual QString column() const;
+	virtual void setColumn(const QString& column);
 
-public slots:
-	void selectIcon();
+	virtual QStringList columns() const;
+	virtual void setColumns(const QStringList& columns);
 
-protected slots:
-	void handleIcon();
-	void handleClose();
+	virtual QWidget* viewer() const;
+	virtual void setViewer(QWidget *view);
 
-signals:
-	void iconCanceled();
-	void iconReady(const QString& path, const QString& value);
+	virtual QWidget* editor() const;
+	virtual void setEditor(QWidget *edit);
+
+	virtual void clear();
+
+	virtual void handleViewResponse(const QVariantMap& values);
+	virtual void retrieveUpdateData(QVariantMap& row);
+
+	QSpinBox* fromEditor() const;
+	void setFromEditor(QSpinBox *from);
+
+	QSpinBox* toEditor() const;
+	void setToEditor(QSpinBox *to);
+
+	QString fromColumn() const;
+	void setFromColumn(const QString& column);
+
+	QString toColumn() const;
+	void setToColumn(const QString& column);
+
+	int defaultMin() const;
+	void setDefaultMin(int min);
+
+	int defaultMax() const;
+	void setDefaultMax(int max);
+
+	bool hideNegative() const;
+	void setHideNegative(bool hide);
 
 protected:
-	QString mSearchPath;
+	QLabel *mViewer;
+	QSpinBox *mFrom, *mTo;
 
-	Ui::IconSelect ui;
+	QString mFromColumn, mToColumn;
+	int mDefaultMin, mDefaultMax;
+	bool mHideNegative;
 };
 
-#endif // __IconSelect_h__
+#endif // __BindNumberRange_h__

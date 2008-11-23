@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconSelect.h                                                     *
+*  client/src/BindNumberSet.h                                                  *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,36 +17,63 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconSelect_h__
-#define __IconSelect_h__
+#ifndef __BindNumberSet_h__
+#define __BindNumberSet_h__
 
-#include "ui_IconSelect.h"
+#include "AjaxBind.h"
 
-class IconSelect : public QWidget
+class QLabel;
+class QSpinBox;
+class QComboBox;
+
+class BindNumberSet : public AjaxBind
 {
 	Q_OBJECT
 
 public:
-	IconSelect(QWidget *parent = 0);
+	BindNumberSet(QObject *parent = 0);
 
-	QString searchPath() const;
-	void setSearchPath(const QString &path);
+	virtual void setColumns(const QStringList& columns);
 
-public slots:
-	void selectIcon();
+	virtual QWidget* viewer() const;
+	virtual void setViewer(QWidget *view);
+
+	virtual QWidget* editor() const;
+	virtual void setEditor(QWidget *edit);
+
+	virtual void clear();
+
+	virtual void handleViewResponse(const QVariantMap& values);
+	virtual void retrieveUpdateData(QVariantMap& row);
+
+	int defaultValue() const;
+	void setDefaultValue(int value);
+
+	QString separator() const;
+	void setSeparator(const QString& sep);
+
+	QStringList patterns() const;
+	void setPatterns(const QStringList& patterns);
+
+	QComboBox* selector() const;
+	void setSelector(QComboBox *selector);
 
 protected slots:
-	void handleIcon();
-	void handleClose();
-
-signals:
-	void iconCanceled();
-	void iconReady(const QString& path, const QString& value);
+	void updateNumberSetValues();
+	void updateNumberSetSelection();
 
 protected:
-	QString mSearchPath;
+	QLabel *mViewer;
+	QSpinBox *mEditor;
+	QComboBox *mSelector;
 
-	Ui::IconSelect ui;
+	QString mCurrent;
+	QVariantMap mData;
+
+	QString mSeparator;
+	QStringList mPatterns;
+
+	int mDefaultValue;
 };
 
-#endif // __IconSelect_h__
+#endif // __BindNumberSet_h__

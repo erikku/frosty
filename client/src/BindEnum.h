@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconSelect.h                                                     *
+*  client/src/BindEnum.h                                                       *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,36 +17,44 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconSelect_h__
-#define __IconSelect_h__
+#ifndef __BindEnum_h__
+#define __BindEnum_h__
 
-#include "ui_IconSelect.h"
+#include "AjaxBind.h"
 
-class IconSelect : public QWidget
+class QLabel;
+class QComboBox;
+
+class BindEnum : public AjaxBind
 {
 	Q_OBJECT
 
 public:
-	IconSelect(QWidget *parent = 0);
+	BindEnum(QObject *parent = 0);
 
-	QString searchPath() const;
-	void setSearchPath(const QString &path);
+	virtual QWidget* viewer() const;
+	virtual void setViewer(QWidget *view);
 
-public slots:
-	void selectIcon();
+	virtual QWidget* editor() const;
+	virtual void setEditor(QWidget *edit);
 
-protected slots:
-	void handleIcon();
-	void handleClose();
+	virtual void clear();
 
-signals:
-	void iconCanceled();
-	void iconReady(const QString& path, const QString& value);
+	virtual void handleViewResponse(const QVariantMap& values);
+	virtual void retrieveUpdateData(QVariantMap& row);
+
+	int defaultValue() const;
+	void setDefaultValue(int value);
+
+	QMap<int, QString> items() const;
+	void setItems(const QMap<int, QString>& items);
 
 protected:
-	QString mSearchPath;
+	QLabel *mViewer;
+	QComboBox *mEditor;
 
-	Ui::IconSelect ui;
+	int mDefaultValue;
+	QMap<int, QString> mItems;
 };
 
-#endif // __IconSelect_h__
+#endif // __BindEnum_h__

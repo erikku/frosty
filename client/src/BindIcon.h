@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconSelect.h                                                     *
+*  client/src/BindIcon.h                                                       *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,36 +17,48 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconSelect_h__
-#define __IconSelect_h__
+#ifndef __BindIcon_h__
+#define __BindIcon_h__
 
-#include "ui_IconSelect.h"
+#include "AjaxBind.h"
 
-class IconSelect : public QWidget
+class QLabel;
+class IconEdit;
+class IconSelect;
+
+class BindIcon : public AjaxBind
 {
 	Q_OBJECT
 
 public:
-	IconSelect(QWidget *parent = 0);
+	BindIcon(QObject *parent = 0);
+
+	virtual QWidget* viewer() const;
+	virtual void setViewer(QWidget *view);
+
+	virtual QWidget* editor() const;
+	virtual void setEditor(QWidget *edit);
+
+	virtual void clear();
+
+	virtual void handleViewResponse(const QVariantMap& values);
+	virtual void retrieveUpdateData(QVariantMap& row);
+
+	QString path() const;
+	void setPath(const QString& path);
 
 	QString searchPath() const;
-	void setSearchPath(const QString &path);
-
-public slots:
-	void selectIcon();
+	void setSearchPath(const QString& path);
 
 protected slots:
-	void handleIcon();
-	void handleClose();
-
-signals:
-	void iconCanceled();
-	void iconReady(const QString& path, const QString& value);
+	void updateIcon(const QString& path, const QString& value);
 
 protected:
-	QString mSearchPath;
+	QLabel *mViewer;
+	IconEdit *mEditor;
+	IconSelect *mSelector;
 
-	Ui::IconSelect ui;
+	QString mPath, mSearchPath;
 };
 
-#endif // __IconSelect_h__
+#endif // __BindIcon_h__

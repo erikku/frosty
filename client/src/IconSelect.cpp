@@ -34,13 +34,21 @@ IconSelect::IconSelect(QWidget *parent_widget) : QWidget(parent_widget)
 	setWindowModality(Qt::ApplicationModal);
 }
 
-void IconSelect::selectIcon(const QString& path)
+QString IconSelect::searchPath() const
+{
+	return mSearchPath;
+}
+
+void IconSelect::setSearchPath(const QString &path)
+{
+	mSearchPath = path;
+}
+
+void IconSelect::selectIcon()
 {
 	ui.iconList->clear();
 
-	mIconPath = path;
-
-	QDir dir(mIconPath);
+	QDir dir(mSearchPath);
 	if( !dir.exists() )
 		return;
 
@@ -70,8 +78,8 @@ void IconSelect::handleIcon()
 		return;
 	}
 
-	emit iconReady(mIconPath + QString("/icon_") + item->text() + QString(".png"),
-		item->text() );
+	emit iconReady(mSearchPath + QString("/icon_") +
+		item->text() + QString(".png"), item->text() );
 
 	close();
 }

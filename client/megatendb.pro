@@ -25,8 +25,23 @@ MOC_DIR     = .moc
 RCC_DIR     = .rcc
 UI_DIR      = .ui
 
-RESOURCES    = \#megatendb.rc \
-               megatendb.qrc
+QMAKE_CXXFLAGS_DEBUG += -W -Wall -ansi -pedantic-errors -Wcast-align \
+	-Wcast-qual -Wchar-subscripts -Winline -Wpointer-arith \
+	-Wredundant-decls -Wshadow -Wwrite-strings -Werror \
+	-Wno-non-virtual-dtor -Wno-long-long -pedantic -Wconversion
+
+QMAKE_CFLAGS_DEBUG += -W -Wall -ansi -pedantic-errors -Wcast-align \
+	-Wcast-qual -Wchar-subscripts -Winline -Wpointer-arith \
+	-Wredundant-decls -Wshadow -Wwrite-strings \
+	-Wno-long-long -pedantic -Wconversion -Wstrict-prototypes \
+	-Wbad-function-cast -Wmissing-prototypes -Wnested-externs
+
+win32 {
+	RESOURCES += megatendb.rc
+	QMAKE_CXXFLAGS_DEBUG += -mnop-fun-dllimport
+}
+
+RESOURCES   += megatendb.qrc
 TRANSLATIONS = trans/megatendb_en.ts \
                trans/megatendb_ja.ts
 FORMS       += ui/PaletteEditor.ui \
@@ -85,7 +100,18 @@ HEADERS     += src/ajax.h \
                src/LogView.h \
                src/LogWidget.h \
                src/VersionCheck.h \
-               src/LineEdit.h
+               src/LineEdit.h \
+               src/AjaxBind.h \
+               src/BindText.h \
+               src/BindTextBox.h \
+               src/BindIcon.h \
+               src/BindNumber.h \
+               src/BindNumberRange.h \
+               src/BindEnum.h \
+               src/BindBool.h \
+               src/BindRelation.h \
+               src/BindNumberSet.h \
+               src/BindNumberSelector.h
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
@@ -128,4 +154,15 @@ SOURCES     += src/main.cpp \
                src/LogWidget.cpp \
                src/VersionCheck.cpp \
                src/KanaCOnversion.cpp \
-               src/LineEdit.cpp
+               src/LineEdit.cpp \
+               src/AjaxBind.cpp \
+               src/BindText.cpp \
+               src/BindTextBox.cpp \
+               src/BindIcon.cpp \
+               src/BindNumber.cpp \
+               src/BindNumberRange.cpp \
+               src/BindEnum.cpp \
+               src/BindBool.cpp \
+               src/BindRelation.cpp \
+               src/BindNumberSet.cpp \
+               src/BindNumberSelector.cpp

@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconSelect.h                                                     *
+*  client/src/AjaxBind.cpp                                                     *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,36 +17,54 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconSelect_h__
-#define __IconSelect_h__
+#include "AjaxBind.h"
 
-#include "ui_IconSelect.h"
-
-class IconSelect : public QWidget
+AjaxBind::AjaxBind(QObject *obj_parent) : QObject(obj_parent)
 {
-	Q_OBJECT
+	// Nothing to see here
+}
 
-public:
-	IconSelect(QWidget *parent = 0);
+AjaxBind::~AjaxBind()
+{
+	// Nothing to see here
+}
 
-	QString searchPath() const;
-	void setSearchPath(const QString &path);
+QString AjaxBind::column() const
+{
+	Q_ASSERT(mColumns.count() == 1);
 
-public slots:
-	void selectIcon();
+	return mColumns.first();
+}
 
-protected slots:
-	void handleIcon();
-	void handleClose();
+void AjaxBind::setColumn(const QString& col)
+{
+	Q_ASSERT(mColumns.count() <= 1);
+	Q_ASSERT( !col.isEmpty() );
 
-signals:
-	void iconCanceled();
-	void iconReady(const QString& path, const QString& value);
+	mColumns = QStringList() << col;
+}
 
-protected:
-	QString mSearchPath;
+QStringList AjaxBind::columns() const
+{
+	return mColumns;
+}
 
-	Ui::IconSelect ui;
-};
+void AjaxBind::setColumns(const QStringList& cols)
+{
+	mColumns = cols;
+}
 
-#endif // __IconSelect_h__
+QVariantList AjaxBind::customViewActions() const
+{
+	return QVariantList();
+}
+
+QVariantList AjaxBind::customUpdateActions() const
+{
+	return QVariantList();
+}
+
+QVariantList AjaxBind::customDeleteActions() const
+{
+	return QVariantList();
+}

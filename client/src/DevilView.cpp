@@ -131,6 +131,26 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 	mashou_where["column"] = "type";
 	mashou_where["value"] = 2; // Mashou
 
+	QVariantMap relation1_columns;
+	relation1_columns["name_ja"] = "expert_ja";
+	relation1_columns["name_en"] = "expert_en";
+
+	QVariantMap relation1;
+	relation1["id"] = "db_skills.expert";
+	relation1["table"] = "db_expert";
+	relation1["foreign_id"] = "id";
+	relation1["columns"] = relation1_columns;
+
+	QVariantMap relation2_columns;
+	relation2_columns["name_ja"] = "category_ja";
+	relation2_columns["name_en"] = "category_en";
+
+	QVariantMap relation2;
+	relation2["id"] = "db_skills.category";
+	relation2["table"] = "db_category";
+	relation2["foreign_id"] = "id";
+	relation2["columns"] = relation2_columns;
+
 	// Bind the data
 	bindText("name_en", ui.englishName, ui.englishNameEdit);
 	bindText("name_ja", ui.japaneseName, ui.japaneseNameEdit);
@@ -335,6 +355,16 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindBool("absorb_suicide", ui.absorbSuicide, ui.absorbSuicideEdit);
 	bindBool("absorb_almighty", ui.absorbAlmighty, ui.absorbAlmightyEdit);
 	bindBool("absorb_special", ui.absorbSpecial, ui.absorbSpecialEdit);
+	bindDetailedMultiRelation("db_devil_skills", ui.skills, ui.skillsEditList,
+		"application/x-megatendb-skills", "devil", "skill", "db_skills", "icon",
+		"icons/skills/icon_%1.png", QStringList() << "name_{$lang}"
+		<< "__extra__" << "expert_{$lang}" << "category_{$lang}",
+		ui.skillsEditAdd, ui.skillsEditEdit, ui.skillsEditRemove,
+		ui.skillsEditSearchNew, ui.skillsEditSearchUpdate,
+		ui.skillsEditSearchCancel, ui.skillsEditAddSearch, ui.skillsEditAddList,
+		QVariant(), QVariant(), true, QVariantList() << relation1 << relation2,
+		"lvl", tr("At what level does the devil learn this skill? "
+		"(-1 for starting level)"));
 
 	// Give the relation buttons an icon
 	QIcon edit_icon(":/edit.png");
