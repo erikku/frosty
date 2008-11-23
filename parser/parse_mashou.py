@@ -18,28 +18,8 @@
 # Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-import BeautifulSoup, demjson, random, time
+import BeautifulSoup, demjson, random, time, udc
 import ajax, urllib, urllib2, codecs, sys, re, os
-
-def eucjp_udc(e):
-	seq = e.object[e.start:e.end]
-
-	if not isinstance(e, UnicodeDecodeError):
-		raise e
-	if len(seq) != 2 or not isinstance(seq, str):
-		raise e
-
-	chart = {
-		"\xfc\xf1":u"ⅰ", "\xfc\xf2":u"ⅱ", "\xfc\xf3":u"ⅲ",
-		"\xfc\xf4":u"ⅳ", "\xfc\xf5":u"ⅴ", "\xfc\xf6":u"ⅵ",
-		"\xfc\xf7":u"ⅶ", "\xfc\xf8":u"ⅷ", "\xfc\xf9":u"ⅸ" }
-
-	if chart.has_key(seq):
-		return (chart[seq], e.end)
-
-	raise e
-
-codecs.register_error("eucjp_udc", eucjp_udc)
 
 def strip_tags(value):
 	return re.sub(r"<[^>]*?>", u"", value)
@@ -60,8 +40,8 @@ def cache_file(url, post, filename):
 		time.sleep(random.uniform(1000000, 5000000) / 1000000)
 
 	# Open the file
-	handle = codecs.open(filename, encoding="euc-jp", errors="eucjp_udc")
-	page = handle.read()
+	handle = open(filename, "r")
+	page = handle.read().decode("euc-jp-udc")
 	handle.close()
 
 	return page
