@@ -594,7 +594,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="3">
+               <item row="0" column="4">
                 <widget class="QLabel" name="seireiLabel">
                  <property name="text">
                   <string>Result Seirei</string>
@@ -634,10 +634,30 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="3">
+               <item row="1" column="4">
                 <widget class="QLabel" name="seirei">
                  <property name="text">
                   <string>N/A</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLabel" name="devilBookLabel">
+                 <property name="text">
+                  <string>悪魔全書</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QLabel" name="devilBook">
+                 <property name="text">
+                  <string> x </string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1290,8 +1310,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>463</width>
-                  <height>307</height>
+                  <width>96</width>
+                  <height>42</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout">
@@ -1349,8 +1369,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>463</width>
-                  <height>307</height>
+                  <width>96</width>
+                  <height>42</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout">
@@ -3271,7 +3291,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="3">
+               <item row="0" column="4">
                 <widget class="QLabel" name="seireiEditLabel">
                  <property name="text">
                   <string>Result Seirei</string>
@@ -3302,8 +3322,21 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="3">
+               <item row="1" column="4">
                 <widget class="QComboBox" name="seireiEdit"/>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLabel" name="devilBookEditLabel">
+                 <property name="text">
+                  <string>悪魔全書</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QCheckBox" name="devilBookEdit"/>
                </item>
               </layout>
              </item>

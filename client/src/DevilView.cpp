@@ -56,7 +56,7 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.wpElectricShockLabel << ui.wpHamaLabel << ui.wpMudoLabel
 		<< ui.wpMagicForceLabel << ui.wpNerveLabel << ui.wpMindLabel
 		<< ui.wpSuicideLabel << ui.wpAlmightyLabel << ui.wpSpecialLabel
-		<< ui.separatorWidget;
+		<< ui.separatorWidget << ui.devilBookLabel;
 
 	// Edit labels
 	widgets << ui.nameEditLabel << ui.englishNameEditLabel
@@ -86,7 +86,7 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.wpElectricShockEditLabel << ui.wpHamaEditLabel
 		<< ui.wpMudoEditLabel << ui.wpMagicForceEditLabel << ui.wpNerveEditLabel
 		<< ui.wpMindEditLabel << ui.wpSuicideEditLabel << ui.wpAlmightyEditLabel
-		<< ui.wpSpecialEditLabel;
+		<< ui.wpSpecialEditLabel << ui.devilBookEditLabel;
 
 	foreach(QWidget *widget, widgets)
 		darkenWidget(widget);
@@ -164,6 +164,7 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindNumber("hp", ui.hp, ui.hpEdit);
 	bindNumber("mp", ui.mp, ui.mpEdit);
 	bindNumber("mag", ui.mag, ui.magEdit);
+	bindBool("devil_book", ui.devilBook, ui.devilBookEdit);
 	bindEnum("seirei", ui.seirei, ui.seireiEdit, seireiEnum);
 	bindRelation("parent", ui.parentDevil, ui.parentDevilEdit, "db_devils",
 		QString(), 0, QString(), tr("N/A"));
