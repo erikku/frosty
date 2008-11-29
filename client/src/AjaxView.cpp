@@ -341,6 +341,8 @@ void AjaxView::bindRelation(const QString& field, QLabel *view_widget,
 	bind->setNoneName(noneName);
 	bind->setFilters(filters);
 
+	bind->refreshRelationCache();
+
 	mBinds << bind;
 }
 
@@ -583,7 +585,14 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 	{
 		// Someone clicked too fast, ignore this request
 		if( result.value("rows").toList().first().toMap().value("id") != mID )
+		{
+			mSleepingResponse = QVariantMap();
+
 			return;
+		}
+
+		// Clear out the sleeping response so we don't do this again
+		mSleepingResponse = QVariantMap();
 
 		QVariantList rows = result.value("rows").toList();
 		QVariantMap map = rows.at(0).toMap();

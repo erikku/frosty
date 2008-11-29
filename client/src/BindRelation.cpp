@@ -77,12 +77,17 @@ void BindRelation::clear()
 	Q_ASSERT( mViewer && mEditor );
 
 	mViewer->clear();
+	mEditor->setCurrentIndex(0);
 
+	mLastID = -1;
+
+	/*
 	mEditor->clear();
 	if( !mNoneName.isEmpty() )
 		mEditor->addItem(mNoneName, 0);
 
 	refreshRelationCache();
+	*/
 }
 
 void BindRelation::handleViewResponse(const QVariantMap& values)
@@ -208,6 +213,9 @@ void BindRelation::browseRelationList()
 
 void BindRelation::updateRelationCombo()
 {
+	if( !mEditor->isEnabled() )
+		return;
+
 	mLastID = mEditor->itemData( mEditor->currentIndex() ).toInt();
 }
 
@@ -294,13 +302,13 @@ void BindRelation::ajaxResponse(const QVariant& resp)
 			index = mEditor->count() - 1;
 	}
 
+	mEditor->blockSignals(block);
+	mEditor->setEnabled(true);
+	mFilled = true;
+
 	if(index != -1)
 	{
 		mViewer->setText( mEditor->itemText(index) );
 		mEditor->setCurrentIndex(index);
 	}
-
-	mEditor->blockSignals(block);
-	mEditor->setEnabled(true);
-	mFilled = true;
 }

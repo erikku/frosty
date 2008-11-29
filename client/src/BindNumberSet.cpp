@@ -24,7 +24,7 @@
 #include <QtGui/QComboBox>
 
 BindNumberSet::BindNumberSet(QObject *obj_parent) : AjaxBind(obj_parent),
-	mViewer(0),	mEditor(0), mDefaultValue(0)
+	mViewer(0), mEditor(0), mSelector(0), mDefaultValue(0)
 {
 	// Nothing to see here
 }

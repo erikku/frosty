@@ -10,3 +10,4 @@ debug
 megatendb_updater
 megatendb_updater.exe
 megatendb_updater_*.qm
+*.pro.user
