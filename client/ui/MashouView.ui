@@ -88,6 +88,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
@@ -107,6 +110,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -171,6 +177,9 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
@@ -190,6 +199,9 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -219,12 +231,18 @@
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="equipType">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
@@ -273,6 +291,9 @@
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+           </property>
           </widget>
          </item>
          <item row="1" column="1">
@@ -282,6 +303,9 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
@@ -304,6 +328,9 @@
            <property name="wordWrap">
             <bool>true</bool>
            </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+           </property>
           </widget>
          </item>
         </layout>
@@ -324,6 +351,9 @@
           <widget class="QLabel" name="desc_jaFusion2">
            <property name="wordWrap">
             <bool>true</bool>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
@@ -346,6 +376,9 @@
            <property name="wordWrap">
             <bool>true</bool>
            </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+           </property>
           </widget>
          </item>
         </layout>
@@ -366,6 +399,9 @@
           <widget class="QLabel" name="desc_enFusion2">
            <property name="wordWrap">
             <bool>true</bool>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>
@@ -729,7 +765,7 @@
               </sizepolicy>
              </property>
              <property name="value">
-              <number>-1</number>
+              <number>0</number>
              </property>
              <property name="minimum">
               <number>-1</number>
@@ -755,7 +791,7 @@
               </sizepolicy>
              </property>
              <property name="value">
-              <number>-1</number>
+              <number>0</number>
              </property>
              <property name="minimum">
               <number>-1</number>
@@ -794,7 +830,7 @@
               </sizepolicy>
              </property>
              <property name="value">
-              <number>-1</number>
+              <number>0</number>
              </property>
              <property name="minimum">
               <number>-1</number>
@@ -820,7 +856,7 @@
               </sizepolicy>
              </property>
              <property name="value">
-              <number>-1</number>
+              <number>0</number>
              </property>
              <property name="minimum">
               <number>-1</number>

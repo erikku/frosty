@@ -104,6 +104,9 @@
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
+                   <property name="textInteractionFlags">
+                    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                   </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
@@ -113,6 +116,9 @@
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
+                   </property>
+                   <property name="textInteractionFlags">
+                    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                    </property>
                   </widget>
                  </item>
@@ -175,6 +181,9 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -184,6 +193,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -198,12 +210,18 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="1" column="3">
               <widget class="QLabel" name="growth">
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -426,6 +444,9 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -435,6 +456,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -446,6 +470,9 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="1" column="3">
@@ -455,6 +482,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -466,6 +496,9 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="1" column="5">
@@ -475,6 +508,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -486,6 +522,9 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="3" column="1">
@@ -495,6 +534,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -506,6 +548,9 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="3" column="3">
@@ -515,6 +560,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -526,6 +574,9 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
               </widget>
              </item>
              <item row="3" column="5">
@@ -535,6 +586,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -612,6 +666,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="1">
@@ -621,6 +678,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -632,6 +692,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="4">
@@ -641,6 +704,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -661,6 +727,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -696,12 +765,18 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="1">
                 <widget class="QLabel" name="mashou">
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -762,6 +837,9 @@
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
                    </property>
+                   <property name="textInteractionFlags">
+                    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                   </property>
                   </widget>
                  </item>
                  <item>
@@ -782,6 +860,9 @@
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
                    </property>
+                   <property name="textInteractionFlags">
+                    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -790,6 +871,9 @@
                 <widget class="QLabel" name="fusionRange">
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -800,6 +884,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -835,6 +922,9 @@
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
                      </property>
+                     <property name="textInteractionFlags">
+                      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                     </property>
                     </widget>
                    </item>
                    <item row="0" column="0">
@@ -865,6 +955,9 @@
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
                      </property>
+                     <property name="textInteractionFlags">
+                      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                     </property>
                     </widget>
                    </item>
                    <item row="2" column="0">
@@ -884,6 +977,9 @@
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="textInteractionFlags">
+                      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                      </property>
                     </widget>
                    </item>
@@ -949,6 +1045,9 @@
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
                      </property>
+                     <property name="textInteractionFlags">
+                      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                     </property>
                     </widget>
                    </item>
                    <item row="1" column="1">
@@ -958,6 +1057,9 @@
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="textInteractionFlags">
+                      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                      </property>
                     </widget>
                    </item>
@@ -979,6 +1081,9 @@
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
                      </property>
+                     <property name="textInteractionFlags">
+                      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                     </property>
                     </widget>
                    </item>
                    <item row="3" column="0">
@@ -998,6 +1103,9 @@
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="textInteractionFlags">
+                      <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                      </property>
                     </widget>
                    </item>
@@ -1066,6 +1174,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="1">
@@ -1075,6 +1186,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1086,6 +1200,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="0" column="3">
@@ -1095,6 +1212,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1106,6 +1226,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="3">
@@ -1115,6 +1238,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1126,6 +1252,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="5">
@@ -1136,6 +1265,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="5">
@@ -1145,6 +1277,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1310,8 +1445,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>96</width>
-                  <height>42</height>
+                  <width>463</width>
+                  <height>307</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout">
@@ -1369,8 +1504,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>96</width>
-                  <height>42</height>
+                  <width>463</width>
+                  <height>307</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout">
@@ -1425,6 +1560,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                </property>
               </widget>
              </item>
@@ -1646,6 +1784,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="2">
@@ -1655,6 +1796,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1666,6 +1810,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="4">
@@ -1675,6 +1822,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1686,6 +1836,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="1">
@@ -1695,6 +1848,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1706,6 +1862,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="3">
@@ -1715,6 +1874,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1726,6 +1888,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="5">
@@ -1735,6 +1900,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1746,6 +1914,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="3" column="2">
@@ -1755,6 +1926,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1766,6 +1940,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="3" column="4">
@@ -1775,6 +1952,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1786,6 +1966,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="4" column="1">
@@ -1795,6 +1978,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1806,6 +1992,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="4" column="3">
@@ -1815,6 +2004,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1826,6 +2018,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="4" column="5">
@@ -1835,6 +2030,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1846,6 +2044,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="5" column="2">
@@ -1855,6 +2056,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1866,6 +2070,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="5" column="4">
@@ -1875,6 +2082,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1886,6 +2096,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="6" column="1">
@@ -1895,6 +2108,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1906,6 +2122,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="6" column="3">
@@ -1915,6 +2134,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1926,6 +2148,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="6" column="5">
@@ -1935,6 +2160,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1946,6 +2174,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="7" column="2">
@@ -1955,6 +2186,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1966,6 +2200,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="7" column="4">
@@ -1975,6 +2212,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -1986,6 +2226,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="8" column="1">
@@ -1995,6 +2238,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2006,6 +2252,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="8" column="3">
@@ -2015,6 +2264,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2026,6 +2278,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="8" column="5">
@@ -2035,6 +2290,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2046,6 +2304,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="9" column="2">
@@ -2055,6 +2316,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2066,6 +2330,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="9" column="4">
@@ -2075,6 +2342,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2086,6 +2356,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="10" column="1">
@@ -2095,6 +2368,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2106,6 +2382,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="10" column="3">
@@ -2115,6 +2394,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2126,6 +2408,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="10" column="5">
@@ -2135,6 +2420,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2319,6 +2607,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="2">
@@ -2328,6 +2619,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2339,6 +2633,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="3" column="2">
@@ -2348,6 +2645,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2359,6 +2659,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="5" column="2">
@@ -2368,6 +2671,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2379,6 +2685,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="7" column="2">
@@ -2388,6 +2697,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2399,6 +2711,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="9" column="2">
@@ -2408,6 +2723,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2419,6 +2737,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="1">
@@ -2428,6 +2749,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2439,6 +2763,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="4" column="1">
@@ -2448,6 +2775,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2459,6 +2789,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="6" column="1">
@@ -2468,6 +2801,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2479,6 +2815,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="8" column="1">
@@ -2488,6 +2827,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2499,6 +2841,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="10" column="1">
@@ -2508,6 +2853,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2519,6 +2867,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="3">
@@ -2528,6 +2879,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2539,6 +2893,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="4" column="3">
@@ -2548,6 +2905,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2559,6 +2919,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="6" column="3">
@@ -2568,6 +2931,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2579,6 +2945,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="8" column="3">
@@ -2588,6 +2957,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2599,6 +2971,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="10" column="3">
@@ -2608,6 +2983,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2619,6 +2997,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="4">
@@ -2628,6 +3009,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2639,6 +3023,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="3" column="4">
@@ -2648,6 +3035,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2659,6 +3049,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="6" column="4">
@@ -2668,6 +3061,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2679,6 +3075,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="8" column="4">
@@ -2688,6 +3087,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2699,6 +3101,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="10" column="4">
@@ -2708,6 +3113,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2719,6 +3127,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="9" column="5">
@@ -2728,6 +3139,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2739,6 +3153,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="7" column="5">
@@ -2748,6 +3165,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2759,6 +3179,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="5" column="5">
@@ -2768,6 +3191,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2779,6 +3205,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="3" column="5">
@@ -2788,6 +3217,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
@@ -2799,6 +3231,9 @@
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
                  </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="5">
@@ -2808,6 +3243,9 @@
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
                  </property>
                 </widget>
                </item>
