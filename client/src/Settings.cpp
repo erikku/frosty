@@ -53,7 +53,7 @@ Settings::Settings(QObject *parent_object) : QObject(parent_object)
 		qsettings.setValue("lang", "ja");
 
 	mUpdateURL = qsettings.value("update_url").toUrl();
-	mLang = qsettings.value("lang", "ja").toString();
+	mLang = qsettings.value("lang", "en").toString();
 	mEmail = qsettings.value("email").toString();
 	mPass = qsettings.value("pass").toString();
 
