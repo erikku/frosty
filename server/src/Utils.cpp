@@ -75,6 +75,7 @@ QStringList tables_blacklist()
 {
 	QStringList blacklist;
 	blacklist << "users";
+	blacklist << "sqlite_sequence";
 
 	return blacklist;
 };

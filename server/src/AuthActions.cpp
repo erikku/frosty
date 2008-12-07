@@ -29,17 +29,24 @@ QVariantMap authActionQueryPerms(int i, QTcpSocket *connection,
 
 	if( action.contains("email") )
 	{
+		QVariantMap perms = auth->queryPerms(
+			action.value("email").toString() ).toMap();
+		perms.remove("any");
+
 		QVariantMap map;
 		map["email"] = action.value("email");
-		map["perms"] = auth->queryPerms( action.value("email").toString() );
+		map["perms"] = perms;
 
 		return map;
 	}
 	else
 	{
+		QVariantMap perms = auth->queryPerms(email).toMap();
+		perms.remove("any");
+
 		QVariantMap map;
 		map["email"] = email;
-		map["perms"] = auth->queryPerms(email);
+		map["perms"] = perms;
 
 		return map;
 	}
