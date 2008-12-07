@@ -768,6 +768,22 @@
            <item>
             <widget class="QPushButton" name="affinityEditButton"/>
            </item>
+           <item>
+            <spacer>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>5</width>
+               <height>5</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
          <item row="2" column="0">
@@ -855,7 +871,7 @@
          <item row="1" column="3">
           <widget class="QLabel" name="relatedStatLabel2">
            <property name="text">
-            <string>Affinity</string>
+            <string>Related Stat</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
