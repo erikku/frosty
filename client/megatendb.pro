@@ -49,6 +49,7 @@ FORMS       += ui/PaletteEditor.ui \
                ui/DevilView.ui \
                ui/MashouView.ui \
                ui/SkillView.ui \
+               ui/IconImport.ui \
                ui/IconSelect.ui \
                ui/InfoListWidget.ui \
                ui/InfoListWidgetItem.ui \
@@ -80,6 +81,7 @@ HEADERS     += src/ajax.h \
                src/SearchEdit.h \
                src/HttpTransfer.h \
                src/IconEdit.h \
+               src/IconImport.h \
                src/IconSelect.h \
                src/ImportExport.h \
                src/InfoListWidget.h \
@@ -131,6 +133,7 @@ SOURCES     += src/main.cpp \
                src/SkillWindow.cpp \
                src/HttpTransfer.cpp \
                src/IconEdit.cpp \
+               src/IconImport.cpp \
                src/IconSelect.cpp \
                src/ImportExport.cpp \
                src/InfoListWidget.cpp \

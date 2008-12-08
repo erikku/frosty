@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/main.cpp                                                         *
+*  client/src/IconImport.h                                                     *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,58 +17,39 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include <QtGui/QApplication>
-#include <QtGui/QPalette>
+#ifndef __IconImport_h__
+#define __IconImport_h__
 
-#include <QtCore/QTranslator>
-#include <QtCore/QFile>
+#include "ui_IconImport.h"
 
-#include "PaletteEditor.h"
-#include "VersionCheck.h"
-#include "IconImport.h"
-#include "Settings.h"
-#include "Register.h"
-#include "Taskbar.h"
+#include <QtCore/QStringList>
+#include <QtCore/QProcess>
 
-#include <QtNetwork/QSslSocket>
-#include <QtNetwork/QSslCertificate>
-
-int main(int argc, char *argv[])
+class IconImport : public QWidget
 {
-	QApplication::setStyle("plastique");
+	Q_OBJECT
 
-	QApplication app(argc, argv);
+public:
+	IconImport(QWidget *parent = 0);
 
-	QApplication::setWindowIcon( QIcon( ":/megatendb.ico") );
+public slots:
+	void performCheck();
 
-	QTranslator translator;
-	translator.load( QString("megatendb_%1").arg(settings->lang()) );
-	app.installTranslator(&translator);
+protected slots:
+	void iconError();
+	void scanIcons();
+	void handleNext();
+	void iconFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
-	QFile paletteFile(":/dark.xml");
-	paletteFile.open(QIODevice::ReadOnly);
-	QPalette palette = PaletteEditor::importPalette( paletteFile.readAll() );
-	paletteFile.close();
+protected:
 
-	app.setPalette(palette);
+	QProcess *mProc;
 
-	QFile cert_file(":/ca.crt");
-    cert_file.open(QIODevice::ReadOnly);
+	QString mSrcPath;
+	QString mAppPath, mLastSrc, mLastDest;
+	QStringList mDevils, mSkills, mMashou;
 
-	QSslCertificate cert(&cert_file);
-	QSslSocket::addDefaultCaCertificate(cert);
+	Ui::IconImport ui;
+};
 
-	if( settings->email().isEmpty() )
-		(new Register)->show();
-	else
-		(new Taskbar)->show();
-
-	if( !app.arguments().contains("--no-check") )
-	{
-		VersionCheck::getSingletonPtr();
-
-		(new IconImport)->performCheck();
-	}
-
-	return app.exec();
-}
+#endif // __IconImport_h__

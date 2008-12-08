@@ -19,6 +19,7 @@
 
 #include "Settings.h"
 
+#include <QtCore/QDir>
 #include <QtCore/QSettings>
 #include <QtCore/QCoreApplication>
 #include <QtGui/QInputDialog>
@@ -59,6 +60,17 @@ Settings::Settings(QObject *parent_object) : QObject(parent_object)
 
 	Q_ASSERT(g_settings == 0);
 	g_settings = this;
+
+#ifdef Q_OS_WIN32
+	QSettings magick("HKEY_LOCAL_MACHINE\\SOFTWARE\\ImageMagick\\6.4.7\\Q:16",
+		QSettings::NativeFormat);
+
+	QString appPath = QDir::toNativeSeparators( qApp->applicationDirPath() );
+
+	magick.setValue("BinPath", appPath);
+	magick.setValue("ConfigurePath", appPath);
+	magick.setValue("LibPath", appPath);
+#endif // Q_OS_WIN32
 }
 
 Settings* Settings::getSingletonPtr()
