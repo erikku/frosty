@@ -233,6 +233,7 @@ void Taskbar::ajaxResponse(const QVariant& resp)
 			mUsersAction->setVisible(true);
 			mImportExportAction->setEnabled(true);
 			mImportExportAction->setVisible(true);
+			ui.devilsButton->setEnabled(true);
 		}
 	}
 }

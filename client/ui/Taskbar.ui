@@ -23,6 +23,9 @@
       <layout class="QHBoxLayout">
        <item>
         <widget class="QPushButton" name="devilsButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>&amp;Devils</string>
          </property>
