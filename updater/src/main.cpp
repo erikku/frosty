@@ -39,4 +39,4 @@ int main(int argc, char *argv[])
 	new Updater;
 
 	return app.exec();
-};
+}

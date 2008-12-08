@@ -18,17 +18,14 @@
 \******************************************************************************/
 
 #include "Updater.h"
+#include "CheckThread.h"
 #include "HttpTransfer.h"
-#include "sha1.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QProcess>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTextStream>
 #include <QtCore/QSettings>
-#include <QtCore/QRegExp>
 #include <QtGui/QApplication>
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
@@ -42,8 +39,12 @@
 #define EXE_FILE "megatendb"
 #endif
 
-Updater::Updater(QWidget *parent) : QWidget(parent), mCount(0)
+Q_DECLARE_METATYPE(StringMap)
+
+Updater::Updater(QWidget *parent_widget) : QWidget(parent_widget), mCount(0)
 {
+	qRegisterMetaType<StringMap>();
+
 	QCoreApplication::setOrganizationName("MegatenDB");
 	QCoreApplication::setOrganizationDomain("troopersklan.jp");
 	QCoreApplication::setApplicationName("Megaten DB");
@@ -74,73 +75,32 @@ Updater::Updater(QWidget *parent) : QWidget(parent), mCount(0)
 
 	downloadFile(UPDATE_FILE);
 	show();
-};
+}
 
-QString Updater::fileChecksum(const QString& path) const
+void Updater::checkFiles(const QString& checksums)
 {
-	// TODO: Add error checking
+	ui.fileLabel->setText( tr("Checking files, please wait...") );
 
-	sha1_context ctx;
-	sha1_starts(&ctx);
+	CheckThread *checkThread = new CheckThread;
 
-	qint64 bytesRead = -1;
-	unsigned char buffer[4096];
-	unsigned char hash[20];
+	connect(checkThread, SIGNAL(listReady(const StringMap&)),
+		this, SLOT(listReady(const StringMap&)));
+	connect(checkThread, SIGNAL(finished()),
+		checkThread, SLOT(deleteLater()));
 
-	QFile file(path);
-	file.open(QIODevice::ReadOnly);
+	checkThread->setChecksums(checksums);
+	checkThread->start();
+}
 
-	while( (bytesRead = file.read((char*)buffer, 4096)) > 0 )
-		sha1_update(&ctx, buffer, (int)bytesRead);
-
-	sha1_finish(&ctx, hash);
-	file.close();
-
-	QString checksum;
-	for(int i = 0; i < 20; i++)
-	{
-		int byte = (int)hash[i];
-		checksum += QString("%1").arg(byte, 2, 16, QLatin1Char('0'));
-	}
-
-	//checksum += QString(" *%1").arg(path);
-
-	return checksum;
-};
-
-bool Updater::checkFile(const QString& path, const QString& checksum) const
+void Updater::listReady(const StringMap& list)
 {
-	if( !QFileInfo(path).exists() )
-		return false;
+	mBadList = list;
+	ui.totalProgress->setMaximum(mBadList.count());
+	ui.totalProgress->setValue(0);
 
-	return ( fileChecksum(path).toLower() == checksum.toLower() );
-};
-
-QMap<QString, QString> Updater::checkFiles(const QString& checksums) const
-{
-	QString stream_text = checksums;
-	QTextStream stream(&stream_text);
-
-	QRegExp checksumMatcher("([0-9A-Fa-f]{40}) \\*(.+)");
-
-	QString line;
-	QMap<QString, QString> badList;
-
-	while(true)
-	{
-		line = stream.readLine();
-		if( line.isEmpty() )
-			break;
-
-		if( !checksumMatcher.exactMatch(line) )
-			continue;
-
-		if( !checkFile(checksumMatcher.cap(2), checksumMatcher.cap(1)) )
-			badList[checksumMatcher.cap(2)] = checksumMatcher.cap(1);
-	}
-
-	return badList;
-};
+	mCount--;
+	transferFinished(QString());
+}
 
 void Updater::downloadFile(const QString& path)
 {
@@ -159,7 +119,7 @@ void Updater::downloadFile(const QString& path)
 		ui.fileProgress, SLOT(setValue(int)));
 	connect(transfer, SIGNAL(transferFailed()),
 		this, SLOT(transferFailed()));
-};
+}
 
 void Updater::transferFailed()
 {
@@ -175,15 +135,13 @@ void Updater::transferFailed()
 	}
 
 	qApp->quit();
-};
+}
 
 void Updater::transferFinished(const QString& checksum)
 {
 	HttpTransfer *transfer = qobject_cast<HttpTransfer*>(sender());
-	if(!transfer)
-		return;
-
-	transfer->deleteLater();
+	if(transfer)
+		transfer->deleteLater();
 
 	mCount++;
 	ui.totalProgress->setValue(mCount);
@@ -199,11 +157,11 @@ void Updater::transferFinished(const QString& checksum)
 		file.remove();
 
 		mCount = 0;
-		mBadList = checkFiles(mChecksums);
-		ui.totalProgress->setValue(0);
-		ui.totalProgress->setMaximum(mBadList.count());
+		checkFiles(mChecksums);
+
+		return;
 	}
-	else
+	else if( !mCurrentPath.isEmpty() )
 	{
 		if(mBadList.value(mCurrentPath) != checksum)
 		{
@@ -229,13 +187,16 @@ void Updater::transferFinished(const QString& checksum)
 			QFile::ExeOwner | QFile::ReadGroup | QFile::ExeGroup |
 			QFile::ReadOther | QFile::ExeOther);
 
+		ui.totalProgress->setMaximum(10);
+		ui.totalProgress->setValue(10);
+
 		ui.fileLabel->setText( tr("Update Finished") );
 		ui.startButton->setEnabled(true);
 	}
-};
+}
 
 void Updater::startApp()
 {
 	QProcess::startDetached( QDir::current().filePath(EXE_FILE) );
 	qApp->quit();
-};
+}

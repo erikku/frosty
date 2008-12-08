@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  updater/src/Updater.h                                                       *
+*  updater/src/CheckThread.h                                                   *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,41 +17,34 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Updater_h__
-#define __Updater_h__
-
-#include "ui_Updater.h"
+#ifndef __CheckThread_h__
+#define __CheckThread_h__
 
 #include <QtCore/QMap>
-#include <QtGui/QWidget>
-#include <QtNetwork/QHttpResponseHeader>
+#include <QtCore/QString>
+#include <QtCore/QThread>
 
 typedef QMap<QString,QString> StringMap;
 
-class Updater : public QWidget
+class CheckThread : public QThread
 {
 	Q_OBJECT
 
 public:
-	Updater(QWidget *parent = 0);
+	CheckThread(QObject *parent = 0);
 
-	void checkFiles(const QString& checksums);
-	void downloadFile(const QString& path);
+	virtual void run();
 
-protected slots:
-	void startApp();
-	void transferFailed();
-	void transferFinished(const QString& checksum);
+	void setChecksums(const QString& checksums);
+
+signals:
 	void listReady(const StringMap& list);
 
 protected:
-	int mCount;
+	QString fileChecksum(const QString& path) const;
+	bool checkFile(const QString& path, const QString& checksum) const;
 
 	QString mChecksums;
-	QString mCurrentPath;
-	QMap<QString, QString> mBadList;
-
-	Ui::Updater ui;
 };
 
-#endif // __Updater_h__
+#endif // __CheckThread_h__
