@@ -49,9 +49,14 @@ public:
 	QString noText() const;
 	void setNoText(const QString& no);
 
+	bool defaultValue() const;
+	void setDefaultValue(bool val);
+
 protected:
 	QLabel *mViewer;
 	QCheckBox *mEditor;
+
+	bool mDefaultValue;
 
 	QString mYesText, mNoText;
 };

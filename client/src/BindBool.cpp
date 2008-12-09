@@ -23,7 +23,7 @@
 #include <QtGui/QCheckBox>
 
 BindBool::BindBool(QObject *obj_parent) : AjaxBind(obj_parent),
-	mViewer(0),	mEditor(0)
+	mViewer(0), mEditor(0), mDefaultValue(false)
 {
 	// Nothing to see here
 }
@@ -57,7 +57,7 @@ void BindBool::clear()
 	Q_ASSERT( mViewer && mEditor );
 
 	mViewer->clear();
-	mEditor->setCheckState(Qt::Unchecked);
+	mEditor->setCheckState(mDefaultValue ? Qt::Checked : Qt::Unchecked);
 }
 
 void BindBool::handleViewResponse(const QVariantMap& values)
@@ -103,4 +103,14 @@ QString BindBool::noText() const
 void BindBool::setNoText(const QString& no)
 {
 	mNoText = no;
+}
+
+bool BindBool::defaultValue() const
+{
+	return mDefaultValue;
+}
+
+void BindBool::setDefaultValue(bool val)
+{
+	mDefaultValue = val;
 }

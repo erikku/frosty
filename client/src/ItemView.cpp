@@ -138,7 +138,8 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindNumber("durability", ui.durability, ui.durabilityEdit, 0);
 	bindNumber("buy_price", ui.buyPrice, ui.buyPriceEdit, 0);
 	bindNumber("sell_price", ui.sellPrice, ui.sellPriceEdit, 0);
-	bindBool("tradable", ui.tradable, ui.tradeableEdit);
+	bindBool("tradable", ui.tradable, ui.tradeableEdit,
+		QString(), QString(), true);
 	bindRelation("type", ui.type, ui.typeEdit, "db_item_type",
 		QString(), ui.typeEditButton, tr("Item Type"));
 	bindRelation("equip_type", ui.equipType, ui.equipTypeEdit, "db_equip_type",
@@ -146,8 +147,10 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindRelation("affinity", ui.affinity, ui.affinityEdit, "db_affinity",
 		QString(), ui.affinityEditButton, tr("Affinity"));
 	bindEnum("lnc_req", ui.lncReq, ui.lncReqEdit, lncEnum, 0);
-	bindBool("fusion1", ui.fusion1, ui.fusion1Edit);
-	bindBool("fusion2", ui.fusion2, ui.fusion2Edit);
+	bindBool("fusion1", ui.fusion1, ui.fusion1Edit,
+		QString(), QString(), true);
+	bindBool("fusion2", ui.fusion2, ui.fusion2Edit,
+		QString(), QString(), true);
 	bindNumber("slot_count", ui.slotCount, ui.slotCountEdit, 0);
 	bindNumber("level_req", ui.levelReq, ui.levelReqEdit);
 	bindBool("cash_shop", ui.cashShop, ui.cashShopEdit);

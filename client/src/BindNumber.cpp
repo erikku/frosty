@@ -71,7 +71,7 @@ void BindNumber::handleViewResponse(const QVariantMap& values)
 
 	int val = data.toInt();
 
-	if(val < 0 )
+	if(val < 0 && mEditor->minimum() >= -1)
 	{
 		mViewer->setText( tr("N/A") );
 	}

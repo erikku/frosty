@@ -311,13 +311,15 @@ void AjaxView::bindEnum(const QString& field, QLabel *view_widget,
 }
 
 void AjaxView::bindBool(const QString& field, QLabel *view_widget,
-	QCheckBox *edit_widget, const QString& yes, const QString& no)
+	QCheckBox *edit_widget, const QString& yes, const QString& no,
+	bool defaultValue)
 {
 	BindBool *bind = new BindBool;
 	bind->setViewer(view_widget);
 	bind->setEditor(edit_widget);
 	bind->setColumn(field);
 
+	bind->setDefaultValue(defaultValue);
 	bind->setYesText(yes);
 	bind->setNoText(no);
 
