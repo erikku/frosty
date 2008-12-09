@@ -203,6 +203,6 @@ void Updater::transferFinished(const QString& checksum)
 
 void Updater::startApp()
 {
-	QProcess::startDetached( QDir::current().filePath(EXE_FILE) );
+	QProcess::startDetached(QDir::current().filePath(EXE_FILE), QStringList());
 	qApp->quit();
 }
