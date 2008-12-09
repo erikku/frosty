@@ -40,6 +40,7 @@ public:
 	Taskbar(QWidget *parent = 0);
 
 public slots:
+	void showAbout();
 	void showLogWindow();
 	void showItemWindow();
 	void showDevilWindow();

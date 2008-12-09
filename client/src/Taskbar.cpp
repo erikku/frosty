@@ -29,6 +29,8 @@
 #include "ImportExport.h"
 #include "ajax.h"
 
+#include "ui_About.h"
+
 #include <QtGui/QSystemTrayIcon>
 #include <QtGui/QAction>
 #include <QtGui/QMenu>
@@ -97,6 +99,12 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 	act = menu->addSeparator();
 
+	// About Action
+	act = menu->addAction(/* icon, */tr("&About") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showAbout()));
+	connect(ui.aboutButton, SIGNAL(clicked(bool)),
+		this, SLOT(showAbout()));
+
 	// Options Action
 	act = menu->addAction(/* icon, */tr("&Options") );
 	connect(act, SIGNAL(triggered()), this, SLOT(showOptionsWindow()));
@@ -131,6 +139,16 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
+}
+
+void Taskbar::showAbout()
+{
+	Ui::About about;
+
+	QWidget *widget = new QWidget;
+	about.setupUi(widget);
+
+	widget->show();
 }
 
 void Taskbar::showLogWindow()

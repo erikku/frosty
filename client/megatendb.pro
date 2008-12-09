@@ -63,7 +63,8 @@ FORMS       += ui/PaletteEditor.ui \
                ui/Login.ui \
                ui/UserEdit.ui \
                ui/UserList.ui \
-               ui/LogView.ui
+               ui/LogView.ui \
+               ui/About.ui
 HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/PaletteEditor.h \
