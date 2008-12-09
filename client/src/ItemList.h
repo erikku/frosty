@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconImport.h                                                     *
+*  client/src/ItemList.h                                                       *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,39 +17,41 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconImport_h__
-#define __IconImport_h__
+#ifndef __ItemList_h__
+#define __ItemList_h__
 
-#include "ui_IconImport.h"
+#include "AjaxList.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QProcess>
+#include <QtCore/QMap>
+#include <QtCore/QVariant>
 
-class IconImport : public QWidget
+class ItemView;
+class QListWidgetItem;
+
+class ItemList : public AjaxList
 {
 	Q_OBJECT
 
 public:
-	IconImport(QWidget *parent = 0);
-
-public slots:
-	void performCheck();
-
-protected slots:
-	void iconError();
-	void scanIcons();
-	void handleNext();
-	void iconFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	ItemList(ItemView *view = 0, QWidget *parent = 0);
 
 protected:
+	virtual QVariant filterAction() const;
+	virtual QVariant filterUserData() const;
 
-	QProcess *mProc;
+	virtual QVariant listAction() const;
+	virtual QVariant listUserData() const;
 
-	QString mSrcPath, mCurrent;
-	QString mAppPath, mLastSrc, mLastDest;
-	QStringList mDevils, mSkills, mMashou, mItems;
+	virtual QString switchTitle() const;
+	virtual QString switchMessage() const;
 
-	Ui::IconImport ui;
+	virtual QString deleteTitle() const;
+	virtual QString deleteMessage() const;
+	virtual QVariant deleteAction(int id) const;
+	virtual QVariant deleteUserData() const;
+
+	virtual int filterID(const QVariantMap& map) const;
+	virtual QString itemIcon(const QVariantMap& map) const;
 };
 
-#endif // __IconImport_h__
+#endif // __ItemList_h__

@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconImport.h                                                     *
+*  client/src/ItemWindow.cpp                                                   *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,39 +17,42 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconImport_h__
-#define __IconImport_h__
+#include "ItemWindow.h"
+#include "ItemList.h"
+#include "ItemView.h"
+#include "UserList.h"
+#include "Options.h"
 
-#include "ui_IconImport.h"
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QSplitter>
 
-#include <QtCore/QStringList>
-#include <QtCore/QProcess>
-
-class IconImport : public QWidget
+ItemWindow::ItemWindow(QWidget *parent_widget) : QWidget(parent_widget)
 {
-	Q_OBJECT
+	mItemView = new ItemView;
+	mItemList = new ItemList(mItemView);
 
-public:
-	IconImport(QWidget *parent = 0);
+	QSplitter *mainSplitter = new QSplitter;
+	mainSplitter->addWidget(mItemList);
+	mainSplitter->addWidget(mItemView);
 
-public slots:
-	void performCheck();
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->addWidget(mainSplitter);
 
-protected slots:
-	void iconError();
-	void scanIcons();
-	void handleNext();
-	void iconFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	connect(mItemList, SIGNAL(itemClicked(int)), mItemView, SLOT(view(int)));
+	connect(mItemView, SIGNAL(viewChanged()), mItemList, SLOT(refresh()));
+	connect(mItemList, SIGNAL(addItemRequested()), mItemView, SLOT(add()));
+	connect(Options::getSingletonPtr(), SIGNAL(optionsChanged()),
+		this, SLOT(refresh()));
 
-protected:
+	setLayout(mainLayout);
+	setWindowTitle( tr("%1 - Item List").arg(
+		tr("Shin Megami Tensei IMAGINE DB") ) );
 
-	QProcess *mProc;
+	resize(800, 600);
+}
 
-	QString mSrcPath, mCurrent;
-	QString mAppPath, mLastSrc, mLastDest;
-	QStringList mDevils, mSkills, mMashou, mItems;
-
-	Ui::IconImport ui;
-};
-
-#endif // __IconImport_h__
+void ItemWindow::refresh()
+{
+	mItemList->refresh();
+	mItemView->refresh();
+}

@@ -22,6 +22,7 @@
 #include "UserList.h"
 #include "Settings.h"
 #include "LogWidget.h"
+#include "ItemWindow.h"
 #include "DevilWindow.h"
 #include "SkillWindow.h"
 #include "MashouWindow.h"
@@ -33,8 +34,9 @@
 #include <QtGui/QMenu>
 
 Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
-	mUserList(0), mLogWidget(0), mDevilWindow(0), mSkillWindow(0),
-	mMashouWindow(0), mImportExportWindow(0), mAdminSep(0), mUsersAction(0)
+	mUserList(0), mLogWidget(0), mItemWindow(0), mDevilWindow(0),
+	mSkillWindow(0), mMashouWindow(0), mImportExportWindow(0), mAdminSep(0),
+	mUsersAction(0)
 {
 	ui.setupUi(this);
 
@@ -69,6 +71,12 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	mAdminSep = menu->addSeparator();
 	mAdminSep->setEnabled(false);
 	mAdminSep->setVisible(false);
+
+	// Items Action
+	act = menu->addAction(/* icon, */tr("&Items") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showItemWindow()));
+	connect(ui.itemsButton, SIGNAL(clicked(bool)),
+		this, SLOT(showItemWindow()));
 
 	// Users Action
 	mUsersAction = menu->addAction(/* icon, */tr("&Users") );
@@ -135,6 +143,18 @@ void Taskbar::showLogWindow()
 	mLogWidget->show();
 	mLogWidget->activateWindow();
 	mLogWidget->raise();
+}
+
+void Taskbar::showItemWindow()
+{
+	if(!mItemWindow)
+		mItemWindow = new ItemWindow;
+
+	Q_ASSERT(mItemWindow != 0);
+
+	mItemWindow->show();
+	mItemWindow->activateWindow();
+	mItemWindow->raise();
 }
 
 void Taskbar::showDevilWindow()

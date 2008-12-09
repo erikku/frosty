@@ -25,6 +25,7 @@
 class Options;
 class UserList;
 class LogWidget;
+class ItemWindow;
 class DevilWindow;
 class SkillWindow;
 class MashouWindow;
@@ -40,6 +41,7 @@ public:
 
 public slots:
 	void showLogWindow();
+	void showItemWindow();
 	void showDevilWindow();
 	void showSkillWindow();
 	void showUsersWindow();
@@ -56,6 +58,7 @@ protected:
 	Options *mOptions;
 	UserList *mUserList;
 	LogWidget *mLogWidget;
+	ItemWindow *mItemWindow;
 	DevilWindow *mDevilWindow;
 	SkillWindow *mSkillWindow;
 	MashouWindow *mMashouWindow;

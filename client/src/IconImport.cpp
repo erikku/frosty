@@ -55,8 +55,9 @@ void IconImport::performCheck()
 	appDir.mkpath("icons/devils");
 	appDir.mkpath("icons/skills");
 	appDir.mkpath("icons/mashou");
+	appDir.mkpath("icons/items");
 
-	QFileInfo check("icons/skills/icon_SP02_0004a.png");
+	QFileInfo check("icons/items/icon_A09_0100a.png");
 	if( check.exists() )
 	{
 		deleteLater();
@@ -117,17 +118,24 @@ void IconImport::scanIcons()
 		return;
 	}
 
-	mDevils = dir.entryList(QStringList() << "icon_D[1-3]_*",
-		QDir::Files);
+	mDevils = dir.entryList(QStringList()
+		<< "icon_D[1-3]_*.[Tt][Gg][Aa]", QDir::Files);
 
-	mMashou = dir.entryList(QStringList() << "icon_I71_*", QDir::Files);
+	mMashou = dir.entryList(QStringList()
+		<< "icon_I71_*.[Tt][Gg][Aa]", QDir::Files);
 
-	mSkills = dir.entryList(QStringList() << "icon_SB[0-9][0-9]_*"
-		<< "icon_SD[0-9][0-9]_*" << "icon_SM[0-9][0-9]_*"
-		<< "icon_SP[0-9][0-9]_*" << "icon_SS[0-9][0-9]_*", QDir::Files);
+	mSkills = dir.entryList(QStringList() << "icon_SB[0-9][0-9]_*.[Tt][Gg][Aa]"
+		<< "icon_SD[0-9][0-9]_*.[Tt][Gg][Aa]"
+		<< "icon_SM[0-9][0-9]_*.[Tt][Gg][Aa]"
+		<< "icon_SP[0-9][0-9]_*.[Tt][Gg][Aa]"
+		<< "icon_SS[0-9][0-9]_*.[Tt][Gg][Aa]", QDir::Files);
+
+	mItems = dir.entryList(QStringList() << "icon_A[0-9][0-9]_*.[Tt][Gg][Aa]"
+		<< "icon_I[0-9][0-9]_*.[Tt][Gg][Aa]"
+		<< "icon_W[0-9][0-9]_*.[Tt][Gg][Aa]", QDir::Files);
 
 	ui.iconStatus->setMaximum( mDevils.count() + mSkills.count() +
-		mMashou.count() );
+		mMashou.count() + mItems.count() );
 
 	QTimer::singleShot(1, this, SLOT(handleNext()));
 }
@@ -150,6 +158,11 @@ void IconImport::handleNext()
 		dest = "mashou/";
 		src = mMashou.takeFirst();
 	}
+	else if( !mItems.isEmpty() )
+	{
+		dest = "items/";
+		src = mItems.takeFirst();
+	}
 	else
 	{
 		deleteLater();
@@ -157,6 +170,7 @@ void IconImport::handleNext()
 	}
 
 	dest += src.left(src.length() - 4) + ".png";
+	mCurrent = dest;
 
 	ui.iconLabel->setText(dest);
 
@@ -192,7 +206,7 @@ void IconImport::iconFinished(int exitCode, QProcess::ExitStatus exitStatus)
 	if(exitCode != 0)
 	{
 		QMessageBox box(QMessageBox::Critical, tr("Icon Import Error"),
-			tr("Failed to import icon."));
+			tr("Failed to import icon: %1").arg(mCurrent));
 
 		box.exec();
 		deleteLater();
@@ -204,6 +218,7 @@ void IconImport::iconFinished(int exitCode, QProcess::ExitStatus exitStatus)
 	{
 		QString src = mLastSrc;
 		QString dest = mLastDest.replace("icon_", "icon16_");
+		mCurrent = QFileInfo(dest).fileName();
 
 		mLastSrc.clear();
 		mLastDest.clear();
@@ -232,7 +247,7 @@ void IconImport::iconFinished(int exitCode, QProcess::ExitStatus exitStatus)
 void IconImport::iconError()
 {
 	QMessageBox box(QMessageBox::Critical, tr("Icon Import Error"),
-		tr("Failed to import icon."));
+		tr("Failed to import icon: %1").arg(mCurrent));
 
 	box.exec();
 	deleteLater();

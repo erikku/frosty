@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconImport.h                                                     *
+*  client/src/ItemWindow.h                                                     *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,39 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconImport_h__
-#define __IconImport_h__
+#ifndef __ItemWindow_h__
+#define __ItemWindow_h__
 
-#include "ui_IconImport.h"
+#include <QtGui/QWidget>
+#include <QtCore/QVariant>
+#include <QtCore/QMap>
 
-#include <QtCore/QStringList>
-#include <QtCore/QProcess>
+class ItemList;
+class ItemView;
+class QListWidgetItem;
 
-class IconImport : public QWidget
+class ItemWindow : public QWidget
 {
 	Q_OBJECT
 
 public:
-	IconImport(QWidget *parent = 0);
+	ItemWindow(QWidget *parent = 0);
 
 public slots:
-	void performCheck();
-
-protected slots:
-	void iconError();
-	void scanIcons();
-	void handleNext();
-	void iconFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	void refresh();
 
 protected:
-
-	QProcess *mProc;
-
-	QString mSrcPath, mCurrent;
-	QString mAppPath, mLastSrc, mLastDest;
-	QStringList mDevils, mSkills, mMashou, mItems;
-
-	Ui::IconImport ui;
+	ItemList *mItemList;
+	ItemView *mItemView;
 };
 
-#endif // __IconImport_h__
+#endif // __ItemWindow_h__

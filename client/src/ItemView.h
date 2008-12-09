@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/IconImport.h                                                     *
+*  client/src/ItemView.h                                                       *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,39 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __IconImport_h__
-#define __IconImport_h__
+#ifndef __ItemView_h__
+#define __ItemView_h__
 
-#include "ui_IconImport.h"
+#include "AjaxView.h"
+#include "ui_ItemView.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QProcess>
+#include <QtCore/QVariant>
+#include <QtCore/QMap>
 
-class IconImport : public QWidget
+class ItemView : public AjaxView
 {
 	Q_OBJECT
 
 public:
-	IconImport(QWidget *parent = 0);
-
-public slots:
-	void performCheck();
-
-protected slots:
-	void iconError();
-	void scanIcons();
-	void handleNext();
-	void iconFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	ItemView(QWidget *parent = 0);
 
 protected:
+	virtual bool checkValues();
+	virtual QString table() const;
 
-	QProcess *mProc;
+	virtual QString addWarningTitle() const;
+	virtual QString addWarningMessage() const;
 
-	QString mSrcPath, mCurrent;
-	QString mAppPath, mLastSrc, mLastDest;
-	QStringList mDevils, mSkills, mMashou, mItems;
-
-	Ui::IconImport ui;
+	Ui::ItemView ui;
 };
 
-#endif // __IconImport_h__
+#endif // __ItemView_h__
