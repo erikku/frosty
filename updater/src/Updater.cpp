@@ -33,9 +33,11 @@
 
 #ifdef Q_OS_WIN32
 #define UPDATE_FILE "updates.win.sha1"
+#define UPDATE_EXE  "megatendb_updater.exe"
 #define EXE_FILE "megatendb.exe"
 #else
 #define UPDATE_FILE "updates.lin.sha1"
+#define UPDATE_EXE  "megatendb_updater"
 #define EXE_FILE "megatendb"
 #endif
 
@@ -95,6 +97,10 @@ void Updater::checkFiles(const QString& checksums)
 void Updater::listReady(const StringMap& list)
 {
 	mBadList = list;
+
+	if( mBadList.contains(UPDATE_EXE) )
+		mBadList.remove(UPDATE_EXE);
+
 	ui.totalProgress->setMaximum(mBadList.count());
 	ui.totalProgress->setValue(0);
 
