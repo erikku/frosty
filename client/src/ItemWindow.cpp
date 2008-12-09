@@ -46,7 +46,7 @@ ItemWindow::ItemWindow(QWidget *parent_widget) : QWidget(parent_widget)
 
 	setLayout(mainLayout);
 	setWindowTitle( tr("%1 - Item List").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ) );
+		tr("Absolutely Frosty") ) );
 
 	resize(800, 600);
 }

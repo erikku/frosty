@@ -55,7 +55,7 @@ LogWidget::LogWidget(QWidget *parent_widget) :
 	setLayout(mainLayout);
 
 	setWindowTitle( tr("%1 - AJAX Log").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ) );
+		tr("Absolutely Frosty") ) );
 
 	connect(mLogList, SIGNAL(itemSelectionChanged()),
 		this, SLOT(updateCurrentRequest()));

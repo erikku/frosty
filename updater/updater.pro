@@ -37,7 +37,7 @@ QMAKE_CFLAGS_DEBUG += -W -Wall -ansi -pedantic-errors -Wcast-align \
 	-Wbad-function-cast -Wmissing-prototypes -Wnested-externs
 
 win32 {
-	RESOURCES += megatendb.rc
+	RC_FILE = updater.rc
 	QMAKE_CXXFLAGS_DEBUG += -mnop-fun-dllimport
 }
 

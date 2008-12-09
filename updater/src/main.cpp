@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 
+	QApplication::setWindowIcon( QIcon( ":/megatendb.png") );
+
 	QFile paletteFile(":/dark.xml");
 	paletteFile.open(QIODevice::ReadOnly);
 	QPalette palette = PaletteEditor::importPalette( paletteFile.readAll() );

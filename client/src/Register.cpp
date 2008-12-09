@@ -69,7 +69,7 @@ Register::Register(QWidget *parent_widget) : QWidget(parent_widget),
 	darkenWidget(ui.validationLabel);
 
 	setWindowTitle( tr("%1 - Registration").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ) );
+		tr("Absolutely Frosty") ) );
 
 	ui.grid->setEnabled(false);
 	ui.guestButton->setEnabled(false);

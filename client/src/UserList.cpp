@@ -66,7 +66,7 @@ UserList::UserList(QWidget *parent_widget) : QWidget(parent_widget)
 		this, SLOT(makeUserInactive()));
 
 	setWindowTitle( tr("%1 - User List").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ) );
+		tr("Absolutely Frosty") ) );
 
 	ajax::getSingletonPtr()->subscribe(this);
 }

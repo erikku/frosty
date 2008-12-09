@@ -56,7 +56,7 @@ void UserEdit::darkenWidget(QWidget *widget)
 void UserEdit::showEdit(const QString& email)
 {
 	setWindowTitle( tr("%1 - Edit %2").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ).arg(mEmail) );
+		tr("Absolutely Frosty") ).arg(mEmail) );
 
 	mEmail = email;
 	refresh();

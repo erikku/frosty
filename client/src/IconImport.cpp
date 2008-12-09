@@ -46,7 +46,7 @@ IconImport::IconImport(QWidget *parent_widget) : QWidget(parent_widget)
 	ui.setupUi(this);
 
 	setWindowTitle( tr("%1 - Icon Import").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ) );
+		tr("Absolutely Frosty") ) );
 }
 
 void IconImport::performCheck()

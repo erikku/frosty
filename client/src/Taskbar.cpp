@@ -47,7 +47,7 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	// and disable this setting.
 	QApplication::setQuitOnLastWindowClosed(false);
 
-	QMenu *menu = new QMenu( tr("MegatenDB") );
+	QMenu *menu = new QMenu( tr("Absolutely Frosty") );
 	QAction *act;
 
 	// Devils Action
@@ -120,7 +120,7 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	tray->show();
 
 	setWindowTitle( tr("%1 - Taskbar").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ) );
+		tr("Absolutely Frosty") ) );
 
 	ajax::getSingletonPtr()->subscribe(this);
 

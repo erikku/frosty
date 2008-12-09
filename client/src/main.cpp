@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 
-	QApplication::setWindowIcon( QIcon( ":/megatendb.ico") );
+	QApplication::setWindowIcon( QIcon( ":/megatendb.png") );
 
 	QTranslator translator;
 	translator.load( QString("megatendb_%1").arg(settings->lang()) );

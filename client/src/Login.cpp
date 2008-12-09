@@ -35,7 +35,7 @@ Login::Login(QWidget *parent_widget) : QWidget(parent_widget)
 	darkenWidget(ui.passwordLabel);
 
 	setWindowTitle( tr("%1 - Login").arg(
-		tr("Shin Megami Tensei IMAGINE DB") ) );
+		tr("Absolutely Frosty") ) );
 
 	connect(ui.loginButton, SIGNAL(clicked(bool)), this, SLOT(login()));
 	connect(ui.emailEdit, SIGNAL(returnPressed()), this, SLOT(login()));

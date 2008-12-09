@@ -50,7 +50,7 @@ Updater::Updater(QWidget *parent_widget) : QWidget(parent_widget), mCount(0)
 	QCoreApplication::setApplicationName("Megaten DB");
 
 	ui.setupUi(this);
-	setWindowTitle( tr("Megaten DB Updater") );
+	setWindowTitle( tr("Absolutely Frosty Updater") );
 
 	// http://www.troopersklan.jp/megaten/updates
 	QUrl url("http://gigadelic.homelinux.net:10900/megatendb/updates");
@@ -125,12 +125,12 @@ void Updater::transferFailed()
 {
 	if( mChecksums.isEmpty() )
 	{
-		QMessageBox::critical(0, tr("Megaten DB Updater"),
+		QMessageBox::critical(0, tr("Absolutely Frosty Updater"),
 			tr("Failed to download update list"));
 	}
 	else
 	{
-		QMessageBox::critical(0, tr("Megaten DB Updater"),
+		QMessageBox::critical(0, tr("Absolutely Frosty Updater"),
 			tr("Failed to download file"));
 	}
 
@@ -165,7 +165,7 @@ void Updater::transferFinished(const QString& checksum)
 	{
 		if(mBadList.value(mCurrentPath) != checksum)
 		{
-			QMessageBox::critical(0, tr("Megaten DB Updater"),
+			QMessageBox::critical(0, tr("Absolutely Frosty Updater"),
 				tr("Failed to download file: Wrong checksum"));
 
 			qApp->quit();
