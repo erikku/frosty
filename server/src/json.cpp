@@ -649,7 +649,7 @@ QVariant json::parse_string()
 	int end = pos;
 	int index = -1;
 
-	while( (index = str.indexOf(QChar('"'), end)) != -1 )
+	while( (index = str.indexOf(QChar('"'), end + 1)) != -1 )
 	{
 		end = index;
 		if( str[end - 1] != QChar('\\') )
