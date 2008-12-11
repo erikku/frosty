@@ -359,8 +359,11 @@ QString json::stringToJSON(const QVariant& obj)
 	QString result;
 	QString src = obj.toString();
 
-	src = src.replace("\"", "\\\"");
+	// This needs to be first to prevent it from escaping the slash in
+	// escaped characters
 	src = src.replace("\\", "\\\\");
+
+	src = src.replace("\"", "\\\"");
 	src = src.replace("/", "\\/");
 	src = src.replace("\b", "\\b");
 	src = src.replace("\f", "\\f");
