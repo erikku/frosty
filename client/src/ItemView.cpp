@@ -67,7 +67,7 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.affinityMudoLabel << ui.affinityMagicForceLabel
 		<< ui.affinityNerveLabel << ui.affinityMindLabel
 		<< ui.affinitySuicideLabel << ui.affinityAlmightyLabel
-		<< ui.affinitySpecialLabel << ui.affinitiesLabel;
+		<< ui.affinitySpecialLabel << ui.affinitiesLabel << ui.stackSizeLabel;
 
 	// Edit labels
 	widgets << ui.elementsLabel2 << ui.nameLabel2 << ui.japaneseNameLabel2
@@ -113,7 +113,7 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.affinityNerveLabel2 << ui.affinityMindLabel2
 		<< ui.affinitySuicideLabel2 << ui.affinityAlmightyLabel2
 		<< ui.affinitySpecialLabel2 << ui.locationsEditDivider
-		<< ui.affinitiesLabel2;
+		<< ui.affinitiesLabel2 << ui.stackSizeLabel2;
 
 	foreach(QWidget *widget, widgets)
 		darkenWidget(widget);
@@ -140,6 +140,7 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindNumber("sell_price", ui.sellPrice, ui.sellPriceEdit, 0);
 	bindBool("tradable", ui.tradable, ui.tradeableEdit,
 		QString(), QString(), true);
+	bindNumber("stack_size", ui.stackSize, ui.stackSizeEdit, 1);
 	bindRelation("type", ui.type, ui.typeEdit, "db_item_type",
 		QString(), ui.typeEditButton, tr("Item Type"));
 	bindRelation("equip_type", ui.equipType, ui.equipTypeEdit, "db_equip_type",
