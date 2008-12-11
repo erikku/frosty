@@ -646,7 +646,7 @@ QVariant json::parse_string()
 
 	pos++;
 	int start = pos;
-	int end = pos;
+	int end = pos - 1;
 	int index = -1;
 
 	while( (index = str.indexOf(QChar('"'), end + 1)) != -1 )
