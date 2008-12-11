@@ -32,6 +32,8 @@ class AjaxList : public QWidget
 {
 	Q_OBJECT
 
+	friend class AjaxView;
+
 public:
 	AjaxList(AjaxView *view = 0, QWidget *parent = 0);
 
@@ -43,6 +45,7 @@ public slots:
 
 protected slots:
 	void ajaxResponse(const QVariant& resp);
+	void handleItemInserted(int id);
 	void handleItemSelected();
 
 signals:

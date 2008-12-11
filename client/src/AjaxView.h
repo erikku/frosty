@@ -65,6 +65,7 @@ protected slots:
 
 signals:
 	void viewChanged();
+	void itemInserted(int id);
 
 protected:
 	int mID;

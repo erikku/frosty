@@ -134,6 +134,8 @@ void AjaxView::clear()
 	foreach(AjaxBind *bind, mBinds)
 		bind->clear();
 
+	ui.updateButton->setText( QObject::tr("&Update") );
+
 	mID = -1;
 }
 
@@ -212,6 +214,9 @@ void AjaxView::add()
 	mID = -1;
 
 	clear();
+
+	ui.updateButton->setText( QObject::tr("&Add") );
+
 	ui.editButton->setVisible(false);
 	ui.refreshButton->setVisible(false);
 	ui.updateButton->setVisible(true);
@@ -506,7 +511,12 @@ QVariantList AjaxView::createUpdateActions() const
 	action["columns"] = columns;
 
 	QVariantList user_data;
-	user_data << QString("%1_update").arg( table() );
+
+	if(mID > 0)
+		user_data << QString("%1_update").arg( table() );
+	else
+		user_data << QString("%1_insert").arg( table() );
+
 	user_data << mID;
 
 	action["user_data"] = user_data;
@@ -553,6 +563,7 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 	}
 
 	QString update_data = QString("%1_update").arg( table() );
+	QString insert_data = QString("%1_insert").arg( table() );
 	QString view_data = QString("%1_view").arg( table() );
 
 	if(user_data == view_data)
@@ -561,11 +572,22 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 		if( rows.count() && rows.first().toMap().value("id") == mID )
 			mSleepingResponse = result;
 	}
-	else if(user_data == update_data)
+	else if(user_data == update_data )
 	{
 		view(updated_id);
 
 		emit viewChanged();
+
+		return;
+	}
+	else if(user_data == insert_data)
+	{
+		int id = result.value("ids").toList().first().toInt();
+
+		view(id);
+
+		emit viewChanged();
+		emit itemInserted(id);
 
 		return;
 	}

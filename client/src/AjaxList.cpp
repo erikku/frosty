@@ -45,6 +45,9 @@ AjaxList::AjaxList(AjaxView *view,
 	connect(ui.refreshButton, SIGNAL(clicked(bool)), this, SLOT(refresh()));
 	connect(ui.deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteAjax()));
 
+	connect(view, SIGNAL(itemInserted(int)),
+		this, SLOT(handleItemInserted(int)));
+
 	ui.imeButton->setChecked( ui.searchEdit->romajiMode() );
 	connect(ui.imeButton, SIGNAL(toggled(bool)),
 		ui.searchEdit, SLOT(setRomajiMode(bool)));
@@ -73,6 +76,14 @@ AjaxList::AjaxList(AjaxView *view,
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
+}
+
+void AjaxList::handleItemInserted(int id)
+{
+	if( !sender()->inherits("AjaxView") )
+		return;
+
+	mCurrentID = id;
 }
 
 void AjaxList::handleItemSelected()
