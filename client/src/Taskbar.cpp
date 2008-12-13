@@ -53,8 +53,8 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	QAction *act;
 
 	// Devils Action
-	act = menu->addAction(/* icon, */tr("&Devils") );
-	connect(act, SIGNAL(triggered()), this, SLOT(showDevilWindow()));
+	//act = menu->addAction(/* icon, */tr("&Devils") );
+	//connect(act, SIGNAL(triggered()), this, SLOT(showDevilWindow()));
 	connect(ui.devilsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showDevilWindow()));
 
