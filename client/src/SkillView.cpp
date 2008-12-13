@@ -87,7 +87,7 @@ SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 		tr("Related Stat"));
 	bindNumberSet("cost_set", ui.cost, ui.costEdit, ui.costEditCombo,
 		QStringList() << "hp_cost" << "mp_cost" << "mag_cost",
-		QStringList() << tr("HP%1") << tr("MP%1") << tr("MAG%1"), tr("+"));
+		QStringList() << tr("HP%1%") << tr("MP%1") << tr("MAG%1"), tr("+"));
 
 	// Give the relation buttons an icon
 	QIcon edit_icon(":/edit.png");
