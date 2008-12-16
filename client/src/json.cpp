@@ -371,10 +371,12 @@ QString json::stringToJSON(const QVariant& obj)
 	src = src.replace("\r", "\\r");
 	src = src.replace("\t", "\\t");
 
+	QString badX = QString::fromUtf8("×");
 	for(int i = 0; i < src.length(); i++)
 	{
-		if( !src[i].toAscii() )
-			result += QString("\\u%1").arg( QString::number(src[i].unicode(), 16) );
+		if( !src[i].toAscii() || badX[0] == src[i] )
+			result += QString("\\u%1").arg(src[i].unicode(),
+				4, 16, QLatin1Char('0'));
 		else
 			result += src[i];
 	}
