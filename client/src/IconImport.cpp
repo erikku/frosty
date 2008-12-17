@@ -57,7 +57,7 @@ void IconImport::performCheck()
 	appDir.mkpath("icons/mashou");
 	appDir.mkpath("icons/items");
 
-	QFileInfo check("icons/items/icon_A09_0100a.png");
+	QFileInfo check("icons/items/icon_I402_0723a.png");
 	if( check.exists() )
 	{
 		deleteLater();
@@ -131,6 +131,7 @@ void IconImport::scanIcons()
 		<< "icon_SS[0-9][0-9]_*.[Tt][Gg][Aa]", QDir::Files);
 
 	mItems = dir.entryList(QStringList() << "icon_A[0-9][0-9]_*.[Tt][Gg][Aa]"
+		<< "icon_I4[0-9][0-9]_*.[Tt][Gg][Aa]"
 		<< "icon_I[0-9][0-9]_*.[Tt][Gg][Aa]"
 		<< "icon_W[0-9][0-9]_*.[Tt][Gg][Aa]", QDir::Files);
 
