@@ -296,7 +296,11 @@ QIcon InfoListWidgetItem::icon() const
 
 InfoListWidgetItem* InfoListWidgetItem::clone() const
 {
-	return new InfoListWidgetItem(icon(), text1(), text2(), text3(), text4());
+	InfoListWidgetItem *item = new InfoListWidgetItem(icon(), text1(),
+		text2(), text3(), text4());
+	item->setData( data() );
+
+	return item;
 }
 
 InfoListWidget* InfoListWidgetItem::infoListWidget() const

@@ -60,6 +60,8 @@ public slots:
 	void refresh();
 	void view(int id, bool switchView = true);
 
+	QVariantList createDeleteActions(int id) const;
+
 protected slots:
 	void ajaxResponse(const QVariant& resp);
 
@@ -117,18 +119,20 @@ protected:
 		const QStringList& columns = QStringList(),
 		QPushButton *add_button = 0, QPushButton *edit_button = 0,
 		QPushButton *remove_button = 0, QPushButton *new_button = 0,
-		QPushButton *update_button = 0, QPushButton *cancel_button = 0,
+		QPushButton *cancel_button = 0,
 		SearchEdit *quick_filter = 0, QListWidget *add_list = 0,
 		const QVariant& view_action = QVariant(),
 		const QVariant& search_action = QVariant(), bool allow_drops = false,
 		const QVariantList& additional_relations = QVariantList(),
 		const QString& extra_column = QString(),
-		const QString& extra_prompt = QString());
+		const QString& extra_prompt = QString(),
+		QStackedWidget *add_stack = 0);
 
 	void darkenWidget(QWidget *widget);
 
 	QVariantList createViewActions() const;
 	QVariantList createUpdateActions() const;
+
 	void processBindValues(const QVariantMap& values);
 
 	QVariantMap mSleepingResponse;

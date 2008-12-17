@@ -247,6 +247,10 @@ void AjaxList::deleteAjax()
 		return;
 
 	ajax::getSingletonPtr()->request(settings->url(), deleteAction(id));
+
+	QVariantList custom_actions = mAjaxView->createDeleteActions(id);
+	foreach(QVariant action, custom_actions)
+		ajax::getSingletonPtr()->request(settings->url(), action);
 }
 
 void AjaxList::ajaxResponse(const QVariant& resp)

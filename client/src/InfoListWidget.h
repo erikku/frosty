@@ -88,7 +88,7 @@ public:
 signals:
 	void itemClicked(InfoListWidgetItem *item);
 	void itemDoubleClicked(InfoListWidgetItem *item);
-	void selectionChanged(InfoListWidgetItem *item);
+	void selectionChanged();
 
 public slots:
 	void sort();
@@ -103,7 +103,6 @@ public slots:
 protected slots:
 	void handleItemClicked();
 	void handleItemDoubleClicked();
-	void handleSelectionChanged();
 
 protected:
 	QLabel* arrowAt(int index);

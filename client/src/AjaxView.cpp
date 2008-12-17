@@ -34,8 +34,10 @@
 #endif // QT_NO_DEBUG
 
 #include "Settings.h"
-#include "IconEdit.h"
 #include "ajax.h"
+
+#include "IconEdit.h"
+#include "InfoListWidget.h"
 
 #include "AjaxBind.h"
 #include "BindText.h"
@@ -48,6 +50,7 @@
 #include "BindRelation.h"
 #include "BindNumberSet.h"
 #include "BindNumberSelector.h"
+#include "BindDetailedMultiRelation.h"
 
 AjaxView::AjaxView(QWidget *parent_widget) : QWidget(parent_widget),
 	mID(-1), mCanEdit(false)
@@ -216,6 +219,14 @@ void AjaxView::add()
 	clear();
 
 	ui.updateButton->setText( QObject::tr("&Add") );
+
+	QListIterator<AjaxBind*> it(mBinds);
+	while( it.hasNext() )
+	{
+		AjaxBind *bind = it.next();
+
+		bind->addRequested();
+	}
 
 	ui.editButton->setVisible(false);
 	ui.refreshButton->setVisible(false);
@@ -422,21 +433,44 @@ void AjaxView::bindDetailedMultiRelation(const QString& field,
 	const QStringList& cols,
 	QPushButton *add_button, QPushButton *edit_button,
 	QPushButton *remove_button, QPushButton *new_button,
-	QPushButton *update_button, QPushButton *cancel_button,
+	QPushButton *cancel_button,
 	SearchEdit *quick_filter, QListWidget *add_list,
 	const QVariant& view_action, const QVariant& search_action,
 	bool allow_drops, const QVariantList& additional_relations,
-	const QString& extra_column, const QString& extra_prompt)
+	const QString& extra_column, const QString& extra_prompt,
+	QStackedWidget *add_stack)
 {
-	Q_UNUSED(field); Q_UNUSED(view_widget); Q_UNUSED(edit_widget);
-	Q_UNUSED(drop_mime_type); Q_UNUSED(id); Q_UNUSED(foreign_id);
-	Q_UNUSED(foreign_table); Q_UNUSED(icon_column); Q_UNUSED(icon_path);
-	Q_UNUSED(cols); Q_UNUSED(add_button); Q_UNUSED(edit_button);
-	Q_UNUSED(remove_button); Q_UNUSED(new_button); Q_UNUSED(update_button);
-	Q_UNUSED(cancel_button); Q_UNUSED(quick_filter); Q_UNUSED(add_list);
-	Q_UNUSED(view_action); Q_UNUSED(search_action); Q_UNUSED(allow_drops);
-	Q_UNUSED(additional_relations); Q_UNUSED(extra_column);
-	Q_UNUSED(extra_prompt);
+	// TODO: Implement these
+	Q_UNUSED(drop_mime_type); Q_UNUSED(allow_drops);
+	Q_UNUSED(view_action); Q_UNUSED(search_action);
+
+	BindDetailedMultiRelation *bind = new BindDetailedMultiRelation;
+	bind->setAdditionalRelations(additional_relations);
+	bind->setViewer(view_widget);
+	bind->setEditor(edit_widget);
+	bind->setOtherTable(field);
+	bind->setTable( table() );
+
+	bind->setIconPath(icon_path);
+	bind->setIconColumn(icon_column);
+	bind->setRelation(id, foreign_table, foreign_id);
+	bind->setExtraColumn(extra_column);
+	bind->setExtraPrompt(extra_prompt);
+	bind->setColumns(cols);
+
+	bind->setRemoveButton(remove_button);
+	bind->setEditButton(edit_button);
+	bind->setAddButton(add_button);
+
+	bind->setCancelButton(cancel_button);
+	bind->setNewButton(new_button);
+
+	bind->setAddStack(add_stack);
+	bind->setAddList(add_list);
+
+	bind->setQuickSearch(quick_filter);
+
+	mBinds << bind;
 }
 
 QVariantList AjaxView::createViewActions() const
@@ -457,7 +491,7 @@ QVariantList AjaxView::createViewActions() const
 		foreach(QString column, bind_cols)
 			columns << column;
 
-		custom_actions << bind->customViewActions();
+		custom_actions << bind->customViewActions(mID);
 	}
 
 	QVariantMap where;
@@ -497,7 +531,7 @@ QVariantList AjaxView::createUpdateActions() const
 
 		bind->retrieveUpdateData(row);
 
-		custom_actions << bind->customUpdateActions();
+		custom_actions << bind->customUpdateActions(mID);
 	}
 
 	QVariantMap action;
@@ -534,6 +568,21 @@ QVariantList AjaxView::createUpdateActions() const
 	action["rows"] = QVariantList() << row;
 
 	custom_actions.prepend(action);
+
+	return custom_actions;
+}
+
+QVariantList AjaxView::createDeleteActions(int id) const
+{
+	QVariantList custom_actions;
+
+	QListIterator<AjaxBind*> it(mBinds);
+	while( it.hasNext() )
+	{
+		AjaxBind *bind = it.next();
+
+		custom_actions << bind->customDeleteActions(id);
+	}
 
 	return custom_actions;
 }

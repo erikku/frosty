@@ -1445,8 +1445,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>463</width>
-                  <height>307</height>
+                  <width>96</width>
+                  <height>42</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout">
@@ -1504,8 +1504,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>463</width>
-                  <height>307</height>
+                  <width>96</width>
+                  <height>42</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout">
@@ -4289,13 +4289,6 @@
                     <widget class="QPushButton" name="skillsEditSearchNew">
                      <property name="text">
                       <string>&amp;New</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="skillsEditSearchUpdate">
-                     <property name="text">
-                      <string>&amp;Update</string>
                      </property>
                     </widget>
                    </item>

@@ -42,9 +42,9 @@ public:
 	virtual QStringList columns() const;
 	virtual void setColumns(const QStringList& columns);
 
-	virtual QVariantList customViewActions() const;
-	virtual QVariantList customUpdateActions() const;
-	virtual QVariantList customDeleteActions() const;
+	virtual QVariantList customViewActions(int id) const;
+	virtual QVariantList customUpdateActions(int id) const;
+	virtual QVariantList customDeleteActions(int id) const;
 
 	virtual QWidget* viewer() const = 0;
 	virtual void setViewer(QWidget *view) = 0;
@@ -56,6 +56,9 @@ public:
 
 	virtual void handleViewResponse(const QVariantMap& values) = 0;
 	virtual void retrieveUpdateData(QVariantMap& row) = 0;
+
+public slots:
+	virtual void addRequested();
 
 protected:
 	QStringList mColumns;

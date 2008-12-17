@@ -18,9 +18,16 @@
 \******************************************************************************/
 
 #include "DevilView.h"
+#include "InfoListWidgetItem.h"
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QButtonGroup>
+
+bool numberSortFunction2(const InfoListWidgetItem *item1,
+	const InfoListWidgetItem *item2)
+{
+	return item1->text2().toInt() < item2->text2().toInt();
+}
 
 DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 {
@@ -86,7 +93,8 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.wpElectricShockEditLabel << ui.wpHamaEditLabel
 		<< ui.wpMudoEditLabel << ui.wpMagicForceEditLabel << ui.wpNerveEditLabel
 		<< ui.wpMindEditLabel << ui.wpSuicideEditLabel << ui.wpAlmightyEditLabel
-		<< ui.wpSpecialEditLabel << ui.devilBookEditLabel;
+		<< ui.wpSpecialEditLabel << ui.devilBookEditLabel
+		<< ui.skillsEditAddLabel;
 
 	foreach(QWidget *widget, widgets)
 		darkenWidget(widget);
@@ -126,11 +134,6 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 	modifierEnum[1] = tr("N/A");
 	modifierEnum[2] = tr("DOWN");
 
-	QVariantMap mashou_where;
-	mashou_where["type"] = "equals";
-	mashou_where["column"] = "type";
-	mashou_where["value"] = 2; // Mashou
-
 	QVariantMap relation1_columns;
 	relation1_columns["name_ja"] = "expert_ja";
 	relation1_columns["name_en"] = "expert_en";
@@ -168,8 +171,8 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindEnum("seirei", ui.seirei, ui.seireiEdit, seireiEnum);
 	bindRelation("parent", ui.parentDevil, ui.parentDevilEdit, "db_devils",
 		QString(), 0, QString(), tr("N/A"));
-	bindRelation("mashou", ui.mashou, ui.mashouEdit, "db_items",
-		QString(), 0, QString(), tr("N/A"), QVariantList() << mashou_where);
+	bindRelation("mashou", ui.mashou, ui.mashouEdit, "db_mashou",
+		QString(), 0, QString(), tr("N/A"));
 	bindBool("fusion2", ui.fusion2, ui.fusion2Edit);
 	bindBool("fusion3", ui.fusion3, ui.fusion3Edit);
 	bindNumberRange("fusion_range", ui.fusionRange, ui.fusionRangeFromEdit,
@@ -361,11 +364,19 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 		"icons/skills/icon_%1.png", QStringList() << "name_{$lang}"
 		<< "__extra__" << "expert_{$lang}" << "category_{$lang}",
 		ui.skillsEditAdd, ui.skillsEditEdit, ui.skillsEditRemove,
-		ui.skillsEditSearchNew, ui.skillsEditSearchUpdate,
+		ui.skillsEditSearchNew,
 		ui.skillsEditSearchCancel, ui.skillsEditAddSearch, ui.skillsEditAddList,
 		QVariant(), QVariant(), true, QVariantList() << relation1 << relation2,
 		"lvl", tr("At what level does the devil learn this skill? "
-		"(-1 for starting level)"));
+		"(-1 for starting level)"), ui.skillsEditStack);
+
+	// Make sure the level sorts right
+	ui.skills->setSortFunction2(numberSortFunction2);
+	ui.skills->toggleSort2();
+	ui.skills->toggleSort2();
+	ui.skillsEditList->setSortFunction2(numberSortFunction2);
+	ui.skillsEditList->toggleSort2();
+	ui.skillsEditList->toggleSort2();
 
 	// Give the relation buttons an icon
 	QIcon edit_icon(":/edit.png");

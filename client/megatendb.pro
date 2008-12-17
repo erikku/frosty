@@ -118,7 +118,8 @@ HEADERS     += src/ajax.h \
                src/BindBool.h \
                src/BindRelation.h \
                src/BindNumberSet.h \
-               src/BindNumberSelector.h
+               src/BindNumberSelector.h \
+               src/BindDetailedMultiRelation.h
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
@@ -176,4 +177,5 @@ SOURCES     += src/main.cpp \
                src/BindBool.cpp \
                src/BindRelation.cpp \
                src/BindNumberSet.cpp \
-               src/BindNumberSelector.cpp
+               src/BindNumberSelector.cpp \
+               src/BindDetailedMultiRelation.cpp

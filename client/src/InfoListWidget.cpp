@@ -121,7 +121,7 @@ void InfoListWidget::addItem(InfoListWidgetItem *item)
 	connect(item, SIGNAL(doubleClicked()),
 		this, SLOT(handleItemDoubleClicked()));
 	connect(item, SIGNAL(selectionChanged()),
-		this, SLOT(handleSelectionChanged()));
+		this, SIGNAL(selectionChanged()));
 }
 
 void InfoListWidget::addItem(const QIcon& icon, const QString& text1,
@@ -144,7 +144,7 @@ void InfoListWidget::insertItem(int r, InfoListWidgetItem *item)
 	connect(item, SIGNAL(doubleClicked()),
 		this, SLOT(handleItemDoubleClicked()));
 	connect(item, SIGNAL(selectionChanged()),
-		this, SLOT(handleSelectionChanged()));
+		this, SIGNAL(selectionChanged()));
 }
 
 void InfoListWidget::insertItem(int r, const QIcon& icon,
@@ -191,7 +191,10 @@ InfoListWidgetItem* InfoListWidget::takeItem(int r)
 	disconnect(item, SIGNAL(doubleClicked()),
 		this, SLOT(handleItemDoubleClicked()));
 	disconnect(item, SIGNAL(selectionChanged()),
-		this, SLOT(handleSelectionChanged()));
+		this, SIGNAL(selectionChanged()));
+
+	if( item->isSelected() )
+		emit selectionChanged();
 
 	return item;
 }
@@ -210,7 +213,10 @@ InfoListWidgetItem* InfoListWidget::takeItem(InfoListWidgetItem *item)
 	disconnect(item, SIGNAL(doubleClicked()),
 		this, SLOT(handleItemDoubleClicked()));
 	disconnect(item, SIGNAL(selectionChanged()),
-		this, SLOT(handleSelectionChanged()));
+		this, SIGNAL(selectionChanged()));
+
+	if( item->isSelected() )
+		emit selectionChanged();
 
 	return item;
 }
@@ -264,6 +270,8 @@ void InfoListWidget::clear()
 	}
 
 	mItems.clear();
+
+	emit selectionChanged();
 }
 
 void InfoListWidget::handleItemClicked()
@@ -303,15 +311,6 @@ void InfoListWidget::handleItemDoubleClicked()
 		return;
 
 	emit itemDoubleClicked(item);
-}
-
-void InfoListWidget::handleSelectionChanged()
-{
-	InfoListWidgetItem *item = qobject_cast<InfoListWidgetItem*>( sender() );
-	if(!item)
-		return;
-
-	emit selectionChanged(item);
 }
 
 void InfoListWidget::setSortHeaders(const QString& name1, const QString& name2,

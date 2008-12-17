@@ -54,17 +54,28 @@ void AjaxBind::setColumns(const QStringList& cols)
 	mColumns = cols;
 }
 
-QVariantList AjaxBind::customViewActions() const
+QVariantList AjaxBind::customViewActions(int id) const
 {
+	Q_UNUSED(id);
+
 	return QVariantList();
 }
 
-QVariantList AjaxBind::customUpdateActions() const
+QVariantList AjaxBind::customUpdateActions(int id) const
 {
+	Q_UNUSED(id);
+
 	return QVariantList();
 }
 
-QVariantList AjaxBind::customDeleteActions() const
+QVariantList AjaxBind::customDeleteActions(int id) const
 {
+	Q_UNUSED(id);
+
 	return QVariantList();
+}
+
+void AjaxBind::addRequested()
+{
+	// Do nothing
 }
