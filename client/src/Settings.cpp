@@ -51,7 +51,7 @@ Settings::Settings(QObject *parent_object) : QObject(parent_object)
 	}
 
 	if( !qsettings.contains("lang") )
-		qsettings.setValue("lang", "ja");
+		qsettings.setValue("lang", "en");
 
 	mUpdateURL = qsettings.value("update_url").toUrl();
 	mLang = qsettings.value("lang", "en").toString();
