@@ -30,6 +30,7 @@ class DevilWindow;
 class SkillWindow;
 class MashouWindow;
 class ImportExport;
+class QSystemTrayIcon;
 class QAction;
 
 class Taskbar : public QWidget
@@ -40,6 +41,7 @@ public:
 	Taskbar(QWidget *parent = 0);
 
 public slots:
+	void quit();
 	void showAbout();
 	void showLogWindow();
 	void showItemWindow();
@@ -68,6 +70,8 @@ protected:
 	QAction *mAdminSep;
 	QAction *mUsersAction;
 	QAction *mImportExportAction;
+
+	QSystemTrayIcon *mTray;
 };
 
 #endif // __Taskbar_h__

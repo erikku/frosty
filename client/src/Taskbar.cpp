@@ -38,7 +38,7 @@
 Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	mUserList(0), mLogWidget(0), mItemWindow(0), mDevilWindow(0),
 	mSkillWindow(0), mMashouWindow(0), mImportExportWindow(0), mAdminSep(0),
-	mUsersAction(0)
+	mUsersAction(0), mTray(0)
 {
 	ui.setupUi(this);
 
@@ -121,11 +121,11 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 	// Quit Action
 	act = menu->addAction(/* icon, */tr("&Quit") );
-	connect(act, SIGNAL(triggered()), qApp, SLOT(quit()));
+	connect(act, SIGNAL(triggered()), this, SLOT(quit()));
 
-	QSystemTrayIcon *tray = new QSystemTrayIcon( QApplication::windowIcon() );
-	tray->setContextMenu(menu);
-	tray->show();
+	mTray = new QSystemTrayIcon( QApplication::windowIcon() );
+	mTray->setContextMenu(menu);
+	mTray->show();
 
 	setWindowTitle( tr("%1 - Taskbar").arg(
 		tr("Absolutely Frosty") ) );
@@ -139,6 +139,12 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
+}
+
+void Taskbar::quit()
+{
+	mTray->hide();
+	qApp->quit();
 }
 
 void Taskbar::showAbout()
