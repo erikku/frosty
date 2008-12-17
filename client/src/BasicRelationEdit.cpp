@@ -107,12 +107,12 @@ void BasicRelationEdit::ajaxResponse(const QVariant& resp)
 	if( mTable.isEmpty() )
 		return;
 
-	QVariantMap result = resp.toMap();
+	QVariantMap res = resp.toMap();
 
-	if(result.value("user_data").toString() ==
+	if(res.value("user_data").toString() ==
 		QString("%1_entry").arg(mTable))
 	{
-		QVariantMap map = result.value("rows").toList().first().toMap();
+		QVariantMap map = res.value("rows").toList().first().toMap();
 		if(map["id"].toInt() != mID)
 			return;
 

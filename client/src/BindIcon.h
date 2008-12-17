@@ -25,13 +25,14 @@
 class QLabel;
 class IconEdit;
 class IconSelect;
+class AjaxView;
 
 class BindIcon : public AjaxBind
 {
 	Q_OBJECT
 
 public:
-	BindIcon(QObject *parent = 0);
+	BindIcon(AjaxView *ajax_view, QObject *parent = 0);
 
 	virtual QWidget* viewer() const;
 	virtual void setViewer(QWidget *view);

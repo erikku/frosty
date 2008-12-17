@@ -20,11 +20,11 @@
 #ifndef __RelationList_h__
 #define __RelationList_h__
 
-#include <QtGui/QWidget>
+#include <QtGui/QDialog>
 
 class RelationEdit;
 
-class RelationList : public QWidget
+class RelationList : public QDialog
 {
 	Q_OBJECT
 

@@ -20,17 +20,18 @@
 #include "BindRelation.h"
 #include "BasicRelationList.h"
 #include "BasicRelationEdit.h"
+#include "AjaxView.h"
 #include "Settings.h"
 #include "ajax.h"
 
 #include <QtGui/QLabel>
 #include <QtGui/QComboBox>
 
-BindRelation::BindRelation(QObject *obj_parent) : AjaxBind(obj_parent),
+BindRelation::BindRelation(AjaxView *ajax_view, QObject *obj_parent) : AjaxBind(obj_parent),
 	mViewer(0),	mEditor(0), mBrowseButton(0), mLastID(0), mFilled(false)
 {
 	// TODO: Allow the developer to set this
-	mList = new BasicRelationList(new BasicRelationEdit);
+	mList = new BasicRelationList(new BasicRelationEdit, ajax_view);
 
 	ajax::getSingletonPtr()->subscribe(this);
 }

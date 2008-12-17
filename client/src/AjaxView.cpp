@@ -266,7 +266,7 @@ void AjaxView::bindTextBox(const QString& field, QLabel *view_widget,
 void AjaxView::bindIcon(const QString& field, QLabel *view_widget,
 	IconEdit *edit_widget, const QString& path, const QString& searchPath)
 {
-	BindIcon *bind = new BindIcon;
+	BindIcon *bind = new BindIcon(this);
 	bind->setViewer(view_widget);
 	bind->setEditor(edit_widget);
 	bind->setColumn(field);
@@ -347,7 +347,7 @@ void AjaxView::bindRelation(const QString& field, QLabel *view_widget,
 	QPushButton *browseButton, const QString& listTitle,
 	const QString& noneName, const QVariantList& filters)
 {
-	BindRelation *bind = new BindRelation;
+	BindRelation *bind = new BindRelation(this);
 	bind->setViewer(view_widget);
 	bind->setEditor(edit_widget);
 	bind->setColumn(field);

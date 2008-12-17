@@ -26,13 +26,14 @@ class QLabel;
 class QComboBox;
 class QPushButton;
 class RelationList;
+class AjaxView;
 
 class BindRelation : public AjaxBind
 {
 	Q_OBJECT
 
 public:
-	BindRelation(QObject *parent = 0);
+	BindRelation(AjaxView *ajax_view, QObject *parent = 0);
 
 	virtual QWidget* viewer() const;
 	virtual void setViewer(QWidget *view);

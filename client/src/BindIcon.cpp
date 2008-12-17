@@ -20,15 +20,16 @@
 #include "BindIcon.h"
 #include "IconEdit.h"
 #include "IconSelect.h"
+#include "AjaxView.h"
 
 #include <QtCore/QFileInfo>
 
 #include <QtGui/QLabel>
 
-BindIcon::BindIcon(QObject *obj_parent) : AjaxBind(obj_parent),
-	mViewer(0),	mEditor(0)
+BindIcon::BindIcon(AjaxView *ajax_view, QObject *obj_parent) :
+	AjaxBind(obj_parent), mViewer(0), mEditor(0)
 {
-	mSelector = new IconSelect;
+	mSelector = new IconSelect(ajax_view);
 	Q_ASSERT(mSelector);
 
 	connect(mSelector, SIGNAL(iconReady(const QString&, const QString&)),

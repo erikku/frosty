@@ -20,9 +20,9 @@
 #ifndef __RelationEdit_h__
 #define __RelationEdit_h__
 
-#include <QtGui/QWidget>
+#include <QtGui/QDialog>
 
-class RelationEdit : public QWidget
+class RelationEdit : public QDialog
 {
 	Q_OBJECT
 

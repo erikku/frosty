@@ -85,12 +85,12 @@ void BasicRelationList::ajaxResponse(const QVariant& resp)
 	if( mTable.isEmpty() )
 		return;
 
-	QVariantMap result = resp.toMap();
+	QVariantMap res = resp.toMap();
 
-	if( result.value("user_data").toString() ==
+	if( res.value("user_data").toString() ==
 		QString("%1_relation_list").arg(mTable) )
 	{
-		QVariantList rows = result.value("rows").toList();
+		QVariantList rows = res.value("rows").toList();
 		for(int i = 0; i < rows.count(); i++)
 		{
 			QVariantMap map = rows.at(i).toMap();

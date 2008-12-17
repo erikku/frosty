@@ -22,7 +22,9 @@
 
 #include "ui_IconSelect.h"
 
-class IconSelect : public QWidget
+#include <QtGui/QDialog>
+
+class IconSelect : public QDialog
 {
 	Q_OBJECT
 

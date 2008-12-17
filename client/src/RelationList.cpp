@@ -25,12 +25,13 @@
 #include <QtGui/QMessageBox>
 
 RelationList::RelationList(RelationEdit *edit,
-	QWidget *parent_widget) : QWidget(parent_widget)
+	QWidget *parent_widget) : QDialog(parent_widget)
 {
 	Q_ASSERT(edit);
 	mEdit = edit;
+	mEdit->setParent(this, mEdit->windowFlags());
 
-	setWindowModality(Qt::ApplicationModal);
+	setWindowModality(Qt::WindowModal);
 
 	ajax::getSingletonPtr()->subscribe(this);
 
@@ -97,9 +98,9 @@ void RelationList::ajaxResponse(const QVariant& resp)
 	if( mTable.isEmpty() )
 		return;
 
-	QVariantMap result = resp.toMap();
+	QVariantMap res = resp.toMap();
 
-	if(result.value("user_data").toString() ==
+	if(res.value("user_data").toString() ==
 		QString("%1_relation_delete").arg(mTable))
 	{
 		refresh();

@@ -24,14 +24,14 @@
 
 #include <QtGui/QMessageBox>
 
-IconSelect::IconSelect(QWidget *parent_widget) : QWidget(parent_widget)
+IconSelect::IconSelect(QWidget *parent_widget) : QDialog(parent_widget)
 {
 	ui.setupUi(this);
 
 	connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(handleIcon()));
 	connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(handleClose()));
 
-	setWindowModality(Qt::ApplicationModal);
+	setWindowModality(Qt::WindowModal);
 }
 
 QString IconSelect::searchPath() const
