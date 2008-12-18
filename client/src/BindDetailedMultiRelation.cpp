@@ -190,6 +190,9 @@ QVariantList BindDetailedMultiRelation::customUpdateActions(int id) const
 		}
 	}
 
+	// TODO: This will not work if you are inserting a new record since
+	// we don't know the id for it yet
+
 	// Process insert queue
 	{
 		foreach(QVariant i, mInsertQueue)
@@ -277,6 +280,8 @@ void BindDetailedMultiRelation::clear()
 		mEditor->clear();
 	if(mAddList)
 		mAddList->clear();
+	if(mAddStack)
+		mAddStack->setCurrentIndex(0);
 }
 
 void BindDetailedMultiRelation::handleViewResponse(const QVariantMap& values)
@@ -707,7 +712,7 @@ void BindDetailedMultiRelation::queueRemoval()
 			}
 		}
 
-			for(int i = 0; i < mInsertQueue.count(); i++)
+		for(int i = 0; i < mInsertQueue.count(); i++)
 		{
 			QVariantMap map = mInsertQueue.at(i).toMap();
 
@@ -720,6 +725,8 @@ void BindDetailedMultiRelation::queueRemoval()
 	}
 
 	mEditor->removeItem(item);
+
+	filterAddList();
 }
 
 void BindDetailedMultiRelation::performEdit()
@@ -828,7 +835,7 @@ void BindDetailedMultiRelation::performAdd()
 
 	QVariantMap data = item->data(Qt::UserRole).toMap();
 
-	// Asf for the extra data
+	// Ask for the extra data
 	if( !mExtraColumn.isEmpty() )
 	{
 		int extra = promptForExtra(-2);
@@ -873,6 +880,8 @@ void BindDetailedMultiRelation::performAdd()
 	mEditor->addItem(new_item);
 
 	mInsertQueue << data;
+
+	filterAddList();
 }
 
 int BindDetailedMultiRelation::promptForExtra(int default_value)

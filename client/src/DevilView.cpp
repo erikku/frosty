@@ -94,7 +94,8 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.wpMudoEditLabel << ui.wpMagicForceEditLabel << ui.wpNerveEditLabel
 		<< ui.wpMindEditLabel << ui.wpSuicideEditLabel << ui.wpAlmightyEditLabel
 		<< ui.wpSpecialEditLabel << ui.devilBookEditLabel
-		<< ui.skillsEditAddLabel;
+		<< ui.skillsEditAddLabel << ui.traitsEditAddLabel
+		<< ui.locationsEditAddLabel;
 
 	foreach(QWidget *widget, widgets)
 		darkenWidget(widget);
@@ -369,6 +370,16 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 		QVariant(), QVariant(), true, QVariantList() << relation1 << relation2,
 		"lvl", tr("At what level does the devil learn this skill? "
 		"(-1 for starting level)"), ui.skillsEditStack);
+	bindMultiRelation("db_devil_traits", ui.traits, ui.traitsEditList,
+		"devil", "trait", "db_traits", "name_{$lang}", "desc_{$lang}",
+		ui.traitsEditAdd, ui.traitsEditRemove, ui.traitsEditStack,
+		ui.traitsEditAddSearch, ui.traitsEditAddList, ui.traitsEditSearchAdd,
+		ui.traitsEditSearchCancel);
+	bindMultiRelation("db_devil_locations", ui.locations, ui.locationsEditList,
+		"devil", "location", "db_locations", "name_{$lang}", QString(),
+		ui.locationsEditAdd, ui.locationsEditRemove, ui.locationsEditStack,
+		ui.locationsEditAddSearch, ui.locationsEditAddList,
+		ui.locationsEditSearchAdd, ui.locationsEditSearchCancel);
 
 	// Make sure the level sorts right
 	ui.skills->setSortFunction2(numberSortFunction2);

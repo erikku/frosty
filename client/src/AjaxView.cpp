@@ -26,6 +26,7 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
 #include <QtGui/QPushButton>
+#include <QtGui/QListWidget>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QMessageBox>
 
@@ -51,6 +52,7 @@
 #include "BindNumberSet.h"
 #include "BindNumberSelector.h"
 #include "BindDetailedMultiRelation.h"
+#include "BindMultiRelation.h"
 
 AjaxView::AjaxView(QWidget *parent_widget) : QWidget(parent_widget),
 	mID(-1), mCanEdit(false)
@@ -469,6 +471,37 @@ void AjaxView::bindDetailedMultiRelation(const QString& field,
 	bind->setAddList(add_list);
 
 	bind->setQuickSearch(quick_filter);
+
+	mBinds << bind;
+}
+
+void AjaxView::bindMultiRelation(const QString& field, QListWidget *view_widget,
+	QListWidget *edit_widget, const QString& id, const QString& foreign_id,
+	const QString& foreign_table, const QString& column,
+	const QString& extra_column, QPushButton *add_button,
+	QPushButton *remove_button, QStackedWidget *stack, SearchEdit *quick_search,
+	QListWidget *add_list, QPushButton *new_button, QPushButton *cancel_button)
+{
+	BindMultiRelation *bind = new BindMultiRelation;
+	bind->setViewer(view_widget);
+	bind->setEditor(edit_widget);
+	bind->setOtherTable(field);
+	bind->setTable( table() );
+
+	bind->setRelation(id, foreign_table, foreign_id);
+	bind->setExtraColumn(extra_column);
+	bind->setColumn(column);
+
+	bind->setRemoveButton(remove_button);
+	bind->setAddButton(add_button);
+
+	bind->setCancelButton(cancel_button);
+	bind->setNewButton(new_button);
+
+	bind->setAddStack(stack);
+	bind->setAddList(add_list);
+
+	bind->setQuickSearch(quick_search);
 
 	mBinds << bind;
 }

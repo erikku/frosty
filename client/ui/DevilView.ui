@@ -1433,46 +1433,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QScrollArea" name="traits">
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-               </property>
-               <property name="widgetResizable">
-                <bool>true</bool>
-               </property>
-               <widget class="QWidget" name="traitsArea">
-                <property name="geometry">
-                 <rect>
-                  <x>0</x>
-                  <y>0</y>
-                  <width>96</width>
-                  <height>42</height>
-                 </rect>
-                </property>
-                <layout class="QVBoxLayout">
-                 <item>
-                  <widget class="QLabel" name="traitsSample">
-                   <property name="text">
-                    <string>Sample</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer>
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </widget>
-              </widget>
+              <widget class="QListWidget" name="traits"/>
              </item>
             </layout>
            </widget>
@@ -1492,46 +1453,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QScrollArea" name="locations">
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-               </property>
-               <property name="widgetResizable">
-                <bool>true</bool>
-               </property>
-               <widget class="QWidget" name="locationsArea">
-                <property name="geometry">
-                 <rect>
-                  <x>0</x>
-                  <y>0</y>
-                  <width>96</width>
-                  <height>42</height>
-                 </rect>
-                </property>
-                <layout class="QVBoxLayout">
-                 <item>
-                  <widget class="QLabel" name="locationsSample">
-                   <property name="text">
-                    <string>Sample</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer>
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </widget>
-              </widget>
+              <widget class="QListWidget" name="locations"/>
              </item>
             </layout>
            </widget>
@@ -4371,26 +4293,6 @@
                     </spacer>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="traitsEditEdit">
-                     <property name="text">
-                      <string>Edit</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <spacer>
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item>
                     <widget class="QPushButton" name="traitsEditRemove">
                      <property name="text">
                       <string>Remove</string>
@@ -4424,7 +4326,7 @@
                  <item>
                   <layout class="QHBoxLayout">
                    <item>
-                    <widget class="QPushButton" name="traitslEditSearchAdd">
+                    <widget class="QPushButton" name="traitsEditSearchAdd">
                      <property name="text">
                       <string>&amp;Add</string>
                      </property>
@@ -4492,26 +4394,6 @@
                     <widget class="QPushButton" name="locationsEditAdd">
                      <property name="text">
                       <string>Add</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <spacer>
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="locationsEditEdit">
-                     <property name="text">
-                      <string>Edit</string>
                      </property>
                     </widget>
                    </item>
