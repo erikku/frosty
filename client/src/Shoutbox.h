@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  server/src/ServerActions.cpp                                                *
+*  client/src/Shoutbox.h                                                       *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,25 +17,35 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include "ServerActions.h"
-#include "Config.h"
+#ifndef __Shoutbox_h__
+#define __Shoutbox_h__
 
-QVariantMap serverActionUpdates(int i, QTcpSocket *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+#include "ui_Shoutbox.h"
+
+#include <QtCore/QVariant>
+
+class QTimer;
+
+class Shoutbox : public QWidget
 {
-	Q_UNUSED(i);
-	Q_UNUSED(db);
-	Q_UNUSED(email);
-	Q_UNUSED(action);
-	Q_UNUSED(connection);
+	Q_OBJECT
 
-	QVariantMap map;
-	map["client_win32"]   = conf->clientWin32();
-	map["client_macosx"]  = conf->clientMacOSX();
-	map["client_linux"]   = conf->clientLinux();
-	map["updater_win32"]  = conf->updaterWin32();
-	map["updater_macosx"] = conf->updaterMacOSX();
-	map["updater_linux"]  = conf->updaterLinux();
+public:
+	Shoutbox(QWidget *parent = 0);
 
-	return map;
-}
+public slots:
+	void checkNew();
+
+protected slots:
+	void shout();
+	void updateShoutButton();
+	void ajaxResponse(const QVariant& resp);
+
+protected:
+	Ui::Shoutbox ui;
+
+	QTimer *mTimer;
+	QVariant mLastStamp;
+};
+
+#endif // __Shoutbox_h__

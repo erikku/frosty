@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  server/src/ServerActions.cpp                                                *
+*  server/src/ShoutboxActions.h                                                *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,25 +17,19 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include "ServerActions.h"
-#include "Config.h"
+#ifndef __ShoutboxActions_h__
+#define __ShoutboxActions_h__
 
-QVariantMap serverActionUpdates(int i, QTcpSocket *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
-{
-	Q_UNUSED(i);
-	Q_UNUSED(db);
-	Q_UNUSED(email);
-	Q_UNUSED(action);
-	Q_UNUSED(connection);
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QVariant>
+#include <QtSql/QSqlDatabase>
 
-	QVariantMap map;
-	map["client_win32"]   = conf->clientWin32();
-	map["client_macosx"]  = conf->clientMacOSX();
-	map["client_linux"]   = conf->clientLinux();
-	map["updater_win32"]  = conf->updaterWin32();
-	map["updater_macosx"] = conf->updaterMacOSX();
-	map["updater_linux"]  = conf->updaterLinux();
+class QTcpSocket;
 
-	return map;
-}
+QVariantMap shoutboxPoll(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap shoutboxPost(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+
+#endif // __ShoutboxActions_h__

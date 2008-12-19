@@ -19,6 +19,7 @@
 
 #include "Taskbar.h"
 #include "Options.h"
+#include "Shoutbox.h"
 #include "UserList.h"
 #include "Settings.h"
 #include "LogWidget.h"
@@ -36,7 +37,7 @@
 #include <QtGui/QMenu>
 
 Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
-	mUserList(0), mLogWidget(0), mItemWindow(0), mDevilWindow(0),
+	mShoutbox(0), mUserList(0), mLogWidget(0), mItemWindow(0), mDevilWindow(0),
 	mSkillWindow(0), mMashouWindow(0), mImportExportWindow(0), mAdminSep(0),
 	mUsersAction(0), mTray(0)
 {
@@ -53,8 +54,8 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	QAction *act;
 
 	// Devils Action
-	//act = menu->addAction(/* icon, */tr("&Devils") );
-	//connect(act, SIGNAL(triggered()), this, SLOT(showDevilWindow()));
+	act = menu->addAction(/* icon, */tr("&Devils") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showDevilWindow()));
 	connect(ui.devilsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showDevilWindow()));
 
@@ -111,6 +112,12 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	connect(ui.optionsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showOptionsWindow()));
 
+	// Shoutbox Action
+	act = menu->addAction(/* icon, */tr("&Shoutbox") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showShoutbox()));
+	connect(ui.shoutButton, SIGNAL(clicked(bool)),
+		this, SLOT(showShoutbox()));
+
 	// Log Action
 	act = menu->addAction(/* icon, */tr("&Log") );
 	connect(act, SIGNAL(triggered()), this, SLOT(showLogWindow()));
@@ -139,6 +146,8 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
+
+	showShoutbox();
 }
 
 void Taskbar::quit()
@@ -155,6 +164,19 @@ void Taskbar::showAbout()
 	about.setupUi(widget);
 
 	widget->show();
+}
+
+void Taskbar::showShoutbox()
+{
+	if(!mShoutbox)
+		mShoutbox = new Shoutbox;
+
+	Q_ASSERT(mShoutbox != 0);
+
+	mShoutbox->show();
+	mShoutbox->activateWindow();
+	mShoutbox->raise();
+	mShoutbox->checkNew();
 }
 
 void Taskbar::showLogWindow()
@@ -277,7 +299,6 @@ void Taskbar::ajaxResponse(const QVariant& resp)
 			mUsersAction->setVisible(true);
 			mImportExportAction->setEnabled(true);
 			mImportExportAction->setVisible(true);
-			ui.devilsButton->setEnabled(true);
 		}
 	}
 }

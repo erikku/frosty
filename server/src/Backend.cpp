@@ -26,6 +26,7 @@
 #include "BackendActions.h"
 #include "DatabaseActions.h"
 #include "ServerActions.h"
+#include "ShoutboxActions.h"
 
 #include "json.h"
 
@@ -53,6 +54,10 @@ Backend::Backend(QObject *parent_object) : QObject(parent_object)
 
 	// Server Actions
 	mActionHandlers["server_updates"] = serverActionUpdates;
+
+	// Shoutbox Actions
+	mActionHandlers["shoutbox_poll"] = shoutboxPoll;
+	mActionHandlers["shoutbox_post"] = shoutboxPost;
 
 	auth->start(mActionHandlers);
 }

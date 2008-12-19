@@ -142,6 +142,14 @@ void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 	connect(transfer, SIGNAL(transferFinished(const QVariant&)),
 		this, SIGNAL(response(const QVariant&)) );
 
+	QVariantList actions = req.toMap().value("actions").toList();
+	if(actions.count() == 1)
+	{
+		QVariantMap action = actions.first().toMap();
+		if(action.value("user_data").toString() == "shoutbox")
+			return;
+	}
+
 	mLog->registerRequest(transfer, req);
 }
 

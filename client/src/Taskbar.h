@@ -23,6 +23,7 @@
 #include "ui_Taskbar.h"
 
 class Options;
+class Shoutbox;
 class UserList;
 class LogWidget;
 class ItemWindow;
@@ -43,6 +44,7 @@ public:
 public slots:
 	void quit();
 	void showAbout();
+	void showShoutbox();
 	void showLogWindow();
 	void showItemWindow();
 	void showDevilWindow();
@@ -59,6 +61,7 @@ protected:
 	Ui::Taskbar ui;
 
 	Options *mOptions;
+	Shoutbox *mShoutbox;
 	UserList *mUserList;
 	LogWidget *mLogWidget;
 	ItemWindow *mItemWindow;

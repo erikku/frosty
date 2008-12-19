@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>404</width>
     <height>97</height>
    </rect>
   </property>
@@ -23,9 +23,6 @@
       <layout class="QHBoxLayout">
        <item>
         <widget class="QPushButton" name="devilsButton">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="text">
           <string>&amp;Devils</string>
          </property>
@@ -110,6 +107,13 @@
         <widget class="QPushButton" name="optionsButton">
          <property name="text">
           <string>&amp;Options</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="shoutButton">
+         <property name="text">
+          <string>&amp;Shoutbox</string>
          </property>
         </widget>
        </item>

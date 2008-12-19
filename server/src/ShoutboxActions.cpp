@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  server/src/ServerActions.cpp                                                *
+*  server/src/ShoutboxActions.cpp                                              *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,10 +17,15 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include "ServerActions.h"
-#include "Config.h"
+#include "ShoutboxActions.h"
+#include "Auth.h"
 
-QVariantMap serverActionUpdates(int i, QTcpSocket *connection,
+#include <QtCore/QQueue>
+#include <QtCore/QDateTime>
+
+QQueue<QVariantMap> g_shoutbox_queue;
+
+QVariantMap shoutboxPoll(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -29,13 +34,44 @@ QVariantMap serverActionUpdates(int i, QTcpSocket *connection,
 	Q_UNUSED(action);
 	Q_UNUSED(connection);
 
+	uint stamp = action.value("timestamp").toUInt();
+
+	QVariantList msgs;
+	foreach(QVariantMap msg, g_shoutbox_queue)
+	{
+		if(msg.value("timestamp").toUInt() > stamp)
+			msgs << msg;
+	}
+
 	QVariantMap map;
-	map["client_win32"]   = conf->clientWin32();
-	map["client_macosx"]  = conf->clientMacOSX();
-	map["client_linux"]   = conf->clientLinux();
-	map["updater_win32"]  = conf->updaterWin32();
-	map["updater_macosx"] = conf->updaterMacOSX();
-	map["updater_linux"]  = conf->updaterLinux();
+	map["messages"] = msgs;
+	map["timestamp"] = QString::number(
+		QDateTime::currentDateTime().toTime_t() );
 
 	return map;
+}
+
+QVariantMap shoutboxPost(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+{
+	Q_UNUSED(i);
+	Q_UNUSED(db);
+	Q_UNUSED(email);
+	Q_UNUSED(action);
+	Q_UNUSED(connection);
+
+	QVariantMap user_info = Auth::getSingletonPtr()->queryUser(
+		email, email).toMap();
+
+	QVariantMap msg;
+	msg["author"] = user_info.value("name");
+	msg["text"] = action.value("text");
+	msg["timestamp"] = QString::number(
+		QDateTime::currentDateTime().toTime_t() );
+
+	g_shoutbox_queue << msg;
+	while(g_shoutbox_queue.count() > 20)
+		g_shoutbox_queue.dequeue();
+
+	return shoutboxPoll(i, connection, db, action, email);
 }

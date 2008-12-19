@@ -64,7 +64,8 @@ FORMS       += ui/PaletteEditor.ui \
                ui/UserEdit.ui \
                ui/UserList.ui \
                ui/LogView.ui \
-               ui/About.ui
+               ui/About.ui \
+               ui/Shoutbox.ui
 HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/PaletteEditor.h \
@@ -120,7 +121,8 @@ HEADERS     += src/ajax.h \
                src/BindNumberSet.h \
                src/BindNumberSelector.h \
                src/BindDetailedMultiRelation.h \
-               src/BindMultiRelation.h
+               src/BindMultiRelation.h \
+               src/Shoutbox.h
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
@@ -180,4 +182,5 @@ SOURCES     += src/main.cpp \
                src/BindNumberSet.cpp \
                src/BindNumberSelector.cpp \
                src/BindDetailedMultiRelation.cpp \
-               src/BindMultiRelation.cpp
+               src/BindMultiRelation.cpp \
+               src/Shoutbox.cpp

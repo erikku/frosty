@@ -39,7 +39,7 @@ QString sha1FromString(const QString& str)
 		hash += QString("%1").arg(((int)checksum[i]), 2, 16, QLatin1Char('0'));
 
 	return hash;
-};
+}
 
 QVariantMap herror(const QString& type, const QString& err)
 {
@@ -47,7 +47,7 @@ QVariantMap herror(const QString& type, const QString& err)
 	map["error"] = tr("Error parsing %1: %2").arg(type).arg(err);
 
 	return map;
-};
+}
 
 QVariantMap herror_sql(const QSqlDatabase& db, const QString& type,
 	const QString& err)
@@ -59,7 +59,7 @@ QVariantMap herror_sql(const QSqlDatabase& db, const QString& type,
 	map["error"] = tr("Error parsing %1: %2").arg(type).arg(err);
 
 	return map;
-};
+}
 
 QVariantMap param_error(const QString& type, const QString& param,
 	const QString& action)
@@ -69,7 +69,7 @@ QVariantMap param_error(const QString& type, const QString& param,
 		type).arg(param).arg(action);
 
 	return map;
-};
+}
 
 QStringList tables_blacklist()
 {
@@ -78,7 +78,7 @@ QStringList tables_blacklist()
 	blacklist << "sqlite_sequence";
 
 	return blacklist;
-};
+}
 
 QString full_column_name(const QString& table, const QString& column)
 {
@@ -86,7 +86,7 @@ QString full_column_name(const QString& table, const QString& column)
 		return column;
 
 	return QString("%1.%2").arg(table).arg(column);
-};
+}
 
 QStringList cache_columns(const QString& table, const QSqlDatabase& db)
 {
@@ -128,7 +128,7 @@ QStringList cache_columns(const QString& table, const QSqlDatabase& db)
 	master_cache[db.connectionName()] = cache;
 
 	return list;
-};
+}
 
 QMap<QString, QString> where_connect_types()
 {
@@ -137,7 +137,7 @@ QMap<QString, QString> where_connect_types()
 	types["and"] = " AND ";
 
 	return types;
-};
+}
 
 QMap<QString, QString> where_types()
 {
@@ -147,7 +147,7 @@ QMap<QString, QString> where_types()
 	types["equals"]       = "=";
 
 	return types;
-};
+}
 
 bool check_column(const QString& col, const QString& table,
 	const QSqlDatabase& db)
@@ -168,4 +168,4 @@ bool check_column(const QString& col, const QString& table,
 	}
 
 	return column_cache.contains(real_col);
-};
+}

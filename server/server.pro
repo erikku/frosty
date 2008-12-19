@@ -29,6 +29,22 @@ UI_DIR      = .ui
 
 LIBS       += -lgd
 
+QMAKE_CXXFLAGS_DEBUG += -W -Wall -ansi -pedantic-errors -Wcast-align \
+	-Wcast-qual -Wchar-subscripts -Winline -Wpointer-arith \
+	-Wredundant-decls -Wshadow -Wwrite-strings -Werror \
+	-Wno-non-virtual-dtor -Wno-long-long -pedantic -Wconversion
+
+QMAKE_CFLAGS_DEBUG += -W -Wall -ansi -pedantic-errors -Wcast-align \
+	-Wcast-qual -Wchar-subscripts -Winline -Wpointer-arith \
+	-Wredundant-decls -Wshadow -Wwrite-strings \
+	-Wno-long-long -pedantic -Wconversion -Wstrict-prototypes \
+	-Wbad-function-cast -Wmissing-prototypes -Wnested-externs
+
+win32 {
+	RC_FILE = megatendb.rc
+	QMAKE_CXXFLAGS_DEBUG += -mnop-fun-dllimport
+}
+
 RESOURCES    = server.qrc
 TRANSLATIONS =
 FORMS       +=
@@ -38,6 +54,7 @@ HEADERS     += src/Auth.h \
                src/BackendActions.h \
                src/Config.h \
                src/DatabaseActions.h \
+               src/ShoutboxActions.h \
                src/DomUtils.h \
                src/Log.h \
                src/Server.h \
@@ -52,6 +69,7 @@ SOURCES     += src/main.cpp \
                src/BackendActions.cpp \
                src/Config.cpp \
                src/DatabaseActions.cpp \
+               src/ShoutboxActions.cpp \
                src/DomUtils.cpp \
                src/Log.cpp \
                src/Server.cpp \

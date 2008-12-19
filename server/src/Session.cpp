@@ -25,13 +25,13 @@
 
 static Session *g_session_inst = 0;
 
-Session::Session(QObject *parent) : QObject(parent)
+Session::Session(QObject *parent_object) : QObject(parent_object)
 {
 	mTimer = new QTimer;
 	mTimer->start(300000);
 
 	connect(mTimer, SIGNAL(timeout()), this, SLOT(clean()));
-};
+}
 
 Session* Session::getSingletonPtr()
 {
@@ -41,7 +41,7 @@ Session* Session::getSingletonPtr()
 	Q_ASSERT(g_session_inst);
 
 	return g_session_inst;
-};
+}
 
 QString Session::create(const QHostAddress& peer)
 {
@@ -55,7 +55,7 @@ QString Session::create(const QHostAddress& peer)
 	mSessions[hash] = pair;
 
 	return hash;
-};
+}
 
 QVariant Session::load(const QString& key)
 {
@@ -74,7 +74,7 @@ QVariant Session::load(const QString& key)
 	}
 
 	return pair.second;
-};
+}
 
 void Session::save(const QString& key, QVariant& data)
 {
@@ -86,7 +86,7 @@ void Session::save(const QString& key, QVariant& data)
 	pair.second = data;
 
 	mSessions[key] = pair;
-};
+}
 
 QString Session::keyToCookie(const QString& key, const QString& host)
 {
@@ -95,7 +95,7 @@ QString Session::keyToCookie(const QString& key, const QString& host)
 	QString domain = url.host();
 
 	return QString("SESSION=%1; domain=%2; path=/").arg(key).arg(domain);
-};
+}
 
 QString Session::cookieToKey(const QString& cookie)
 {
@@ -104,7 +104,7 @@ QString Session::cookieToKey(const QString& cookie)
 		return cookieMatcher.cap(1).trimmed();
 
 	return QString();
-};
+}
 
 void Session::clean()
 {
@@ -122,4 +122,4 @@ void Session::clean()
 		else
 			i++;
 	}
-};
+}

@@ -68,6 +68,10 @@ void Auth::start(const QMap<QString, BackendActionHandler>& actionHandlers)
 	// Server Actions
 	mActionPermissions["server_updates"] = "any";
 
+	// Shoutbox Actions
+	mActionPermissions["shoutbox_poll"] = "any";
+	mActionPermissions["shoutbox_post"] = "view_db";
+
 	mDefaultPerms["any"] = true;
 	mDefaultPerms["admin"] = conf->authAdmin();
 	mDefaultPerms["view_db"] = conf->authViewDB();

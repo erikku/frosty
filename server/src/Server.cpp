@@ -43,7 +43,7 @@
 #include <QtSql/QSqlDatabase>
 
 
-Server::Server(int argc, char *argv[]) : QCoreApplication(argc, argv)
+Server::Server(int ac, char *av[]) : QCoreApplication(ac, av)
 {
 	qsrand( QDateTime::currentDateTime().toTime_t() );
 }
@@ -89,7 +89,7 @@ void Server::init()
 	//QSqlDatabase::removeDatabase("master");
 }
 
-void SslServer::incomingConnection(int socketDescriptor)
+void SslServer::incomingConnection(int descriptor)
 {
 	if( conf->sslEnabled() )
 	{
@@ -103,7 +103,7 @@ void SslServer::incomingConnection(int socketDescriptor)
 		socket->setLocalCertificate( conf->sslCert() );
 		socket->setPrivateKey( conf->sslKey() );
 
-		socket->setSocketDescriptor(socketDescriptor);
+		socket->setSocketDescriptor(descriptor);
 		socket->startServerEncryption();
 
 		emit newConnection(socket);
@@ -115,7 +115,7 @@ void SslServer::incomingConnection(int socketDescriptor)
 		connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
 			this, SLOT(error(QAbstractSocket::SocketError)));
 
-		socket->setSocketDescriptor(socketDescriptor);
+		socket->setSocketDescriptor(descriptor);
 
 		emit newConnection(socket);
 	}
@@ -317,20 +317,20 @@ void Server::finalize(QTcpSocket *connection)
 				return;
 			}
 
-			QString error = auth->registerUser(post.value("email"),
+			QString err = auth->registerUser(post.value("email"),
 				post.value("name"), post.value("pass"));
-			if( !error.isEmpty() )
+			if( !err.isEmpty() )
 			{
-				captcha(connection, session_key, cookie, error);
+				captcha(connection, session_key, cookie, err);
 
 				return;
 			}
 
-			QHttpResponseHeader header = basicResponseHeader();
-			header.setContentLength(2);
-			header.setContentType("text/html");
+			QHttpResponseHeader resp_header = basicResponseHeader();
+			resp_header.setContentLength(2);
+			resp_header.setContentType("text/html");
 
-			connection->write( header.toString().toUtf8() );
+			connection->write( resp_header.toString().toUtf8() );
 			connection->write( QString("OK").toUtf8() );
 		}
 		else
@@ -405,7 +405,7 @@ void Server::respond(QTcpSocket *connection, const QVariant& data)
 }
 
 void Server::captcha(QTcpSocket *connection, const QString& session_key,
-	const QString& cookie, const QString& error)
+	const QString& cookie, const QString& error_text)
 {
 	QStringList letters = conf->captchaLetters();
 	int count = letters.count();
@@ -465,8 +465,8 @@ void Server::captcha(QTcpSocket *connection, const QString& session_key,
 	header.setContentLength(size);
 	header.setContentType("image/png");
 
-	if( !error.isEmpty() )
-		header.setValue("X-Registration-Error", error);
+	if( !error_text.isEmpty() )
+		header.setValue("X-Registration-Error", error_text);
 
 	connection->write( header.toString().toUtf8() );
 	connection->write(image, size);
