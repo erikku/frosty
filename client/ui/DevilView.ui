@@ -3803,7 +3803,14 @@
                <item row="1" column="1">
                 <layout class="QHBoxLayout">
                  <item>
-                  <widget class="QSpinBox" name="fusionRangeFromEdit"/>
+                  <widget class="QSpinBox" name="fusionRangeFromEdit">
+                   <property name="minimum">
+                    <number>-1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>200</number>
+                   </property>
+                  </widget>
                  </item>
                  <item>
                   <widget class="QLabel" name="fusionRangeDivEditLabel">
@@ -3816,7 +3823,14 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QSpinBox" name="fusionRangeToEdit"/>
+                  <widget class="QSpinBox" name="fusionRangeToEdit">
+                   <property name="minimum">
+                    <number>-1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>200</number>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </item>

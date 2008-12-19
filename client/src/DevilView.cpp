@@ -177,7 +177,7 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindBool("fusion2", ui.fusion2, ui.fusion2Edit);
 	bindBool("fusion3", ui.fusion3, ui.fusion3Edit);
 	bindNumberRange("fusion_range", ui.fusionRange, ui.fusionRangeFromEdit,
-		ui.fusionRangeToEdit, "fuse_min_lvl", "fuse_max_lvl");
+		ui.fusionRangeToEdit, "fuse_min_lvl", "fuse_max_lvl", -1, -1, true);
 	bindNumber("fuse_chance", ui.chance, ui.chanceEdit, 100, "%1%");
 	bindBool("greet", ui.greet, ui.greetEdit);
 	bindBool("provoke", ui.provoke, ui.provokeEdit);
