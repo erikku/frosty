@@ -299,7 +299,7 @@ QString Auth::registerUser(const QString& email, const QString& name,
 QVariant Auth::queryUser(const QString& email, const QString& target) const
 {
 	QVariantMap perms = queryPerms(email).toMap();
-	if( !perms.value("admin").toBool() )
+	if( !perms.value("admin").toBool() && email != target )
 		return QVariant();
 
 	QString sql = "SELECT email, name, active, type, last_login FROM users "

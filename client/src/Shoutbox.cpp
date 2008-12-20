@@ -96,7 +96,8 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 		}
 
 		// Set the new timestamp
-		mLastStamp = result.value("timestamp");
+		if( result.value("timestamp").toUInt() > mLastStamp.toUInt() )
+			mLastStamp = result.value("timestamp");
 
 		// Restart the timer
 		mTimer->start(5000);
