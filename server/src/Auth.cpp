@@ -69,6 +69,7 @@ void Auth::start(const QMap<QString, BackendActionHandler>& actionHandlers)
 	mActionPermissions["server_updates"] = "any";
 
 	// Shoutbox Actions
+	mActionPermissions["shoutbox_login"] = "any";
 	mActionPermissions["shoutbox_poll"] = "any";
 	mActionPermissions["shoutbox_post"] = "view_db";
 

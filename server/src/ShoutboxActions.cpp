@@ -25,7 +25,7 @@
 
 QQueue<QVariantMap> g_shoutbox_queue;
 
-QVariantMap shoutboxPoll(int i, QTcpSocket *connection,
+QVariantMap shoutboxLogin(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -34,13 +34,37 @@ QVariantMap shoutboxPoll(int i, QTcpSocket *connection,
 	Q_UNUSED(action);
 	Q_UNUSED(connection);
 
+	QVariantMap user_info = Auth::getSingletonPtr()->queryUser(
+		email, email).toMap();
+
+	QVariantMap ret = shoutboxPoll(i, connection, db, action, QString());
+	ret["nick"] = user_info.value("name");
+
+	return ret;
+}
+
+QVariantMap shoutboxPoll(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+{
+	Q_UNUSED(i);
+	Q_UNUSED(db);
+	Q_UNUSED(connection);
+
 	uint stamp = action.value("timestamp").toUInt();
 
 	QVariantList msgs;
 	foreach(QVariantMap msg, g_shoutbox_queue)
 	{
+		if(msg.value("email").toString() == email)
+			continue;
+
 		if(msg.value("timestamp").toUInt() > stamp)
-			msgs << msg;
+		{
+			QVariantMap copy = msg;
+			copy.remove("email");
+
+			msgs << copy;
+		}
 	}
 
 	QVariantMap map;
@@ -56,8 +80,6 @@ QVariantMap shoutboxPost(int i, QTcpSocket *connection,
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
-	Q_UNUSED(email);
-	Q_UNUSED(action);
 	Q_UNUSED(connection);
 
 	QVariantMap user_info = Auth::getSingletonPtr()->queryUser(
@@ -66,6 +88,7 @@ QVariantMap shoutboxPost(int i, QTcpSocket *connection,
 	QVariantMap msg;
 	msg["author"] = user_info.value("name");
 	msg["text"] = action.value("text");
+	msg["email"] = email;
 	msg["timestamp"] = QString::number(
 		QDateTime::currentDateTime().toTime_t() );
 

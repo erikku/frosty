@@ -35,6 +35,7 @@ Shoutbox::Shoutbox(QWidget *parent_widget) : QWidget(parent_widget),
 
 	mTimer = new QTimer;
 	mTimer->start(5000);
+	mNick = tr("me");
 
 	connect(mTimer, SIGNAL(timeout()), this, SLOT(checkNew()));
 	connect(ui.shoutButton, SIGNAL(clicked(bool)), this, SLOT(shout()));
@@ -45,6 +46,15 @@ Shoutbox::Shoutbox(QWidget *parent_widget) : QWidget(parent_widget),
 	ui.chatLog->insertPlainText( tr("-- Start Shoutbox Log --") );
 
 	updateShoutButton();
+
+	QVariantMap action;
+	action["action"] = "shoutbox_login";
+	action["timestamp"] = mLastStamp;
+	action["user_data"] = "shoutbox";
+
+	ajax::getSingletonPtr()->request(settings->url(), action);
+
+	ui.messageEdit->setEnabled(false);
 }
 
 void Shoutbox::shout()
@@ -58,6 +68,10 @@ void Shoutbox::shout()
 	action["user_data"] = "shoutbox";
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
+
+	ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+	ui.chatLog->insertHtml( tr("<br/><b>%1:</b> ").arg(mNick) +
+		ui.messageEdit->text() );
 
 	ui.messageEdit->clear();
 }
@@ -91,15 +105,24 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 		{
 			QVariantMap msg = msg_item.toMap();
 
+			ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 			ui.chatLog->insertHtml("<br/><b>" +
 				msg.value("author").toString() + QString(":</b> ") +
 				msg.value("text").toString() );
 		}
 
 		// Set the new timestamp
-		mLastStamp = result.value("timestamp").toUInt();
+		if( result.contains("timestamp") )
+			mLastStamp = result.value("timestamp").toUInt();
 
 		if( !msgs.isEmpty() )
 			ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+	}
+
+	if(result.value("action").toString() == "shoutbox_login")
+	{
+		mNick = result.value("nick").toString();
+
+		ui.messageEdit->setEnabled(true);
 	}
 }

@@ -44,6 +44,8 @@ protected slots:
 protected:
 	Ui::Shoutbox ui;
 
+	QString mNick;
+
 	QTimer *mTimer;
 	uint mLastStamp;
 };

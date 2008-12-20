@@ -27,6 +27,8 @@
 
 class QTcpSocket;
 
+QVariantMap shoutboxLogin(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 QVariantMap shoutboxPoll(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 QVariantMap shoutboxPost(int i, QTcpSocket *connection,

@@ -56,6 +56,7 @@ Backend::Backend(QObject *parent_object) : QObject(parent_object)
 	mActionHandlers["server_updates"] = serverActionUpdates;
 
 	// Shoutbox Actions
+	mActionHandlers["shoutbox_login"] = shoutboxLogin;
 	mActionHandlers["shoutbox_poll"] = shoutboxPoll;
 	mActionHandlers["shoutbox_post"] = shoutboxPost;
 
