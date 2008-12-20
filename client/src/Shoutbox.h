@@ -44,9 +44,6 @@ protected slots:
 protected:
 	Ui::Shoutbox ui;
 
-	bool mWaiting;
-	bool mCheckAgain;
-
 	QTimer *mTimer;
 	uint mLastStamp;
 };

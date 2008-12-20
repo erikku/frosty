@@ -24,7 +24,7 @@
 #include <QtCore/QTimer>
 
 Shoutbox::Shoutbox(QWidget *parent_widget) : QWidget(parent_widget),
-	mWaiting(false), mCheckAgain(false), mLastStamp(0)
+	mLastStamp(0)
 {
 	ui.setupUi(this);
 
@@ -52,9 +52,6 @@ void Shoutbox::shout()
 	if( ui.messageEdit->text().isEmpty() )
 		return;
 
-	if(mWaiting)
-		mCheckAgain = true;
-
 	QVariantMap action;
 	action["action"] = "shoutbox_post";
 	action["text"] = ui.messageEdit->text();
@@ -67,7 +64,7 @@ void Shoutbox::shout()
 
 void Shoutbox::checkNew()
 {
-	if(!isVisible() || mWaiting)
+	if( !isVisible() )
 		return;
 
 	QVariantMap action;
@@ -76,9 +73,6 @@ void Shoutbox::checkNew()
 	action["user_data"] = "shoutbox";
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
-
-	mWaiting = true;
-	mTimer->start(5000);
 }
 
 void Shoutbox::updateShoutButton()
@@ -92,12 +86,6 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 
 	if(result.value("user_data").toString() == "shoutbox")
 	{
-		if( !result.contains("messages") )
-		{
-			checkNew();
-			return;
-		}
-
 		QVariantList msgs = result.value("messages").toList();
 		foreach(QVariant msg_item, msgs)
 		{
@@ -108,15 +96,8 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 				msg.value("text").toString() );
 		}
 
-		mWaiting = false;
-		if(mCheckAgain)
-		{
-			checkNew();
-			mCheckAgain = false;
-		}
-
-		// Restart the timer
-		mTimer->start(5000);
+		// Set the new timestamp
+		mLastStamp = result.value("timestamp").toUInt();
 
 		if( !msgs.isEmpty() )
 			ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
