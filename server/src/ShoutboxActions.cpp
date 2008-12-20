@@ -73,5 +73,5 @@ QVariantMap shoutboxPost(int i, QTcpSocket *connection,
 	while(g_shoutbox_queue.count() > 20)
 		g_shoutbox_queue.dequeue();
 
-	return shoutboxPoll(i, connection, db, action, email);
+	return QVariantMap();
 }
