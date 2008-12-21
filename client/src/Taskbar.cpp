@@ -176,7 +176,6 @@ void Taskbar::showShoutbox()
 	mShoutbox->show();
 	mShoutbox->activateWindow();
 	mShoutbox->raise();
-	mShoutbox->checkNew();
 }
 
 void Taskbar::showLogWindow()

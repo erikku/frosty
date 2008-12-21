@@ -22,6 +22,7 @@
 #include "ajax.h"
 
 #include <QtCore/QTimer>
+#include <QtCore/QDateTime>
 
 Shoutbox::Shoutbox(QWidget *parent_widget) : QWidget(parent_widget),
 	mLastStamp(0)
@@ -34,7 +35,6 @@ Shoutbox::Shoutbox(QWidget *parent_widget) : QWidget(parent_widget),
 	ajax::getSingletonPtr()->subscribe(this);
 
 	mTimer = new QTimer;
-	mTimer->start(5000);
 	mNick = tr("me");
 
 	connect(mTimer, SIGNAL(timeout()), this, SLOT(checkNew()));
@@ -69,9 +69,13 @@ void Shoutbox::shout()
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
 
+	QString stamp = QDateTime::currentDateTime().toString(
+		"yyyy-MM-dd hh:mm:ss");
+
 	ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-	ui.chatLog->insertHtml( tr("<br/><b>%1:</b> ").arg(mNick) +
-		ui.messageEdit->text() );
+	ui.chatLog->insertHtml( tr("<br/><b>(%1) %2:</b> %3").arg(
+		stamp).arg(mNick).arg( ui.messageEdit->text() ) );
+	ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 
 	ui.messageEdit->clear();
 }
@@ -105,10 +109,13 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 		{
 			QVariantMap msg = msg_item.toMap();
 
+			QString stamp = QDateTime::fromTime_t( msg.value(
+				"timestamp").toUInt() ).toString("yyyy-MM-dd hh:mm:ss");
+
 			ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-			ui.chatLog->insertHtml("<br/><b>" +
-				msg.value("author").toString() + QString(":</b> ") +
-				msg.value("text").toString() );
+			ui.chatLog->insertHtml( tr("<br/><b>(%1) %2:</b> %3").arg(
+				stamp).arg( msg.value("author").toString() ).arg(
+				msg.value("text").toString() ) );
 		}
 
 		// Set the new timestamp
@@ -122,6 +129,7 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 	if(result.value("action").toString() == "shoutbox_login")
 	{
 		mNick = result.value("nick").toString();
+		mTimer->start(5000);
 
 		ui.messageEdit->setEnabled(true);
 	}

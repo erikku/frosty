@@ -92,6 +92,8 @@ QVariantList Backend::parseRequest(QTcpSocket *connection,
 		if(  !auth->authenticate(email, post.value("request"),
 			post.value("pass")) )
 		{
+			LOG_ERROR( tr("Authentication error for %1").arg(email) );
+
 			QVariantMap error;
 			error["error"] = "Authentication Error";
 
@@ -146,6 +148,7 @@ QVariantList Backend::parseRequest(QTcpSocket *connection,
 			}
 			else
 			{
+				LOG_ERROR( tr("Authentication error for %1").arg(email) );
 				request_result = herror(tr("%1 action").arg(name),
 					tr("authentication error for action %1").arg(i));
 			}
