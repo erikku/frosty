@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/TraitWindow.h                                                    *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,67 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __TraitWindow_h__
+#define __TraitWindow_h__
 
-#include "ui_Taskbar.h"
+#include <QtGui/QWidget>
+#include <QtCore/QVariant>
+#include <QtCore/QMap>
 
-class Options;
-class Shoutbox;
-class UserList;
-class LogWidget;
-class ItemWindow;
-class DevilWindow;
-class TraitWindow;
-class SkillWindow;
-class MashouWindow;
-class ImportExport;
-class QSystemTrayIcon;
-class QAction;
+class TraitList;
+class TraitView;
+class QListWidgetItem;
 
-class Taskbar : public QWidget
+class TraitWindow : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
+	TraitWindow(QWidget *parent = 0);
 
 public slots:
-	void quit();
-	void showAbout();
-	void showShoutbox();
-	void showLogWindow();
-	void showItemWindow();
-	void showDevilWindow();
-	void showTraitWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showMashouWindow();
-	void showOptionsWindow();
-	void showImportExportWindow();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void refresh();
 
 protected:
-	Ui::Taskbar ui;
-
-	Options *mOptions;
-	Shoutbox *mShoutbox;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	ItemWindow *mItemWindow;
-	DevilWindow *mDevilWindow;
-	TraitWindow *mTraitWindow;
-	SkillWindow *mSkillWindow;
-	MashouWindow *mMashouWindow;
-	ImportExport *mImportExportWindow;
-
-	QAction *mAdminSep;
-	QAction *mUsersAction;
-	QAction *mImportExportAction;
-
-	QSystemTrayIcon *mTray;
+	TraitList *mTraitList;
+	TraitView *mTraitView;
 };
 
-#endif // __Taskbar_h__
+#endif // __TraitWindow_h__

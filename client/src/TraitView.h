@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/TraitView.h                                                      *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,67 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __TraitView_h__
+#define __TraitView_h__
 
-#include "ui_Taskbar.h"
+#include "AjaxView.h"
+#include "ui_TraitView.h"
 
-class Options;
-class Shoutbox;
-class UserList;
-class LogWidget;
-class ItemWindow;
-class DevilWindow;
-class TraitWindow;
-class SkillWindow;
-class MashouWindow;
-class ImportExport;
-class QSystemTrayIcon;
-class QAction;
+#include <QtCore/QVariant>
+#include <QtCore/QMap>
 
-class Taskbar : public QWidget
+class TraitView : public AjaxView
 {
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
-
-public slots:
-	void quit();
-	void showAbout();
-	void showShoutbox();
-	void showLogWindow();
-	void showItemWindow();
-	void showDevilWindow();
-	void showTraitWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showMashouWindow();
-	void showOptionsWindow();
-	void showImportExportWindow();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	TraitView(QWidget *parent = 0);
 
 protected:
-	Ui::Taskbar ui;
+	virtual bool checkValues();
+	virtual QString table() const;
 
-	Options *mOptions;
-	Shoutbox *mShoutbox;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	ItemWindow *mItemWindow;
-	DevilWindow *mDevilWindow;
-	TraitWindow *mTraitWindow;
-	SkillWindow *mSkillWindow;
-	MashouWindow *mMashouWindow;
-	ImportExport *mImportExportWindow;
+	virtual QString addWarningTitle() const;
+	virtual QString addWarningMessage() const;
 
-	QAction *mAdminSep;
-	QAction *mUsersAction;
-	QAction *mImportExportAction;
-
-	QSystemTrayIcon *mTray;
+	Ui::TraitView ui;
 };
 
-#endif // __Taskbar_h__
+#endif // __TraitView_h__

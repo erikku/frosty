@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/TraitWindow.cpp                                                  *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,67 +17,42 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#include "TraitWindow.h"
+#include "TraitList.h"
+#include "TraitView.h"
+#include "UserList.h"
+#include "Options.h"
 
-#include "ui_Taskbar.h"
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QSplitter>
 
-class Options;
-class Shoutbox;
-class UserList;
-class LogWidget;
-class ItemWindow;
-class DevilWindow;
-class TraitWindow;
-class SkillWindow;
-class MashouWindow;
-class ImportExport;
-class QSystemTrayIcon;
-class QAction;
-
-class Taskbar : public QWidget
+TraitWindow::TraitWindow(QWidget *parent_widget) : QWidget(parent_widget)
 {
-	Q_OBJECT
+	mTraitView = new TraitView;
+	mTraitList = new TraitList(mTraitView);
 
-public:
-	Taskbar(QWidget *parent = 0);
+	QSplitter *mainSplitter = new QSplitter;
+	mainSplitter->addWidget(mTraitList);
+	mainSplitter->addWidget(mTraitView);
 
-public slots:
-	void quit();
-	void showAbout();
-	void showShoutbox();
-	void showLogWindow();
-	void showItemWindow();
-	void showDevilWindow();
-	void showTraitWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showMashouWindow();
-	void showOptionsWindow();
-	void showImportExportWindow();
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->addWidget(mainSplitter);
 
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	connect(mTraitList, SIGNAL(itemClicked(int)), mTraitView, SLOT(view(int)));
+	connect(mTraitView, SIGNAL(viewChanged()), mTraitList, SLOT(refresh()));
+	connect(mTraitList, SIGNAL(addItemRequested()), mTraitView, SLOT(add()));
+	connect(Options::getSingletonPtr(), SIGNAL(optionsChanged()),
+		this, SLOT(refresh()));
 
-protected:
-	Ui::Taskbar ui;
+	setLayout(mainLayout);
+	setWindowTitle( tr("%1 - Trait List").arg(
+		tr("Absolutely Frosty") ) );
 
-	Options *mOptions;
-	Shoutbox *mShoutbox;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	ItemWindow *mItemWindow;
-	DevilWindow *mDevilWindow;
-	TraitWindow *mTraitWindow;
-	SkillWindow *mSkillWindow;
-	MashouWindow *mMashouWindow;
-	ImportExport *mImportExportWindow;
+	resize(800, 600);
+}
 
-	QAction *mAdminSep;
-	QAction *mUsersAction;
-	QAction *mImportExportAction;
-
-	QSystemTrayIcon *mTray;
-};
-
-#endif // __Taskbar_h__
+void TraitWindow::refresh()
+{
+	mTraitList->refresh();
+	mTraitView->refresh();
+}

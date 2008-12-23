@@ -50,6 +50,7 @@ FORMS       += ui/PaletteEditor.ui \
                ui/ItemView.ui \
                ui/MashouView.ui \
                ui/SkillView.ui \
+               ui/TraitView.ui \
                ui/IconImport.ui \
                ui/IconSelect.ui \
                ui/InfoListWidget.ui \
@@ -75,15 +76,18 @@ HEADERS     += src/ajax.h \
                src/ItemList.h \
                src/MashouList.h \
                src/SkillList.h \
+               src/TraitList.h \
                src/AjaxView.h \
                src/DevilView.h \
                src/ItemView.h \
                src/MashouView.h \
                src/SkillView.h \
+               src/TraitView.h \
                src/DevilWindow.h \
                src/ItemWindow.h \
                src/MashouWindow.h \
                src/SkillWindow.h \
+               src/TraitWindow.h \
                src/SearchEdit.h \
                src/HttpTransfer.h \
                src/IconEdit.h \
@@ -134,15 +138,18 @@ SOURCES     += src/main.cpp \
                src/ItemList.cpp \
                src/MashouList.cpp \
                src/SkillList.cpp \
+               src/TraitList.cpp \
                src/AjaxView.cpp \
                src/DevilView.cpp \
                src/ItemView.cpp \
                src/MashouView.cpp \
                src/SkillView.cpp \
+               src/TraitView.cpp \
                src/DevilWindow.cpp\
                src/ItemWindow.cpp \
                src/MashouWindow.cpp \
                src/SkillWindow.cpp \
+               src/TraitWindow.cpp \
                src/HttpTransfer.cpp \
                src/IconEdit.cpp \
                src/IconImport.cpp \

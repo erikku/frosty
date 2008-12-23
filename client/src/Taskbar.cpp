@@ -25,6 +25,7 @@
 #include "LogWidget.h"
 #include "ItemWindow.h"
 #include "DevilWindow.h"
+#include "TraitWindow.h"
 #include "SkillWindow.h"
 #include "MashouWindow.h"
 #include "ImportExport.h"
@@ -38,8 +39,8 @@
 
 Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	mShoutbox(0), mUserList(0), mLogWidget(0), mItemWindow(0), mDevilWindow(0),
-	mSkillWindow(0), mMashouWindow(0), mImportExportWindow(0), mAdminSep(0),
-	mUsersAction(0), mTray(0)
+	mTraitWindow(0), mSkillWindow(0), mMashouWindow(0), mImportExportWindow(0),
+	mAdminSep(0), mUsersAction(0), mTray(0)
 {
 	ui.setupUi(this);
 
@@ -80,6 +81,12 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	connect(act, SIGNAL(triggered()), this, SLOT(showItemWindow()));
 	connect(ui.itemsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showItemWindow()));
+
+	// Traits Action
+	act = menu->addAction(/* icon, */tr("&Traits") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showTraitWindow()));
+	connect(ui.traitsButton, SIGNAL(clicked(bool)),
+		this, SLOT(showTraitWindow()));
 
 	// Users Action
 	mUsersAction = menu->addAction(/* icon, */tr("&Users") );
@@ -213,6 +220,19 @@ void Taskbar::showDevilWindow()
 	mDevilWindow->activateWindow();
 	mDevilWindow->raise();
 }
+
+void Taskbar::showTraitWindow()
+{
+	if(!mTraitWindow)
+		mTraitWindow = new TraitWindow;
+
+	Q_ASSERT(mTraitWindow != 0);
+
+	mTraitWindow->show();
+	mTraitWindow->activateWindow();
+	mTraitWindow->raise();
+}
+
 
 void Taskbar::showSkillWindow()
 {

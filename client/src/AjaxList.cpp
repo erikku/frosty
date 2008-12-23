@@ -158,8 +158,11 @@ void AjaxList::updateFilter()
 
 		QString icon_path = itemIcon(map);
 
-		QListWidgetItem *item = new QListWidgetItem(QIcon(icon_path),
-			itemText(map) );
+		QListWidgetItem *item;
+		if( icon_path.isEmpty() )
+			item = new QListWidgetItem( itemText(map) );
+		else
+			item = new QListWidgetItem(QIcon(icon_path), itemText(map) );
 
 		item->setData(Qt::UserRole, QVariant(i));
 		list->addItem(item);
@@ -197,7 +200,12 @@ void AjaxList::refresh()
 	ui.filterCombo->clear();
 	ui.filterCombo->addItem( tr("All") );
 
-	ajax::getSingletonPtr()->request(settings->url(), filterAction());
+	QVariant filter_action = filterAction();
+	if( !filter_action.isNull() )
+		ajax::getSingletonPtr()->request(settings->url(), filter_action);
+	else
+		mDataLoaded++;
+
 	ajax::getSingletonPtr()->request(settings->url(), listAction());
 
 	setEnabled(false);
