@@ -156,7 +156,7 @@ void InfoListWidget::insertItem(int r, const QIcon& icon,
 
 InfoListWidgetItem* InfoListWidget::itemAt(int r) const
 {
-	if(mItems.count() >= r)
+	if(mItems.count() <= r)
 		return 0;
 
 	return mItems.at(r);
