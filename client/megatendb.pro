@@ -53,6 +53,7 @@ FORMS       += ui/PaletteEditor.ui \
                ui/TraitView.ui \
                ui/IconImport.ui \
                ui/IconSelect.ui \
+               ui/IconListWidgetItem.ui \
                ui/InfoListWidget.ui \
                ui/InfoListWidgetItem.ui \
                ui/ImportExport.ui \
@@ -66,7 +67,9 @@ FORMS       += ui/PaletteEditor.ui \
                ui/UserList.ui \
                ui/LogView.ui \
                ui/About.ui \
-               ui/Shoutbox.ui
+               ui/Shoutbox.ui \
+               ui/COMP.ui \
+               ui/Storage.ui
 HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/PaletteEditor.h \
@@ -94,6 +97,8 @@ HEADERS     += src/ajax.h \
                src/IconImport.h \
                src/IconSelect.h \
                src/ImportExport.h \
+               src/IconListWidget.h \
+               src/IconListWidgetItem.h \
                src/InfoListWidget.h \
                src/InfoListWidgetItem.h \
                src/RelationEdit.h \
@@ -126,7 +131,9 @@ HEADERS     += src/ajax.h \
                src/BindNumberSelector.h \
                src/BindDetailedMultiRelation.h \
                src/BindMultiRelation.h \
-               src/Shoutbox.h
+               src/Shoutbox.h \
+               src/COMP.h \
+               src/Storage.h
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
@@ -155,6 +162,8 @@ SOURCES     += src/main.cpp \
                src/IconImport.cpp \
                src/IconSelect.cpp \
                src/ImportExport.cpp \
+               src/IconListWidget.cpp \
+               src/IconListWidgetItem.cpp \
                src/InfoListWidget.cpp \
                src/InfoListWidgetItem.cpp \
                src/SearchEdit.cpp \
@@ -190,4 +199,6 @@ SOURCES     += src/main.cpp \
                src/BindNumberSelector.cpp \
                src/BindDetailedMultiRelation.cpp \
                src/BindMultiRelation.cpp \
-               src/Shoutbox.cpp
+               src/Shoutbox.cpp \
+               src/COMP.cpp \
+               src/Storage.cpp

@@ -31,6 +31,10 @@
 #include "ImportExport.h"
 #include "ajax.h"
 
+// My Devils
+#include "COMP.h"
+#include "Storage.h"
+
 #include "ui_About.h"
 
 #include <QtGui/QSystemTrayIcon>
@@ -40,12 +44,12 @@
 Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	mShoutbox(0), mUserList(0), mLogWidget(0), mItemWindow(0), mDevilWindow(0),
 	mTraitWindow(0), mSkillWindow(0), mMashouWindow(0), mImportExportWindow(0),
-	mAdminSep(0), mUsersAction(0), mTray(0)
+	mCOMP(0), mStorage(0), mAdminSep(0), mUsersAction(0), mTray(0)
 {
 	ui.setupUi(this);
 
 	// Hide the admin tab unless you have admin rights
-	ui.tabWidget->removeTab(1);
+	ui.tabWidget->removeTab(2);
 
 	// Now that the registration is done, let's enable the tray icon
 	// and disable this setting.
@@ -72,10 +76,6 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	connect(ui.mashouButton, SIGNAL(clicked(bool)),
 		this, SLOT(showMashouWindow()));
 
-	mAdminSep = menu->addSeparator();
-	mAdminSep->setEnabled(false);
-	mAdminSep->setVisible(false);
-
 	// Items Action
 	act = menu->addAction(/* icon, */tr("&Items") );
 	connect(act, SIGNAL(triggered()), this, SLOT(showItemWindow()));
@@ -87,6 +87,24 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	connect(act, SIGNAL(triggered()), this, SLOT(showTraitWindow()));
 	connect(ui.traitsButton, SIGNAL(clicked(bool)),
 		this, SLOT(showTraitWindow()));
+
+	act = menu->addSeparator();
+
+	// COMP Action
+	act = menu->addAction(/* icon, */tr("&COMP") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showCOMP()));
+	connect(ui.compButton, SIGNAL(clicked(bool)),
+		this, SLOT(showCOMP()));
+
+	// Storage Action
+	act = menu->addAction(/* icon, */tr("&Storage") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showStorage()));
+	connect(ui.storageButton, SIGNAL(clicked(bool)),
+		this, SLOT(showStorage()));
+
+	mAdminSep = menu->addSeparator();
+	mAdminSep->setEnabled(false);
+	mAdminSep->setVisible(false);
 
 	// Users Action
 	mUsersAction = menu->addAction(/* icon, */tr("&Users") );
@@ -300,6 +318,30 @@ void Taskbar::showImportExportWindow()
 	mImportExportWindow->raise();
 }
 
+void Taskbar::showCOMP()
+{
+	if(!mCOMP)
+		mCOMP = new COMP;
+
+	Q_ASSERT(mCOMP != 0);
+
+	mCOMP->show();
+	mCOMP->activateWindow();
+	mCOMP->raise();
+}
+
+void Taskbar::showStorage()
+{
+	if(!mStorage)
+		mStorage = new Storage;
+
+	Q_ASSERT(mStorage != 0);
+
+	mStorage->show();
+	mStorage->activateWindow();
+	mStorage->raise();
+}
+
 void Taskbar::ajaxResponse(const QVariant& resp)
 {
 	QVariantMap result = resp.toMap();
@@ -311,7 +353,7 @@ void Taskbar::ajaxResponse(const QVariant& resp)
 		if( result.value("perms").toMap().value("admin").toBool()
 			&& !mAdminSep->isVisible() )
 		{
-			ui.tabWidget->insertTab(1, ui.adminTab, tr("&Administration"));
+			ui.tabWidget->insertTab(2, ui.adminTab, tr("&Administration"));
 			mAdminSep->setVisible(true);
 			mAdminSep->setEnabled(true);
 			mUsersAction->setEnabled(true);

@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/Taskbar.h                                                        *
+*  client/src/Storage.h                                                        *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,79 +17,45 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Taskbar_h__
-#define __Taskbar_h__
+#ifndef __Storage_h__
+#define __Storage_h__
 
-#include "ui_Taskbar.h"
+#include "ui_Storage.h"
 
-class Options;
-class Shoutbox;
-class UserList;
-class LogWidget;
-class ItemWindow;
-class DevilWindow;
-class TraitWindow;
-class SkillWindow;
-class MashouWindow;
-class ImportExport;
-class QSystemTrayIcon;
-class QAction;
+#include <QtCore/QList>
+#include <QtCore/QPoint>
+#include <QtCore/QVariantMap>
 
-// My Devils
 class COMP;
-class Storage;
+class QLabel;
 
-class Taskbar : public QWidget
+class Storage : public QWidget
 {
 	Q_OBJECT
 
+	friend class COMP;
+
 public:
-	Taskbar(QWidget *parent = 0);
-
-public slots:
-	void quit();
-	void showAbout();
-	void showShoutbox();
-	void showLogWindow();
-	void showItemWindow();
-	void showDevilWindow();
-	void showTraitWindow();
-	void showSkillWindow();
-	void showUsersWindow();
-	void showMashouWindow();
-	void showOptionsWindow();
-	void showImportExportWindow();
-
-	// My Devils
-	void showCOMP();
-	void showStorage();
-
-protected slots:
-	void ajaxResponse(const QVariant& resp);
+	Storage(QWidget *parent = 0);
 
 protected:
-	Ui::Taskbar ui;
+	void updateCount();
+	void clearAt(int index);
+	void setAt(int index, const QVariantMap& devil);
 
-	Options *mOptions;
-	Shoutbox *mShoutbox;
-	UserList *mUserList;
-	LogWidget *mLogWidget;
-	ItemWindow *mItemWindow;
-	DevilWindow *mDevilWindow;
-	TraitWindow *mTraitWindow;
-	SkillWindow *mSkillWindow;
-	MashouWindow *mMashouWindow;
-	ImportExport *mImportExportWindow;
+	virtual void mousePressEvent(QMouseEvent *event);
+	virtual void mouseMoveEvent(QMouseEvent *event);
 
-	// My Devils
-	COMP *mCOMP;
-	Storage *mStorage;
+	virtual void dragEnterEvent(QDragEnterEvent *event);
+	virtual void dragMoveEvent(QDragMoveEvent *event);
+	virtual void dropEvent(QDropEvent *event);
 
-	QAction *mAdminSep;
-	QAction *mUsersAction;
-	QAction *mImportExportAction;
+	QList<QLabel*> mSlots;
+	QList<QVariantMap> mData;
 
-	QSystemTrayIcon *mTray;
+	QPoint mDragStartPosition;
+
+	Ui::Storage ui;
 };
 
-#endif // __Taskbar_h__
+#endif // __Storage_h__
