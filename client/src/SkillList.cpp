@@ -139,5 +139,9 @@ int SkillList::filterID(const QVariantMap& map) const
 
 QString SkillList::itemIcon(const QVariantMap& map) const
 {
-	return QString("icons/skills/icon_%1.png").arg( map["icon"].toString() );
+	QString icon_path = map["icon"].toString();
+	if( icon_path.isEmpty() )
+		return QString();
+
+	return QString("icons/skills/icon_%1.png").arg(icon_path);
 }

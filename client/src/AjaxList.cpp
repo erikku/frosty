@@ -22,6 +22,7 @@
 #include "Settings.h"
 #include "ajax.h"
 
+#include <QtCore/QFileInfo>
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
 
@@ -157,6 +158,11 @@ void AjaxList::updateFilter()
 			continue;
 
 		QString icon_path = itemIcon(map);
+		if( icon_path.isEmpty() )
+			icon_path = ":/blank.png";
+		else if( !QFileInfo(icon_path).exists() )
+			icon_path = ":/missing.png";
+
 
 		QListWidgetItem *item;
 		if( icon_path.isEmpty() )

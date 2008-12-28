@@ -6,6 +6,7 @@
 	<file alias="down2.png">res/down2.png</file>
 	<file alias="dark.xml">res/dark.xml</file>
 	<file alias="blank.png">res/blank.png</file>
+	<file alias="missing.png">res/missing.png</file>
 	<file alias="edit.png">res/edit.png</file>
 	<file alias="fileopen.png">res/fileopen.png</file>
 	<file alias="next.png">res/next.png</file>

@@ -96,11 +96,17 @@ void BindIcon::handleViewResponse(const QVariantMap& values)
 		mEditor->setPixmap( QPixmap(icon_path) );
 		mEditor->setValue( data.toString() );
 	}
-	else
+	else if( data.toString().isEmpty() )
 	{
 		mViewer->setPixmap( QPixmap(":/blank.png") );
 		mEditor->setPixmap( QPixmap(":/blank.png") );
 		mEditor->setValue( QString() );
+	}
+	else
+	{
+		mViewer->setPixmap( QPixmap(":/missing.png") );
+		mEditor->setPixmap( QPixmap(":/missing.png") );
+		mEditor->setValue( data.toString() );
 	}
 }
 

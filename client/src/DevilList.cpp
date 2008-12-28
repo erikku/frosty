@@ -135,5 +135,9 @@ int DevilList::filterID(const QVariantMap& map) const
 
 QString DevilList::itemIcon(const QVariantMap& map) const
 {
-	return QString("icons/devils/icon_%1.png").arg( map["icon"].toString() );
+	QString icon_path = map["icon"].toString();
+	if( icon_path.isEmpty() )
+		return QString();
+
+	return QString("icons/devils/icon_%1.png").arg(icon_path);
 }
