@@ -44,7 +44,7 @@ class Taskbar : public QWidget
 	Q_OBJECT
 
 public:
-	Taskbar(QWidget *parent = 0);
+	static Taskbar* getSingletonPtr();
 
 public slots:
 	void quit();
@@ -64,10 +64,14 @@ public slots:
 	void showCOMP();
 	void showStorage();
 
+	void notifyDirty(const QString& user_data);
+
 protected slots:
 	void ajaxResponse(const QVariant& resp);
 
 protected:
+	Taskbar(QWidget *parent = 0);
+
 	Ui::Taskbar ui;
 
 	Options *mOptions;
@@ -88,6 +92,8 @@ protected:
 	QAction *mAdminSep;
 	QAction *mUsersAction;
 	QAction *mImportExportAction;
+
+	QStringList mDirtyData;
 
 	QSystemTrayIcon *mTray;
 };

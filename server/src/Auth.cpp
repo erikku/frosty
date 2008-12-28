@@ -73,6 +73,13 @@ void Auth::start(const QMap<QString, BackendActionHandler>& actionHandlers)
 	mActionPermissions["shoutbox_poll"] = "any";
 	mActionPermissions["shoutbox_post"] = "view_db";
 
+	// Simulator Actions
+	mActionPermissions["simulator_cache"] = "any";
+	mActionPermissions["simulator_load_storage"] = "any";
+	mActionPermissions["simulator_sync_storage"] = "any";
+	mActionPermissions["simulator_load_comp"] = "any";
+	mActionPermissions["simulator_sync_comp"] = "any";
+
 	mDefaultPerms["any"] = true;
 	mDefaultPerms["admin"] = conf->authAdmin();
 	mDefaultPerms["view_db"] = conf->authViewDB();
@@ -326,6 +333,25 @@ QVariant Auth::queryUser(const QString& email, const QString& target) const
 	map["last_login"] = record.value("last_login");
 
 	return map;
+}
+
+int Auth::queryUserID(const QString& email) const
+{
+	QString sql = "SELECT id FROM users WHERE email = :email";
+
+	QSqlQuery query(mAuthDB);
+	query.prepare(sql);
+	query.bindValue(":email", email);
+
+	if( !query.exec() )
+		return -1;
+
+	if( !query.next() )
+		return -1;
+
+	QSqlRecord record = query.record();
+
+	return record.value("id").toInt();
 }
 
 bool Auth::makeInactive(const QString& email,

@@ -27,7 +27,9 @@
 #include <QtCore/QVariantMap>
 
 class COMP;
+class AddDevil;
 class QLabel;
+class QTimer;
 
 class Storage : public QWidget
 {
@@ -38,11 +40,20 @@ class Storage : public QWidget
 public:
 	Storage(QWidget *parent = 0);
 
+public slots:
+	void sync();
+
+protected slots:
+	void markDirty();
+	void loadDevils();
+	void ajaxResponse(const QVariant& resp);
+	void setAt(int index, const QVariantMap& devil);
+
 protected:
 	void updateCount();
 	void clearAt(int index);
-	void setAt(int index, const QVariantMap& devil);
 
+	virtual void mouseDoubleClickEvent(QMouseEvent *event);
 	virtual void mousePressEvent(QMouseEvent *event);
 	virtual void mouseMoveEvent(QMouseEvent *event);
 
@@ -54,6 +65,11 @@ protected:
 	QList<QVariantMap> mData;
 
 	QPoint mDragStartPosition;
+
+	bool mLoaded, mMarked;
+	QTimer *mSyncTimer;
+
+	AddDevil *mAddDevil;
 
 	Ui::Storage ui;
 };

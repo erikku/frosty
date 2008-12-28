@@ -99,7 +99,7 @@ void Register::registrationComplete()
 	settings->setEmail( ui.emailEdit->text() );
 	settings->setPass(pass);
 
-	(new Taskbar)->show();
+	Taskbar::getSingletonPtr()->show();
 
 	deleteLater();
 	close();
@@ -214,14 +214,14 @@ void Register::sendRequest()
 
 void Register::showLogin()
 {
-	(new Login)->show();
+	Taskbar::getSingletonPtr()->show();
 	deleteLater();
 	close();
 }
 
 void Register::guestLogin()
 {
-	(new Taskbar)->show();
+	Taskbar::getSingletonPtr()->show();
 
 	deleteLater();
 	close();

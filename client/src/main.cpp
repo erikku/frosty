@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 	if( settings->email().isEmpty() )
 		(new Register)->show();
 	else
-		(new Taskbar)->show();
+		Taskbar::getSingletonPtr()->show();
 
 	if( !app.arguments().contains("--no-check") )
 	{

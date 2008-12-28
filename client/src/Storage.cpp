@@ -18,17 +18,26 @@
 \******************************************************************************/
 
 #include "Storage.h"
+#include "DevilCache.h"
+#include "Settings.h"
+#include "AddDevil.h"
+#include "Taskbar.h"
 #include "COMP.h"
+#include "ajax.h"
+#include "json.h"
 
+#include <QtCore/QTimer>
 #include <QtCore/QMimeData>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QDrag>
 
-Storage::Storage(QWidget *parent_widget) : QWidget(parent_widget)
+Storage::Storage(QWidget *parent_widget) : QWidget(parent_widget),
+	mLoaded(false), mMarked(false)
 {
 	ui.setupUi(this);
+	setEnabled(false);
 
-		setWindowTitle( tr("%1 - Devil Storage").arg(
+	setWindowTitle( tr("%1 - Devil Storage").arg(
 		tr("Absolutely Frosty") ) );
 
 	mSlots << ui.devil1 << ui.devil2 << ui.devil3 << ui.devil4 << ui.devil5
@@ -42,31 +51,85 @@ Storage::Storage(QWidget *parent_widget) : QWidget(parent_widget)
 		 << ui.devil41 << ui.devil42 << ui.devil43 << ui.devil44 << ui.devil45
 		 << ui.devil46 << ui.devil47 << ui.devil48 << ui.devil49 << ui.devil50;
 
-	QString icon_path = QString("icons/devils/icon_%1.png").arg("D2_04_009a");
-	QPixmap icon(icon_path);
-
-	QVariantMap devil;
-	devil["name_en"] = "Jack Frost";
-	devil["name_ja"] = QString::fromUtf8("ジャックフロスト");
-	devil["icon"] = "D2_04_009a";
-
+	QPixmap blank(":/blank.png");
 	foreach(QLabel *slot, mSlots)
 	{
-		slot->setPixmap(icon);
-		mData << devil;
+		slot->setPixmap(blank);
+		mData << QVariantMap();
 	}
 
-	devil["name_en"] = "Oni";
-	devil["name_ja"] = QString::fromUtf8("オニ");
-	devil["icon"] = "D3_02_011a";
-
-	icon_path = QString("icons/devils/icon_%1.png").arg("D3_02_011a");
-	icon = QPixmap(icon_path);
-
-	mSlots.at(5)->setPixmap(icon);
-	mData[5] = devil;
-
 	setAcceptDrops(true);
+
+	DevilCache *cache = DevilCache::getSingletonPtr();
+	connect(cache, SIGNAL(cacheReady()), this, SLOT(loadDevils()));
+	cache->fillCache();
+
+	ajax::getSingletonPtr()->subscribe(this);
+
+	mSyncTimer = new QTimer;
+	mSyncTimer->setSingleShot(true);
+
+	connect(mSyncTimer, SIGNAL(timeout()), this, SLOT(sync()));
+
+	mAddDevil = new AddDevil(this);
+
+	connect(mAddDevil, SIGNAL(devilSelected(int, const QVariantMap&)),
+		this, SLOT(setAt(int, const QVariantMap&)));
+}
+
+void Storage::loadDevils()
+{
+	QVariantMap action;
+	action["action"] = "simulator_load_storage";
+	action["user_data"] = "simulator_load_storage";
+
+	ajax::getSingletonPtr()->request(settings->url(), action);
+}
+
+void Storage::ajaxResponse(const QVariant& resp)
+{
+	QVariantMap result = resp.toMap();
+
+	if(result.value("user_data").toString() != "simulator_load_storage")
+		return;
+
+	int max = mSlots.count();
+
+	QVariantList devils = result.value("devils").toList();
+	if(devils.count() != max)
+		return;
+
+	for(int i = 0; i < max; i++)
+	{
+		QVariantMap devil = json::parse(devils.at(i).toString()).toMap();
+		if( devil.isEmpty() )
+			continue;
+
+		setAt(i, devil);
+	}
+
+	updateCount();
+	setEnabled(true);
+	mLoaded = true;
+}
+#include <iostream>
+void Storage::mouseDoubleClickEvent(QMouseEvent *evt)
+{
+	QLabel *icon = qobject_cast<QLabel*>( childAt( evt->pos() ) );
+	if(!icon)
+		return;
+
+	int index = mSlots.indexOf(icon);
+
+	if( mData.at(index).isEmpty() )
+	{
+		// Empty slot, so add a devil
+		mAddDevil->add(index);
+	}
+	else
+	{
+		// TODO: The slot exists, so show the devil's properties
+	}
 }
 
 void Storage::mousePressEvent(QMouseEvent *evt)
@@ -77,6 +140,8 @@ void Storage::mousePressEvent(QMouseEvent *evt)
 
 void Storage::mouseMoveEvent(QMouseEvent *evt)
 {
+	// TODO: Move the event pos() from here, into the mousePressEvent
+
 	if( !(evt->buttons() & Qt::LeftButton) )
 		return;
 
@@ -120,6 +185,8 @@ void Storage::clearAt(int index)
 
 	mSlots.at(index)->setPixmap( QPixmap(":/blank.png") );
 	mData[index] = QVariantMap();
+
+	markDirty();
 }
 
 void Storage::setAt(int index, const QVariantMap& devil)
@@ -127,11 +194,21 @@ void Storage::setAt(int index, const QVariantMap& devil)
 	if(index < 0 || index >= mSlots.count())
 		return;
 
-	QString icon_path = QString("icons/devils/icon_%1.png").arg(
-		devil.value("icon").toString() );
+	DevilCache *cache = DevilCache::getSingletonPtr();
 
-	mSlots.at(index)->setPixmap( QPixmap(icon_path) );
+	QString tooltip = cache->generateToolTip(devil);
+
+	QVariantMap devil_data = cache->devilByID( devil.value("id").toInt() );
+
+	QPixmap icon( QString("icons/devils/icon_%1.png").arg(
+		devil_data.value("icon").toString() ) );
+
+	QLabel *slot = mSlots.at(index);
+	slot->setPixmap(icon);
+	slot->setToolTip(tooltip);
 	mData[index] = devil;
+
+	markDirty();
 }
 
 void Storage::dragEnterEvent(QDragEnterEvent *evt)
@@ -242,6 +319,40 @@ void Storage::dropEvent(QDropEvent *evt)
 	evt->acceptProposedAction();
 
 	updateCount();
+	markDirty();
+}
+
+void Storage::markDirty()
+{
+	if(!mLoaded || mMarked)
+		return;
+
+	mMarked = true;
+
+	mSyncTimer->start(60000); // 60 seconds
+
+	Taskbar::getSingletonPtr()->notifyDirty("simulator_sync_storage");
+}
+
+void Storage::sync()
+{
+	QVariantMap action;
+	action["action"] = "simulator_sync_storage";
+	action["user_data"] = "simulator_sync_storage";
+
+	int max = mSlots.count();
+
+	QVariantList devils;
+	for(int i = 0; i < max; i++)
+		devils << json::toJSON(mData[i]);
+
+	action["devils"] = devils;
+
+	ajax::getSingletonPtr()->request(settings->url(), action);
+
+	// Stop the timer now
+	mSyncTimer->stop();
+	mMarked = false;
 }
 
 void Storage::updateCount()

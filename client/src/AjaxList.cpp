@@ -36,8 +36,8 @@ AjaxList::AjaxList(AjaxView *view,
 	connect(ui.filterCombo, SIGNAL(currentIndexChanged(int)), this,
 		SLOT(updateFilter()));
 
-	connect(ui.searchEdit, SIGNAL(textChanged(const QString&)), this,
-		SLOT(updateSearch()));
+	connect(ui.searchEdit, SIGNAL(textChanged(const QString&)),
+		this, SLOT(updateSearch()));
 
 	connect(ui.ajaxList, SIGNAL(itemSelectionChanged()),
 		this, SLOT(handleItemSelected()));

@@ -142,6 +142,7 @@ void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 	connect(transfer, SIGNAL(transferFinished(const QVariant&)),
 		this, SIGNAL(response(const QVariant&)) );
 
+	/*
 	QVariantList actions = req.toMap().value("actions").toList();
 	if(actions.count() == 1)
 	{
@@ -149,8 +150,10 @@ void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 		if(action.value("user_data").toString() == "shoutbox")
 			return;
 	}
+	*/
 
-	mLog->registerRequest(transfer, req);
+	// We are not logging anymore
+	//mLog->registerRequest(transfer, req);
 }
 
 void ajax::subscribe(QObject *obj)

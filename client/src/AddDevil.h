@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/COMP.h                                                           *
+*  client/src/AddDevil.h                                                       *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,61 +17,38 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __COMP_h__
-#define __COMP_h__
+#ifndef __AddDevil_h__
+#define __AddDevil_h__
 
-#include "ui_COMP.h"
+#include "ui_AddDevil.h"
 
-#include <QtCore/QPoint>
+#include <QtGui/QDialog>
 
-class QTimer;
-class Storage;
-class AddDevil;
-class IconListWidgetItem;
-
-class COMP : public QWidget
+class AddDevil : public QDialog
 {
 	Q_OBJECT
 
-	friend class Storage;
-
 public:
-	COMP(QWidget *parent = 0);
+	AddDevil(QWidget *parent = 0);
+
+signals:
+	void devilSelected(int index, const QVariantMap& devil);
 
 public slots:
-	void sync();
+	void add(int slot);
 
 protected slots:
-	void dismiss();
-	void markDirty();
-	void loadDevils();
-	void selectionChanged();
+	void addDevil();
+	void updateSearch();
+	void handleItemSelected();
 	void ajaxResponse(const QVariant& resp);
-	void itemDoubleClicked(IconListWidgetItem *item);
-	void setAt(int index, const QVariantMap& devil);
 
 protected:
-	void clearAt(int index);
+	bool itemMatches(const QVariantMap& map, const QString& search);
 
-	void updateCount();
+	int mSlot;
 
-	IconListWidgetItem* itemAt(const QPoint& pos);
-
-	virtual void mousePressEvent(QMouseEvent *event);
-	virtual void mouseMoveEvent(QMouseEvent *event);
-
-	virtual void dragEnterEvent(QDragEnterEvent *event);
-	virtual void dragMoveEvent(QDragMoveEvent *event);
-	virtual void dropEvent(QDropEvent *event);
-
-	QPoint mDragStartPosition;
-
-	bool mLoaded, mMarked;
-	QTimer *mSyncTimer;
-
-	AddDevil *mAddDevil;
-
-	Ui::COMP ui;
+	Ui::AddDevil ui;
 };
 
-#endif // __COMP_h__
+#endif // __AddDevil_h__

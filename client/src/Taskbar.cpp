@@ -41,6 +41,18 @@
 #include <QtGui/QAction>
 #include <QtGui/QMenu>
 
+static Taskbar *g_taskbar_inst = 0;
+
+Taskbar* Taskbar::getSingletonPtr()
+{
+	if(!g_taskbar_inst)
+		g_taskbar_inst = new Taskbar;
+
+	Q_ASSERT(g_taskbar_inst != 0);
+
+	return g_taskbar_inst;
+}
+
 Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	mShoutbox(0), mUserList(0), mLogWidget(0), mItemWindow(0), mDevilWindow(0),
 	mTraitWindow(0), mSkillWindow(0), mMashouWindow(0), mImportExportWindow(0),
@@ -345,10 +357,10 @@ void Taskbar::showStorage()
 void Taskbar::ajaxResponse(const QVariant& resp)
 {
 	QVariantMap result = resp.toMap();
-	if( result.contains("error") )
-		return;
 
-	if(result.value("user_data").toString() == "auth_query_perms")
+	QString user_data = result.value("user_data").toString();
+
+	if(user_data == "auth_query_perms")
 	{
 		if( result.value("perms").toMap().value("admin").toBool()
 			&& !mAdminSep->isVisible() )
@@ -362,4 +374,18 @@ void Taskbar::ajaxResponse(const QVariant& resp)
 			mImportExportAction->setVisible(true);
 		}
 	}
+
+	if( mDirtyData.contains(user_data) )
+		mDirtyData.removeAt( mDirtyData.indexOf(user_data) );
+
+	if( mDirtyData.isEmpty() )
+		mTray->setIcon( QApplication::windowIcon() );
+}
+
+void Taskbar::notifyDirty(const QString& user_data)
+{
+	if( !mDirtyData.contains(user_data) )
+		mDirtyData << user_data;
+
+	mTray->setIcon( QIcon(":/megatendb_dirty.png") );
 }

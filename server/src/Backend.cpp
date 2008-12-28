@@ -27,6 +27,7 @@
 #include "DatabaseActions.h"
 #include "ServerActions.h"
 #include "ShoutboxActions.h"
+#include "SimulatorActions.h"
 
 #include "json.h"
 
@@ -59,6 +60,13 @@ Backend::Backend(QObject *parent_object) : QObject(parent_object)
 	mActionHandlers["shoutbox_login"] = shoutboxLogin;
 	mActionHandlers["shoutbox_poll"] = shoutboxPoll;
 	mActionHandlers["shoutbox_post"] = shoutboxPost;
+
+	// Simulator Actions
+	mActionHandlers["simulator_cache"] = simulatorCache;
+	mActionHandlers["simulator_load_storage"] = simulatorLoadStorage;
+	mActionHandlers["simulator_sync_storage"] = simulatorSyncStorage;
+	mActionHandlers["simulator_load_comp"] = simulatorLoadCOMP;
+	mActionHandlers["simulator_sync_comp"] = simulatorSyncCOMP;
 
 	auth->start(mActionHandlers);
 }
@@ -158,10 +166,17 @@ QVariantList Backend::parseRequest(QTcpSocket *connection,
 
 			request_result["action"] = name;
 
+			// Log the error
+			if( request_result.contains("error") )
+				LOG_ERROR( request_result.value("error").toString() + "\n" );
+
 			request_results << request_result;
 		}
 		else
 		{
+			LOG_ERROR( tr("unknown action type %1 for action %2\n").arg(
+				name).arg(i) );
+
 			request_results << herror(tr("action"),
 				tr("unknown action type %1 for action %2").arg(name).arg(i) );
 

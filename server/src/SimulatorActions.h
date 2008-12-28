@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/COMP.h                                                           *
+*  server/src/SimulatorActions.h                                               *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,61 +17,25 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __COMP_h__
-#define __COMP_h__
+#ifndef __SimulatorActions_h__
+#define __SimulatorActions_h__
 
-#include "ui_COMP.h"
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QVariant>
+#include <QtSql/QSqlDatabase>
 
-#include <QtCore/QPoint>
+class QTcpSocket;
 
-class QTimer;
-class Storage;
-class AddDevil;
-class IconListWidgetItem;
+QVariantMap simulatorCache(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap simulatorLoadStorage(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap simulatorSyncStorage(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap simulatorLoadCOMP(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+QVariantMap simulatorSyncCOMP(int i, QTcpSocket *connection,
+	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 
-class COMP : public QWidget
-{
-	Q_OBJECT
-
-	friend class Storage;
-
-public:
-	COMP(QWidget *parent = 0);
-
-public slots:
-	void sync();
-
-protected slots:
-	void dismiss();
-	void markDirty();
-	void loadDevils();
-	void selectionChanged();
-	void ajaxResponse(const QVariant& resp);
-	void itemDoubleClicked(IconListWidgetItem *item);
-	void setAt(int index, const QVariantMap& devil);
-
-protected:
-	void clearAt(int index);
-
-	void updateCount();
-
-	IconListWidgetItem* itemAt(const QPoint& pos);
-
-	virtual void mousePressEvent(QMouseEvent *event);
-	virtual void mouseMoveEvent(QMouseEvent *event);
-
-	virtual void dragEnterEvent(QDragEnterEvent *event);
-	virtual void dragMoveEvent(QDragMoveEvent *event);
-	virtual void dropEvent(QDropEvent *event);
-
-	QPoint mDragStartPosition;
-
-	bool mLoaded, mMarked;
-	QTimer *mSyncTimer;
-
-	AddDevil *mAddDevil;
-
-	Ui::COMP ui;
-};
-
-#endif // __COMP_h__
+#endif // __SimulatorActions_h__

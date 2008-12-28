@@ -19,23 +19,33 @@
 
 #include "COMP.h"
 #include "Storage.h"
+#include "Taskbar.h"
 #include "Settings.h"
+#include "AddDevil.h"
+#include "DevilCache.h"
 #include "IconListWidgetItem.h"
+#include "json.h"
+#include "ajax.h"
 
+#include <QtCore/QTimer>
 #include <QtGui/QMessageBox>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDragMoveEvent>
 #include <QtGui/QDropEvent>
 
-COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget)
+COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget),
+	mLoaded(false), mMarked(false)
 {
 	ui.setupUi(this);
+	setEnabled(false);
 
 	setWindowTitle( tr("%1 - COMP").arg(
 		tr("Absolutely Frosty") ) );
 
 	connect(ui.devilList, SIGNAL(selectionChanged()),
 		this, SLOT(selectionChanged()));
+	connect(ui.devilList, SIGNAL(itemDoubleClicked(IconListWidgetItem*)),
+		this, SLOT(itemDoubleClicked(IconListWidgetItem*)));
 	connect(ui.dismissButton, SIGNAL(clicked(bool)),
 		this, SLOT(dismiss()));
 
@@ -50,6 +60,22 @@ COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget)
 
 	selectionChanged();
 	setAcceptDrops(true);
+
+	DevilCache *cache = DevilCache::getSingletonPtr();
+	connect(cache, SIGNAL(cacheReady()), this, SLOT(loadDevils()));
+	cache->fillCache();
+
+	ajax::getSingletonPtr()->subscribe(this);
+
+	mSyncTimer = new QTimer;
+	mSyncTimer->setSingleShot(true);
+
+	connect(mSyncTimer, SIGNAL(timeout()), this, SLOT(sync()));
+
+	mAddDevil = new AddDevil(this);
+
+	connect(mAddDevil, SIGNAL(devilSelected(int, const QVariantMap&)),
+		this, SLOT(setAt(int, const QVariantMap&)));
 }
 
 void COMP::selectionChanged()
@@ -243,6 +269,7 @@ void COMP::dropEvent(QDropEvent *evt)
 	evt->acceptProposedAction();
 	selectionChanged();
 	updateCount();
+	markDirty();
 }
 
 void COMP::clearAt(int index)
@@ -255,6 +282,8 @@ void COMP::clearAt(int index)
 	item->setUpperText(QString());
 	item->setLowerText(QString());
 	item->setData(QVariant());
+
+	markDirty();
 }
 
 void COMP::setAt(int index, const QVariantMap& devil)
@@ -263,13 +292,21 @@ void COMP::setAt(int index, const QVariantMap& devil)
 	if(!item)
 		return;
 
-	QString name_column = QString("name_%1").arg( settings->lang() );
-	QString icon_path = QString("icons/devils/icon_%1.png").arg(
-		devil.value("icon").toString() );
+	DevilCache *cache = DevilCache::getSingletonPtr();
 
-	item->setIcon( QIcon(icon_path) );
-	item->setUpperText( devil.value(name_column).toString() );
+	QString tooltip = cache->generateToolTip(devil);
+
+	QVariantMap devil_data = cache->devilByID( devil.value("id").toInt() );
+
+	QIcon icon( QString("icons/devils/icon_%1.png").arg(
+		devil_data.value("icon").toString() ) );
+
+	item->setIcon(icon);
+	item->setUpperText( devil_data.value("name").toString() );
 	item->setData(devil);
+	item->setToolTip(tooltip);
+
+	markDirty();
 }
 
 void COMP::updateCount()
@@ -298,4 +335,91 @@ void COMP::dismiss()
 	clearAt( ui.devilList->row(items.first()) );
 	selectionChanged();
 	updateCount();
+}
+
+void COMP::markDirty()
+{
+	if(!mLoaded || mMarked)
+		return;
+
+	mMarked = true;
+
+	mSyncTimer->start(60000); // 60 seconds
+
+	Taskbar::getSingletonPtr()->notifyDirty("simulator_sync_comp");
+}
+
+void COMP::sync()
+{
+	QVariantMap action;
+	action["action"] = "simulator_sync_comp";
+	action["user_data"] = "simulator_sync_comp";
+
+	int max = ui.devilList->count();
+
+	QVariantList devils;
+	for(int i = 0; i < max; i++)
+		devils << json::toJSON( ui.devilList->itemAt(i)->data() );
+
+	action["devils"] = devils;
+
+	ajax::getSingletonPtr()->request(settings->url(), action);
+
+	// Stop the timer now
+	mSyncTimer->stop();
+	mMarked = false;
+}
+
+void COMP::loadDevils()
+{
+	QVariantMap action;
+	action["action"] = "simulator_load_comp";
+	action["user_data"] = "simulator_load_comp";
+
+	ajax::getSingletonPtr()->request(settings->url(), action);
+}
+
+void COMP::ajaxResponse(const QVariant& resp)
+{
+	QVariantMap result = resp.toMap();
+
+	if(result.value("user_data").toString() != "simulator_load_comp")
+		return;
+
+	int max = ui.devilList->count();
+
+	QVariantList devils = result.value("devils").toList();
+	if(devils.count() != max)
+		return;
+
+	for(int i = 0; i < max; i++)
+	{
+		QVariantMap devil = json::parse(devils.at(i).toString()).toMap();
+		if( devil.isEmpty() )
+			continue;
+
+		setAt(i, devil);
+	}
+
+	updateCount();
+	setEnabled(true);
+	mLoaded = true;
+}
+
+void COMP::itemDoubleClicked(IconListWidgetItem *item)
+{
+	if( item->data().toMap().isEmpty() )
+	{
+		// Release the mouse so the AddDevil can be used
+		QMouseEvent release_event(QEvent::MouseMove, QPoint(-1, -1),
+			QPoint(-1, -1), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+		qApp->sendEvent(item, &release_event);
+
+		// Empty slot, so add a devil
+		mAddDevil->add( ui.devilList->row(item) );
+	}
+	else
+	{
+		// TODO: The slot exists, so show the devil's properties
+	}
 }

@@ -55,6 +55,7 @@ HEADERS     += src/Auth.h \
                src/Config.h \
                src/DatabaseActions.h \
                src/ShoutboxActions.h \
+               src/SimulatorActions.h \
                src/DomUtils.h \
                src/Log.h \
                src/Server.h \
@@ -70,6 +71,7 @@ SOURCES     += src/main.cpp \
                src/Config.cpp \
                src/DatabaseActions.cpp \
                src/ShoutboxActions.cpp \
+               src/SimulatorActions.cpp \
                src/DomUtils.cpp \
                src/Log.cpp \
                src/Server.cpp \

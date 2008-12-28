@@ -123,7 +123,7 @@ void Login::validationImage(const QPixmap& image, const QString& error)
 	settings->setEmail( ui.emailEdit->text() );
 	settings->setPass(pass);
 
-	(new Taskbar)->show();
+	Taskbar::getSingletonPtr()->show();
 
 	mRegistration->deleteLater();
 	deleteLater();

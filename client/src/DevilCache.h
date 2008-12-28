@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/COMP.h                                                           *
+*  client/src/DevilCache.h                                                     *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,61 +17,43 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __COMP_h__
-#define __COMP_h__
+#ifndef __DevilCache_h__
+#define __DevilCache_h__
 
-#include "ui_COMP.h"
+#include <QtCore/QVariantMap>
+#include <QtCore/QObject>
+#include <QtCore/QHash>
 
-#include <QtCore/QPoint>
-
-class QTimer;
-class Storage;
-class AddDevil;
-class IconListWidgetItem;
-
-class COMP : public QWidget
+class DevilCache : public QObject
 {
 	Q_OBJECT
 
-	friend class Storage;
-
 public:
-	COMP(QWidget *parent = 0);
+	static DevilCache* getSingletonPtr();
+
+	QVariantMap devilByID(int id) const;
+
+	QString generateToolTip(const QVariantMap& mix_data) const;
+
+signals:
+	void cacheReady();
 
 public slots:
-	void sync();
+	void fillCache();
 
 protected slots:
-	void dismiss();
-	void markDirty();
-	void loadDevils();
-	void selectionChanged();
 	void ajaxResponse(const QVariant& resp);
-	void itemDoubleClicked(IconListWidgetItem *item);
-	void setAt(int index, const QVariantMap& devil);
 
 protected:
-	void clearAt(int index);
+	DevilCache(QObject *parent = 0);
 
-	void updateCount();
+	bool mCacheFull;
 
-	IconListWidgetItem* itemAt(const QPoint& pos);
+	QHash<int, QVariantMap> mSkills;
+	QHash<int, QVariantMap> mTraits;
+	QHash<int, QVariantMap> mDevils;
 
-	virtual void mousePressEvent(QMouseEvent *event);
-	virtual void mouseMoveEvent(QMouseEvent *event);
-
-	virtual void dragEnterEvent(QDragEnterEvent *event);
-	virtual void dragMoveEvent(QDragMoveEvent *event);
-	virtual void dropEvent(QDropEvent *event);
-
-	QPoint mDragStartPosition;
-
-	bool mLoaded, mMarked;
-	QTimer *mSyncTimer;
-
-	AddDevil *mAddDevil;
-
-	Ui::COMP ui;
+	QHash< QString, QList<QVariantMap> > mDevilsByGenus;
 };
 
-#endif // __COMP_h__
+#endif // __DevilCache_h__

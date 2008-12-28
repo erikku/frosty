@@ -41,6 +41,8 @@ public:
 	QVariant queryUsers(const QString& email) const;
 	QVariant queryUser(const QString& email, const QString& target) const;
 
+	int queryUserID(const QString& email) const;
+
 	QString registerUser(const QString& email, const QString& name,
 		const QString& pass) const;
 
