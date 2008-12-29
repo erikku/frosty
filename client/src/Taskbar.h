@@ -39,6 +39,8 @@ class QAction;
 class COMP;
 class Storage;
 
+class Clock;
+
 class Taskbar : public QWidget
 {
 	Q_OBJECT
@@ -64,6 +66,8 @@ public slots:
 	void showCOMP();
 	void showStorage();
 
+	void showClock();
+
 	void notifyDirty(const QString& user_data);
 
 protected slots:
@@ -88,6 +92,8 @@ protected:
 	// My Devils
 	COMP *mCOMP;
 	Storage *mStorage;
+
+	Clock *mClock;
 
 	QAction *mAdminSep;
 	QAction *mUsersAction;

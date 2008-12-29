@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>495</width>
-    <height>97</height>
+    <height>98</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -155,6 +155,13 @@
         <widget class="QPushButton" name="shoutButton">
          <property name="text">
           <string>&amp;Shoutbox</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clockButton">
+         <property name="text">
+          <string>&amp;Clock</string>
          </property>
         </widget>
        </item>

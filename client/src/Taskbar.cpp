@@ -35,6 +35,8 @@
 #include "COMP.h"
 #include "Storage.h"
 
+#include "Clock.h"
+
 #include "ui_About.h"
 
 #include <QtGui/QSystemTrayIcon>
@@ -56,7 +58,7 @@ Taskbar* Taskbar::getSingletonPtr()
 Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	mShoutbox(0), mUserList(0), mLogWidget(0), mItemWindow(0), mDevilWindow(0),
 	mTraitWindow(0), mSkillWindow(0), mMashouWindow(0), mImportExportWindow(0),
-	mCOMP(0), mStorage(0), mAdminSep(0), mUsersAction(0), mTray(0)
+	mCOMP(0), mStorage(0), mClock(0), mAdminSep(0), mUsersAction(0), mTray(0)
 {
 	ui.setupUi(this);
 
@@ -155,6 +157,12 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 	connect(ui.shoutButton, SIGNAL(clicked(bool)),
 		this, SLOT(showShoutbox()));
 
+	// Clock Action
+	act = menu->addAction(/* icon, */tr("&Clock") );
+	connect(act, SIGNAL(triggered()), this, SLOT(showClock()));
+	connect(ui.clockButton, SIGNAL(clicked(bool)),
+		this, SLOT(showClock()));
+
 	// Log Action
 	act = menu->addAction(/* icon, */tr("&Log") );
 	connect(act, SIGNAL(triggered()), this, SLOT(showLogWindow()));
@@ -191,6 +199,18 @@ void Taskbar::quit()
 {
 	mTray->hide();
 	qApp->quit();
+}
+
+void Taskbar::showClock()
+{
+	if(!mClock)
+		mClock = new Clock;
+
+	Q_ASSERT(mClock != 0);
+
+	mClock->show();
+	mClock->activateWindow();
+	mClock->raise();
 }
 
 void Taskbar::showAbout()
