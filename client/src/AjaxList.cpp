@@ -326,6 +326,11 @@ void AjaxList::ajaxResponse(const QVariant& resp)
 		if( result.value("perms").toMap().value("modify_db").toBool() )
 			ui.addButton->setVisible(true);
 	}
+	else
+	{
+		// Don't update anything if the request wasn't for the AjaxList
+		return;
+	}
 
 	if(mDataLoaded)
 	{
