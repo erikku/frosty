@@ -100,6 +100,15 @@ bool MashouView::checkValues()
 		return false;
 	}
 
+	// Check icon
+	if( ui.iconEdit->value().isEmpty() )
+	{
+		QMessageBox::warning(this, tr("Update Error"), tr("You must set a valid "
+			"icon."));
+
+		return false;
+	}
+
 	return true;
 }
 
