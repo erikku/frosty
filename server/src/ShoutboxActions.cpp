@@ -18,8 +18,11 @@
 \******************************************************************************/
 
 #include "ShoutboxActions.h"
+#include "Config.h"
 #include "Auth.h"
+#include "Log.h"
 
+#include <QtCore/QFile>
 #include <QtCore/QQueue>
 #include <QtCore/QDateTime>
 
@@ -85,12 +88,36 @@ QVariantMap shoutboxPost(int i, QTcpSocket *connection,
 	QVariantMap user_info = Auth::getSingletonPtr()->queryUser(
 		email, email).toMap();
 
+	QString text = action.value("text").toString();
+	QString nick = user_info.value("name").toString();
+
 	QVariantMap msg;
-	msg["author"] = user_info.value("name");
-	msg["text"] = action.value("text");
+	msg["author"] = nick;
+	msg["text"] = text;
 	msg["email"] = email;
 	msg["timestamp"] = QString::number(
 		QDateTime::currentDateTime().toTime_t() );
+
+	if( conf->shoutboxLog() )
+	{
+		QString stamp = QDateTime::currentDateTime().toString(
+			"yyyy-MM-dd hh:mm:ss");
+
+		QFile log( conf->shoutboxLogPath() );
+		if( !log.open(QIODevice::WriteOnly | QIODevice::Append) )
+		{
+			LOG_ERROR("Failed to open shoutbox log for writing.\n");
+		}
+		else
+		{
+			QString line = QString("<b>(%1) %2:</b> %3<br/>\n").arg(
+				stamp).arg(nick).arg(text);
+
+			log.write( line.toUtf8() );
+			log.flush();
+			log.close();
+		}
+	}
 
 	g_shoutbox_queue << msg;
 	while(g_shoutbox_queue.count() > 20)

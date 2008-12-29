@@ -238,6 +238,17 @@ public:
 
 	Q_PROPERTY(QString mUpdaterLinux READ updaterLinux WRITE setUpdaterLinux)
 
+	QString shoutboxLogPath() const;
+	void setShoutboxLogPath(const QString& path);
+
+	Q_PROPERTY(QString mShoutboxLogPath READ shoutboxLogPath
+		WRITE setShoutboxLogPath)
+
+	bool shoutboxLog() const;
+	void setShoutboxLog(bool log);
+
+	Q_PROPERTY(bool mShoutboxLog READ shoutboxLog WRITE setShoutboxLog)
+
 protected:
 	Config(QObject *parent = 0);
 	bool nodeToBool(const QDomNode& node, bool def);
@@ -258,6 +269,9 @@ protected:
 	bool mAuthViewDB;
 	bool mAuthModifyDB;
 	bool mAuthAdminDB;
+
+	bool mShoutboxLog;
+	QString mShoutboxLogPath;
 
 	QString mDBType;
 	QString mDBPath;

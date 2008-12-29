@@ -69,6 +69,9 @@ void Config::loadDefaults()
 	mDBType = "sqlite";
 	mDBPath = "master.db";
 
+	mShoutboxLog = true;
+	mShoutboxLogPath = "shoutbox.log";
+
 	mSslEnabled = false;
 }
 
@@ -421,6 +424,20 @@ void Config::loadConfig(const QString& path)
 		mUpdaterLinux = nodes.first().toElement().text().trimmed();
 	else
 		LOG_WARNING( tr("Failed to find linux updater sha1 in config\n") );
+
+	// <shoutbox><log><path>
+	nodes = elementsByXPath(doc, "/shoutbox/log/path");
+	if( nodes.count() && nodes.first().isElement() )
+		mShoutboxLogPath = nodes.first().toElement().text().trimmed();
+	else
+		LOG_WARNING( tr("Failed to find shoutbox log path in config file\n") );
+
+	// <shoutbox><log><enabled>
+	nodes = elementsByXPath(doc, "/shoutbox/log/enabled");
+	if( nodes.isEmpty() )
+		LOG_WARNING( tr("Error parsing <enabled>, default will be used\n") );
+	else
+		mShoutboxLog = nodeToBool(nodes.first(), mLogCritical);
 
 	LOG_INFO( tr("Config file loaded\n") );
 }
@@ -914,4 +931,24 @@ QString Config::updaterLinux() const
 void Config::setUpdaterLinux(const QString& sha1)
 {
 	mUpdaterLinux = sha1;
+}
+
+QString Config::shoutboxLogPath() const
+{
+	return mShoutboxLogPath;
+}
+
+void Config::setShoutboxLogPath(const QString& path)
+{
+	mShoutboxLogPath = path;
+}
+
+bool Config::shoutboxLog() const
+{
+	return mShoutboxLog;
+}
+
+void Config::setShoutboxLog(bool log)
+{
+	mShoutboxLog = log;
 }
