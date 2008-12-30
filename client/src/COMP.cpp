@@ -23,6 +23,7 @@
 #include "Settings.h"
 #include "AddDevil.h"
 #include "DevilCache.h"
+#include "DevilProperties.h"
 #include "IconListWidgetItem.h"
 #include "json.h"
 #include "ajax.h"
@@ -46,13 +47,15 @@ COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget),
 		this, SLOT(selectionChanged()));
 	connect(ui.devilList, SIGNAL(itemDoubleClicked(IconListWidgetItem*)),
 		this, SLOT(itemDoubleClicked(IconListWidgetItem*)));
+	connect(ui.propButton, SIGNAL(clicked(bool)),
+		this, SLOT(properties()));
 	connect(ui.dismissButton, SIGNAL(clicked(bool)),
 		this, SLOT(dismiss()));
 
 	QIcon blank(":/blank.png");
 
 	// Fill in blanks
-	for(int i = 0; i < 7; i++)
+	for(int i = 0; i < 8; i++)
 	{
 		IconListWidgetItem *item = new IconListWidgetItem(blank);
 		ui.devilList->addItem(item);
@@ -87,6 +90,18 @@ void COMP::selectionChanged()
 	{
 		IconListWidgetItem *item = items.first();
 		good = !item->upperText().isEmpty();
+
+		DevilProperties *prop = DevilProperties::getSingletonPtr();
+
+		if( good && prop->isVisible() )
+		{
+			prop->setActiveDevil( this,
+				ui.devilList->row(item), item->data().toMap() );
+		}
+		else
+		{
+			prop->hide();
+		}
 	}
 
 	ui.propButton->setEnabled(good);
@@ -284,6 +299,7 @@ void COMP::clearAt(int index)
 	item->setData(QVariant());
 
 	markDirty();
+	updateCount();
 }
 
 void COMP::setAt(int index, const QVariantMap& devil)
@@ -294,7 +310,7 @@ void COMP::setAt(int index, const QVariantMap& devil)
 
 	DevilCache *cache = DevilCache::getSingletonPtr();
 
-	QString tooltip = cache->generateToolTip(devil);
+	QString tooltip = cache->devilToolTip(devil);
 
 	QVariantMap devil_data = cache->devilByID( devil.value("id").toInt() );
 
@@ -307,6 +323,7 @@ void COMP::setAt(int index, const QVariantMap& devil)
 	item->setToolTip(tooltip);
 
 	markDirty();
+	updateCount();
 }
 
 void COMP::updateCount()
@@ -420,6 +437,29 @@ void COMP::itemDoubleClicked(IconListWidgetItem *item)
 	}
 	else
 	{
-		// TODO: The slot exists, so show the devil's properties
+		DevilProperties *prop = DevilProperties::getSingletonPtr();
+
+		prop->setActiveDevil( this,
+			ui.devilList->row(item), item->data().toMap() );
+		prop->show();
+		prop->activateWindow();
+		prop->raise();
 	}
+}
+
+void COMP::properties()
+{
+	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
+	if( items.isEmpty() )
+		return;
+
+	IconListWidgetItem *item = items.first();
+
+	DevilProperties *prop = DevilProperties::getSingletonPtr();
+
+	prop->setActiveDevil( this,
+		ui.devilList->row(item), item->data().toMap() );
+	prop->show();
+	prop->activateWindow();
+	prop->raise();
 }

@@ -112,7 +112,7 @@ void Storage::ajaxResponse(const QVariant& resp)
 	setEnabled(true);
 	mLoaded = true;
 }
-#include <iostream>
+
 void Storage::mouseDoubleClickEvent(QMouseEvent *evt)
 {
 	QLabel *icon = qobject_cast<QLabel*>( childAt( evt->pos() ) );
@@ -187,6 +187,7 @@ void Storage::clearAt(int index)
 	mData[index] = QVariantMap();
 
 	markDirty();
+	updateCount();
 }
 
 void Storage::setAt(int index, const QVariantMap& devil)
@@ -196,7 +197,7 @@ void Storage::setAt(int index, const QVariantMap& devil)
 
 	DevilCache *cache = DevilCache::getSingletonPtr();
 
-	QString tooltip = cache->generateToolTip(devil);
+	QString tooltip = cache->devilToolTip(devil);
 
 	QVariantMap devil_data = cache->devilByID( devil.value("id").toInt() );
 
@@ -209,6 +210,7 @@ void Storage::setAt(int index, const QVariantMap& devil)
 	mData[index] = devil;
 
 	markDirty();
+	updateCount();
 }
 
 void Storage::dragEnterEvent(QDragEnterEvent *evt)

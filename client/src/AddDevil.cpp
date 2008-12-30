@@ -87,6 +87,13 @@ void AddDevil::addDevil()
 			skills << skill.value("skill");
 	}
 
+	QVariantMap blank_skill;
+	blank_skill["id"] = -1;
+	blank_skill["lvl"] = -1;
+
+	while(skills.count() < 8)
+		skills << blank_skill;
+
 	// Process the devil data
 	QVariantMap devil;
 	devil["id"] = devil_id;
@@ -170,7 +177,7 @@ void AddDevil::ajaxResponse(const QVariant& resp)
 		QListWidgetItem *item = new QListWidgetItem(icon,
 			devil.value(name_column).toString());
 		item->setData(Qt::UserRole, devil);
-		item->setToolTip( cache->generateToolTip(devil) );
+		item->setToolTip( cache->devilToolTip(devil) );
 
 		ui.devilList->addItem(item);
 	}

@@ -27,6 +27,7 @@
 class QTimer;
 class Storage;
 class AddDevil;
+class DevilProperties;
 class IconListWidgetItem;
 
 class COMP : public QWidget
@@ -34,6 +35,7 @@ class COMP : public QWidget
 	Q_OBJECT
 
 	friend class Storage;
+	friend class DevilProperties;
 
 public:
 	COMP(QWidget *parent = 0);
@@ -44,6 +46,7 @@ public slots:
 protected slots:
 	void dismiss();
 	void markDirty();
+	void properties();
 	void loadDevils();
 	void selectionChanged();
 	void ajaxResponse(const QVariant& resp);

@@ -112,12 +112,26 @@ void DevilCache::fillCache()
 		emit cacheReady();
 }
 
+QVariantMap DevilCache::skillByID(int id) const
+{
+	return mSkills.value(id);
+}
+
 QVariantMap DevilCache::devilByID(int id) const
 {
 	return mDevils.value(id);
 }
 
-QString DevilCache::generateToolTip(const QVariantMap& mix_data) const
+QString DevilCache::skillToolTip(int id) const
+{
+	QVariantMap skill = mSkills.value(id);
+
+	QString tooltip = tr("%1").arg( skill.value("name").toString() );
+
+	return tooltip;
+}
+
+QString DevilCache::devilToolTip(const QVariantMap& mix_data) const
 {
 	int devil_id = mix_data.value("id").toInt();
 

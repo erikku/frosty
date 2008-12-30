@@ -30,7 +30,7 @@
 
 #define tr(msg) QObject::tr(msg)
 
-#define SLOT_COUNT_COMP    (7)
+#define SLOT_COUNT_COMP    (8)
 #define SLOT_COUNT_STORAGE (50)
 
 QMap<QString, QVariantMap> simulator_cache;
@@ -79,7 +79,7 @@ QVariantMap simulatorCache(int i, QTcpSocket *connection,
 		"db_skills.category = db_category.id LEFT JOIN db_action_type ON "
 		"db_skills.action_type = db_action_type.id LEFT JOIN db_related_stat "
 		"ON db_skills.related_stat = db_related_stat.id "
-		"WHERE db_skills.player_only = 0";
+		"WHERE db_skills.player_only = 0 OR db_skills.player_only = 'false'";
 	sql = sql.replace("{$lang}", lang);
 
 	QSqlQuery query(db);

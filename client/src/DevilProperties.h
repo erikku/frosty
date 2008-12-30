@@ -1,5 +1,5 @@
 /******************************************************************************\
-*  client/src/DevilCache.h                                                     *
+*  client/src/DevilProperties.h                                                *
 *  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
@@ -17,45 +17,55 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __DevilCache_h__
-#define __DevilCache_h__
+#ifndef __DevilProperties_h__
+#define __DevilProperties_h__
+
+#include "ui_DevilProperties.h"
 
 #include <QtCore/QVariantMap>
-#include <QtCore/QObject>
-#include <QtCore/QHash>
+#include <QtCore/QPoint>
 
-class DevilCache : public QObject
+class COMP;
+class QLabel;
+class QTimer;
+
+class DevilProperties : public QWidget
 {
 	Q_OBJECT
 
 public:
-	static DevilCache* getSingletonPtr();
+	static DevilProperties* getSingletonPtr();
 
-	QVariantMap skillByID(int id) const;
-	QVariantMap devilByID(int id) const;
-
-	QString skillToolTip(int id) const;
-	QString devilToolTip(const QVariantMap& mix_data) const;
-
-signals:
-	void cacheReady();
-
-public slots:
-	void fillCache();
+	void setActiveDevil(COMP *comp, int slot, const QVariantMap& data);
 
 protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void updateLearnedSkills();
 
 protected:
-	DevilCache(QObject *parent = 0);
+	DevilProperties(QWidget *parent = 0);
 
-	bool mCacheFull;
+	void darkenWidget(QWidget *widget);
 
-	QHash<int, QVariantMap> mSkills;
-	QHash<int, QVariantMap> mTraits;
-	QHash<int, QVariantMap> mDevils;
+	void rewindSkills(int start, QList<QLabel*> *icons, QList<int> *ids);
 
-	QHash< QString, QList<QVariantMap> > mDevilsByGenus;
+	virtual void mousePressEvent(QMouseEvent *event);
+	virtual void mouseMoveEvent(QMouseEvent *event);
+
+	virtual void dragEnterEvent(QDragEnterEvent *event);
+	virtual void dragMoveEvent(QDragMoveEvent *event);
+	virtual void dropEvent(QDropEvent *event);
+
+	int mActiveSlot;
+	COMP *mActiveComp;
+
+	QVariantMap mData;
+
+	QList<int> mActiveIDs, mLearnedIDs, mInheritedIDs;
+	QList<QLabel*> mActiveSkills, mLearnedSkills, mInheritedSkills;
+
+	QPoint mDragStartPosition;
+
+	Ui::DevilProperties ui;
 };
 
-#endif // __DevilCache_h__
+#endif // __DevilProperties_h__
