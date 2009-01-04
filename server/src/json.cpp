@@ -301,7 +301,7 @@ QString json::mapToJSON(const QVariant& obj)
 		i.next();
 
 		QString value = toJSON( i.value() );
-		QString key = QString("\"%1\":").arg( i.key() );
+		QString key = QString("%1:").arg( stringToJSON(i.key()) );
 
 		result << (key + value);
 	}
