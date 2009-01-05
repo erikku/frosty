@@ -191,8 +191,6 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
 	}
-
-	showShoutbox();
 }
 
 void Taskbar::quit()

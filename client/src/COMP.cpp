@@ -23,6 +23,7 @@
 #include "Settings.h"
 #include "AddDevil.h"
 #include "DevilCache.h"
+#include "FusionChart.h"
 #include "DevilProperties.h"
 #include "IconListWidgetItem.h"
 #include "json.h"
@@ -51,6 +52,8 @@ COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget),
 		this, SLOT(properties()));
 	connect(ui.dismissButton, SIGNAL(clicked(bool)),
 		this, SLOT(dismiss()));
+	connect(ui.fuseButton, SIGNAL(clicked(bool)),
+		this, SLOT(startFusion()));
 
 	QIcon blank(":/blank.png");
 
@@ -76,6 +79,7 @@ COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget),
 	connect(mSyncTimer, SIGNAL(timeout()), this, SLOT(sync()));
 
 	mAddDevil = new AddDevil(this);
+	mFusionChart = new FusionChart(this);
 
 	connect(mAddDevil, SIGNAL(devilSelected(int, const QVariantMap&)),
 		this, SLOT(setAt(int, const QVariantMap&)));
@@ -462,4 +466,17 @@ void COMP::properties()
 	prop->show();
 	prop->activateWindow();
 	prop->raise();
+}
+
+void COMP::startFusion()
+{
+	int max = ui.devilList->count();
+
+	QList<QVariantMap> devils;
+	for(int i = 0; i < max; i++)
+		devils << ui.devilList->itemAt(i)->data().toMap();
+
+	DevilProperties::getSingletonPtr()->hide();
+
+	mFusionChart->loadDevils(this, devils);
 }

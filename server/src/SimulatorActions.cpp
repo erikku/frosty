@@ -35,6 +35,11 @@
 
 QMap<QString, QVariantMap> simulator_cache;
 
+void simulator_reset_cache()
+{
+	simulator_cache.clear();
+}
+
 QVariantMap simulatorCache(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
@@ -138,8 +143,8 @@ QVariantMap simulatorCache(int i, QTcpSocket *connection,
 		"db_mashou.fusion2_desc_{$lang} mashou_desc2, "
 		"db_equip_type.name_{$lang} mashou_equip_type, "
 		"db_devils.fusion2 fusion2, db_devils.fusion3 fusion3, "
-		"db_devils.fuse_min_lvl fuse_min_lvl, "
-		"db_devils.fuse_max_lvl fuse_max_lvl, "
+		"db_devils.fuse_min_lvl fuse_min_lvl, db_devils.parent parent_id, "
+		"db_devils.fuse_max_lvl fuse_max_lvl, db_devils.genus genus_id, "
 		"db_devils.fuse_chance fuse_chance, db_devils.breath breath, "
 		"db_devils.wing wing, db_devils.pierce pierce, db_devils.fang fang, "
 		"db_devils.claw claw, db_devils.needle needle, db_devils.sword sword, "
@@ -218,6 +223,43 @@ QVariantMap simulatorCache(int i, QTcpSocket *connection,
 	}
 
 	map["devils"] = devils;
+
+
+	sql = "SELECT id, name_ja FROM db_genus";
+
+	if( !query.prepare(sql) )
+		return herror_sql(db, "simulator_cache action", tr("SQL error for "
+			"action %1: %2").arg(i).arg( query.lastError().text() ));
+
+	if( !query.exec() )
+		return herror_sql(db, "simulator_cache action", tr("SQL error for "
+			"action %1: %2").arg(i).arg( query.lastError().text() ));
+
+	QVariantMap genus;
+	while( query.next() )
+		genus[query.value(1).toString()] = query.value(0);
+
+	map["genus"] = genus;
+
+	Q_ASSERT( genus.contains(QString::fromUtf8("精霊")) );
+
+	sql = "SELECT id, name_ja FROM db_devils WHERE genus = :genus";
+
+	if( !query.prepare(sql) )
+		return herror_sql(db, "simulator_cache action", tr("SQL error for "
+			"action %1: %2").arg(i).arg( query.lastError().text() ));
+
+	query.bindValue(":genus", genus.value(QString::fromUtf8("精霊")), QSql::In);
+
+	if( !query.exec() )
+		return herror_sql(db, "simulator_cache action", tr("SQL error for "
+			"action %1: %2").arg(i).arg( query.lastError().text() ));
+
+	QVariantMap seirei;
+	while( query.next() )
+		seirei[query.value(1).toString()] = query.value(0);
+
+	map["seirei"] = seirei;
 
 	// Update the cache
 	simulator_cache[lang] = map;

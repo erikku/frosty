@@ -87,12 +87,8 @@ void AddDevil::addDevil()
 			skills << skill.value("skill");
 	}
 
-	QVariantMap blank_skill;
-	blank_skill["id"] = -1;
-	blank_skill["lvl"] = -1;
-
 	while(skills.count() < 8)
-		skills << blank_skill;
+		skills << -1;
 
 	// Process the devil data
 	QVariantMap devil;

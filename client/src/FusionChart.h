@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  client/src/COMP.h                                                           *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/FusionChart.h                                                    *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,68 +17,50 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __COMP_h__
-#define __COMP_h__
+#ifndef __FusionChart_h__
+#define __FusionChart_h__
 
-#include "ui_COMP.h"
+#include "ui_FusionChart.h"
 
-#include <QtCore/QPoint>
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QVariant>
+#include <QtGui/QDialog>
 
-class QTimer;
-class Storage;
-class AddDevil;
-class FusionChart;
-class DevilProperties;
-class IconListWidgetItem;
+class COMP;
 
-class COMP : public QWidget
+class FusionChart : public QDialog
 {
 	Q_OBJECT
 
-	friend class Storage;
-	friend class FusionChart;
-	friend class DevilProperties;
-
 public:
-	COMP(QWidget *parent = 0);
+	FusionChart(QWidget *parent = 0);
+
+	void loadDevils(COMP *comp, const QList<QVariantMap>& devils);
 
 public slots:
-	void sync();
-
-protected slots:
-	void dismiss();
-	void markDirty();
-	void properties();
-	void loadDevils();
-	void startFusion();
-	void selectionChanged();
-	void ajaxResponse(const QVariant& resp);
-	void itemDoubleClicked(IconListWidgetItem *item);
-	void setAt(int index, const QVariantMap& devil);
+	void clear();
 
 protected:
-	void clearAt(int index);
+	void calculateFusion(int first, int second);
+	bool checkLevelRange(int level, const QVariantMap& devil);
 
-	void updateCount();
+	QVariantMap fuseDevils(const QVariantMap& devilA,
+		const QVariantMap& devilB, const QVariantMap& resultDevil);
 
-	IconListWidgetItem* itemAt(const QPoint& pos);
+	virtual void mouseReleaseEvent(QMouseEvent *event);
 
-	virtual void mousePressEvent(QMouseEvent *event);
-	virtual void mouseMoveEvent(QMouseEvent *event);
+	Ui::FusionChart ui;
 
-	virtual void dragEnterEvent(QDragEnterEvent *event);
-	virtual void dragMoveEvent(QDragMoveEvent *event);
-	virtual void dropEvent(QDropEvent *event);
+	COMP *mCOMP;
 
-	QPoint mDragStartPosition;
+	QList<int> mDevilSlots;
+	QList<QLabel*> mDevilLabels;
+	QList<QLabel*> mDevilIconGrid;
+	QList<QLabel*> mDevilIcons, mDevilIcons2;
 
-	bool mLoaded, mMarked;
-	QTimer *mSyncTimer;
-
-	AddDevil *mAddDevil;
-	FusionChart *mFusionChart;
-
-	Ui::COMP ui;
+	QList<QVariantMap> mDevilData;
+	QList<QVariantMap> mFusionData;
 };
 
-#endif // __COMP_h__
+#endif // __FusionChart_h__

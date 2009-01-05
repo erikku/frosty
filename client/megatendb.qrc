@@ -6,6 +6,7 @@
 	<file alias="down2.png">res/down2.png</file>
 	<file alias="dark.xml">res/dark.xml</file>
 	<file alias="blank.png">res/blank.png</file>
+	<file alias="border.png">res/border.png</file>
 	<file alias="missing.png">res/missing.png</file>
 	<file alias="edit.png">res/edit.png</file>
 	<file alias="fileopen.png">res/fileopen.png</file>
@@ -15,5 +16,8 @@
 	<file alias="megatendb.png">res/megatendb.png</file>
 	<file alias="megatendb_dirty.png">res/megatendb_dirty.png</file>
 	<file alias="ca.crt">res/ca.crt</file>
+	<file alias="fusion_combos.json">res/fusion_combos.json</file>
+	<file alias="seirei_modifiers.json">res/seirei_modifiers.json</file>
+	<file alias="seirei.json">res/seirei.json</file>
 </qresource>
 </RCC>

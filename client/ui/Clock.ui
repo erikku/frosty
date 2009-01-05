@@ -91,6 +91,9 @@
     <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="moonPhasesButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>&amp;Moon Phases</string>
        </property>
@@ -101,6 +104,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="alarmsButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>&amp;Alarms</string>
        </property>

@@ -478,6 +478,7 @@ void DevilProperties::rewindSkills(int start,
 			break;
 
 		QLabel *src = skill = icons->at(index + 1);
+		ids->replace(index, ids->at(index + 1));
 
 		skill = icons->at(index);
 		skill->setPixmap( *src->pixmap() );
@@ -487,4 +488,5 @@ void DevilProperties::rewindSkills(int start,
 	skill = icons->at(index);
 	skill->setPixmap(blank);
 	skill->setToolTip(QString());
+	ids->replace(index, -1);
 }

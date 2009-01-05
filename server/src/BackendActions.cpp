@@ -18,6 +18,7 @@
 \******************************************************************************/
 
 #include "BackendActions.h"
+#include "SimulatorActions.h"
 #include "Config.h"
 #include "Utils.h"
 #include "Auth.h"
@@ -236,6 +237,7 @@ QVariantMap backendActionDelete(int i, QTcpSocket *connection,
 			"%1: %2").arg(i).arg( query.lastError().text() ));
 
 	m_db.commit();
+	simulator_reset_cache();
 
 	return QVariantMap();
 }
@@ -587,6 +589,7 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 	}
 
 	m_db.commit();
+	simulator_reset_cache();
 
 	QVariantMap map;
 	map["ids"] = ids;
@@ -1176,6 +1179,7 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 	}
 
 	m_db.commit();
+	simulator_reset_cache();
 
 	QVariantMap map;
 	map["ids"] = ids;

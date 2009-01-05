@@ -27,6 +27,8 @@
 
 class QTcpSocket;
 
+void simulator_reset_cache();
+
 QVariantMap simulatorCache(int i, QTcpSocket *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 QVariantMap simulatorLoadStorage(int i, QTcpSocket *connection,
