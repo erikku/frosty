@@ -47,10 +47,13 @@ public slots:
 
 protected slots:
 	void dismiss();
+	void addDevil();
 	void markDirty();
 	void properties();
 	void loadDevils();
 	void startFusion();
+	void extractDevil();
+	void duplicateDevil();
 	void selectionChanged();
 	void ajaxResponse(const QVariant& resp);
 	void itemDoubleClicked(IconListWidgetItem *item);
@@ -59,7 +62,8 @@ protected slots:
 protected:
 	void clearAt(int index);
 
-	void updateCount();
+	int updateCount();
+	int nextFreeRow();
 
 	IconListWidgetItem* itemAt(const QPoint& pos);
 

@@ -54,6 +54,12 @@ COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget),
 		this, SLOT(dismiss()));
 	connect(ui.fuseButton, SIGNAL(clicked(bool)),
 		this, SLOT(startFusion()));
+	connect(ui.addButton, SIGNAL(clicked(bool)),
+		this, SLOT(addDevil()));
+	connect(ui.duplicateButton, SIGNAL(clicked(bool)),
+		this, SLOT(duplicateDevil()));
+	connect(ui.extractButton, SIGNAL(clicked(bool)),
+		this, SLOT(extractDevil()));
 
 	QIcon blank(":/blank.png");
 
@@ -89,6 +95,9 @@ void COMP::selectionChanged()
 {
 	bool good = false;
 
+	int max = ui.devilList->count();
+	int count = updateCount();
+
 	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
 	if( items.count() )
 	{
@@ -106,10 +115,28 @@ void COMP::selectionChanged()
 		{
 			prop->hide();
 		}
+
+		if(good)
+		{
+			QVariantMap devil_data = item->data().toMap();
+			int parent_count = devil_data.value("parents").toList().count();
+
+			if(parent_count > 0)
+				ui.extractButton->setEnabled( (max - count) >= parent_count );
+			else
+				ui.extractButton->setEnabled(false);
+		}
+		else
+		{
+			ui.extractButton->setEnabled(false);
+		}
 	}
 
 	ui.propButton->setEnabled(good);
 	ui.dismissButton->setEnabled(good);
+
+	ui.addButton->setEnabled(items.count() && !good);
+	ui.duplicateButton->setEnabled(good && count < max);
 }
 
 IconListWidgetItem* COMP::itemAt(const QPoint& p)
@@ -304,6 +331,7 @@ void COMP::clearAt(int index)
 
 	markDirty();
 	updateCount();
+	selectionChanged();
 }
 
 void COMP::setAt(int index, const QVariantMap& devil)
@@ -328,9 +356,10 @@ void COMP::setAt(int index, const QVariantMap& devil)
 
 	markDirty();
 	updateCount();
+	selectionChanged();
 }
 
-void COMP::updateCount()
+int COMP::updateCount()
 {
 	int count = 0;
 	int max = ui.devilList->count();
@@ -343,6 +372,8 @@ void COMP::updateCount()
 
 	ui.fuseButton->setEnabled(count > 0);
 	ui.devilCount->setText(tr("%1/%2").arg(count).arg(max));
+
+	return count;
 }
 
 void COMP::dismiss()
@@ -479,4 +510,77 @@ void COMP::startFusion()
 	DevilProperties::getSingletonPtr()->hide();
 
 	mFusionChart->loadDevils(this, devils);
+}
+
+int COMP::nextFreeRow()
+{
+	int max = ui.devilList->count();
+	int count = updateCount();
+
+	if(count >= max)
+		return -1;
+
+	int row = -1;
+	for(int i = 0; i < max; i++)
+	{
+		row = i;
+		if( ui.devilList->itemAt(i)->data().toMap().isEmpty() )
+			break;
+	}
+
+	return row;
+}
+
+void COMP::addDevil()
+{
+	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
+	if( items.isEmpty() )
+		return;
+
+	IconListWidgetItem *item = items.first();
+
+	if( !item->data().toMap().isEmpty() )
+		return;
+
+	mAddDevil->add( ui.devilList->row(item) );
+}
+
+void COMP::extractDevil()
+{
+	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
+	if( items.isEmpty() )
+		return;
+
+	int max = ui.devilList->count();
+	int count = updateCount();
+
+	QVariantMap devil_data = items.first()->data().toMap();
+	QVariantList parents_data = devil_data.value("parents").toList();
+
+	int parent_count = parents_data.count();
+
+	if( (max - count) < parent_count )
+		return;
+
+	QListIterator<QVariant> it(parents_data);
+	while( it.hasNext() )
+	{
+		QVariantMap parent_devil = it.next().toMap();
+		setAt(nextFreeRow(), parent_devil);
+	}
+}
+
+void COMP::duplicateDevil()
+{
+	int row = nextFreeRow();
+	if(row < 0)
+		return;
+
+	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
+	if( items.isEmpty() )
+		return;
+
+	QVariantMap devil_data = items.first()->data().toMap();
+
+	setAt(row, devil_data);
 }
