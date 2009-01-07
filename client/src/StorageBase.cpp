@@ -92,7 +92,7 @@ void StorageBase::dismiss()
 		return;
 
 	DevilData devil_data = devilAt(index);
-	if( !devil_data.isEmpty() )
+	if( devil_data.isEmpty() )
 		return;
 
 	// TODO: Ask if you are sure (include the devil name)
@@ -109,7 +109,7 @@ void StorageBase::extract()
 		return;
 
 	DevilData devil_data = devilAt(index);
-	if( !devil_data.isEmpty() )
+	if( devil_data.isEmpty() )
 		return;
 
 	QVariantList parent_data = devil_data.value("parents").toList();
@@ -137,7 +137,7 @@ void StorageBase::duplicate()
 		return;
 
 	DevilData devil_data = devilAt(index);
-	if( !devil_data.isEmpty() )
+	if( devil_data.isEmpty() )
 		return;
 
 	setAt(free_index, devil_data);
@@ -150,7 +150,7 @@ void StorageBase::properties()
 		return;
 
 	DevilData devil_data = devilAt(index);
-	if( !devil_data.isEmpty() )
+	if( devil_data.isEmpty() )
 		return;
 
 	DevilProperties *prop = DevilProperties::getSingletonPtr();
@@ -244,6 +244,10 @@ void StorageBase::selectionChanged()
 		{
 			mExtractButton->setEnabled(false);
 		}
+	}
+	else
+	{
+		mExtractButton->setEnabled(false);
 	}
 
 	if(mPropertiesButton)
