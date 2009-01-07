@@ -21,13 +21,12 @@
 #define __FusionChart_h__
 
 #include "ui_FusionChart.h"
+#include "StorageBase.h"
 
 #include <QtCore/QMap>
 #include <QtCore/QList>
 #include <QtCore/QVariant>
 #include <QtGui/QDialog>
-
-class COMP;
 
 class FusionChart : public QDialog
 {
@@ -36,7 +35,7 @@ class FusionChart : public QDialog
 public:
 	FusionChart(QWidget *parent = 0);
 
-	void loadDevils(COMP *comp, const QList<QVariantMap>& devils);
+	void loadDevils(StorageBase *storage, const QList<DevilData>& devils);
 
 public slots:
 	void clear();
@@ -52,7 +51,7 @@ protected:
 
 	Ui::FusionChart ui;
 
-	COMP *mCOMP;
+	StorageBase *mStorage;
 
 	QList<int> mDevilSlots;
 	QList<QLabel*> mDevilLabels;

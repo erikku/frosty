@@ -19,7 +19,6 @@
 
 #include "DevilProperties.h"
 #include "DevilCache.h"
-#include "COMP.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QDrag>
@@ -41,7 +40,7 @@ DevilProperties* DevilProperties::getSingletonPtr()
 }
 
 DevilProperties::DevilProperties(QWidget *parent_widget) :
-	QWidget(parent_widget), mActiveSlot(-1), mActiveComp(0)
+	QWidget(parent_widget), mActiveSlot(-1), mActiveStorage(0)
 {
 	ui.setupUi(this);
 
@@ -85,11 +84,12 @@ DevilProperties::DevilProperties(QWidget *parent_widget) :
 	setAcceptDrops(true);
 }
 
-void DevilProperties::setActiveDevil(COMP *comp, int slot, const QVariantMap& d)
+void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
+	const DevilData& devil_data)
 {
 	mActiveSlot = slot;
-	mActiveComp = comp;
-	mData = d;
+	mActiveStorage = storage;
+	mData = devil_data;
 
 	DevilCache *cache = DevilCache::getSingletonPtr();
 
@@ -238,7 +238,7 @@ void DevilProperties::updateLearnedSkills()
 		ui.level->blockSignals(blocked);
 		mData["lvl"] = lvl;
 
-		mActiveComp->setAt(mActiveSlot, mData);
+		mActiveStorage->setAt(mActiveSlot, mData);
 	}
 }
 
@@ -460,7 +460,7 @@ void DevilProperties::dropEvent(QDropEvent *evt)
 
 	mData["inherited_skills"] = skills;
 
-	mActiveComp->setAt(mActiveSlot, mData);
+	mActiveStorage->setAt(mActiveSlot, mData);
 }
 
 void DevilProperties::rewindSkills(int start,

@@ -18,28 +18,18 @@
 \******************************************************************************/
 
 #include "COMP.h"
-#include "Storage.h"
-#include "Taskbar.h"
-#include "Settings.h"
-#include "AddDevil.h"
-#include "DevilCache.h"
-#include "FusionChart.h"
-#include "DevilProperties.h"
-#include "IconListWidgetItem.h"
+
 #include "json.h"
-#include "ajax.h"
+#include "DevilCache.h"
+#include "IconListWidgetItem.h"
 
-#include <QtCore/QTimer>
-#include <QtGui/QMessageBox>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDragMoveEvent>
-#include <QtGui/QDropEvent>
+#include <QtGui/QApplication>
+#include <QtGui/QMouseEvent>
 
-COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget),
-	mLoaded(false), mMarked(false)
+COMP::COMP(QWidget *parent_widget) : StorageBase(parent_widget)
 {
 	ui.setupUi(this);
-	setEnabled(false);
+	setEditable(true);
 
 	setWindowTitle( tr("%1 - COMP").arg(
 		tr("Absolutely Frosty") ) );
@@ -48,285 +38,67 @@ COMP::COMP(QWidget *parent_widget) : QWidget(parent_widget),
 		this, SLOT(selectionChanged()));
 	connect(ui.devilList, SIGNAL(itemDoubleClicked(IconListWidgetItem*)),
 		this, SLOT(itemDoubleClicked(IconListWidgetItem*)));
-	connect(ui.propButton, SIGNAL(clicked(bool)),
-		this, SLOT(properties()));
-	connect(ui.dismissButton, SIGNAL(clicked(bool)),
-		this, SLOT(dismiss()));
-	connect(ui.fuseButton, SIGNAL(clicked(bool)),
-		this, SLOT(startFusion()));
-	connect(ui.addButton, SIGNAL(clicked(bool)),
-		this, SLOT(addDevil()));
-	connect(ui.duplicateButton, SIGNAL(clicked(bool)),
-		this, SLOT(duplicateDevil()));
-	connect(ui.extractButton, SIGNAL(clicked(bool)),
-		this, SLOT(extractDevil()));
 
-	QIcon blank(":/blank.png");
+	QIcon blank(":/border.png");
+
+	int max = capacity();
 
 	// Fill in blanks
-	for(int i = 0; i < 8; i++)
+	for(int i = 0; i < max; i++)
 	{
 		IconListWidgetItem *item = new IconListWidgetItem(blank);
 		ui.devilList->addItem(item);
 	}
 
-	selectionChanged();
-	setAcceptDrops(true);
-
-	DevilCache *cache = DevilCache::getSingletonPtr();
-	connect(cache, SIGNAL(cacheReady()), this, SLOT(loadDevils()));
-	cache->fillCache();
-
-	ajax::getSingletonPtr()->subscribe(this);
-
-	mSyncTimer = new QTimer;
-	mSyncTimer->setSingleShot(true);
-
-	connect(mSyncTimer, SIGNAL(timeout()), this, SLOT(sync()));
-
-	mAddDevil = new AddDevil(this);
-	mFusionChart = new FusionChart(this);
-
-	connect(mAddDevil, SIGNAL(devilSelected(int, const QVariantMap&)),
-		this, SLOT(setAt(int, const QVariantMap&)));
+	initStorage(ui.addButton, ui.dismissButton, ui.propButton,
+		ui.duplicateButton, ui.extractButton, ui.fuseButton);
 }
 
-void COMP::selectionChanged()
+int COMP::capacity() const
 {
-	bool good = false;
+	return 8;
+}
 
-	int max = ui.devilList->count();
-	int count = updateCount();
+DevilData COMP::devilAt(int index) const
+{
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
+		return DevilData();
 
+	return ui.devilList->itemAt(index)->data().toMap();
+}
+
+int COMP::activeIndex() const
+{
 	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
-	if( items.count() )
-	{
-		IconListWidgetItem *item = items.first();
-		good = !item->upperText().isEmpty();
+	if( items.isEmpty() )
+		return -1;
 
-		DevilProperties *prop = DevilProperties::getSingletonPtr();
-
-		if( good && prop->isVisible() )
-		{
-			prop->setActiveDevil( this,
-				ui.devilList->row(item), item->data().toMap() );
-		}
-		else
-		{
-			prop->hide();
-		}
-
-		if(good)
-		{
-			QVariantMap devil_data = item->data().toMap();
-			int parent_count = devil_data.value("parents").toList().count();
-
-			if(parent_count > 0)
-				ui.extractButton->setEnabled( (max - count) >= parent_count );
-			else
-				ui.extractButton->setEnabled(false);
-		}
-		else
-		{
-			ui.extractButton->setEnabled(false);
-		}
-	}
-
-	ui.propButton->setEnabled(good);
-	ui.dismissButton->setEnabled(good);
-
-	ui.addButton->setEnabled(items.count() && !good);
-	ui.duplicateButton->setEnabled(good && count < max);
+	return ui.devilList->row( items.first() );
 }
 
-IconListWidgetItem* COMP::itemAt(const QPoint& p)
+void COMP::updateCount()
 {
-	QObject *child = childAt(p);
-	if(!child)
-		return 0;
+	int used = count();
+	int max = capacity();
 
-	bool isItem = false;
-	do
-	{
-		if( !child->inherits("IconListWidgetItem") )
-			continue;
-
-		isItem = true;
-		break;
-	} while( (child = child->parent()) != this && child );
-
-	if(isItem)
-		return qobject_cast<IconListWidgetItem*>(child);
-
-	return 0;
-}
-
-void COMP::mousePressEvent(QMouseEvent *evt)
-{
-	if(evt->buttons() & Qt::LeftButton)
-		mDragStartPosition = evt->pos();
-}
-
-void COMP::mouseMoveEvent(QMouseEvent *evt)
-{
-	if( !(evt->buttons() & Qt::LeftButton) )
-		return;
-
-	if( (evt->pos() - mDragStartPosition).manhattanLength()
-		< QApplication::startDragDistance() )
-			return;
-
-	IconListWidgetItem *item = itemAt( mapFromGlobal( evt->globalPos() ) );
-	if(!item)
-		return;
-
-	QVariantMap devil = item->data().toMap();
-	if( devil.isEmpty() )
-		return;
-
-	// Release the mouse from the item so the drag works right
-	QMouseEvent release_event(QEvent::MouseMove, QPoint(-1, -1),
-		QPoint(-1, -1), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-	qApp->sendEvent(item, &release_event);
-
-	QPixmap pixmap = item->icon().pixmap(32, 32);
-
-	QByteArray itemData;
-	QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-	dataStream << devil << ui.devilList->row(item);
-
-	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/x-devil", itemData);
-
-	QDrag *drag = new QDrag(this);
-	drag->setMimeData(mimeData);
-	drag->setPixmap(pixmap);
-	drag->setHotSpot(QPoint(16, 16));
-	drag->exec();
-	updateCount();
-}
-
-void COMP::dragEnterEvent(QDragEnterEvent *evt)
-{
-	if( evt->mimeData()->hasFormat("application/x-devil") )
-		evt->acceptProposedAction();
-}
-
-void COMP::dragMoveEvent(QDragMoveEvent *evt)
-{
-	Storage *storage = 0;
-	if( evt->source()->inherits("Storage") )
-		storage = qobject_cast<Storage*>( evt->source() );
-
-	bool sourceThis = (evt->source() == this);
-
-	IconListWidgetItem *item = itemAt( evt->pos() );
-	if( evt->mimeData()->hasFormat("application/x-devil") && item )
-	{
-		if(item->upperText().isEmpty() || storage)
-		{
-			evt->acceptProposedAction();
-		}
-		else if(sourceThis)
-		{
-			QByteArray itemData = evt->mimeData()->data("application/x-devil");
-			QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-
-			int index = -1;
-			QVariantMap devil;
-			dataStream >> devil >> index;
-
-			if(ui.devilList->row(item) == index)
-				evt->ignore();
-			else
-				evt->acceptProposedAction();
-		}
-		else
-		{
-			evt->ignore();
-		}
-	}
-	else
-	{
-		evt->ignore();
-	}
-}
-
-void COMP::dropEvent(QDropEvent *evt)
-{
-	Storage *storage = 0;
-	if( evt->source()->inherits("Storage") )
-		storage = qobject_cast<Storage*>( evt->source() );
-
-	bool sourceThis = (evt->source() == this);
-
-	IconListWidgetItem *item = itemAt( evt->pos() );
-	if( !evt->mimeData()->hasFormat("application/x-devil") || !item )
-	{
-		evt->ignore();
-		return;
-	}
-
-	QByteArray itemData = evt->mimeData()->data("application/x-devil");
-	QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-
-	QVariantMap devil;
-	dataStream >> devil;
-
-	// Move/swap instead of just copy
-	if(storage)
-	{
-		int index = -1;
-		dataStream >> index;
-
-		storage->clearAt(index);
-
-		QVariantMap old_devil = item->data().toMap();
-		if( !old_devil.isEmpty() )
-			storage->setAt(index, old_devil);
-	}
-	else if(sourceThis)
-	{
-		int index = -1;
-		dataStream >> index;
-
-		if(ui.devilList->row(item) == index)
-		{
-			evt->ignore();
-			return;
-		}
-
-		IconListWidgetItem *src = ui.devilList->itemAt(index);
-		Q_ASSERT(src);
-
-		src->setUpperText( item->upperText() );
-		src->setLowerText( item->lowerText() );
-		src->setIcon( item->icon() );
-		src->setData( item->data() );
-	}
-	else if( !item->upperText().isEmpty() )
-	{
-		evt->ignore();
-		return;
-	}
-
-	setAt(ui.devilList->row(item), devil);
-
-	evt->acceptProposedAction();
-	selectionChanged();
-	updateCount();
-	markDirty();
+	ui.fuseButton->setEnabled(used > 0);
+	ui.devilCount->setText(tr("%1/%2").arg(used).arg(max));
 }
 
 void COMP::clearAt(int index)
 {
-	IconListWidgetItem *item = ui.devilList->itemAt(index);
-	if(!item)
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
 		return;
 
-	item->setIcon( QIcon(":/blank.png") );
+	IconListWidgetItem *item = ui.devilList->itemAt(index);
+	Q_ASSERT(item);
+
+	item->setIcon( QIcon(":/border.png") );
 	item->setUpperText(QString());
 	item->setLowerText(QString());
+	item->setToolTip(QString());
 	item->setData(QVariant());
 
 	markDirty();
@@ -334,17 +106,20 @@ void COMP::clearAt(int index)
 	selectionChanged();
 }
 
-void COMP::setAt(int index, const QVariantMap& devil)
+void COMP::setAt(int index, const DevilData& devil)
 {
-	IconListWidgetItem *item = ui.devilList->itemAt(index);
-	if(!item)
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
 		return;
+
+	IconListWidgetItem *item = ui.devilList->itemAt(index);
+	Q_ASSERT(item);
 
 	DevilCache *cache = DevilCache::getSingletonPtr();
 
 	QString tooltip = cache->devilToolTip(devil);
 
-	QVariantMap devil_data = cache->devilByID( devil.value("id").toInt() );
+	DevilData devil_data = cache->devilByID( devil.value("id").toInt() );
 
 	QIcon icon( QString("icons/devils/icon_%1.png").arg(
 		devil_data.value("icon").toString() ) );
@@ -359,55 +134,86 @@ void COMP::setAt(int index, const QVariantMap& devil)
 	selectionChanged();
 }
 
-int COMP::updateCount()
+void COMP::setActiveIndex(int index)
 {
-	int count = 0;
-	int max = ui.devilList->count();
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
+		return;
 
-	for(int i = 0; i < max; i++)
+	ui.devilList->setCurrentRow(index);
+}
+
+void COMP::itemDoubleClicked(IconListWidgetItem *item)
+{
+	Q_ASSERT(ui.devilList->row(item) >= 0);
+
+	// Release the mouse so the AddDevil can be used
+	QMouseEvent release_event(QEvent::MouseMove, QPoint(-1, -1),
+		QPoint(-1, -1), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+	qApp->sendEvent(item, &release_event);
+
+	indexDoubleClicked( ui.devilList->row(item) );
+}
+
+int COMP::indexAt(const QPoint& p) const
+{
+	QObject *child = childAt(p);
+	if(!child)
+		return -1;
+
+	int index = -1;
+
+	do
 	{
-		if( !ui.devilList->itemAt(i)->upperText().isEmpty() )
-			count++;
-	}
+		if( !child->inherits("IconListWidgetItem") )
+			continue;
 
-	ui.fuseButton->setEnabled(count > 0);
-	ui.devilCount->setText(tr("%1/%2").arg(count).arg(max));
+		index = ui.devilList->row( qobject_cast<IconListWidgetItem*>(child) );
 
-	return count;
+		break;
+	} while( (child = child->parent()) != this && child );
+
+	return index;
 }
 
-void COMP::dismiss()
+QPoint COMP::indexPosition(int index) const
 {
-	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
-	if( !items.count() )
-		return;
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
+		return QPoint(0, 0);
 
-	// TODO: Ask if you are sure
+	IconListWidgetItem *item = ui.devilList->itemAt(index);
+	Q_ASSERT(item);
 
-	clearAt( ui.devilList->row(items.first()) );
-	selectionChanged();
-	updateCount();
+	return item->pos();
 }
 
-void COMP::markDirty()
+QString COMP::loadUserData() const
 {
-	if(!mLoaded || mMarked)
-		return;
-
-	mMarked = true;
-
-	mSyncTimer->start(60000); // 60 seconds
-
-	Taskbar::getSingletonPtr()->notifyDirty("simulator_sync_comp");
+	return "simulator_load_comp";
 }
 
-void COMP::sync()
+QVariantList COMP::loadData() const
+{
+	QVariantMap action;
+	action["action"] = "simulator_load_comp";
+	action["user_data"] = "simulator_load_comp";
+
+	return QVariantList() << action;
+}
+
+QString COMP::syncUserData() const
+{
+	return "simulator_sync_comp";
+}
+
+QVariantList COMP::syncData() const
 {
 	QVariantMap action;
 	action["action"] = "simulator_sync_comp";
 	action["user_data"] = "simulator_sync_comp";
 
-	int max = ui.devilList->count();
+	int max = capacity();
 
 	QVariantList devils;
 	for(int i = 0; i < max; i++)
@@ -415,172 +221,39 @@ void COMP::sync()
 
 	action["devils"] = devils;
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
-
-	// Stop the timer now
-	mSyncTimer->stop();
-	mMarked = false;
+	return QVariantList() << action;
 }
 
-void COMP::loadDevils()
+QPoint COMP::hotspot(int index) const
 {
-	QVariantMap action;
-	action["action"] = "simulator_load_comp";
-	action["user_data"] = "simulator_load_comp";
+	Q_UNUSED(index);
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	return QPoint(16, 16);
 }
 
-void COMP::ajaxResponse(const QVariant& resp)
+void COMP::mouseMoveEvent(QMouseEvent *evt)
 {
-	QVariantMap result = resp.toMap();
+	// If we are starting to drag an item, we need to release the mouse
 
-	if(result.value("user_data").toString() != "simulator_load_comp")
+	if( !(evt->buttons() & Qt::LeftButton) )
 		return;
 
-	int max = ui.devilList->count();
+	if( (evt->pos() - mDragStartPosition).manhattanLength()
+		< QApplication::startDragDistance() )
+			return;
 
-	QVariantList devils = result.value("devils").toList();
-	if(devils.count() != max)
+	int index = indexAt(mDragStartPosition);
+	if(index < 0)
 		return;
 
-	for(int i = 0; i < max; i++)
-	{
-		QVariantMap devil = json::parse(devils.at(i).toString()).toMap();
-		if( devil.isEmpty() )
-			continue;
-
-		setAt(i, devil);
-	}
-
-	updateCount();
-	setEnabled(true);
-	mLoaded = true;
-}
-
-void COMP::itemDoubleClicked(IconListWidgetItem *item)
-{
-	if( item->data().toMap().isEmpty() )
-	{
-		// Release the mouse so the AddDevil can be used
-		QMouseEvent release_event(QEvent::MouseMove, QPoint(-1, -1),
-			QPoint(-1, -1), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-		qApp->sendEvent(item, &release_event);
-
-		// Empty slot, so add a devil
-		mAddDevil->add( ui.devilList->row(item) );
-	}
-	else
-	{
-		DevilProperties *prop = DevilProperties::getSingletonPtr();
-
-		prop->setActiveDevil( this,
-			ui.devilList->row(item), item->data().toMap() );
-		prop->show();
-		prop->activateWindow();
-		prop->raise();
-	}
-}
-
-void COMP::properties()
-{
-	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
-	if( items.isEmpty() )
+	DevilData devil_data = devilAt(index);
+	if( devil_data.isEmpty() )
 		return;
 
-	IconListWidgetItem *item = items.first();
+	// Release the mouse from the item so the drag works right
+	QMouseEvent release_event(QEvent::MouseMove, QPoint(-1, -1),
+		QPoint(-1, -1), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+	qApp->sendEvent(ui.devilList->itemAt(index), &release_event);
 
-	DevilProperties *prop = DevilProperties::getSingletonPtr();
-
-	prop->setActiveDevil( this,
-		ui.devilList->row(item), item->data().toMap() );
-	prop->show();
-	prop->activateWindow();
-	prop->raise();
-}
-
-void COMP::startFusion()
-{
-	int max = ui.devilList->count();
-
-	QList<QVariantMap> devils;
-	for(int i = 0; i < max; i++)
-		devils << ui.devilList->itemAt(i)->data().toMap();
-
-	DevilProperties::getSingletonPtr()->hide();
-
-	mFusionChart->loadDevils(this, devils);
-}
-
-int COMP::nextFreeRow()
-{
-	int max = ui.devilList->count();
-	int count = updateCount();
-
-	if(count >= max)
-		return -1;
-
-	int row = -1;
-	for(int i = 0; i < max; i++)
-	{
-		row = i;
-		if( ui.devilList->itemAt(i)->data().toMap().isEmpty() )
-			break;
-	}
-
-	return row;
-}
-
-void COMP::addDevil()
-{
-	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
-	if( items.isEmpty() )
-		return;
-
-	IconListWidgetItem *item = items.first();
-
-	if( !item->data().toMap().isEmpty() )
-		return;
-
-	mAddDevil->add( ui.devilList->row(item) );
-}
-
-void COMP::extractDevil()
-{
-	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
-	if( items.isEmpty() )
-		return;
-
-	int max = ui.devilList->count();
-	int count = updateCount();
-
-	QVariantMap devil_data = items.first()->data().toMap();
-	QVariantList parents_data = devil_data.value("parents").toList();
-
-	int parent_count = parents_data.count();
-
-	if( (max - count) < parent_count )
-		return;
-
-	QListIterator<QVariant> it(parents_data);
-	while( it.hasNext() )
-	{
-		QVariantMap parent_devil = it.next().toMap();
-		setAt(nextFreeRow(), parent_devil);
-	}
-}
-
-void COMP::duplicateDevil()
-{
-	int row = nextFreeRow();
-	if(row < 0)
-		return;
-
-	QList<IconListWidgetItem*> items = ui.devilList->selectedItems();
-	if( items.isEmpty() )
-		return;
-
-	QVariantMap devil_data = items.first()->data().toMap();
-
-	setAt(row, devil_data);
+	StorageBase::mouseMoveEvent(evt);
 }

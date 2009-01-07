@@ -138,6 +138,7 @@ HEADERS     += src/ajax.h \
                src/Shoutbox.h \
                src/COMP.h \
                src/Storage.h \
+               src/StorageBase.h \
                src/DevilCache.h \
                src/AddDevil.h \
                src/Clock.h \
@@ -211,6 +212,7 @@ SOURCES     += src/main.cpp \
                src/Shoutbox.cpp \
                src/COMP.cpp \
                src/Storage.cpp \
+               src/StorageBase.cpp \
                src/DevilCache.cpp \
                src/AddDevil.cpp \
                src/Clock.cpp \

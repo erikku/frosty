@@ -19,23 +19,13 @@
 
 #include "Storage.h"
 #include "DevilCache.h"
-#include "Settings.h"
-#include "AddDevil.h"
-#include "Taskbar.h"
-#include "COMP.h"
-#include "ajax.h"
 #include "json.h"
 
-#include <QtCore/QTimer>
-#include <QtCore/QMimeData>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QDrag>
-
-Storage::Storage(QWidget *parent_widget) : QWidget(parent_widget),
-	mLoaded(false), mMarked(false)
+Storage::Storage(QWidget *parent_widget) : StorageBase(parent_widget),
+	mActiveIndex(-1)
 {
 	ui.setupUi(this);
-	setEnabled(false);
+	setEditable(true);
 
 	setWindowTitle( tr("%1 - Devil Storage").arg(
 		tr("Absolutely Frosty") ) );
@@ -51,155 +41,69 @@ Storage::Storage(QWidget *parent_widget) : QWidget(parent_widget),
 		 << ui.devil41 << ui.devil42 << ui.devil43 << ui.devil44 << ui.devil45
 		 << ui.devil46 << ui.devil47 << ui.devil48 << ui.devil49 << ui.devil50;
 
-	QPixmap blank(":/blank.png");
+	QPixmap blank(":/border.png");
 	foreach(QLabel *slot, mSlots)
 	{
 		slot->setPixmap(blank);
-		mData << QVariantMap();
+		mData << DevilData();
 	}
 
-	setAcceptDrops(true);
-
-	DevilCache *cache = DevilCache::getSingletonPtr();
-	connect(cache, SIGNAL(cacheReady()), this, SLOT(loadDevils()));
-	cache->fillCache();
-
-	ajax::getSingletonPtr()->subscribe(this);
-
-	mSyncTimer = new QTimer;
-	mSyncTimer->setSingleShot(true);
-
-	connect(mSyncTimer, SIGNAL(timeout()), this, SLOT(sync()));
-
-	mAddDevil = new AddDevil(this);
-
-	connect(mAddDevil, SIGNAL(devilSelected(int, const QVariantMap&)),
-		this, SLOT(setAt(int, const QVariantMap&)));
+	initStorage(0, 0, 0);
 }
 
-void Storage::loadDevils()
+int Storage::capacity() const
 {
-	QVariantMap action;
-	action["action"] = "simulator_load_storage";
-	action["user_data"] = "simulator_load_storage";
-
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	return 50;
 }
 
-void Storage::ajaxResponse(const QVariant& resp)
+DevilData Storage::devilAt(int index) const
 {
-	QVariantMap result = resp.toMap();
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
+		return DevilData();
 
-	if(result.value("user_data").toString() != "simulator_load_storage")
-		return;
-
-	int max = mSlots.count();
-
-	QVariantList devils = result.value("devils").toList();
-	if(devils.count() != max)
-		return;
-
-	for(int i = 0; i < max; i++)
-	{
-		QVariantMap devil = json::parse(devils.at(i).toString()).toMap();
-		if( devil.isEmpty() )
-			continue;
-
-		setAt(i, devil);
-	}
-
-	updateCount();
-	setEnabled(true);
-	mLoaded = true;
+	return mData.value(index);
 }
 
-void Storage::mouseDoubleClickEvent(QMouseEvent *evt)
+int Storage::activeIndex() const
 {
-	QLabel *icon = qobject_cast<QLabel*>( childAt( evt->pos() ) );
-	if(!icon)
-		return;
-
-	int index = mSlots.indexOf(icon);
-
-	if( mData.at(index).isEmpty() )
-	{
-		// Empty slot, so add a devil
-		mAddDevil->add(index);
-	}
-	else
-	{
-		// TODO: The slot exists, so show the devil's properties
-	}
+	// Items in this storage device are not selectable, so only return an
+	// index that was set by code.
+	return mActiveIndex;
 }
 
-void Storage::mousePressEvent(QMouseEvent *evt)
+void Storage::updateCount()
 {
-	if(evt->buttons() & Qt::LeftButton)
-		mDragStartPosition = evt->pos();
-}
+	int used = count();
+	int max = capacity();
 
-void Storage::mouseMoveEvent(QMouseEvent *evt)
-{
-	// TODO: Move the event pos() from here, into the mousePressEvent
-
-	if( !(evt->buttons() & Qt::LeftButton) )
-		return;
-
-	if( (evt->pos() - mDragStartPosition).manhattanLength()
-		< QApplication::startDragDistance() )
-			return;
-
-	QLabel *icon = qobject_cast<QLabel*>( childAt( evt->pos() ) );
-	if(!icon)
-		return;
-
-	int index = mSlots.indexOf(icon);
-	if(index < 0)
-		return;
-
-	QVariantMap devil = mData.at(index);
-	if( devil.isEmpty() )
-		return;
-
-	QPixmap pixmap = *icon->pixmap();
-
-	QByteArray itemData;
-	QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-	dataStream << devil << mSlots.indexOf(icon);
-
-	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/x-devil", itemData);
-
-	QDrag *drag = new QDrag(this);
-	drag->setMimeData(mimeData);
-	drag->setPixmap(pixmap);
-	drag->setHotSpot(evt->pos() - icon->pos());
-	drag->exec();
-	updateCount();
+	ui.devilCount->setText(tr("%1/%2").arg(used).arg(max));
 }
 
 void Storage::clearAt(int index)
 {
-	if(index < 0 || index >= mSlots.count())
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
 		return;
 
-	mSlots.at(index)->setPixmap( QPixmap(":/blank.png") );
-	mData[index] = QVariantMap();
+	mSlots.at(index)->setPixmap( QPixmap(":/border.png") );
+	mData[index] = DevilData();
 
 	markDirty();
 	updateCount();
 }
 
-void Storage::setAt(int index, const QVariantMap& devil)
+void Storage::setAt(int index, const DevilData& devil)
 {
-	if(index < 0 || index >= mSlots.count())
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
 		return;
 
 	DevilCache *cache = DevilCache::getSingletonPtr();
 
 	QString tooltip = cache->devilToolTip(devil);
 
-	QVariantMap devil_data = cache->devilByID( devil.value("id").toInt() );
+	DevilData devil_data = cache->devilByID( devil.value("id").toInt() );
 
 	QPixmap icon( QString("icons/devils/icon_%1.png").arg(
 		devil_data.value("icon").toString() ) );
@@ -213,136 +117,59 @@ void Storage::setAt(int index, const QVariantMap& devil)
 	updateCount();
 }
 
-void Storage::dragEnterEvent(QDragEnterEvent *evt)
+void Storage::setActiveIndex(int index)
 {
-	if( evt->mimeData()->hasFormat("application/x-devil") )
-		evt->acceptProposedAction();
-}
-
-void Storage::dragMoveEvent(QDragMoveEvent *evt)
-{
-	COMP *comp = 0;
-	if( evt->source()->inherits("COMP") )
-		comp = qobject_cast<COMP*>( evt->source() );
-
-	bool sourceThis = (evt->source() == this);
-
-	QLabel *icon = qobject_cast<QLabel*>( childAt( evt->pos() ) );
-	int index = mSlots.indexOf(icon);
-
-	if( evt->mimeData()->hasFormat("application/x-devil") && icon )
-	{
-		if(mData.at(index).isEmpty() || comp)
-		{
-			evt->acceptProposedAction();
-		}
-		else if(sourceThis)
-		{
-			QByteArray itemData = evt->mimeData()->data("application/x-devil");
-			QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-
-			int src_index = -1;
-			QVariantMap devil;
-			dataStream >> devil >> src_index;
-
-			if(src_index == index)
-				evt->ignore();
-			else
-				evt->acceptProposedAction();
-		}
-		else
-		{
-			evt->ignore();
-		}
-	}
-	else
-	{
-		evt->ignore();
-	}
-}
-
-void Storage::dropEvent(QDropEvent *evt)
-{
-	COMP *comp = 0;
-	if( evt->source()->inherits("COMP") )
-		comp = qobject_cast<COMP*>( evt->source() );
-
-	bool sourceThis = (evt->source() == this);
-
-	QLabel *icon = qobject_cast<QLabel*>( childAt( evt->pos() ) );
-	int index = mSlots.indexOf(icon);
-
-	if( !evt->mimeData()->hasFormat("application/x-devil") || !icon )
-	{
-		evt->ignore();
-		return;
-	}
-
-	QByteArray itemData = evt->mimeData()->data("application/x-devil");
-	QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-
-	QVariantMap devil;
-	dataStream >> devil;
-
-	// Move/swap instead of just copy
-	if(comp)
-	{
-		int src_index = -1;
-		dataStream >> src_index;
-
-		comp->clearAt(src_index);
-
-		QVariantMap old_devil = mData.at(index);
-		if( !old_devil.isEmpty() )
-			comp->setAt(src_index, old_devil);
-	}
-	else if(sourceThis)
-	{
-		int src_index = -1;
-		dataStream >> src_index;
-
-		if(src_index == index)
-		{
-			evt->ignore();
-			return;
-		}
-
-		mData[src_index] = mData[index];
-		mSlots.at(src_index)->setPixmap( *(mSlots.at(index)->pixmap()) );
-	}
-	else if( !mData.at(index).isEmpty() )
-	{
-		evt->ignore();
-		return;
-	}
-
-	setAt(index, devil);
-
-	evt->acceptProposedAction();
-
-	updateCount();
-	markDirty();
-}
-
-void Storage::markDirty()
-{
-	if(!mLoaded || mMarked)
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
 		return;
 
-	mMarked = true;
-
-	mSyncTimer->start(60000); // 60 seconds
-
-	Taskbar::getSingletonPtr()->notifyDirty("simulator_sync_storage");
+	mActiveIndex = index;
 }
 
-void Storage::sync()
+int Storage::indexAt(const QPoint& p) const
+{
+	QLabel *icon = qobject_cast<QLabel*>( childAt(p) );
+	if(!icon)
+		return -1;
+
+	return mSlots.indexOf(icon);
+}
+
+QPoint Storage::indexPosition(int index) const
+{
+	Q_ASSERT(index < capacity() || index >= 0);
+	if(index >= capacity() || index < 0)
+		return QPoint(0, 0);
+
+	return mSlots.at(index)->pos();
+}
+
+QString Storage::loadUserData() const
+{
+	return "simulator_load_storage";
+}
+
+QVariantList Storage::loadData() const
+{
+	QVariantMap action;
+	action["action"] = "simulator_load_storage";
+	action["user_data"] = "simulator_load_storage";
+
+	return QVariantList() << action;
+}
+
+QString Storage::syncUserData() const
+{
+	return "simulator_sync_storage";
+}
+
+QVariantList Storage::syncData() const
 {
 	QVariantMap action;
 	action["action"] = "simulator_sync_storage";
 	action["user_data"] = "simulator_sync_storage";
 
-	int max = mSlots.count();
+	int max = capacity();
 
 	QVariantList devils;
 	for(int i = 0; i < max; i++)
@@ -350,23 +177,5 @@ void Storage::sync()
 
 	action["devils"] = devils;
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
-
-	// Stop the timer now
-	mSyncTimer->stop();
-	mMarked = false;
-}
-
-void Storage::updateCount()
-{
-	int count = 0;
-	int max = mSlots.count();
-
-	for(int i = 0; i < max; i++)
-	{
-		if( !mData.at(i).isEmpty() )
-			count++;
-	}
-
-	ui.devilCount->setText(tr("%1/%2").arg(count).arg(max));
+	return QVariantList() << action;
 }

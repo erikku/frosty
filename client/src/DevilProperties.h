@@ -21,11 +21,8 @@
 #define __DevilProperties_h__
 
 #include "ui_DevilProperties.h"
+#include "StorageBase.h"
 
-#include <QtCore/QVariantMap>
-#include <QtCore/QPoint>
-
-class COMP;
 class QLabel;
 class QTimer;
 
@@ -36,7 +33,7 @@ class DevilProperties : public QWidget
 public:
 	static DevilProperties* getSingletonPtr();
 
-	void setActiveDevil(COMP *comp, int slot, const QVariantMap& data);
+	void setActiveDevil(StorageBase *storage, int slot, const DevilData& data);
 
 protected slots:
 	void updateLearnedSkills();
@@ -56,9 +53,9 @@ protected:
 	virtual void dropEvent(QDropEvent *event);
 
 	int mActiveSlot;
-	COMP *mActiveComp;
+	StorageBase *mActiveStorage;
 
-	QVariantMap mData;
+	DevilData mData;
 
 	QList<int> mActiveIDs, mLearnedIDs, mInheritedIDs;
 	QList<QLabel*> mActiveSkills, mLearnedSkills, mInheritedSkills;

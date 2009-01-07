@@ -124,12 +124,18 @@ void IconListWidgetItem::mouseMoveEvent(QMouseEvent *evt)
 				setBackgroundRole(QPalette::NoRole);
 		}
 
-		QObject *p = parent();
+		QWidget *p = qobject_cast<QWidget*>(parent());
 		while( p->parent() )
-			p = p->parent();
+			p = qobject_cast<QWidget*>(p->parent());
 
 		if(p)
-			qApp->sendEvent(p, evt);
+		{
+			// Send the mouse event to the parent widget
+			QMouseEvent move_event(evt->type(), mapTo(p, evt->pos()),
+				evt->globalPos(), evt->button(), evt->buttons(),
+				evt->modifiers());
+			qApp->sendEvent(p, &move_event);
+		}
 	}
 	else
 	{
@@ -153,12 +159,18 @@ void IconListWidgetItem::mousePressEvent(QMouseEvent *evt)
 		window()->activateWindow();
 		window()->raise();
 
-		QObject *p = parent();
+		QWidget *p = qobject_cast<QWidget*>(parent());
 		while( p->parent() )
-			p = p->parent();
+			p = qobject_cast<QWidget*>(p->parent());
 
 		if(p)
-			qApp->sendEvent(p, evt);
+		{
+			// Send the press event to the parent widget
+			QMouseEvent press_event(evt->type(), mapTo(p, evt->pos()),
+				evt->globalPos(), evt->button(), evt->buttons(),
+				evt->modifiers());
+			qApp->sendEvent(p, &press_event);
+		}
 	}
 }
 

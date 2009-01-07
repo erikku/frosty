@@ -21,67 +21,45 @@
 #define __COMP_h__
 
 #include "ui_COMP.h"
+#include "StorageBase.h"
 
-#include <QtCore/QPoint>
-
-class QTimer;
-class Storage;
-class AddDevil;
-class FusionChart;
-class DevilProperties;
-class IconListWidgetItem;
-
-class COMP : public QWidget
+class COMP : public StorageBase
 {
 	Q_OBJECT
-
-	friend class Storage;
-	friend class FusionChart;
-	friend class DevilProperties;
 
 public:
 	COMP(QWidget *parent = 0);
 
+	virtual int capacity() const;
+
+	virtual DevilData devilAt(int index) const;
+	virtual int activeIndex() const;
+
 public slots:
-	void sync();
+	virtual void updateCount();
+
+	virtual void clearAt(int index);
+	virtual void setAt(int index, const DevilData& devil);
+	virtual void setActiveIndex(int index);
 
 protected slots:
-	void dismiss();
-	void addDevil();
-	void markDirty();
-	void properties();
-	void loadDevils();
-	void startFusion();
-	void extractDevil();
-	void duplicateDevil();
-	void selectionChanged();
-	void ajaxResponse(const QVariant& resp);
 	void itemDoubleClicked(IconListWidgetItem *item);
-	void setAt(int index, const QVariantMap& devil);
 
 protected:
-	void clearAt(int index);
+	virtual int indexAt(const QPoint& pos) const;
+	virtual QPoint indexPosition(int index) const;
 
-	int updateCount();
-	int nextFreeRow();
+	virtual QString loadUserData() const;
+	virtual QVariantList loadData() const;
 
-	IconListWidgetItem* itemAt(const QPoint& pos);
+	virtual QString syncUserData() const;
+	virtual QVariantList syncData() const;
 
-	virtual void mousePressEvent(QMouseEvent *event);
+	virtual QPoint hotspot(int index) const;
+
 	virtual void mouseMoveEvent(QMouseEvent *event);
 
-	virtual void dragEnterEvent(QDragEnterEvent *event);
-	virtual void dragMoveEvent(QDragMoveEvent *event);
-	virtual void dropEvent(QDropEvent *event);
-
-	QPoint mDragStartPosition;
-
-	bool mLoaded, mMarked;
-	QTimer *mSyncTimer;
-
-	AddDevil *mAddDevil;
-	FusionChart *mFusionChart;
-
+private:
 	Ui::COMP ui;
 };
 

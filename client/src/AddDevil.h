@@ -24,6 +24,8 @@
 
 #include <QtGui/QDialog>
 
+typedef QVariantMap DevilData;
+
 class AddDevil : public QDialog
 {
 	Q_OBJECT
@@ -32,7 +34,7 @@ public:
 	AddDevil(QWidget *parent = 0);
 
 signals:
-	void devilSelected(int index, const QVariantMap& devil);
+	void devilSelected(int index, const DevilData& devil);
 
 public slots:
 	void add(int slot);

@@ -24,7 +24,7 @@
 #include <QtGui/QMouseEvent>
 
 FusionChart::FusionChart(QWidget *parent_widget) : QDialog(parent_widget),
-	mCOMP(0)
+	mStorage(0)
 {
 	ui.setupUi(this);
 
@@ -70,9 +70,10 @@ FusionChart::FusionChart(QWidget *parent_widget) : QDialog(parent_widget),
 	connect(ui.closeButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 }
 
-void FusionChart::loadDevils(COMP *comp, const QList<QVariantMap>& devils)
+void FusionChart::loadDevils(StorageBase *storage,
+	const QList<DevilData>& devils)
 {
-	mCOMP = comp;
+	mStorage = storage;
 
 	Q_ASSERT( mDevilLabels.count() == devils.count() );
 
@@ -260,7 +261,8 @@ void FusionChart::calculateFusion(int first, int second)
 		if(result_genus < 1)
 			return;
 
-		int level_sum = devilA.value("lvl").toInt() + devilB.value("lvl").toInt();
+		int level_sum = devilA.value("lvl").toInt() +
+			devilB.value("lvl").toInt();
 
 		QList<QVariantMap> choices = cache->devilsByGenus(result_genus);
 		foreach(QVariantMap choice, choices)
@@ -374,8 +376,8 @@ void FusionChart::mouseReleaseEvent(QMouseEvent *evt)
 	slot1 = mDevilSlots.at(slot1);
 	slot2 = mDevilSlots.at(slot2);
 
-	mCOMP->setAt(slot1 < slot2 ? slot1 : slot2, devil_data);
-	mCOMP->clearAt(slot1 < slot2 ? slot2 : slot1);
+	mStorage->setAt(slot1 < slot2 ? slot1 : slot2, devil_data);
+	mStorage->clearAt(slot1 < slot2 ? slot2 : slot1);
 
 	close();
 }

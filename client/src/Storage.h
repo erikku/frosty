@@ -21,55 +21,44 @@
 #define __Storage_h__
 
 #include "ui_Storage.h"
+#include "StorageBase.h"
 
-#include <QtCore/QList>
-#include <QtCore/QPoint>
-#include <QtCore/QVariantMap>
-
-class COMP;
-class AddDevil;
 class QLabel;
-class QTimer;
 
-class Storage : public QWidget
+class Storage : public StorageBase
 {
 	Q_OBJECT
-
-	friend class COMP;
 
 public:
 	Storage(QWidget *parent = 0);
 
-public slots:
-	void sync();
+	virtual int capacity() const;
 
-protected slots:
-	void markDirty();
-	void loadDevils();
-	void ajaxResponse(const QVariant& resp);
-	void setAt(int index, const QVariantMap& devil);
+	virtual DevilData devilAt(int index) const;
+	virtual int activeIndex() const;
+
+public slots:
+	virtual void updateCount();
+
+	virtual void clearAt(int index);
+	virtual void setAt(int index, const DevilData& devil);
+	virtual void setActiveIndex(int index);
 
 protected:
-	void updateCount();
-	void clearAt(int index);
+	virtual int indexAt(const QPoint& pos) const;
+	virtual QPoint indexPosition(int index) const;
 
-	virtual void mouseDoubleClickEvent(QMouseEvent *event);
-	virtual void mousePressEvent(QMouseEvent *event);
-	virtual void mouseMoveEvent(QMouseEvent *event);
+	virtual QString loadUserData() const;
+	virtual QVariantList loadData() const;
 
-	virtual void dragEnterEvent(QDragEnterEvent *event);
-	virtual void dragMoveEvent(QDragMoveEvent *event);
-	virtual void dropEvent(QDropEvent *event);
+	virtual QString syncUserData() const;
+	virtual QVariantList syncData() const;
+
+private:
+	int mActiveIndex;
 
 	QList<QLabel*> mSlots;
-	QList<QVariantMap> mData;
-
-	QPoint mDragStartPosition;
-
-	bool mLoaded, mMarked;
-	QTimer *mSyncTimer;
-
-	AddDevil *mAddDevil;
+	QList<DevilData> mData;
 
 	Ui::Storage ui;
 };
