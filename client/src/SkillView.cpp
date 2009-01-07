@@ -40,6 +40,7 @@ SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 	darkenWidget(ui.affinityLabel);
 	darkenWidget(ui.expertLabel);
 	darkenWidget(ui.relatedStatLabel);
+	darkenWidget(ui.inheritLabel);
 
 	darkenWidget(ui.desc_jaLabel);
 	darkenWidget(ui.desc_enLabel);
@@ -59,9 +60,24 @@ SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 	darkenWidget(ui.affinityLabel2);
 	darkenWidget(ui.expertLabel2);
 	darkenWidget(ui.relatedStatLabel2);
+	darkenWidget(ui.inheritLabel2);
 
 	darkenWidget(ui.desc_jaLabel2);
 	darkenWidget(ui.desc_enLabel2);
+
+	QMap<int, QString> inheritEnum;
+	inheritEnum[-2] = trUtf8("？");
+	inheritEnum[-1] = trUtf8("遺伝不可");
+	inheritEnum[0] = trUtf8("ブレス");
+	inheritEnum[1] = trUtf8("羽");
+	inheritEnum[2] = trUtf8("突撃");
+	inheritEnum[3] = trUtf8("牙");
+	inheritEnum[4] = trUtf8("爪");
+	inheritEnum[5] = trUtf8("針");
+	inheritEnum[6] = trUtf8("武器");
+	inheritEnum[7] = trUtf8("乙女");
+	inheritEnum[8] = trUtf8("目");
+	inheritEnum[99] = trUtf8("無制限");
 
 	// Bind the data
 	bindText("name_en", ui.englishName, ui.englishNameEdit);
@@ -88,6 +104,7 @@ SkillView::SkillView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindNumberSet("cost_set", ui.cost, ui.costEdit, ui.costEditCombo,
 		QStringList() << "hp_cost" << "mp_cost" << "mag_cost",
 		QStringList() << tr("HP%1%") << tr("MP%1") << tr("MAG%1"), tr("+"));
+	bindEnum("inheritance", ui.inherit, ui.inheritEdit, inheritEnum, -2);
 
 	// Give the relation buttons an icon
 	QIcon edit_icon(":/edit.png");
