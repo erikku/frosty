@@ -145,6 +145,8 @@ void ajaxTransfer::requestFinished(int id, bool error)
 
 	foreach(QVariant action, mResponse.toList())
 		emit transferFinished(action);
+
+	deleteLater();
 }
 
 void ajaxTransfer::readyRead(const QHttpResponseHeader& resp)
