@@ -39,6 +39,8 @@
 
 #include "ui_About.h"
 
+#include <QtCore/QFile>
+
 #include <QtGui/QSystemTrayIcon>
 #include <QtGui/QAction>
 #include <QtGui/QMenu>
@@ -215,8 +217,16 @@ void Taskbar::showAbout()
 {
 	Ui::About about;
 
+	QFile file(":/gpl.txt");
+	file.open(QIODevice::ReadOnly);
+
+	QString gpl = QString::fromUtf8( file.readAll() );
+
+	file.close();
+
 	QWidget *widget = new QWidget;
 	about.setupUi(widget);
+	about.license->setPlainText(gpl);
 
 	widget->show();
 }

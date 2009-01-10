@@ -256,56 +256,56 @@
              <item>
               <widget class="QRadioButton" name="loyaltyRank1">
                <property name="text">
-                <string>絆</string>
+                <string>1</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank2">
                <property name="text">
-                <string>心</string>
+                <string>2</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank3">
                <property name="text">
-                <string>信</string>
+                <string>3</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank4">
                <property name="text">
-                <string>仲</string>
+                <string>4</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank5">
                <property name="text">
-                <string>契</string>
+                <string>5</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank6">
                <property name="text">
-                <string>使</string>
+                <string>6</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank7">
                <property name="text">
-                <string>隙</string>
+                <string>7</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank8">
                <property name="text">
-                <string>寝</string>
+                <string>8</string>
                </property>
               </widget>
              </item>
@@ -713,7 +713,7 @@
                <item row="0" column="3">
                 <widget class="QLabel" name="devilBookLabel">
                  <property name="text">
-                  <string>悪魔全書</string>
+                  <string>Devil Book</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1286,7 +1286,7 @@
                <item row="0" column="0">
                 <widget class="QLabel" name="inheritBreathLabel">
                  <property name="text">
-                  <string>息</string>
+                  <string>Breath</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1296,7 +1296,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="inheritWingLabel">
                  <property name="text">
-                  <string>羽</string>
+                  <string>Wing</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1306,7 +1306,7 @@
                <item row="2" column="0">
                 <widget class="QLabel" name="inheritPierceLabel">
                  <property name="text">
-                  <string>突</string>
+                  <string>Pierce</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1316,7 +1316,7 @@
                <item row="0" column="2">
                 <widget class="QLabel" name="inheritFangLabel">
                  <property name="text">
-                  <string>牙</string>
+                  <string>Fang</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1326,7 +1326,7 @@
                <item row="1" column="2">
                 <widget class="QLabel" name="inheritClawLabel">
                  <property name="text">
-                  <string>爪</string>
+                  <string>Claw</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1336,7 +1336,7 @@
                <item row="2" column="2">
                 <widget class="QLabel" name="inheritNeedleLabel">
                  <property name="text">
-                  <string>針</string>
+                  <string>Needle</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1346,7 +1346,7 @@
                <item row="0" column="4">
                 <widget class="QLabel" name="inheritSwordLabel">
                  <property name="text">
-                  <string>武</string>
+                  <string>Sword</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1356,7 +1356,7 @@
                <item row="1" column="4">
                 <widget class="QLabel" name="inheritStrangeLabel">
                  <property name="text">
-                  <string>乙</string>
+                  <string>Strange</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1366,7 +1366,7 @@
                <item row="2" column="4">
                 <widget class="QLabel" name="inheritSpecialLabel">
                  <property name="text">
-                  <string>目</string>
+                  <string>Special</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1601,7 +1601,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="wpAllPhysicalLabel">
                  <property name="text">
-                  <string>全物</string>
+                  <string>All Physical</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1611,7 +1611,7 @@
                <item row="2" column="0">
                 <widget class="QLabel" name="wpAllMagicLabel">
                  <property name="text">
-                  <string>全魔</string>
+                  <string>All Magic</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1621,7 +1621,7 @@
                <item row="3" column="0">
                 <widget class="QLabel" name="wpSlashLabel">
                  <property name="text">
-                  <string>斬撃</string>
+                  <string>Slash</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1631,7 +1631,7 @@
                <item row="4" column="0">
                 <widget class="QLabel" name="wpAssaultLabel">
                  <property name="text">
-                  <string>突撃</string>
+                  <string>Assault</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1641,7 +1641,7 @@
                <item row="5" column="0">
                 <widget class="QLabel" name="wpBlowLabel">
                  <property name="text">
-                  <string>打撃</string>
+                  <string>Blow</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1651,7 +1651,7 @@
                <item row="6" column="0">
                 <widget class="QLabel" name="wpGunLabel">
                  <property name="text">
-                  <string>射撃</string>
+                  <string>Gun</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1661,7 +1661,7 @@
                <item row="7" column="0">
                 <widget class="QLabel" name="wpShotLabel">
                  <property name="text">
-                  <string>散弾</string>
+                  <string>Shot</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1671,7 +1671,7 @@
                <item row="8" column="0">
                 <widget class="QLabel" name="wpPierceLabel">
                  <property name="text">
-                  <string>貫通</string>
+                  <string>Pierce</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1681,7 +1681,7 @@
                <item row="9" column="0">
                 <widget class="QLabel" name="wpBlazeLabel">
                  <property name="text">
-                  <string>火炎</string>
+                  <string>Blaze</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1691,7 +1691,7 @@
                <item row="10" column="0">
                 <widget class="QLabel" name="wpFreezeLabel">
                  <property name="text">
-                  <string>氷結</string>
+                  <string>Freeze</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2411,7 +2411,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="wpShockLabel">
                  <property name="text">
-                  <string>衝撃</string>
+                  <string>Shock</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2421,7 +2421,7 @@
                <item row="2" column="0">
                 <widget class="QLabel" name="wpElectricShockLabel">
                  <property name="text">
-                  <string>電撃</string>
+                  <string>Elec. Shock</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2431,7 +2431,7 @@
                <item row="3" column="0">
                 <widget class="QLabel" name="wpHamaLabel">
                  <property name="text">
-                  <string>破魔</string>
+                  <string>Hama</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2441,7 +2441,7 @@
                <item row="4" column="0">
                 <widget class="QLabel" name="wpMudoLabel">
                  <property name="text">
-                  <string>呪殺</string>
+                  <string>Mudo</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2451,7 +2451,7 @@
                <item row="5" column="0">
                 <widget class="QLabel" name="wpMagicForceLabel">
                  <property name="text">
-                  <string>魔力</string>
+                  <string>Magic Force</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2461,7 +2461,7 @@
                <item row="6" column="0">
                 <widget class="QLabel" name="wpNerveLabel">
                  <property name="text">
-                  <string>神経</string>
+                  <string>Nerve</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2471,7 +2471,7 @@
                <item row="7" column="0">
                 <widget class="QLabel" name="wpMindLabel">
                  <property name="text">
-                  <string>精神</string>
+                  <string>Mind</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2481,7 +2481,7 @@
                <item row="8" column="0">
                 <widget class="QLabel" name="wpSuicideLabel">
                  <property name="text">
-                  <string>自爆</string>
+                  <string>Suicide</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2491,7 +2491,7 @@
                <item row="9" column="0">
                 <widget class="QLabel" name="wpAlmightyLabel">
                  <property name="text">
-                  <string>万能</string>
+                  <string>Almighty</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2501,7 +2501,7 @@
                <item row="10" column="0">
                 <widget class="QLabel" name="wpSpecialLabel">
                  <property name="text">
-                  <string>特殊</string>
+                  <string>Special</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -3379,56 +3379,56 @@
              <item>
               <widget class="QRadioButton" name="loyaltyRank1Edit">
                <property name="text">
-                <string>絆</string>
+                <string>1</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank2Edit">
                <property name="text">
-                <string>心</string>
+                <string>2</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank3Edit">
                <property name="text">
-                <string>信</string>
+                <string>3</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank4Edit">
                <property name="text">
-                <string>仲</string>
+                <string>4</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank5Edit">
                <property name="text">
-                <string>契</string>
+                <string>5</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank6Edit">
                <property name="text">
-                <string>使</string>
+                <string>6</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank7Edit">
                <property name="text">
-                <string>隙</string>
+                <string>7</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="loyaltyRank8Edit">
                <property name="text">
-                <string>寝</string>
+                <string>8</string>
                </property>
               </widget>
              </item>
@@ -3688,7 +3688,7 @@
                <item row="0" column="3">
                 <widget class="QLabel" name="devilBookEditLabel">
                  <property name="text">
-                  <string>悪魔全書</string>
+                  <string>Devil Book</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -4033,63 +4033,63 @@
                <item row="0" column="0">
                 <widget class="QCheckBox" name="inheritBreathEdit">
                  <property name="text">
-                  <string>息</string>
+                  <string>Breath</string>
                  </property>
                 </widget>
                </item>
                <item row="0" column="1">
                 <widget class="QCheckBox" name="inheritFangEdit">
                  <property name="text">
-                  <string>牙</string>
+                  <string>Fang</string>
                  </property>
                 </widget>
                </item>
                <item row="0" column="2">
                 <widget class="QCheckBox" name="inheritSwordEdit">
                  <property name="text">
-                  <string>武</string>
+                  <string>Sword</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="0">
                 <widget class="QCheckBox" name="inheritWingEdit">
                  <property name="text">
-                  <string>羽</string>
+                  <string>Wing</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="1">
                 <widget class="QCheckBox" name="inheritClawEdit">
                  <property name="text">
-                  <string>爪</string>
+                  <string>Claw</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="2">
                 <widget class="QCheckBox" name="inheritStrangeEdit">
                  <property name="text">
-                  <string>乙</string>
+                  <string>Strange</string>
                  </property>
                 </widget>
                </item>
                <item row="2" column="0">
                 <widget class="QCheckBox" name="inheritPierceEdit">
                  <property name="text">
-                  <string>突</string>
+                  <string>Pierce</string>
                  </property>
                 </widget>
                </item>
                <item row="2" column="1">
                 <widget class="QCheckBox" name="inheritNeedleEdit">
                  <property name="text">
-                  <string>針</string>
+                  <string>Needle</string>
                  </property>
                 </widget>
                </item>
                <item row="2" column="2">
                 <widget class="QCheckBox" name="inheritEyeEdit">
                  <property name="text">
-                  <string>目</string>
+                  <string>Special</string>
                  </property>
                 </widget>
                </item>
@@ -4617,7 +4617,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="wpAllPhysicalEditLabel">
                  <property name="text">
-                  <string>全物</string>
+                  <string>All Physical</string>
                  </property>
                 </widget>
                </item>
@@ -4639,7 +4639,7 @@
                <item row="2" column="0">
                 <widget class="QLabel" name="wpAllMagicEditLabel">
                  <property name="text">
-                  <string>全魔</string>
+                  <string>All Magic</string>
                  </property>
                 </widget>
                </item>
@@ -4661,7 +4661,7 @@
                <item row="3" column="0">
                 <widget class="QLabel" name="wpSlashEditLabel">
                  <property name="text">
-                  <string>斬撃</string>
+                  <string>Slash</string>
                  </property>
                 </widget>
                </item>
@@ -4683,7 +4683,7 @@
                <item row="4" column="0">
                 <widget class="QLabel" name="wpAssaultEditLabel">
                  <property name="text">
-                  <string>突撃</string>
+                  <string>Assault</string>
                  </property>
                 </widget>
                </item>
@@ -4705,7 +4705,7 @@
                <item row="5" column="0">
                 <widget class="QLabel" name="wpBlowEditLabel">
                  <property name="text">
-                  <string>打撃</string>
+                  <string>Blow</string>
                  </property>
                 </widget>
                </item>
@@ -4727,7 +4727,7 @@
                <item row="6" column="0">
                 <widget class="QLabel" name="wpGunEditLabel">
                  <property name="text">
-                  <string>射撃</string>
+                  <string>Gun</string>
                  </property>
                 </widget>
                </item>
@@ -4749,7 +4749,7 @@
                <item row="7" column="0">
                 <widget class="QLabel" name="wpShotEditLabel">
                  <property name="text">
-                  <string>散弾</string>
+                  <string>Shot</string>
                  </property>
                 </widget>
                </item>
@@ -4771,7 +4771,7 @@
                <item row="8" column="0">
                 <widget class="QLabel" name="wpPierceEditLabel">
                  <property name="text">
-                  <string>貫通</string>
+                  <string>Pierce</string>
                  </property>
                 </widget>
                </item>
@@ -4793,7 +4793,7 @@
                <item row="9" column="0">
                 <widget class="QLabel" name="wpBlazeEditLabel">
                  <property name="text">
-                  <string>火炎</string>
+                  <string>Blaze</string>
                  </property>
                 </widget>
                </item>
@@ -4815,7 +4815,7 @@
                <item row="10" column="0">
                 <widget class="QLabel" name="wpFreezeEditLabel">
                  <property name="text">
-                  <string>氷結</string>
+                  <string>Freeze</string>
                  </property>
                 </widget>
                </item>
@@ -4925,7 +4925,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="wpShockEditLabel">
                  <property name="text">
-                  <string>衝撃</string>
+                  <string>Shock</string>
                  </property>
                 </widget>
                </item>
@@ -4947,7 +4947,7 @@
                <item row="2" column="0">
                 <widget class="QLabel" name="wpElectricShockEditLabel">
                  <property name="text">
-                  <string>電撃</string>
+                  <string>Elec. Shock</string>
                  </property>
                 </widget>
                </item>
@@ -4969,7 +4969,7 @@
                <item row="3" column="0">
                 <widget class="QLabel" name="wpHamaEditLabel">
                  <property name="text">
-                  <string>破魔</string>
+                  <string>Hama</string>
                  </property>
                 </widget>
                </item>
@@ -4991,7 +4991,7 @@
                <item row="4" column="0">
                 <widget class="QLabel" name="wpMudoEditLabel">
                  <property name="text">
-                  <string>呪殺</string>
+                  <string>Mudo</string>
                  </property>
                 </widget>
                </item>
@@ -5013,7 +5013,7 @@
                <item row="5" column="0">
                 <widget class="QLabel" name="wpMagicForceEditLabel">
                  <property name="text">
-                  <string>魔力</string>
+                  <string>Magic Force</string>
                  </property>
                 </widget>
                </item>
@@ -5035,7 +5035,7 @@
                <item row="6" column="0">
                 <widget class="QLabel" name="wpNerveEditLabel">
                  <property name="text">
-                  <string>神経</string>
+                  <string>Nerve</string>
                  </property>
                 </widget>
                </item>
@@ -5057,7 +5057,7 @@
                <item row="7" column="0">
                 <widget class="QLabel" name="wpMindEditLabel">
                  <property name="text">
-                  <string>精神</string>
+                  <string>Mind</string>
                  </property>
                 </widget>
                </item>
@@ -5079,7 +5079,7 @@
                <item row="8" column="0">
                 <widget class="QLabel" name="wpSuicideEditLabel">
                  <property name="text">
-                  <string>自爆</string>
+                  <string>Suicide</string>
                  </property>
                 </widget>
                </item>
@@ -5101,7 +5101,7 @@
                <item row="9" column="0">
                 <widget class="QLabel" name="wpAlmightyEditLabel">
                  <property name="text">
-                  <string>万能</string>
+                  <string>Almighty</string>
                  </property>
                 </widget>
                </item>
@@ -5123,7 +5123,7 @@
                <item row="10" column="0">
                 <widget class="QLabel" name="wpSpecialEditLabel">
                  <property name="text">
-                  <string>特殊</string>
+                  <string>Special</string>
                  </property>
                 </widget>
                </item>

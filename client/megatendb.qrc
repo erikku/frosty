@@ -19,5 +19,6 @@
 	<file alias="fusion_combos.json">res/fusion_combos.json</file>
 	<file alias="seirei_modifiers.json">res/seirei_modifiers.json</file>
 	<file alias="seirei.json">res/seirei.json</file>
+	<file alias="gpl.txt">res/gpl.txt</file>
 </qresource>
 </RCC>
