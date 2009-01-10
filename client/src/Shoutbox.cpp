@@ -25,7 +25,7 @@
 #include <QtCore/QDateTime>
 
 Shoutbox::Shoutbox(QWidget *parent_widget) : QWidget(parent_widget),
-	mLastStamp(0)
+	mAdmin(false), mModify(false), mLastStamp(0)
 {
 	ui.setupUi(this);
 
@@ -70,11 +70,29 @@ void Shoutbox::shout()
 	ajax::getSingletonPtr()->request(settings->url(), action);
 
 	QString stamp = QDateTime::currentDateTime().toString(
-		"yyyy-MM-dd hh:mm:ss");
+		"MM/dd hh:mm:ss");
 
 	ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-	ui.chatLog->insertHtml( tr("<br/><b>(%1) %2:</b> %3").arg(
-		stamp).arg(mNick).arg( ui.messageEdit->text() ) );
+
+	if(mAdmin)
+	{
+		// #99FF00 - System Message Green
+		ui.chatLog->insertHtml( tr("<br/><b>(%1) <font color=#FF3300>"
+			"%2:</font></b> <font color=#FF3300>%3</font>").arg(
+			stamp).arg(mNick).arg( ui.messageEdit->text() ) );
+	}
+	else if(mModify)
+	{
+		ui.chatLog->insertHtml( tr("<br/><b>(%1) <font color=#0099FF>"
+			"%2:</font></b> <font color=#0099FF>%3</font>").arg(
+			stamp).arg(mNick).arg( ui.messageEdit->text() ) );
+	}
+	else
+	{
+		ui.chatLog->insertHtml( tr("<br/><b>(%1) %2:</b> %3").arg(
+			stamp).arg(mNick).arg( ui.messageEdit->text() ) );
+	}
+
 	ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 
 	ui.messageEdit->clear();
@@ -110,12 +128,30 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 			QVariantMap msg = msg_item.toMap();
 
 			QString stamp = QDateTime::fromTime_t( msg.value(
-				"timestamp").toUInt() ).toString("yyyy-MM-dd hh:mm:ss");
+				"timestamp").toUInt() ).toString("MM/dd hh:mm:ss");
 
 			ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-			ui.chatLog->insertHtml( tr("<br/><b>(%1) %2:</b> %3").arg(
-				stamp).arg( msg.value("author").toString() ).arg(
-				msg.value("text").toString() ) );
+			if( msg.value("admin").toBool() )
+			{
+				// #99FF00 - System Message Green
+				ui.chatLog->insertHtml( tr("<br/><b>(%1) <font color=#FF3300>"
+					"%2:</font></b> <font color=#FF3300>%3</font>").arg(
+					stamp).arg( msg.value("author").toString() ).arg(
+					msg.value("text").toString() ) );
+			}
+			else if( msg.value("modify_db").toBool() )
+			{
+				ui.chatLog->insertHtml( tr("<br/><b>(%1) <font color=#0099FF>"
+					"%2:</font></b> <font color=#0099FF>%3</font>").arg(
+					stamp).arg( msg.value("author").toString() ).arg(
+					msg.value("text").toString() ) );
+			}
+			else
+			{
+				ui.chatLog->insertHtml( tr("<br/><b>(%1) %2:</b> %3").arg(
+					stamp).arg( msg.value("author").toString() ).arg(
+					msg.value("text").toString() ) );
+			}
 		}
 
 		// Set the new timestamp
@@ -129,6 +165,9 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 	if(result.value("action").toString() == "shoutbox_login")
 	{
 		mNick = result.value("nick").toString();
+		mAdmin = result.value("admin").toBool();
+		mModify = result.value("modify_db").toBool();
+
 		mTimer->start(5000);
 
 		ui.messageEdit->setEnabled(true);

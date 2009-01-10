@@ -40,8 +40,12 @@ QVariantMap shoutboxLogin(int i, QTcpSocket *connection,
 	QVariantMap user_info = Auth::getSingletonPtr()->queryUser(
 		email, email).toMap();
 
+	QVariantMap perms = Auth::getSingletonPtr()->queryPerms(email).toMap();
+
 	QVariantMap ret = shoutboxPoll(i, connection, db, action, QString());
+	ret["modify_db"] = perms.value("modify_db");
 	ret["nick"] = user_info.value("name");
+	ret["admin"] = perms.value("admin");
 
 	return ret;
 }
@@ -88,6 +92,8 @@ QVariantMap shoutboxPost(int i, QTcpSocket *connection,
 	QVariantMap user_info = Auth::getSingletonPtr()->queryUser(
 		email, email).toMap();
 
+	QVariantMap perms = Auth::getSingletonPtr()->queryPerms(email).toMap();
+
 	QString text = action.value("text").toString();
 	QString nick = user_info.value("name").toString();
 
@@ -95,6 +101,8 @@ QVariantMap shoutboxPost(int i, QTcpSocket *connection,
 	msg["author"] = nick;
 	msg["text"] = text;
 	msg["email"] = email;
+	msg["admin"] = perms.value("admin");
+	msg["modify_db"] = perms.value("modify_db");
 	msg["timestamp"] = QString::number(
 		QDateTime::currentDateTime().toTime_t() );
 

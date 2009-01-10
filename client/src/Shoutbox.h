@@ -44,6 +44,8 @@ protected slots:
 protected:
 	Ui::Shoutbox ui;
 
+	bool mAdmin, mModify;
+
 	QString mNick;
 
 	QTimer *mTimer;
