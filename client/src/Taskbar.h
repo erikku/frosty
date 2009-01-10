@@ -71,7 +71,7 @@ public slots:
 	void notifyDirty(const QString& user_data);
 
 protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	Taskbar(QWidget *parent = 0);

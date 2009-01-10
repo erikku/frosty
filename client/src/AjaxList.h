@@ -44,7 +44,7 @@ public slots:
 	void deleteAjax();
 
 protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 	void handleItemInserted(int id);
 	void handleItemSelected();
 

@@ -165,19 +165,14 @@ void UserEdit::updateUser()
 	setEnabled(false);
 }
 
-void UserEdit::ajaxResponse(const QVariant& resp)
+void UserEdit::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-	if( result.contains("error") )
-		return;
-
-	QString user_data = result.value("user_data").toString();
 	if(user_data == "auth_edit_query_perms")
 	{
-		if( result.value("email") != mEmail )
+		if( resp.value("email") != mEmail )
 			return;
 
-		QVariantMap map = result.value("perms").toMap();
+		QVariantMap map = resp.value("perms").toMap();
 		QMapIterator<QString, QVariant> i(map);
 		while( i.hasNext() )
 		{
@@ -193,7 +188,7 @@ void UserEdit::ajaxResponse(const QVariant& resp)
 	}
 	else if(user_data == "auth_edit_query_user")
 	{
-		QVariantMap map = result.value("user").toMap();
+		QVariantMap map = resp.value("user").toMap();
 		ui.emailEdit->setText( map.value("email").toString() );
 		ui.nameEdit->setText( map.value("name").toString() );
 
@@ -201,7 +196,7 @@ void UserEdit::ajaxResponse(const QVariant& resp)
 	}
 	else if(user_data == "salt")
 	{
-		mSalt = result.value("salt").toString();
+		mSalt = resp.value("salt").toString();
 		mHaveSalt = true;
 	}
 	else if(user_data == "auth_modify_user")

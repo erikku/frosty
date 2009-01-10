@@ -148,16 +148,14 @@ void AddDevil::handleItemSelected()
 		ui.addButton->setEnabled(true);
 }
 
-void AddDevil::ajaxResponse(const QVariant& resp)
+void AddDevil::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 {
-	QVariantMap res = resp.toMap();
-
-	if(res.value("user_data").toString() != "devil_add_cache")
+	if(user_data != "devil_add_cache")
 		return;
 
 	ui.devilList->clear();
 
-	QVariantList devils = res.value("rows").toList();
+	QVariantList devils = resp.value("rows").toList();
 
 	DevilCache *cache = DevilCache::getSingletonPtr();
 

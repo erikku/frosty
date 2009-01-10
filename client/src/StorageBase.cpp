@@ -289,17 +289,15 @@ void StorageBase::indexDoubleClicked(int idx)
 	}
 }
 
-void StorageBase::ajaxResponse(const QVariant& resp)
+void StorageBase::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-
-	QString user_data = result.value("user_data").toString();
 	if(loadUserData() != user_data)
 		return;
 
 	int max = capacity();
 
-	QList<DevilData> devils = readLoadData(result);
+	QList<DevilData> devils = readLoadData(resp);
 	if(devils.count() != max)
 		return;
 

@@ -410,18 +410,17 @@ void BindDetailedMultiRelation::setAdditionalRelations(
 	}
 }
 
-void BindDetailedMultiRelation::ajaxResponse(const QVariant& resp)
+void BindDetailedMultiRelation::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-
-	QString user_data = QString("multi_relation_%1_%2_cache").arg(
+	QString user_data2 = QString("multi_relation_%1_%2_cache").arg(
 		mTable).arg(mOtherTable);
 
-	if(result.value("user_data").toString() == user_data)
+	if(user_data == user_data2)
 	{
 		Q_ASSERT(mAddList);
 
-		QVariantList rows = result.value("rows").toList();
+		QVariantList rows = resp.value("rows").toList();
 		QListIterator<QVariant> it(rows);
 
 		mAddList->clear();
@@ -449,13 +448,12 @@ void BindDetailedMultiRelation::ajaxResponse(const QVariant& resp)
 		return;
 	}
 
-	user_data = QString("multi_relation_%1_%2").arg(
-		mTable).arg(mOtherTable);
+	user_data2 = QString("multi_relation_%1_%2").arg(mTable).arg(mOtherTable);
 
-	if(result.value("user_data").toString() != user_data)
+	if(user_data != user_data2)
 		return;
 
-	QVariantList rows = result.value("rows").toList();
+	QVariantList rows = resp.value("rows").toList();
 	QListIterator<QVariant> it(rows);
 
 	while( it.hasNext() )

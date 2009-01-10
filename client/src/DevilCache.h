@@ -50,7 +50,7 @@ public slots:
 	void fillCache();
 
 protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	DevilCache(QObject *parent = 0);

@@ -35,7 +35,8 @@ public slots:
 
 protected slots:
 	virtual void refresh();
-	virtual void ajaxResponse(const QVariant& resp);
+	virtual void ajaxResponse(const QVariantMap& resp,
+		const QString& user_data);
 
 protected:
 	Ui::RelationEdit ui;

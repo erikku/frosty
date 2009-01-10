@@ -273,20 +273,16 @@ void AjaxList::deleteAjax()
 		ajax::getSingletonPtr()->request(settings->url(), action);
 }
 
-void AjaxList::ajaxResponse(const QVariant& resp)
+void AjaxList::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-	if( result.contains("error") )
-		return;
+	QVariantList rows = resp.value("rows").toList();
 
-	QVariantList rows = result.value("rows").toList();
-
-	if(result.value("user_data").toString() == listUserData())
+	if(user_data == listUserData())
 	{
 		mItems = rows;
 		mDataLoaded++;
 	}
-	else if(result.value("user_data").toString() == deleteUserData())
+	else if(user_data == deleteUserData())
 	{
 		refresh();
 
@@ -298,7 +294,7 @@ void AjaxList::ajaxResponse(const QVariant& resp)
 
 		return;
 	}
-	else if(result.value("user_data").toString() == filterUserData())
+	else if(user_data == filterUserData())
 	{
 		QComboBox *combo = ui.filterCombo;
 
@@ -327,9 +323,9 @@ void AjaxList::ajaxResponse(const QVariant& resp)
 
 		mDataLoaded++;
 	}
-	else if(result.value("user_data").toString() == "auth_query_perms")
+	else if(resp.value("user_data").toString() == "auth_query_perms")
 	{
-		if( result.value("perms").toMap().value("modify_db").toBool() )
+		if( resp.value("perms").toMap().value("modify_db").toBool() )
 			ui.addButton->setVisible(true);
 	}
 	else

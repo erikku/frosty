@@ -139,8 +139,11 @@ void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 
 	ajaxTransfer *transfer = ajaxTransfer::start(url, post);
 
-	connect(transfer, SIGNAL(transferFinished(const QVariant&)),
-		this, SIGNAL(response(const QVariant&)) );
+	connect(transfer, SIGNAL(transferFinished(const QVariantMap&,
+		const QString&)), this, SIGNAL(response(const QVariantMap&,
+		const QString&)) );
+	connect(transfer, SIGNAL(transferFailed(const QString&)),
+		this, SLOT(handleError(const QString&)), Qt::QueuedConnection);
 
 	/*
 	QVariantList actions = req.toMap().value("actions").toList();
@@ -161,7 +164,8 @@ void ajax::subscribe(QObject *obj)
 	if(!obj)
 		return;
 
-	if(obj->metaObject()->indexOfSlot("ajaxResponse(QVariant)") == -1)
+	if(obj->metaObject()->indexOfSlot(
+		"ajaxResponse(QVariantMap,QString)") == -1)
 	{
 		QMessageBox::critical(0, tr("AJAX Subscribe Error"),
 			tr("Failed to find ajaxResponse() on object %1").arg(
@@ -170,6 +174,12 @@ void ajax::subscribe(QObject *obj)
 		return;
 	}
 
-	connect(this, SIGNAL(response(const QVariant&)), obj,
-		SLOT(ajaxResponse(const QVariant&)));
+	connect(this, SIGNAL(response(const QVariantMap&, const QString&)), obj,
+		SLOT(ajaxResponse(const QVariantMap&, const QString&)));
+}
+
+void ajax::handleError(const QString& err)
+{
+	QMessageBox::critical(0, tr("AJAX Error"),
+		tr("The following AJAX error has occurred:\n%1").arg(err));
 }

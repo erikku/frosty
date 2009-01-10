@@ -35,7 +35,7 @@ protected slots:
 	void transferFailed();
 	void transferFinished(const QString& checksum);
 
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	VersionCheck(QObject *parent = 0);

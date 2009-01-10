@@ -20,6 +20,8 @@
 #ifndef __RelationEdit_h__
 #define __RelationEdit_h__
 
+#include <QtCore/QVariantMap>
+
 #include <QtGui/QDialog>
 
 class RelationEdit : public QDialog
@@ -36,7 +38,8 @@ public slots:
 
 protected slots:
 	virtual void refresh() = 0;
-	virtual void ajaxResponse(const QVariant& resp);
+	virtual void ajaxResponse(const QVariantMap& resp,
+		const QString& user_data);
 
 signals:
 	void relationsUpdated();

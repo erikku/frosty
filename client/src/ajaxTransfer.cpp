@@ -81,7 +81,8 @@ ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 
 		data = post_vars.join("&").toAscii();
 
-		header.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
+		header.setContentType("application/x-www-form-urlencoded; "
+			"charset=UTF-8");
 		header.setContentLength( data.length() );
 	}
 
@@ -113,15 +114,7 @@ void ajaxTransfer::requestFinished(int id, bool error)
 	QString content_error = QString::fromUtf8(mContent);
 	if( !content_error.isEmpty() )
 	{
-		QMessageBox::StandardButton button = QMessageBox::critical(0,
-			tr("AJAX Error"), tr("The AJAX backend has encountered one or "
-			"more errors. Would you like to view the AJAX Log?"),
-			QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-		if(button == QMessageBox::Yes)
-			ajax::getSingletonPtr()->showLog();
-
-		emit transferFailed();
+		emit transferFailed(content_error);
 		deleteLater();
 
 		return;
@@ -129,22 +122,18 @@ void ajaxTransfer::requestFinished(int id, bool error)
 
 	if(error)
 	{
-		QMessageBox::StandardButton button = QMessageBox::critical(0,
-			tr("AJAX Error"), tr("The AJAX backend has encountered one or "
-			"more errors. Would you like to view the AJAX Log?"),
-			QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-		if(button == QMessageBox::Yes)
-			ajax::getSingletonPtr()->showLog();
-
-		emit transferFailed();
+		emit transferFailed( tr("A network error has occurred.") );
 		deleteLater();
 
 		return;
 	}
 
-	foreach(QVariant action, mResponse.toList())
-		emit transferFinished(action);
+	foreach(QVariant action, mResponse)
+	{
+		QVariantMap map = action.toMap();
+
+		emit transferFinished(map, map.value("user_data").toString());
+	}
 
 	deleteLater();
 }
@@ -160,12 +149,8 @@ void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 {
 	if(resp.statusCode() != 200)
 	{
-		QMessageBox::critical(0, tr("AJAX Error"),
-			tr("Server returned code %1").arg(resp.statusCode()));
-
-		ajax::getSingletonPtr()->showLog();
-
-		emit transferFailed();
+		emit transferFailed( tr("Server returned code %1").arg(
+			resp.statusCode() ) );
 		deleteLater();
 
 		return;
@@ -173,12 +158,7 @@ void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 
 	if( !resp.hasKey("X-JSON") )
 	{
-		QMessageBox::critical(0, tr("AJAX Error"),
-			tr("Response missing X-JSON header"));
-
-		ajax::getSingletonPtr()->showLog();
-
-		emit transferFailed();
+		emit transferFailed( tr("Response missing X-JSON header") );
 		deleteLater();
 
 		return;
@@ -191,23 +171,15 @@ void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 		result = jsonResponse.cap(1);
 
 	// TODO: Add error checking here
-	mResponse = json::parse(result);
+	mResponse = json::parse(result).toList();
 
-	QVariantList e_res = mResponse.toList();
-	for(int i = 0; i < e_res.count(); i++)
+	QListIterator<QVariant> it(mResponse);
+	while( it.hasNext() )
 	{
-		QVariantMap map = e_res.at(i).toMap();
+		QVariantMap map = it.next().toMap();
 		if( map.contains("error") )
 		{
-			QMessageBox::StandardButton button = QMessageBox::critical(0,
-				tr("AJAX Error"), tr("The AJAX backend has encountered one or "
-				"more errors. Would you like to view the AJAX Log?"),
-				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-			if(button == QMessageBox::Yes)
-				ajax::getSingletonPtr()->showLog();
-
-			emit transferFailed();
+			emit transferFailed( map.value("error").toString() );
 			deleteLater();
 
 			return;

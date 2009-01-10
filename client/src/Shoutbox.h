@@ -39,7 +39,7 @@ public slots:
 protected slots:
 	void shout();
 	void updateShoutButton();
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	Ui::Shoutbox ui;

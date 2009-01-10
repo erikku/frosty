@@ -54,20 +54,17 @@ VersionCheck* VersionCheck::getSingletonPtr()
 	return g_versioncheck_inst;
 }
 
-void VersionCheck::ajaxResponse(const QVariant& resp)
+void VersionCheck::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-	if( result.contains("error") )
-		return;
-
-	if(result.value("user_data").toString() == "server_updates")
+	if(user_data == "server_updates")
 	{
 #ifdef Q_OS_WIN32
-		QString client_hash = result.value("client_win32").toString();
-		QString updater_hash = result.value("updater_win32").toString();
+		QString client_hash = resp.value("client_win32").toString();
+		QString updater_hash = resp.value("updater_win32").toString();
 #else
-		QString client_hash = result.value("client_linux").toString();
-		QString updater_hash = result.value("updater_linux").toString();
+		QString client_hash = resp.value("client_linux").toString();
+		QString updater_hash = resp.value("updater_linux").toString();
 #endif
 
 		QString client = qApp->applicationFilePath();

@@ -78,19 +78,17 @@ void BasicRelationList::deleteRelation(int id, const QString& name)
 		item->text() );
 }
 
-void BasicRelationList::ajaxResponse(const QVariant& resp)
+void BasicRelationList::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
-	RelationList::ajaxResponse(resp);
+	RelationList::ajaxResponse(resp, user_data);
 
 	if( mTable.isEmpty() )
 		return;
 
-	QVariantMap res = resp.toMap();
-
-	if( res.value("user_data").toString() ==
-		QString("%1_relation_list").arg(mTable) )
+	if( user_data == QString("%1_relation_list").arg(mTable) )
 	{
-		QVariantList rows = res.value("rows").toList();
+		QVariantList rows = resp.value("rows").toList();
 		for(int i = 0; i < rows.count(); i++)
 		{
 			QVariantMap map = rows.at(i).toMap();

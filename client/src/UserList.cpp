@@ -165,16 +165,11 @@ void UserList::refresh()
 	ajax::getSingletonPtr()->request(settings->url(), action);
 }
 
-void UserList::ajaxResponse(const QVariant& resp)
+void UserList::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-	if( result.contains("error") )
-		return;
-
-	QString user_data = result.value("user_data").toString();
 	if(user_data == "auth_query_users")
 	{
-		QVariantList users = result.value("users").toList();
+		QVariantList users = resp.value("users").toList();
 		for(int i = 0; i < users.count(); i++)
 		{
 			QVariantMap user = users.at(i).toMap();

@@ -44,7 +44,7 @@ protected slots:
 	void editInactiveUser();
 	void makeUserActive();
 	void makeUserInactive();
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	void darkenWidget(QWidget *widget);

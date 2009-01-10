@@ -101,7 +101,7 @@ protected slots:
 	void filterAddList();
 	void selectionChanged();
 	void addSelectionChanged();
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	QVariant refreshItemCache() const;

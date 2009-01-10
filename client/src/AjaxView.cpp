@@ -626,17 +626,16 @@ void AjaxView::processBindValues(const QVariantMap& values)
 		bind->handleViewResponse(values);
 }
 
-void AjaxView::ajaxResponse(const QVariant& resp)
+void AjaxView::ajaxResponse(const QVariantMap& resp, const QString& udata)
 {
-	QVariantMap result = resp.toMap();
-
+	QString user_data = udata;
 	int updated_id = -1;
-	QString user_data = result.value("user_data").toString();
-	if( result.value("user_data").canConvert(QVariant::List) )
+
+	if( resp.value("user_data").canConvert(QVariant::List) )
 	{
 		// Special case to recover the ID
 		// of the item updated after a clear()
-		QVariantList user_data_set = result.value("user_data").toList();
+		QVariantList user_data_set = resp.value("user_data").toList();
 		if(user_data_set.count() == 2)
 		{
 			user_data = user_data_set.at(0).toString();
@@ -650,9 +649,9 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 
 	if(user_data == view_data)
 	{
-		QVariantList rows = result.value("rows").toList();
+		QVariantList rows = resp.value("rows").toList();
 		if( rows.count() && rows.first().toMap().value("id") == mID )
-			mSleepingResponse = result;
+			mSleepingResponse = resp;
 	}
 	else if(user_data == update_data)
 	{
@@ -664,7 +663,7 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 	}
 	else if(user_data == insert_data)
 	{
-		int id = result.value("ids").toList().first().toInt();
+		int id = resp.value("ids").toList().first().toInt();
 
 		view(id);
 
@@ -675,7 +674,7 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 	}
 	else if(user_data == "auth_query_perms")
 	{
-		if( result.value("perms").toMap().value("modify_db").toBool() )
+		if( resp.value("perms").toMap().value("modify_db").toBool() )
 		{
 			Q_ASSERT(ui.editButton != 0);
 
@@ -684,7 +683,8 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 		}
 	}
 
-	result = mSleepingResponse; // Check if we can now load the view data
+	// Check if we can now load the view data
+	QVariantMap result = mSleepingResponse;
 	user_data = result.value("user_data").toString();
 
 	if(user_data == view_data)

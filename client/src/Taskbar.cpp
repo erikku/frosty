@@ -382,15 +382,11 @@ void Taskbar::showStorage()
 	mStorage->raise();
 }
 
-void Taskbar::ajaxResponse(const QVariant& resp)
+void Taskbar::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-
-	QString user_data = result.value("user_data").toString();
-
 	if(user_data == "auth_query_perms")
 	{
-		if( result.value("perms").toMap().value("admin").toBool()
+		if( resp.value("perms").toMap().value("admin").toBool()
 			&& !mAdminSep->isVisible() )
 		{
 			ui.tabWidget->insertTab(2, ui.adminTab, tr("&Administration"));

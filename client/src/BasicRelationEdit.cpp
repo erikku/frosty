@@ -100,19 +100,17 @@ void BasicRelationEdit::refresh()
 	ajax::getSingletonPtr()->request(settings->url(), action);
 }
 
-void BasicRelationEdit::ajaxResponse(const QVariant& resp)
+void BasicRelationEdit::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
-	RelationEdit::ajaxResponse(resp);
+	RelationEdit::ajaxResponse(resp, user_data);
 
 	if( mTable.isEmpty() )
 		return;
 
-	QVariantMap res = resp.toMap();
-
-	if(res.value("user_data").toString() ==
-		QString("%1_entry").arg(mTable))
+	if(user_data == QString("%1_entry").arg(mTable))
 	{
-		QVariantMap map = res.value("rows").toList().first().toMap();
+		QVariantMap map = resp.value("rows").toList().first().toMap();
 		if(map["id"].toInt() != mID)
 			return;
 

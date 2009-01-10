@@ -20,6 +20,8 @@
 #ifndef __RelationList_h__
 #define __RelationList_h__
 
+#include <QtCore/QVariantMap>
+
 #include <QtGui/QDialog>
 
 class RelationEdit;
@@ -45,7 +47,8 @@ signals:
 
 protected slots:
 	virtual void itemSelectionChanged() = 0;
-	virtual void ajaxResponse(const QVariant& resp);
+	virtual void ajaxResponse(const QVariantMap& resp,
+		const QString& user_data);
 
 protected:
 	QString mTable;

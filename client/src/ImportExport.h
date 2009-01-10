@@ -37,7 +37,7 @@ public slots:
 	void importDB();
 	void exportDB();
 
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	Ui::ImportExport ui;

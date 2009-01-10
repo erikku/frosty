@@ -52,15 +52,15 @@ void RelationEdit::showEdit(const QString& window_title,
 	show();
 }
 
-void RelationEdit::ajaxResponse(const QVariant& resp)
+void RelationEdit::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
+	Q_UNUSED(resp);
+
 	if( mTable.isEmpty() )
 		return;
 
-	QVariantMap res = resp.toMap();
-
-	if(res.value("user_data").toString() ==
-		QString("%1_relation_updated").arg(mTable))
+	if(user_data == QString("%1_relation_updated").arg(mTable))
 	{
 		setWindowModality(Qt::NonModal);
 		emit relationsUpdated();

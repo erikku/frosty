@@ -93,16 +93,14 @@ void RelationList::showList(const QString& window_title, const QString& table)
 	show();
 }
 
-void RelationList::ajaxResponse(const QVariant& resp)
+void RelationList::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
+	Q_UNUSED(resp);
+
 	if( mTable.isEmpty() )
 		return;
 
-	QVariantMap res = resp.toMap();
-
-	if(res.value("user_data").toString() ==
-		QString("%1_relation_delete").arg(mTable))
-	{
+	if(user_data == QString("%1_relation_delete").arg(mTable))
 		refresh();
-	}
 }

@@ -51,17 +51,15 @@ DevilCache::DevilCache(QObject *parent_object) : QObject(parent_object),
 	}
 }
 
-void DevilCache::ajaxResponse(const QVariant& resp)
+void DevilCache::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-
 	// TODO: Clear the pre-existing cache first
 
-	if(result.value("user_data").toString() == "simulator_cache")
+	if(user_data == "simulator_cache")
 	{
 		// Skills
 		{
-			QVariantList skills = result.value("skills").toList();
+			QVariantList skills = resp.value("skills").toList();
 
 			QListIterator<QVariant> it(skills);
 			while( it.hasNext() )
@@ -74,7 +72,7 @@ void DevilCache::ajaxResponse(const QVariant& resp)
 
 		// Traits
 		{
-			QVariantList traits = result.value("traits").toList();
+			QVariantList traits = resp.value("traits").toList();
 
 			QListIterator<QVariant> it(traits);
 			while( it.hasNext() )
@@ -87,7 +85,7 @@ void DevilCache::ajaxResponse(const QVariant& resp)
 
 		// Devils
 		{
-			QVariantList devils = result.value("devils").toList();
+			QVariantList devils = resp.value("devils").toList();
 
 			QListIterator<QVariant> it(devils);
 			while( it.hasNext() )
@@ -108,7 +106,7 @@ void DevilCache::ajaxResponse(const QVariant& resp)
 
 		// Genus
 		{
-			QVariantMap genus = result.value("genus").toMap();
+			QVariantMap genus = resp.value("genus").toMap();
 
 			QMapIterator<QString, QVariant> it(genus);
 			while( it.hasNext() )
@@ -138,7 +136,7 @@ void DevilCache::ajaxResponse(const QVariant& resp)
 
 		// Seirei
 		{
-			QVariantMap seirei = result.value("seirei").toMap();
+			QVariantMap seirei = resp.value("seirei").toMap();
 
 			QMapIterator<QString, QVariant> it(seirei);
 			while( it.hasNext() )

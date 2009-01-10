@@ -208,15 +208,11 @@ void ImportExport::exportDB()
 	setEnabled(false);
 }
 
-void ImportExport::ajaxResponse(const QVariant& resp)
+void ImportExport::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-	if( result.contains("error") )
-		return;
-
-	if(result.value("user_data").toString() == "db_export")
+	if(user_data == "db_export")
 	{
-		QString export_data = json::toJSON( result.value("export") );
+		QString export_data = json::toJSON( resp.value("export") );
 
 		QFile file(mExportPath);
 		if( !file.open(QIODevice::WriteOnly) )
@@ -237,16 +233,16 @@ void ImportExport::ajaxResponse(const QVariant& resp)
 
 		setEnabled(true);
 	}
-	else if(result.value("user_data").toString() == "db_import")
+	else if(user_data == "db_import")
 	{
 		QMessageBox::information(this, tr("Import Successful"), tr("The import "
 			"has completed successfully."));
 
 		setEnabled(true);
 	}
-	else if(result.value("user_data").toString() == "db_tables")
+	else if(user_data == "db_tables")
 	{
-		QVariantList tables = result.value("tables").toList();
+		QVariantList tables = resp.value("tables").toList();
 		foreach(QVariant table, tables)
 		{
 			QListWidgetItem *item = new QListWidgetItem(table.toString());

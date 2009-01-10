@@ -574,21 +574,20 @@ void BindMultiRelation::addSelectionChanged()
 		mNewButton->setEnabled(true);
 }
 
-void BindMultiRelation::ajaxResponse(const QVariant& resp)
+void BindMultiRelation::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
 	Q_ASSERT(mColumns.count() == 1);
 	Q_ASSERT(mViewer && mEditor);
 
-	QVariantMap result = resp.toMap();
-
-	QString user_data = QString("multirel_%1_%2_cache").arg(
+	QString user_data2 = QString("multirel_%1_%2_cache").arg(
 		mTable).arg(mOtherTable);
 
-	if(result.value("user_data").toString() == user_data)
+	if(user_data == user_data2)
 	{
 		Q_ASSERT(mAddList);
 
-		QVariantList rows = result.value("rows").toList();
+		QVariantList rows = resp.value("rows").toList();
 		QListIterator<QVariant> it(rows);
 
 		mAddList->clear();
@@ -620,10 +619,9 @@ void BindMultiRelation::ajaxResponse(const QVariant& resp)
 		return;
 	}
 
-	user_data = QString("multirel_%1_%2").arg(
-		mTable).arg(mOtherTable);
+	user_data2 = QString("multirel_%1_%2").arg(mTable).arg(mOtherTable);
 
-	if(result.value("user_data").toString() != user_data)
+	if(resp.value("user_data").toString() != user_data)
 		return;
 
 	QString name_col = QString("%1_%2").arg(
@@ -632,7 +630,7 @@ void BindMultiRelation::ajaxResponse(const QVariant& resp)
 		mRelationForeignTable).arg(mExtraColumn);
 	QString id_col = QString("%1_id").arg(mRelationForeignTable);
 
-	QVariantList rows = result.value("rows").toList();
+	QVariantList rows = resp.value("rows").toList();
 	QListIterator<QVariant> it(rows);
 
 	while( it.hasNext() )

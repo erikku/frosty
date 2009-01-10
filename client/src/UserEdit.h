@@ -36,7 +36,7 @@ public slots:
 	void showEdit(const QString& email);
 
 protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 signals:
 	void userChanged();

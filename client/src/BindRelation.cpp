@@ -260,17 +260,15 @@ void BindRelation::refreshRelationCache()
 	ajax::getSingletonPtr()->request(settings->url(), action);
 }
 
-void BindRelation::ajaxResponse(const QVariant& resp)
+void BindRelation::ajaxResponse(const QVariantMap& resp,
+	const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-
 	if( mForeignTable.isEmpty() )
 		return;
 
 	Q_ASSERT( mViewer && mEditor );
 
-	if( result.value("user_data").toString() != QString("%1_%2").arg(
-		mForeignTable).arg("_relation_cache") )
+	if(user_data != QString("%1_%2").arg(mForeignTable).arg("_relation_cache"))
 			return;
 
 	QString column_name = mForeignColumn;
@@ -280,7 +278,7 @@ void BindRelation::ajaxResponse(const QVariant& resp)
 	// Clear the old cache
 	mCache.clear();
 
-	QVariantList rows = result.value("rows").toList();
+	QVariantList rows = resp.value("rows").toList();
 
 	// Block signals until we are done
 	bool block = mEditor->blockSignals(true);

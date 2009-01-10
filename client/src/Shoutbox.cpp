@@ -116,13 +116,11 @@ void Shoutbox::updateShoutButton()
 	ui.shoutButton->setEnabled( !ui.messageEdit->text().isEmpty() );
 }
 
-void Shoutbox::ajaxResponse(const QVariant& resp)
+void Shoutbox::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 {
-	QVariantMap result = resp.toMap();
-
-	if(result.value("user_data").toString() == "shoutbox")
+	if(user_data == "shoutbox")
 	{
-		QVariantList msgs = result.value("messages").toList();
+		QVariantList msgs = resp.value("messages").toList();
 		foreach(QVariant msg_item, msgs)
 		{
 			QVariantMap msg = msg_item.toMap();
@@ -155,18 +153,18 @@ void Shoutbox::ajaxResponse(const QVariant& resp)
 		}
 
 		// Set the new timestamp
-		if( result.contains("timestamp") )
-			mLastStamp = result.value("timestamp").toUInt();
+		if( resp.contains("timestamp") )
+			mLastStamp = resp.value("timestamp").toUInt();
 
 		if( !msgs.isEmpty() )
 			ui.chatLog->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 	}
 
-	if(result.value("action").toString() == "shoutbox_login")
+	if(user_data == "shoutbox_login")
 	{
-		mNick = result.value("nick").toString();
-		mAdmin = result.value("admin").toBool();
-		mModify = result.value("modify_db").toBool();
+		mNick = resp.value("nick").toString();
+		mAdmin = resp.value("admin").toBool();
+		mModify = resp.value("modify_db").toBool();
 
 		mTimer->start(5000);
 

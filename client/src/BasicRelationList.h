@@ -38,7 +38,8 @@ public slots:
 
 protected slots:
 	virtual void itemSelectionChanged();
-	virtual void ajaxResponse(const QVariant& resp);
+	virtual void ajaxResponse(const QVariantMap& resp,
+		const QString& user_data);
 
 protected:
 	Ui::RelationList ui;

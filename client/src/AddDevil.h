@@ -43,7 +43,7 @@ protected slots:
 	void addDevil();
 	void updateSearch();
 	void handleItemSelected();
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	bool itemMatches(const QVariantMap& map, const QString& search);

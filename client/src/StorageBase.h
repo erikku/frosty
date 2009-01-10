@@ -74,7 +74,7 @@ public slots:
 protected slots:
 	void selectionChanged();
 	void indexDoubleClicked(int index = -1);
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 protected:
 	void initStorage(QPushButton *addButton, QPushButton *dismissButton,

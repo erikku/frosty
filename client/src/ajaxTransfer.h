@@ -50,17 +50,19 @@ protected slots:
 	void sslErrors(const QList<QSslError>& errors);
 
 signals:
-	void transferFailed();
-	void transferFinished(const QVariant& response);
-	void transferInfo(const QString& content, const QVariant& response);
+	void transferFailed(const QString& err);
+	void transferFinished(const QVariantMap& response,
+		const QString& user_data);
+	void transferInfo(const QString& content, const QVariantList& response);
 
 protected:
 	ajaxTransfer(QObject *parent = 0);
 
 	int mRequestID;
 	QUrl mBackendURL;
-	QVariant mResponse;
 	QByteArray mContent;
+	QVariantList mResponse;
+
 	QPointer<QHttp> mHttp;
 };
 

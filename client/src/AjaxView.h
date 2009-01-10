@@ -63,7 +63,7 @@ public slots:
 	QVariantList createDeleteActions(int id) const;
 
 protected slots:
-	void ajaxResponse(const QVariant& resp);
+	void ajaxResponse(const QVariantMap& resp, const QString& user_data);
 
 signals:
 	void viewChanged();

@@ -22,6 +22,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
+#include <QtCore/QVariantMap>
 #include <QtCore/QUrl>
 
 #include <QtNetwork/QHttpResponseHeader>
@@ -43,8 +44,11 @@ public slots:
 	void showLog();
 	void dispatchQueue(const QUrl& url = QUrl());
 
+protected slots:
+	void handleError(const QString& err);
+
 signals:
-	void response(const QVariant& response);
+	void response(const QVariantMap& response, const QString& user_data);
 
 protected:
 	ajax(QObject *parent = 0);
