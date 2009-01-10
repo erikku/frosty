@@ -73,6 +73,8 @@ protected:
 	virtual QString itemIcon(const QVariantMap& map) const = 0;
 	virtual bool itemMatches(const QVariantMap& map, const QString& search);
 
+	virtual bool hasIcon() const;
+
 	Ui::AjaxList ui;
 
 	int mFilterID;

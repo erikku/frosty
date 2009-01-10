@@ -245,7 +245,7 @@ void StorageBase::selectionChanged()
 			mExtractButton->setEnabled(false);
 		}
 	}
-	else
+	else if(mExtractButton)
 	{
 		mExtractButton->setEnabled(false);
 	}

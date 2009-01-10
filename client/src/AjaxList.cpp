@@ -157,18 +157,24 @@ void AjaxList::updateFilter()
 		if(id > 0 && filterID(map) != id)
 			continue;
 
-		QString icon_path = itemIcon(map);
-		if( icon_path.isEmpty() )
-			icon_path = ":/blank.png";
-		else if( !QFileInfo(icon_path).exists() )
-			icon_path = ":/missing.png";
-
-
 		QListWidgetItem *item;
-		if( icon_path.isEmpty() )
-			item = new QListWidgetItem( itemText(map) );
+		if( hasIcon() )
+		{
+			QString icon_path = itemIcon(map);
+			if( icon_path.isEmpty() )
+				icon_path = ":/blank.png";
+			else if( !QFileInfo(icon_path).exists() )
+				icon_path = ":/missing.png";
+
+			if( icon_path.isEmpty() )
+				item = new QListWidgetItem( itemText(map) );
+			else
+				item = new QListWidgetItem(QIcon(icon_path), itemText(map) );
+		}
 		else
-			item = new QListWidgetItem(QIcon(icon_path), itemText(map) );
+		{
+			item = new QListWidgetItem( itemText(map) );
+		}
 
 		item->setData(Qt::UserRole, QVariant(i));
 		list->addItem(item);
@@ -354,4 +360,9 @@ bool AjaxList::itemMatches(const QVariantMap& map, const QString& search)
 {
 	return (map["name_en"].toString().contains(search, Qt::CaseInsensitive) ||
 		map["name_ja"].toString().contains(search, Qt::CaseInsensitive));
+}
+
+bool AjaxList::hasIcon() const
+{
+	return true;
 }

@@ -122,3 +122,8 @@ QString TraitList::itemIcon(const QVariantMap& map) const
 
 	return QString();
 }
+
+bool TraitList::hasIcon() const
+{
+	return false;
+}

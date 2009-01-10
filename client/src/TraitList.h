@@ -52,6 +52,8 @@ protected:
 
 	virtual int filterID(const QVariantMap& map) const;
 	virtual QString itemIcon(const QVariantMap& map) const;
+
+	virtual bool hasIcon() const;
 };
 
 #endif // __TraitList_h__
