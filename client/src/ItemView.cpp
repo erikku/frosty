@@ -37,7 +37,7 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.desc_enLabel << ui.statModifiersLabel << ui.modifierPowerLabel
 		<< ui.modifierAttackLabel << ui.modifierMagicPowerLabel
 		<< ui.modifierGunLabel << ui.modifierVitalityLabel
-		<< ui.modifierMagicLabel << ui.descDivider << ui.locationsDivider
+		<< ui.modifierMagicLabel << ui.locationsDivider
 		<< ui.modifierIntelligenceLabel << ui.modifierSupportLabel
 		<< ui.modifierSpeedLabel << ui.modifierDefenseLabel
 		<< ui.modifierLuckLabel << ui.modifierMagicDefenseLabel
@@ -67,7 +67,9 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.affinityMudoLabel << ui.affinityMagicForceLabel
 		<< ui.affinityNerveLabel << ui.affinityMindLabel
 		<< ui.affinitySuicideLabel << ui.affinityAlmightyLabel
-		<< ui.affinitySpecialLabel << ui.affinitiesLabel << ui.stackSizeLabel;
+		<< ui.affinitySpecialLabel << ui.affinitiesLabel
+		<< ui.modLabel << ui.modCompatLabel << ui.stackSizeLabel
+		<< ui.separatorWidget << ui.descSeparator;
 
 	// Edit labels
 	widgets << ui.elementsLabel2 << ui.nameLabel2 << ui.japaneseNameLabel2
@@ -103,7 +105,7 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.elementRubberLabel2 << ui.locations_jaLabel2
 		<< ui.locations_enLabel2 << ui.elementsLabel5
 		<< ui.elementsLabel6 << ui.elementsLabel7 << ui.elementsLabel8
-		<< ui.descEditDivider << ui.affinitySlashLabel2
+		<< ui.affinitySlashLabel2 << ui.separatorWidget2
 		<< ui.affinityAssaultLabel2 << ui.affinityBlowLabel2
 		<< ui.affinityGunLabel2 << ui.affinityShotLabel2
 		<< ui.affinityPierceLabel2 << ui.affinityBlazeLabel2
@@ -113,7 +115,9 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.affinityNerveLabel2 << ui.affinityMindLabel2
 		<< ui.affinitySuicideLabel2 << ui.affinityAlmightyLabel2
 		<< ui.affinitySpecialLabel2 << ui.locationsEditDivider
-		<< ui.affinitiesLabel2 << ui.stackSizeLabel2;
+		<< ui.affinitiesLabel2 << ui.stackSizeLabel2
+		<< ui.modLabel2 << ui.modCompatLabel2 << ui.stackSizeLabel2
+		<< ui.descSeparator2;
 
 	foreach(QWidget *widget, widgets)
 		darkenWidget(widget);
@@ -325,12 +329,23 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		ui.elementGlassChanceEdit, 0, tr("%1%"));
 	bindNumber("element_rubber_chance", ui.elementRubberChance,
 		ui.elementRubberChanceEdit, 0, tr("%1%"));
+	bindRelation("mod_type", ui.modType, ui.modTypeEdit,
+		"db_mod_type", QString(), ui.modTypeEditButton,
+		tr("Modification Type"), tr("N/A"));
+	bindRelation("mod_compat", ui.modCompat, ui.modCompatEdit,
+		"db_mod_compat", QString(), ui.modCompatEditButton,
+		tr("Modification Compatability"), tr("N/A"));
+	bindNumber("mod_level", ui.modLevel, ui.modLevelEdit, -1);
+	bindNumber("mod_slot", ui.modSlot, ui.modSlotEdit, -1);
+	bindText("mod_desc", ui.modDesc, ui.modDescEdit);
 
 	// Give the relation buttons an icon
 	QIcon edit_icon(":/edit.png");
 	ui.typeEditButton->setIcon(edit_icon);
 	ui.equipTypeEditButton->setIcon(edit_icon);
 	ui.affinityEditButton->setIcon(edit_icon);
+	ui.modTypeEditButton->setIcon(edit_icon);
+	ui.modCompatEditButton->setIcon(edit_icon);
 
 	// Init the view
 	initView(ui.stackedWidget, ui.editButton, ui.cancelButton,
