@@ -654,11 +654,11 @@ void AjaxView::ajaxResponse(const QVariant& resp)
 		if( rows.count() && rows.first().toMap().value("id") == mID )
 			mSleepingResponse = result;
 	}
-	else if(user_data == update_data )
+	else if(user_data == update_data)
 	{
 		view(updated_id);
 
-		emit viewChanged();
+		//emit viewChanged();
 
 		return;
 	}
