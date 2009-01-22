@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  server/src/main.cpp                                                         *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  Utopia Player - A cross-platform, multilingual, tagging media manager       *
+*  Copyright (C) 2006-2007 John Eric Martin <john.eric.martin@gmail.com>       *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,41 +17,50 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include "Server.h"
+#ifndef __PaletteEditor_h__
+#define __PaletteEditor_h__
 
-#ifdef QT_GUI_LIB
+#include "ui_PaletteEditor.h"
+
 #include <QtGui/QPalette>
 
-//#include <QtCore/QTranslator>
-#include <QtCore/QFile>
-
-#include "PaletteEditor.h"
-#endif // QT_GUI_LIB
-
-int main(int argc, char *argv[])
+class PaletteData
 {
-#ifdef QT_GUI_LIB
-	QApplication::setStyle("plastique");
-#endif // QT_GUI_LIB
+public:
+	PaletteData();
 
-	Server app(argc, argv);
+	QMap<QString, QGradient::Type> gradType;
+	QMap<QString, Qt::BrushStyle> brushStyles;
+	QMap<QString, QGradient::Spread> gradSpread;
+	QMap<QString, QPalette::ColorRole> colorRoles;
+	QMap<QString, QPalette::ColorGroup> colorGroups;
+	QMap<QPalette::ColorRole, QString> descriptions;
+};
 
-#ifdef QT_GUI_LIB
-	/*
-	QTranslator translator;
-	translator.load( QString("megatendb_%1").arg(settings->lang()) );
-	app.installTranslator(&translator);
-	*/
+class PaletteEditor : public QWidget
+{
+	Q_OBJECT
 
-	QFile paletteFile(":/dark.xml");
-	paletteFile.open(QIODevice::ReadOnly);
-	QPalette palette = PaletteEditor::importPalette( paletteFile.readAll() );
-	paletteFile.close();
+public:
+	PaletteEditor(const QPalette& pal = QPalette(), QWidget *parent = 0);
 
-	app.setPalette(palette);
-#endif // QT_GUI_LIB
+	QPalette currentPalette() const;
 
-	app.init();
+	static QPalette importPalette(const QString& xml);
+	static QString exportPalette(const QPalette& pal);
 
-	return app.exec();
-}
+public slots:
+	void setCurrentPalette(const QPalette& pal);
+
+protected slots:
+	void promptColor();
+	void updateColor();
+	void updatePalette();
+
+protected:
+	PaletteData data;
+	QPalette mPalette;
+	Ui::PaletteEditor ui;
+};
+
+#endif // __PaletteEditor_h__

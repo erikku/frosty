@@ -15,17 +15,23 @@
 #  Free Software Foundation, Inc.,
 #  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-QT          -= gui
 QT          += network sql xml
 TEMPLATE     = app
 TARGET       = megatendb_server
 INCLUDEPATH += src
-CONFIG      += debug
+CONFIG      += gui
 
 OBJECTS_DIR = .objs
 MOC_DIR     = .moc
 RCC_DIR     = .rcc
 UI_DIR      = .ui
+
+gui {
+	message(Building with GUI support.)
+} else {
+	message(Building without GUI support.)
+	QT -= gui
+}
 
 LIBS       += -lgd
 
@@ -41,13 +47,26 @@ QMAKE_CFLAGS_DEBUG += -W -Wall -ansi -pedantic-errors -Wcast-align \
 	-Wbad-function-cast -Wmissing-prototypes -Wnested-externs
 
 win32 {
-	RC_FILE = megatendb.rc
+	RC_FILE = server.rc
 	QMAKE_CXXFLAGS_DEBUG += -mnop-fun-dllimport
 }
 
-RESOURCES    = server.qrc
-TRANSLATIONS =
-FORMS       +=
+gui {
+	RESOURCES    = server_gui.qrc
+	TRANSLATIONS =
+	FORMS       += ui/PaletteEditor.ui \
+	               ui/Settings.ui \
+	               ui/About.ui
+	HEADERS     += src/PaletteEditor.h \
+	               src/TrayIcon.h \
+	               src/Settings.h
+	SOURCES     += src/PaletteEditor.cpp \
+	               src/TrayIcon.cpp \
+	               src/Settings.cpp
+} else {
+	RESOURCES = server.qrc
+}
+
 HEADERS     += src/Auth.h \
                src/AuthActions.h \
                src/Backend.h \

@@ -26,6 +26,10 @@
 #include "json.h"
 #include "Log.h"
 
+#ifdef QT_GUI_LIB
+#include "TrayIcon.h"
+#endif // QT_GUI_LIB
+
 #include <QtCore/QDir>
 #include <QtCore/QUrl>
 #include <QtCore/QFile>
@@ -43,8 +47,18 @@
 #include <QtSql/QSqlDatabase>
 
 
+#ifdef QT_GUI_LIB
+Server::Server(int ac, char *av[]) : QApplication(ac, av)
+{
+	setWindowIcon( QIcon( ":/megatendb.png") );
+	setQuitOnLastWindowClosed(false);
+
+	( new TrayIcon( windowIcon() ) )->show();
+#else // QT_GUI_LIB
 Server::Server(int ac, char *av[]) : QCoreApplication(ac, av)
 {
+#endif // QT_GUI_LIB
+
 	qsrand( QDateTime::currentDateTime().toTime_t() );
 }
 
@@ -410,7 +424,7 @@ void Server::captcha(QTcpSocket *connection, const QString& session_key,
 	QStringList letters = conf->captchaLetters();
 	int count = letters.count();
 
-	QString font = QDir::current().filePath( conf->captchaFont() );
+	QString captcha_font = QDir::current().filePath( conf->captchaFont() );
 
 	QString text;
 	for(int i = 0; i < 8; i++)
@@ -424,7 +438,7 @@ void Server::captcha(QTcpSocket *connection, const QString& session_key,
 
 	// Get the bounding box for the text
 	int brect[8];
-	char *err = gdImageStringFT(NULL, brect, 0, font.toUtf8().data(),
+	char *err = gdImageStringFT(NULL, brect, 0, captcha_font.toUtf8().data(),
 		20, 0, 0, 0, text.toUtf8().data());
 	if(err)
 		LOG_ERROR(err);
@@ -440,7 +454,7 @@ void Server::captcha(QTcpSocket *connection, const QString& session_key,
 	gdImageFilledRectangle(im, 0, 0, width - 1, height - 1, background);
 
 	// Add the text
-	err = gdImageStringFT(im, brect, font_color, font.toUtf8().data(),
+	err = gdImageStringFT(im, brect, font_color, captcha_font.toUtf8().data(),
 		20, 0, -brect[6], -brect[7], text.toUtf8().data());
 	if(err)
 		LOG_ERROR(err);

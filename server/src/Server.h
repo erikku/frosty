@@ -20,7 +20,12 @@
 #ifndef __Server_h__
 #define __Server_h__
 
+#ifdef QT_GUI_LIB
+#include <QtGui/QApplication>
+#else // QT_GUI_LIB
 #include <QtCore/QCoreApplication>
+#endif // QT_GUI_LIB
+
 #include <QtCore/QVariant>
 #include <QtCore/QMap>
 
@@ -56,7 +61,11 @@ public:
 	bool done;
 };
 
+#ifdef QT_GUI_LIB
+class Server : public QApplication
+#else // QT_GUI_LIB
 class Server : public QCoreApplication
+#endif // QT_GUI_LIB
 {
 	Q_OBJECT
 

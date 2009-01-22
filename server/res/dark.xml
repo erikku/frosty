@@ -1,0 +1,240 @@
+<palette>
+  <role name="Alternate Base">
+    <brush group="Active" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#101010</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#202020</color>
+    </brush>
+  </role>
+  <role name="Base">
+    <brush group="Active" style="Solid">
+      <color>#282828</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#181718</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#282828</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#282828</color>
+    </brush>
+  </role>
+  <role name="Bright Text">
+    <brush group="Active" style="Solid">
+      <color>#00c000</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#006000</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#008000</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#00c000</color>
+    </brush>
+  </role>
+  <role name="Button">
+    <brush group="Active" style="Solid">
+      <color>#303030</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#303030</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#303030</color>
+    </brush>
+  </role>
+  <role name="Button Text">
+    <brush group="Active" style="Solid">
+      <color>#00c000</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#004000</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#008000</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#00c000</color>
+    </brush>
+  </role>
+  <role name="Dark">
+    <brush group="Active" style="Solid">
+      <color>#606060</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#404040</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#606060</color>
+    </brush>
+  </role>
+  <role name="Highlight">
+    <brush group="Active" style="Solid">
+      <color>#00c000</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#004000</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#008000</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#00c000</color>
+    </brush>
+  </role>
+  <role name="Highlighted Text">
+    <brush group="Active" style="Solid">
+      <color>#404040</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#000000</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#404040</color>
+    </brush>
+  </role>
+  <role name="Light">
+    <brush group="Active" style="Solid">
+      <color>#000000</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#000000</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#000000</color>
+    </brush>
+  </role>
+  <role name="Link">
+    <brush group="Active" style="Solid">
+      <color>#0000ee</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#0000ee</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#0000ee</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#0000ee</color>
+    </brush>
+  </role>
+  <role name="Link Visited">
+    <brush group="Active" style="Solid">
+      <color>#52188b</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#52188b</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#52188b</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#52188b</color>
+    </brush>
+  </role>
+  <role name="Medium">
+    <brush group="Active" style="Solid">
+      <color>#404040</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#303030</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#404040</color>
+    </brush>
+  </role>
+  <role name="Medium Light">
+    <brush group="Active" style="Solid">
+      <color>#343434</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#303030</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#343434</color>
+    </brush>
+  </role>
+  <role name="Shadow">
+    <brush group="Active" style="Solid">
+      <color>#404040</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#202020</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#303030</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#404040</color>
+    </brush>
+  </role>
+  <role name="Text">
+    <brush group="Active" style="Solid">
+      <color>#00c000</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#004000</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#008000</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#00c000</color>
+    </brush>
+  </role>
+  <role name="Window">
+    <brush group="Active" style="Solid">
+      <color>#101010</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#101010</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#101010</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#101010</color>
+    </brush>
+  </role>
+  <role name="Window Text">
+    <brush group="Active" style="Solid">
+      <color>#00c000</color>
+    </brush>
+    <brush group="Disabled" style="Solid">
+      <color>#004000</color>
+    </brush>
+    <brush group="Inactive" style="Solid">
+      <color>#008000</color>
+    </brush>
+    <brush group="Normal" style="Solid">
+      <color>#00c000</color>
+    </brush>
+  </role>
+</palette>

@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  server/src/main.cpp                                                         *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  server/src/Settings.h                                                       *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,41 +17,35 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include "Server.h"
+#ifndef __Settings_h__
+#define __Settings_h__
 
-#ifdef QT_GUI_LIB
-#include <QtGui/QPalette>
+#include "ui_Settings.h"
 
-//#include <QtCore/QTranslator>
-#include <QtCore/QFile>
-
-#include "PaletteEditor.h"
-#endif // QT_GUI_LIB
-
-int main(int argc, char *argv[])
+class Settings : public QWidget
 {
-#ifdef QT_GUI_LIB
-	QApplication::setStyle("plastique");
-#endif // QT_GUI_LIB
+	Q_OBJECT
 
-	Server app(argc, argv);
+public:
+	Settings(QWidget *parent = 0);
 
-#ifdef QT_GUI_LIB
-	/*
-	QTranslator translator;
-	translator.load( QString("megatendb_%1").arg(settings->lang()) );
-	app.installTranslator(&translator);
-	*/
+public slots:
+	void load();
+	void save();
 
-	QFile paletteFile(":/dark.xml");
-	paletteFile.open(QIODevice::ReadOnly);
-	QPalette palette = PaletteEditor::importPalette( paletteFile.readAll() );
-	paletteFile.close();
+	void browseLogPath();
+	void browseKeyPath();
+	void browseCertPath();
+	void browseFontPath();
+	void browseDatabasePath();
+	void browseAuthDatabasePath();
+	void browseShoutboxLogPath();
+	void updateConnectionType();
 
-	app.setPalette(palette);
-#endif // QT_GUI_LIB
+protected:
+	void darkenWidget(QWidget *widget);
 
-	app.init();
+	Ui::Settings ui;
+};
 
-	return app.exec();
-}
+#endif // __Settings_h__

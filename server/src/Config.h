@@ -208,6 +208,16 @@ public:
 
 	Q_PROPERTY(QSslKey mKey READ sslKey WRITE setSslKey)
 
+	QString sslCertPath() const;
+	void setSslCertPath(const QString& path);
+
+	Q_PROPERTY(QString mCertPath READ sslCertPath WRITE setSslCertPath)
+
+	QString sslKeyPath() const;
+	void setSslKeyPath(const QString& path);
+
+	Q_PROPERTY(QString mKeyPath READ sslKeyPath WRITE setSslKeyPath)
+
 	QString clientWin32() const;
 	void setClientWin32(const QString& sha1);
 

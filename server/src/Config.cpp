@@ -873,6 +873,44 @@ void Config::setSslKey(const QSslKey& key)
 	mKey = key;
 }
 
+QString Config::sslCertPath() const
+{
+	return mCertPath;
+}
+
+void Config::setSslCertPath(const QString& path)
+{
+	mCertPath = path;
+
+	QFile cert_file(mCertPath);
+	cert_file.open(QIODevice::ReadOnly);
+
+	QSslCertificate cert(&cert_file);
+	if( cert.isNull() )
+		LOG_ERROR("Error loading SSL certificate!\n");
+
+	mCert = cert;
+}
+
+QString Config::sslKeyPath() const
+{
+	return mKeyPath;
+}
+
+void Config::setSslKeyPath(const QString& path)
+{
+	mKeyPath = path;
+
+	QFile key_file(mKeyPath);
+	key_file.open(QIODevice::ReadOnly);
+
+	QSslKey key(&key_file, QSsl::Rsa);
+	if( key.isNull() )
+		LOG_ERROR("Error loading SSL key!\n");
+
+	mKey = key;
+}
+
 QString Config::clientWin32() const
 {
 	return mClientWin32;
