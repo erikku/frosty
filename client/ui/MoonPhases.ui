@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MoonPhases</class>
+ <widget class="QWidget" name="MoonPhases">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>341</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout">
+   <item>
+    <layout class="QVBoxLayout">
+     <item>
+      <layout class="QHBoxLayout">
+       <item>
+        <widget class="QRadioButton" name="allPhasesButton">
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>&amp;All Moon Phases</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="fullHalfPhasesButton">
+         <property name="text">
+          <string>&amp;Full &amp;&amp; Half Moon Phases</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QListWidget" name="moonPhaseList"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QPushButton" name="makeAlarmButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>&amp;Make Alarm</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="closeButton">
+       <property name="text">
+        <string>&amp;Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>allPhasesButton</tabstop>
+  <tabstop>fullHalfPhasesButton</tabstop>
+  <tabstop>moonPhaseList</tabstop>
+  <tabstop>makeAlarmButton</tabstop>
+  <tabstop>closeButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

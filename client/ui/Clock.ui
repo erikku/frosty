@@ -85,6 +85,16 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="nextPhaseLabel">
+       <property name="text">
+        <string>Next Phase</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="nextPhase"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -92,7 +102,7 @@
      <item>
       <widget class="QPushButton" name="moonPhasesButton">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>&amp;Moon Phases</string>

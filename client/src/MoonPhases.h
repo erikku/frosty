@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  client/src/Clock.h                                                          *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/MoonPhases.h                                                     *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,39 +17,30 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Clock_h__
-#define __Clock_h__
+#ifndef __MoonPhases_h__
+#define __MoonPhases_h__
 
-#include "ui_Clock.h"
+#include "ui_MoonPhases.h"
 
-#include <QtCore/QList>
-#include <QtCore/QString>
 #include <QtCore/QDateTime>
 
-class MoonPhases;
-
-class Clock : public QWidget
+class MoonPhases : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Clock(QWidget *parent = 0, Qt::WindowFlags f = 0);
+	MoonPhases(QWidget *parent = 0);
+
+	void addMoonPhase(const QDateTime& start,
+		const QDateTime& stop, uint moon, const QString& phase);
+
+	void clear();
 
 public slots:
-	void updateClocks();
-	void showMoonPhases();
+	void updateList();
 
 protected:
-	void darkenWidget(QWidget *widget);
-
-	void megatenTime(const QDateTime& stamp, uint now);
-
-	Ui::Clock ui;
-	uint mLastMoon;
-
-	MoonPhases *mMoonPhases;
-
-	QList<QString> days, phases;
+	Ui::MoonPhases ui;
 };
 
-#endif // __Clock_h__
+#endif // __MoonPhases_h__

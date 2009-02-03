@@ -18,6 +18,7 @@
 \******************************************************************************/
 
 #include "Clock.h"
+#include "MoonPhases.h"
 
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
@@ -28,7 +29,7 @@
 #endif // QT_NO_DEBUG
 
 Clock::Clock(QWidget *parent_widget, Qt::WindowFlags f) :
-	QWidget(parent_widget, f)
+	QWidget(parent_widget, f), mLastMoon(99)
 {
 	ui.setupUi(this);
 
@@ -51,11 +52,24 @@ Clock::Clock(QWidget *parent_widget, Qt::WindowFlags f) :
 	darkenWidget(ui.localTimeLabel);
 	darkenWidget(ui.japanTimeLabel);
 	darkenWidget(ui.megatenTimeLabel);
+	darkenWidget(ui.nextPhaseLabel);
+
+	mMoonPhases = new MoonPhases;
+
+	connect(ui.moonPhasesButton, SIGNAL(clicked(bool)),
+		this, SLOT(showMoonPhases()));
 
 	updateClocks();
 }
 
-void Clock::megatenTime(const QDateTime& stamp, uint now)
+void Clock::showMoonPhases()
+{
+	mMoonPhases->show();
+	mMoonPhases->activateWindow();
+	mMoonPhases->raise();
+}
+
+void Clock::megatenTime(const QDateTime& stamp, uint r_now)
 {
 	int current_day = stamp.date().dayOfWeek() - 1;
 	int current_hour = stamp.time().hour();
@@ -65,15 +79,45 @@ void Clock::megatenTime(const QDateTime& stamp, uint now)
 	offset = (current_day * 2) + (current_hour < 12 ? -1 : 0);
 	offset = (offset + 14) % 14;
 
-	now += offset * 2;
+	uint now = r_now + (offset * 2);
 
 	uint hr = (uint)floor(now / 120) % 24;
 	uint min = (uint)floor(now / 2) % 60;
 
-	QString phase = phases.at((uint)floor(now / 1440) % 16);
+	uint moon = (uint)floor(now / 1440) % 16;
+
+	QString phase = phases.at(moon);
+
+	uint next = 1440 - (now % 1440);
+	uint next_moon = (moon + 1) % 16;
+
+	// Get rid of the offset
+	next = now + next - r_now;
+	ui.nextPhase->setText( tr("To %1 in %2:%3").arg(
+		phases.at(next_moon) ).arg( (uint)floor(next / 60), 2, 10,
+		QLatin1Char('0') ).arg( next % 60, 2, 10, QLatin1Char('0') ) );
+
+	if(mLastMoon != moon)
+	{
+		mMoonPhases->clear();
+
+		for(int i = 0; i < 64; i++)
+		{
+			mMoonPhases->addMoonPhase(QDateTime::fromTime_t(now + next),
+				QDateTime::fromTime_t(now + next + 1440), next_moon,
+				phases.at(next_moon));
+
+			next += 1440;
+			next_moon = (next_moon + 1) % 16;
+		}
+
+		mMoonPhases->updateList();
+	}
 
 	ui.megatenTime->setText( QString(tr("%1 %2:%3")).arg(phase).arg(
 		hr, 2, 10, QLatin1Char('0')).arg(min, 2, 10, QLatin1Char('0')) );
+
+	mLastMoon = moon;
 }
 
 void Clock::updateClocks()
