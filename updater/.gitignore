@@ -7,7 +7,7 @@ debug
 .objs
 .rcc
 .ui
-megatendb_updater
-megatendb_updater.exe
-megatendb_updater_*.qm
+frosty_updater
+frosty_updater.exe
+frosty_updater_*.qm
 *.pro.user

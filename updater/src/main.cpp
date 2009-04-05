@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 
-	QApplication::setWindowIcon( QIcon( ":/megatendb.png") );
+	QApplication::setWindowIcon( QIcon( ":/frosty.png") );
 
 	QFile paletteFile(":/dark.xml");
 	paletteFile.open(QIODevice::ReadOnly);

@@ -33,12 +33,12 @@
 
 #ifdef Q_OS_WIN32
 #define UPDATE_FILE "updates.win.sha1"
-#define UPDATE_EXE  "megatendb_updater.exe"
-#define EXE_FILE "megatendb.exe"
+#define UPDATE_EXE  "frosty_updater.exe"
+#define EXE_FILE "frosty.exe"
 #else
 #define UPDATE_FILE "updates.lin.sha1"
-#define UPDATE_EXE  "megatendb_updater"
-#define EXE_FILE "megatendb"
+#define UPDATE_EXE  "frosty_updater"
+#define EXE_FILE "frosty"
 #endif
 
 Q_DECLARE_METATYPE(StringMap)
@@ -47,20 +47,20 @@ Updater::Updater(QWidget *parent_widget) : QWidget(parent_widget), mCount(0)
 {
 	qRegisterMetaType<StringMap>();
 
-	QCoreApplication::setOrganizationName("MegatenDB");
+	QCoreApplication::setOrganizationName("Absolutely Frosty Team");
 	QCoreApplication::setOrganizationDomain("troopersklan.jp");
-	QCoreApplication::setApplicationName("Megaten DB");
+	QCoreApplication::setApplicationName("Absolutely Frosty");
 
 	ui.setupUi(this);
 	setWindowTitle( tr("Absolutely Frosty Updater") );
 
 	// http://www.troopersklan.jp/megaten/updates
-	QUrl url("http://gigadelic.homelinux.net:10900/megatendb/updates");
+	QUrl url("http://gigadelic.homelinux.net:10900/frosty/updates");
 
 	QSettings settings;
 	if( !settings.contains("update_url") )
 	{
-		QString text = QInputDialog::getText(0, tr("Megaten DB Update "
+		QString text = QInputDialog::getText(0, tr("Absolutely Frosty Update "
 			"Location"), tr("URL:"), QLineEdit::Normal, url.toString());
 
 		if( !text.isEmpty() )

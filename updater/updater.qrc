@@ -1,7 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
 	<file alias="dark.xml">res/dark.xml</file>
-	<file alias="megatendb.ico">res/megatendb.ico</file>
-	<file alias="megatendb.png">res/megatendb.png</file>
+	<file alias="frosty.ico">res/frosty.ico</file>
+	<file alias="frosty.png">res/frosty.png</file>
 </qresource>
 </RCC>

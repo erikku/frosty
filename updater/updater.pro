@@ -1,5 +1,5 @@
 #  updater/updater.pro
-#  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>
+#  Copyright (C) 2008-2009 John Eric Martin <john.eric.martin@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 
 QT          += network webkit xml
 TEMPLATE     = app
-TARGET       = megatendb_updater
+TARGET       = frosty_updater
 INCLUDEPATH += src
 
 OBJECTS_DIR = .objs
