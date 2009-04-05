@@ -214,7 +214,7 @@ void Register::sendRequest()
 
 void Register::showLogin()
 {
-	Taskbar::getSingletonPtr()->show();
+	(new Login)->show();
 	deleteLater();
 	close();
 }
