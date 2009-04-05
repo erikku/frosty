@@ -70,9 +70,9 @@ void VersionCheck::ajaxResponse(const QVariantMap& resp,
 		QString client = qApp->applicationFilePath();
 		QString updater = QDir( qApp->applicationDirPath() ).filePath(
 #ifdef Q_OS_WIN32
-			"megatendb_updater.exe");
+			"frosty_updater.exe");
 #else
-			"megatendb_updater");
+			"frosty_updater");
 #endif
 
 		mUpdaterPath = updater;
@@ -98,9 +98,9 @@ void VersionCheck::ajaxResponse(const QVariantMap& resp,
 			{
 				HttpTransfer *transfer = HttpTransfer::start(
 #ifdef Q_OS_WIN32
-					QUrl(updateUrl + "/megatendb_updater.exe"), updater);
+					QUrl(updateUrl + "/frosty_updater.exe"), updater);
 #else
-					QUrl(updateUrl + "/megatendb_updater"), updater);
+					QUrl(updateUrl + "/frosty_updater"), updater);
 #endif
 
 				connect(transfer, SIGNAL(transferFailed()),

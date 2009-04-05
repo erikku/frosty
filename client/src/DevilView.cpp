@@ -361,7 +361,7 @@ DevilView::DevilView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindBool("absorb_almighty", ui.absorbAlmighty, ui.absorbAlmightyEdit);
 	bindBool("absorb_special", ui.absorbSpecial, ui.absorbSpecialEdit);
 	bindDetailedMultiRelation("db_devil_skills", ui.skills, ui.skillsEditList,
-		"application/x-megatendb-skills", "devil", "skill", "db_skills", "icon",
+		"application/x-frosty-skill", "devil", "skill", "db_skills", "icon",
 		"icons/skills/icon_%1.png", QStringList() << "name_{$lang}"
 		<< "__extra__" << "expert_{$lang}" << "category_{$lang}",
 		ui.skillsEditAdd, ui.skillsEditEdit, ui.skillsEditRemove,

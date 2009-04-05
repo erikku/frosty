@@ -8,7 +8,7 @@ debug
 .objs
 .rcc
 .ui
-megatendb
-megatendb.exe
-megatendb_*.qm
+frosty
+frosty.exe
+frosty_*.qm
 *.pro.user

@@ -28,15 +28,16 @@ Settings *g_settings = 0;
 
 Settings::Settings(QObject *parent_object) : QObject(parent_object)
 {
-	QCoreApplication::setOrganizationName("MegatenDB");
+	QCoreApplication::setOrganizationName("Absolutely Frosty Team");
 	QCoreApplication::setOrganizationDomain("troopersklan.jp");
-	QCoreApplication::setApplicationName("Megaten DB");
+	QCoreApplication::setApplicationName("Absolutely Frosty");
 
 	QSettings qsettings;
 	if( !qsettings.contains("backend") )
 	{
 		// http://www.troopersklan.jp/megaten/backend.php
-		QString text = QInputDialog::getText(0, tr("MegaTen Database Location"),
+		QString text = QInputDialog::getText(0,
+			tr("Absolutely Frosty Database Location"),
 			tr("URL:"), QLineEdit::Normal,
 			"https://gigadelic.homelinux.net:55517/backend.php");
 

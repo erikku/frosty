@@ -411,5 +411,5 @@ void Taskbar::notifyDirty(const QString& user_data)
 	if( !mDirtyData.contains(user_data) )
 		mDirtyData << user_data;
 
-	mTray->setIcon( QIcon(":/megatendb_dirty.png") );
+	mTray->setIcon( QIcon(":/frosty_dirty.png") );
 }

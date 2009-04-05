@@ -39,10 +39,10 @@ int main(int argc, char *argv[])
 
 	QApplication app(argc, argv);
 
-	QApplication::setWindowIcon( QIcon( ":/megatendb.png") );
+	QApplication::setWindowIcon( QIcon( ":/frosty.png") );
 
 	QTranslator translator;
-	translator.load( QString("megatendb_%1").arg(settings->lang()) );
+	translator.load( QString("frosty_%1").arg(settings->lang()) );
 	app.installTranslator(&translator);
 
 	QFile paletteFile(":/dark.xml");

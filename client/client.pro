@@ -1,5 +1,5 @@
-#  client/megatendb.pro
-#  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>
+#  client/client.pro
+#  Copyright (C) 2008-2009 John Eric Martin <john.eric.martin@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2 as
@@ -17,7 +17,7 @@
 
 QT          += network xml
 TEMPLATE     = app
-TARGET       = megatendb
+TARGET       = frosty
 INCLUDEPATH += src
 
 OBJECTS_DIR = .objs
@@ -37,13 +37,13 @@ QMAKE_CFLAGS_DEBUG += -W -Wall -ansi -pedantic-errors -Wcast-align \
 	-Wbad-function-cast -Wmissing-prototypes -Wnested-externs
 
 win32 {
-	RC_FILE = megatendb.rc
+	RC_FILE = client.rc
 	QMAKE_CXXFLAGS_DEBUG += -mnop-fun-dllimport
 }
 
-RESOURCES   += megatendb.qrc
-TRANSLATIONS = trans/megatendb_en.ts \
-               trans/megatendb_ja.ts
+RESOURCES   += client.qrc
+TRANSLATIONS = trans/frosty_en.ts \
+               trans/frosty_ja.ts
 FORMS       += ui/PaletteEditor.ui \
                ui/AjaxList.ui \
                ui/DevilView.ui \
