@@ -50,7 +50,7 @@
 #ifdef QT_GUI_LIB
 Server::Server(int ac, char *av[]) : QApplication(ac, av)
 {
-	setWindowIcon( QIcon( ":/megatendb.png") );
+	setWindowIcon( QIcon( ":/frosty.png") );
 	setQuitOnLastWindowClosed(false);
 
 	( new TrayIcon( windowIcon() ) )->show();

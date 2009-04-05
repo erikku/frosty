@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<megatendb>
+<frosty>
 	<connection>
 		<!-- Valid values are 'any', 'localhost', or any IP address -->
 		<address>any</address>
@@ -10,8 +10,8 @@
 		<!--
 		<type>mysql</type>
 		<host>localhost</host>
-		<db>megaten</db>
-		<user>megaten</user>
+		<db>frosty</db>
+		<user>frosty</user>
 		<pass>hackme</pass>
 		-->
 		<type>sqlite</type>
@@ -37,7 +37,7 @@
 		A unique server signature to pass along with every response.
 		You can include ${version} in the string to insert the version of the server.
 	-->
-	<signature>MegatenDB Official Server v${version}</signature>
+	<signature>Absolutely Frosty Official Server v${version}</signature>
 	<!-- The following salts should be changed for each server -->
 	<salts>
 		<img>change_me</img>
@@ -65,8 +65,8 @@
 			<!--
 			<type>mysql</type>
 			<host>localhost</host>
-			<db>megaten</db>
-			<user>megaten</user>
+			<db>frosty</db>
+			<user>frosty</user>
 			<pass>hackme</pass>
 			-->
 			<type>sqlite</type>
@@ -78,4 +78,4 @@
 		<cert>server.crt</cert>
 		<key>server.key</key>
 	</ssl>
-</megatendb>
+</frosty>

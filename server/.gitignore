@@ -7,9 +7,9 @@ debug
 .objs
 .rcc
 .ui
-megatendb_server
-megatendb_server.exe
-megatendb_server_*.qm
+frosty_server
+frosty_server.exe
+frosty_server_*.qm
 config.xml
 *.db
 *.log

@@ -3,8 +3,8 @@
 	<file alias="400.html">res/400.html</file>
 	<file alias="dark.xml">res/dark.xml</file>
 	<file alias="gpl.txt">res/gpl.txt</file>
-	<file alias="megatendb.ico">res/megatendb.ico</file>
-	<file alias="megatendb.png">res/megatendb.png</file>
+	<file alias="frosty.ico">res/frosty.ico</file>
+	<file alias="frosty.png">res/frosty.png</file>
 	<file alias="fileopen.png">res/fileopen.png</file>
 </qresource>
 </RCC>

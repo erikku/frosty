@@ -53,7 +53,7 @@ void Config::loadDefaults()
 	mAddress = "localhost";
 	mPort = 8080;
 
-	mLogPath = "megatendb.log";
+	mLogPath = "frosty.log";
 
 	mLogCritical = true;
 	mLogError = true;

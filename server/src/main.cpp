@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 #ifdef QT_GUI_LIB
 	/*
 	QTranslator translator;
-	translator.load( QString("megatendb_%1").arg(settings->lang()) );
+	translator.load( QString("frosty_%1").arg(settings->lang()) );
 	app.installTranslator(&translator);
 	*/
 
