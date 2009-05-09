@@ -29,7 +29,14 @@
 IconImport::IconImport(QWidget *parent_widget) : QWidget(parent_widget)
 {
 	mProc = new QProcess(this);
+
 	mSrcPath = "C:\\AeriaGames\\MegaTen";
+	if( !QDir(mSrcPath).exists() )
+		mSrcPath = "C:\\Program Files\\CAVE\\MEGAMITENSEI IMAGINE";
+	if( !QDir(mSrcPath).exists() )
+		mSrcPath = "C:\\Program Files\\CAVE\\真・女神転生IMAGINE";
+	if( !QDir(mSrcPath).exists() )
+		mSrcPath = "C:\\AeriaGames\\MegaTen";
 
 #ifdef Q_OS_WIN32
 	mAppPath = QDir::toNativeSeparators(qApp->applicationDirPath() +
