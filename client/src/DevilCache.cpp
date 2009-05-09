@@ -61,10 +61,10 @@ void DevilCache::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 		{
 			QVariantList skills = resp.value("skills").toList();
 
-			QListIterator<QVariant> it(skills);
-			while( it.hasNext() )
+			QList<QVariant>::const_iterator it;
+			for(it = skills.begin(); it != skills.end(); it++)
 			{
-				QVariantMap skill = it.next().toMap();
+				QVariantMap skill = (*it).toMap();
 
 				mSkills[skill.value("id").toInt()] = skill;
 			}
@@ -74,10 +74,10 @@ void DevilCache::ajaxResponse(const QVariantMap& resp, const QString& user_data)
 		{
 			QVariantList traits = resp.value("traits").toList();
 
-			QListIterator<QVariant> it(traits);
-			while( it.hasNext() )
+			QList<QVariant>::const_iterator it;
+			for(it = traits.begin(); it != traits.end(); it++)
 			{
-				QVariantMap trait = it.next().toMap();
+				QVariantMap trait = (*it).toMap();
 
 				mTraits[trait.value("id").toInt()] = trait;
 			}
@@ -215,7 +215,7 @@ void DevilCache::loadSimulatorData()
 	combo_file.open(QIODevice::ReadOnly);
 
 	QVariantMap combos = json::parse( QString::fromUtf8(
-		combo_file.readLine() ) ).toMap();
+		combo_file.readLine().trimmed() ) ).toMap();
 	combo_file.close();
 
 	QMapIterator<QString, QVariant> it(combos);
@@ -254,7 +254,7 @@ void DevilCache::loadSimulatorData()
 	seirei_file.open(QIODevice::ReadOnly);
 
 	QVariantMap seirei_combos = json::parse( QString::fromUtf8(
-		seirei_file.readLine() ) ).toMap();
+		seirei_file.readLine().trimmed() ) ).toMap();
 	seirei_file.close();
 
 	it = seirei_combos;
@@ -283,7 +283,7 @@ void DevilCache::loadSimulatorData()
 	modifiers_file.open(QIODevice::ReadOnly);
 
 	QVariantMap modifiers = json::parse( QString::fromUtf8(
-		modifiers_file.readLine() ) ).toMap();
+		modifiers_file.readLine().trimmed() ) ).toMap();
 	modifiers_file.close();
 
 	it = modifiers;
