@@ -21,7 +21,7 @@
 #include "Settings.h"
 #include "LogView.h"
 
-#include "ajaxTransfer.h"
+#include "baseTransfer.h"
 #include "ajax.h"
 
 #include <QtCore/QDateTime>
@@ -103,10 +103,10 @@ void LogWidget::resendRequest()
 		ajax::getSingletonPtr()->request(settings->url(), act);
 }
 
-void LogWidget::registerRequest(ajaxTransfer *transfer, const QVariant& request)
+void LogWidget::registerRequest(baseTransfer *transfer, const QVariant& request)
 {
-	connect(transfer, SIGNAL(transferInfo(const QString&, const QVariant&)),
-		this, SLOT(transferInfo(const QString&, const QVariant&)));
+	connect(transfer, SIGNAL(transferInfo(const QString&, const QVariantList&)),
+		this, SLOT(transferInfo(const QString&, const QVariantList&)));
 
 	QListWidgetItem *item = new QListWidgetItem( tr("%1 - %2").arg(
 		mLogList->count(), 4, 10, QLatin1Char('0')).arg(
@@ -121,9 +121,10 @@ void LogWidget::registerRequest(ajaxTransfer *transfer, const QVariant& request)
 	mLogList->addItem(item);
 }
 
-void LogWidget::transferInfo(const QString& content, const QVariant& response)
+void LogWidget::transferInfo(const QString& content,
+	const QVariantList& response)
 {
-	ajaxTransfer *transfer = qobject_cast<ajaxTransfer*>( sender() );
+	baseTransfer *transfer = qobject_cast<baseTransfer*>( sender() );
 	if(!transfer)
 		return;
 

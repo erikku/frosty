@@ -77,6 +77,8 @@ FORMS       += ui/PaletteEditor.ui \
                ui/MoonPhases.ui
 HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
+               src/baseTransfer.h \
+               src/localTransfer.h \
                src/PaletteEditor.h \
                src/ClickableLabel.h \
                src/AjaxList.h \
@@ -106,6 +108,7 @@ HEADERS     += src/ajax.h \
                src/IconListWidgetItem.h \
                src/InfoListWidget.h \
                src/InfoListWidgetItem.h \
+               src/Instance.h \
                src/RelationEdit.h \
                src/BasicRelationEdit.h \
                src/RelationList.h \
@@ -149,6 +152,7 @@ HEADERS     += src/ajax.h \
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
+               src/localTransfer.cpp \
                src/json.cpp \
                src/PaletteEditor.cpp \
                src/ClickableLabel.cpp \
@@ -178,6 +182,7 @@ SOURCES     += src/main.cpp \
                src/IconListWidgetItem.cpp \
                src/InfoListWidget.cpp \
                src/InfoListWidgetItem.cpp \
+               src/Instance.cpp \
                src/SearchEdit.cpp \
                src/RelationEdit.cpp \
                src/BasicRelationEdit.cpp \

@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  client/src/ajaxTransfer.cpp                                                 *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/localTransfer.cpp                                                *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,52 +17,40 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include "ajaxTransfer.h"
+#include "localTransfer.h"
 #include "ajax.h"
 #include "json.h"
 
+#include <QtCore/QTimer>
 #include <QtCore/QStringList>
 #include <QtGui/QMessageBox>
 
-ajaxTransfer::ajaxTransfer(QObject *parent_object) : baseTransfer(parent_object)
+#include <QtNetwork/QLocalSocket>
+#include <QtNetwork/QHttpResponseHeader>
+
+localTransfer::localTransfer(QObject *parent_object) :
+	baseTransfer(parent_object)
 {
-	// Nothing to see here
+	mHaveHeader = false;
+	mContentLength = 0;
 }
 
-ajaxTransfer::~ajaxTransfer()
+localTransfer::~localTransfer()
 {
-	if(mHttp)
+	if(mLocal)
 	{
-		delete mHttp;
-		mHttp = 0;
+		delete mLocal;
+		mLocal = 0;
 	}
 }
 
-void ajaxTransfer::sslErrors(const QList<QSslError>& errors)
+localTransfer* localTransfer::start(const QMap<QString, QString>& post)
 {
-	QStringList list;
-	foreach(QSslError err, errors)
-		list << err.errorString();
+	localTransfer *transfer = new localTransfer;
 
-	QMessageBox::critical(0, tr("AJAX Error"), tr("The AJAX backend has "
-		"encountered the following SSL errors:\n%1").arg( list.join("\n") ));
-}
+	transfer->mLocal = new QLocalSocket;
 
-ajaxTransfer* ajaxTransfer::start(const QUrl& url,
-	const QMap<QString, QString>& post)
-{
-	ajaxTransfer *transfer = new ajaxTransfer;
-
-	transfer->mHttp = new QHttp(url.host(),
-		(url.scheme() == "https") ? QHttp::ConnectionModeHttps :
-		QHttp::ConnectionModeHttp, url.port(80), 0);
-
-	connect(transfer->mHttp, SIGNAL(sslErrors(const QList<QSslError>&)),
-		transfer, SLOT(sslErrors(const QList<QSslError>&)));
-
-	transfer->mBackendURL = url;
-
-	QHttpRequestHeader header(post.isEmpty() ? "GET" : "POST", url.path());
+	QHttpRequestHeader header(post.isEmpty() ? "GET" : "POST", "/backend.php");
 
 	QByteArray data;
 	if( !post.isEmpty() )
@@ -87,29 +75,38 @@ ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 	}
 
 	header.addValue("User-Agent", "Qt4 JSON");
-	header.addValue("Host", url.host());
+	header.addValue("Host", "local");
 
-	connect( transfer->mHttp, SIGNAL(requestFinished(int, bool)),
-		transfer, SLOT(requestFinished(int, bool)), Qt::QueuedConnection );
+	connect(transfer->mLocal, SIGNAL(readyRead()), transfer, SLOT(readyRead()));
 
-	connect( transfer->mHttp, SIGNAL(readyRead(const QHttpResponseHeader&)),
-		transfer, SLOT(readyRead(const QHttpResponseHeader&)) );
+	transfer->mLocal->connectToServer("frosty_local");
+	if( !transfer->mLocal->waitForConnected() )
+	{
+		transfer->error( transfer->mLocal->errorString() );
 
-	connect( transfer->mHttp,
-		SIGNAL(responseHeaderReceived(const QHttpResponseHeader&)),
-		transfer, SLOT(responseHeaderReceived(const QHttpResponseHeader&)) );
+		return transfer;
+	}
 
-	transfer->mRequestID = transfer->mHttp->request(header, data);
+	transfer->mLocal->write(header.toString().toUtf8());
+	transfer->mLocal->write(data);
 
 	return transfer;
 }
 
-void ajaxTransfer::requestFinished(int id, bool error)
+void localTransfer::error(const QString& error)
+{
+	mError = error;
+	QTimer::singleShot(0, this, SLOT(dispatchError()));
+}
+
+void localTransfer::dispatchError()
+{
+	emit transferFailed(mError);
+}
+
+void localTransfer::requestFinished(bool error)
 {
 	emit transferInfo(QString::fromUtf8(mContent), mResponse);
-
-	if(mRequestID != id)
-		return;
 
 	QString content_error = QString::fromUtf8(mContent);
 	if( !content_error.isEmpty() )
@@ -138,14 +135,38 @@ void ajaxTransfer::requestFinished(int id, bool error)
 	deleteLater();
 }
 
-void ajaxTransfer::readyRead(const QHttpResponseHeader& resp)
+void localTransfer::readyRead()
 {
-	Q_UNUSED(resp);
+	if(!mHaveHeader)
+	{
+		while( mLocal->canReadLine() )
+		{
+			QString line = QString::fromUtf8( mLocal->readLine() );
+			mHeader += line;
 
-	mContent += mHttp->readAll();
+			if( line.trimmed().isEmpty() )
+			{
+				QHttpResponseHeader header(mHeader);
+
+				mContentLength = header.contentLength();
+				mHaveHeader = true;
+
+				responseHeaderReceived(header);
+
+				break;
+			}
+		}
+	}
+
+	if(mHaveHeader)
+	{
+		mContent += mLocal->readAll();
+		if(mContent.size() >= mContentLength)
+			requestFinished(false);
+	}
 }
 
-void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
+void localTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 {
 	if(resp.statusCode() != 200)
 	{

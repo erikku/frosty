@@ -21,6 +21,7 @@
 #include "json.h"
 #include "sha1.h"
 #include "ajaxTransfer.h"
+#include "localTransfer.h"
 
 #include "Settings.h"
 #include "LogWidget.h"
@@ -137,13 +138,30 @@ void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 		post["pass"] = pass;
 	}
 
-	ajaxTransfer *transfer = ajaxTransfer::start(url, post);
+	baseTransfer *base = 0;
 
-	connect(transfer, SIGNAL(transferFinished(const QVariantMap&,
-		const QString&)), this, SIGNAL(response(const QVariantMap&,
-		const QString&)) );
-	connect(transfer, SIGNAL(transferFailed(const QString&)),
-		this, SLOT(handleError(const QString&)), Qt::QueuedConnection);
+	if(url.toString() == "local")
+	{
+		localTransfer *transfer = localTransfer::start(post);
+		base = transfer;
+
+		connect(transfer, SIGNAL(transferFinished(const QVariantMap&,
+			const QString&)), this, SIGNAL(response(const QVariantMap&,
+			const QString&)) );
+		connect(transfer, SIGNAL(transferFailed(const QString&)),
+			this, SLOT(handleError(const QString&)), Qt::QueuedConnection);
+	}
+	else
+	{
+		ajaxTransfer *transfer = ajaxTransfer::start(url, post);
+		base = transfer;
+
+		connect(transfer, SIGNAL(transferFinished(const QVariantMap&,
+			const QString&)), this, SIGNAL(response(const QVariantMap&,
+			const QString&)) );
+		connect(transfer, SIGNAL(transferFailed(const QString&)),
+			this, SLOT(handleError(const QString&)), Qt::QueuedConnection);
+	}
 
 	/*
 	QVariantList actions = req.toMap().value("actions").toList();
@@ -156,7 +174,7 @@ void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 	*/
 
 	// We are not logging anymore
-	//mLog->registerRequest(transfer, req);
+	//mLog->registerRequest(base, req);
 }
 
 void ajax::subscribe(QObject *obj)

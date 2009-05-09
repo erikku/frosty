@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  client/src/ajaxTransfer.h                                                   *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/localTransfer.h                                                  *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,46 +17,51 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __ajaxTransfer_h__
-#define __ajaxTransfer_h__
+#ifndef __localTransfer_h__
+#define __localTransfer_h__
 
 #include "baseTransfer.h"
 
-#include <QtCore/QUrl>
 #include <QtCore/QPointer>
 #include <QtCore/QByteArray>
-#include <QtNetwork/QSslError>
-#include <QtNetwork/QHttp>
+
+class QLocalSocket;
+class QHttpResponseHeader;
 
 #include "sha1.h"
 
 typedef QMap<QString, QString> QStringMap;
 
-class ajaxTransfer : public baseTransfer
+class localTransfer : public baseTransfer
 {
 	Q_OBJECT
 
 public:
-	~ajaxTransfer();
+	~localTransfer();
 
-	static ajaxTransfer* start(const QUrl& url,
+	static localTransfer* start(
 		const QMap<QString, QString>& post = QStringMap());
 
 protected slots:
-	void requestFinished(int id, bool error);
-	void readyRead(const QHttpResponseHeader& resp);
-	void responseHeaderReceived(const QHttpResponseHeader& resp);
-	void sslErrors(const QList<QSslError>& errors);
+	void readyRead();
+	void dispatchError();
 
 protected:
-	ajaxTransfer(QObject *parent = 0);
+	localTransfer(QObject *parent = 0);
 
-	int mRequestID;
-	QUrl mBackendURL;
+	void error(const QString& error);
+	void requestFinished(bool error);
+	void responseHeaderReceived(const QHttpResponseHeader& resp);
+
+	bool mHaveHeader;
+	int mContentLength;
+
+	QString mError;
+	QString mHeader;
 	QByteArray mContent;
-	QVariantList mResponse;
 
-	QPointer<QHttp> mHttp;
+	QVariantList mResponse;
+	QPointer<QLocalSocket> mLocal;
 };
 
-#endif // __ajaxTransfer_h__
+#endif // __localTransfer_h__

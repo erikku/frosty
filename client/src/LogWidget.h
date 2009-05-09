@@ -21,13 +21,14 @@
 #define __LogWidget_h__
 
 #include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include <QtCore/QVariantList>
+
 #include <QtGui/QWidget>
 
 class LogView;
 class QListWidget;
 class QListWidgetItem;
-class ajaxTransfer;
+class baseTransfer;
 class RequestSet;
 
 class LogWidget : public QWidget
@@ -40,8 +41,8 @@ public:
 public slots:
 	void resendRequest();
 	void updateCurrentRequest();
-	void registerRequest(ajaxTransfer *transfer, const QVariant& request);
-	void transferInfo(const QString& content, const QVariant& response);
+	void registerRequest(baseTransfer *transfer, const QVariant& request);
+	void transferInfo(const QString& content, const QVariantList& response);
 
 protected:
 	LogWidget(QWidget *parent = 0);
@@ -50,7 +51,7 @@ protected:
 	QListWidget *mLogList;
 
 	QMap<QListWidgetItem*, RequestSet*> mRequests;
-	QMap<ajaxTransfer*, QListWidgetItem*> mRequestMap;
+	QMap<baseTransfer*, QListWidgetItem*> mRequestMap;
 };
 
 #endif // ___h__

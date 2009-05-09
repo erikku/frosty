@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  client/src/ajaxTransfer.h                                                   *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/baseTransfer.h                                                   *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,46 +17,28 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __ajaxTransfer_h__
-#define __ajaxTransfer_h__
+#ifndef __baseTransfer_h__
+#define __baseTransfer_h__
 
-#include "baseTransfer.h"
+#include <QtCore/QMap>
+#include <QtCore/QString>
+#include <QtCore/QVariant>
 
-#include <QtCore/QUrl>
-#include <QtCore/QPointer>
-#include <QtCore/QByteArray>
-#include <QtNetwork/QSslError>
-#include <QtNetwork/QHttp>
-
-#include "sha1.h"
-
-typedef QMap<QString, QString> QStringMap;
-
-class ajaxTransfer : public baseTransfer
+class baseTransfer : public QObject
 {
 	Q_OBJECT
 
 public:
-	~ajaxTransfer();
+	~baseTransfer() { };
 
-	static ajaxTransfer* start(const QUrl& url,
-		const QMap<QString, QString>& post = QStringMap());
-
-protected slots:
-	void requestFinished(int id, bool error);
-	void readyRead(const QHttpResponseHeader& resp);
-	void responseHeaderReceived(const QHttpResponseHeader& resp);
-	void sslErrors(const QList<QSslError>& errors);
+signals:
+	void transferFailed(const QString& err);
+	void transferFinished(const QVariantMap& response,
+		const QString& user_data);
+	void transferInfo(const QString& content, const QVariantList& response);
 
 protected:
-	ajaxTransfer(QObject *parent = 0);
-
-	int mRequestID;
-	QUrl mBackendURL;
-	QByteArray mContent;
-	QVariantList mResponse;
-
-	QPointer<QHttp> mHttp;
+	baseTransfer(QObject *parent = 0) : QObject(parent) { };
 };
 
-#endif // __ajaxTransfer_h__
+#endif // __baseTransfer_h__
