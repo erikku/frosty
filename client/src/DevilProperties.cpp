@@ -81,7 +81,13 @@ DevilProperties::DevilProperties(QWidget *parent_widget) :
 	connect(ui.level, SIGNAL(valueChanged(int)),
 		this, SLOT(updateLearnedSkills()));
 
+	connect(ui.historyTree, SIGNAL(itemSelectionChanged()),
+		this, SLOT(historySelectionChanged()));
+	connect(ui.extractButton, SIGNAL(clicked(bool)),
+		this, SLOT(extractHistory()));
+
 	setAcceptDrops(true);
+	historySelectionChanged();
 }
 
 void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
@@ -121,7 +127,7 @@ void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
 	QVariantList skills = mData.value("skills").toList();
 	QListIterator<QVariant> it(skills);
 
-	QPixmap blank(":/blank.png");
+	QPixmap blank(":/border.png");
 
 	// Clear out the skill icons first
 	int max = mActiveSkills.count();
@@ -146,13 +152,15 @@ void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
 		int skill_id = it.next().toInt();
 
 		QVariantMap skill_info = cache->skillByID(skill_id);
+		if( !skill_info.isEmpty() )
+		{
+			QPixmap skill_icon( QString("icons/skills/icon_%1.png").arg(
+				skill_info.value("icon").toString() ) );
 
-		QPixmap skill_icon( QString("icons/skills/icon_%1.png").arg(
-			skill_info.value("icon").toString() ) );
-
-		mActiveSkills.at(i)->setPixmap(skill_icon);
-		mActiveSkills.at(i)->setToolTip( cache->skillToolTip(skill_id) );
-		mActiveIDs[i] = skill_id;
+			mActiveSkills.at(i)->setPixmap(skill_icon);
+			mActiveSkills.at(i)->setToolTip( cache->skillToolTip(skill_id) );
+			mActiveIDs[i] = skill_id;
+		}
 
 		i++;
 	}
@@ -178,6 +186,7 @@ void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
 	}
 
 	updateLearnedSkills();
+	updateHistory();
 }
 
 void DevilProperties::updateLearnedSkills()
@@ -190,7 +199,7 @@ void DevilProperties::updateLearnedSkills()
 	// Update the demon's level
 	int lvl = ui.level->value();
 
-	QPixmap blank(":/blank.png");
+	QPixmap blank(":/border.png");
 
 	int max = mLearnedSkills.count();
 	for(int i = 0; i < max; i++)
@@ -240,6 +249,128 @@ void DevilProperties::updateLearnedSkills()
 
 		mActiveStorage->setAt(mActiveSlot, mData);
 	}
+}
+
+void DevilProperties::updateHistory()
+{
+	ui.historyTree->clear();
+
+	DevilCache *cache = DevilCache::getSingletonPtr();
+
+	QVariantMap info = cache->devilByID(
+		mData.value("id").toInt() );
+
+	QString text = info.value("name").toString();
+	int level_base = info.value("lvl").toInt();
+	int level_current = mData.value("lvl").toInt();
+	if(level_base == level_current)
+	{
+		text = tr("%1 (%2)").arg(text).arg(level_base);
+	}
+	else
+	{
+		text = tr("%1 (%2=>%3)").arg(text).arg(
+			level_base).arg(level_current);
+	}
+
+	QTreeWidgetItem *parent;
+	parent = new QTreeWidgetItem;
+	parent->setText(0, text);
+	parent->setData(0, Qt::UserRole, mData);
+	parent->setToolTip(0, cache->devilToolTip(mData));
+
+	updateHistoryParent(parent, mData);
+
+	ui.historyTree->addTopLevelItem(parent);
+	ui.historyTree->expandAll();
+}
+
+void DevilProperties::updateHistoryParent(QTreeWidgetItem *parent,
+	const DevilData& data)
+{
+	DevilCache *cache = DevilCache::getSingletonPtr();
+
+	QVariantList list = data.value("parents").toList();
+	QListIterator<QVariant> it(list);
+
+	while( it.hasNext() )
+	{
+		QVariantMap parent_data = it.next().toMap();
+
+		QVariantMap info = cache->devilByID( parent_data.value("id").toInt() );
+
+		QString text = info.value("name").toString();
+		int level_base = info.value("lvl").toInt();
+		int level_current = parent_data.value("lvl").toInt();
+		if(level_base == level_current)
+		{
+			text = tr("%1 (%2)").arg(text).arg(level_base);
+		}
+		else
+		{
+			text = tr("%1 (%2=>%3)").arg(text).arg(
+				level_base).arg(level_current);
+		}
+
+		QTreeWidgetItem *child;
+		child = new QTreeWidgetItem;
+		child->setText(0, text);
+		child->setData(0, Qt::UserRole, parent_data);
+		child->setToolTip(0, cache->devilToolTip(parent_data));
+
+		updateHistoryParent(child, parent_data);
+
+		parent->addChild(child);
+	}
+}
+
+void DevilProperties::historySelectionChanged()
+{
+	if(!mActiveStorage || mActiveStorage->count() >= mActiveStorage->capacity() )
+	{
+		ui.extractButton->setEnabled(false);
+		return;
+	}
+
+	QList<QTreeWidgetItem*> items = ui.historyTree->selectedItems();
+	if( items.isEmpty() )
+	{
+		ui.extractButton->setEnabled(false);
+		return;
+	}
+
+	ui.extractButton->setEnabled(true);
+}
+
+void DevilProperties::extractHistory()
+{
+	if(!mActiveStorage || mActiveStorage->count() >= mActiveStorage->capacity() )
+		return;
+
+	QList<QTreeWidgetItem*> items = ui.historyTree->selectedItems();
+	if( items.isEmpty() )
+		return;
+
+	int index = -1;
+
+	// TODO: Make a function to do this for me
+	// and update all code that does it this way
+	int max = mActiveStorage->capacity();
+	for(int i = 0; i < max; i++)
+	{
+		if( mActiveStorage->devilAt(i).isEmpty() )
+		{
+			index = i;
+			break;
+		}
+	}
+
+	if(index < 0)
+		return;
+
+	mActiveStorage->setAt(index, items.first()->data(0, Qt::UserRole).toMap());
+
+	historySelectionChanged();
 }
 
 void DevilProperties::darkenWidget(QWidget *widget)
@@ -316,7 +447,7 @@ void DevilProperties::mouseMoveEvent(QMouseEvent *evt)
 	dataStream << skill_id << index << pool;
 
 	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/x-devil-skill", itemData);
+	mimeData->setData("application/x-frosty-devil-skill", itemData);
 
 	QDrag *drag = new QDrag(this);
 	drag->setMimeData(mimeData);
@@ -327,7 +458,7 @@ void DevilProperties::mouseMoveEvent(QMouseEvent *evt)
 
 void DevilProperties::dragEnterEvent(QDragEnterEvent *evt)
 {
-	if( evt->mimeData()->hasFormat("application/x-devil-skill") )
+	if( evt->mimeData()->hasFormat("application/x-frosty-devil-skill") )
 		evt->acceptProposedAction();
 }
 
@@ -337,7 +468,7 @@ void DevilProperties::dragMoveEvent(QDragMoveEvent *evt)
 
 	QLabel *skill = qobject_cast<QLabel*>( childAt( evt->pos() ) );
 
-	if( !evt->mimeData()->hasFormat("application/x-devil-skill") ||
+	if( !evt->mimeData()->hasFormat("application/x-frosty-devil-skill") ||
 		!skill || !sourceThis)
 	{
 		evt->ignore();
@@ -350,7 +481,8 @@ void DevilProperties::dragMoveEvent(QDragMoveEvent *evt)
 		return;
 	}
 
-	QByteArray itemData = evt->mimeData()->data("application/x-devil-skill");
+	QByteArray itemData = evt->mimeData()->data(
+		"application/x-frosty-devil-skill");
 	QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
 	int skill_id, index, pool;
@@ -371,7 +503,7 @@ void DevilProperties::dropEvent(QDropEvent *evt)
 
 	QLabel *skill = qobject_cast<QLabel*>( childAt( evt->pos() ) );
 
-	if( !evt->mimeData()->hasFormat("application/x-devil-skill") ||
+	if( !evt->mimeData()->hasFormat("application/x-frosty-devil-skill") ||
 		!skill || !sourceThis)
 	{
 		evt->ignore();
@@ -384,7 +516,8 @@ void DevilProperties::dropEvent(QDropEvent *evt)
 		return;
 	}
 
-	QByteArray itemData = evt->mimeData()->data("application/x-devil-skill");
+	QByteArray itemData = evt->mimeData()->data(
+		"application/x-frosty-devil-skill");
 	QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
 	int skill_id, index, pool;
@@ -398,7 +531,7 @@ void DevilProperties::dropEvent(QDropEvent *evt)
 
 	evt->acceptProposedAction();
 
-	QPixmap blank(":/blank.png");
+	QPixmap blank(":/border.png");
 
 	int target_index = mActiveSkills.indexOf(skill);
 
@@ -468,7 +601,7 @@ void DevilProperties::rewindSkills(int start,
 {
 	int max = icons->count() - 1;
 
-	QPixmap blank(":/blank.png");
+	QPixmap blank(":/border.png");
 	QLabel *skill = 0;
 
 	int index;

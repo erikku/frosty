@@ -456,7 +456,7 @@ void StorageBase::mouseMoveEvent(QMouseEvent *evt)
 	dataStream << devil_data << index;
 
 	QMimeData *mimeData = new QMimeData;
-	mimeData->setData("application/x-devil", itemData);
+	mimeData->setData("application/x-frosty-devil", itemData);
 
 	QDrag *drag = new QDrag(this);
 	drag->setMimeData(mimeData);
@@ -469,7 +469,7 @@ void StorageBase::mouseMoveEvent(QMouseEvent *evt)
 
 void StorageBase::dragEnterEvent(QDragEnterEvent *evt)
 {
-	if( evt->mimeData()->hasFormat("application/x-devil") && mEditable )
+	if( evt->mimeData()->hasFormat("application/x-frosty-devil") && mEditable )
 		evt->acceptProposedAction();
 }
 
@@ -489,7 +489,7 @@ void StorageBase::dragMoveEvent(QDragMoveEvent *evt)
 
 	int index = indexAt( evt->pos() );
 
-	if( evt->mimeData()->hasFormat("application/x-devil") && index >= 0 )
+	if( evt->mimeData()->hasFormat("application/x-frosty-devil") && index >= 0 )
 	{
 		DevilData devil_data = devilAt(index);
 
@@ -499,7 +499,8 @@ void StorageBase::dragMoveEvent(QDragMoveEvent *evt)
 		}
 		else if(sourceThis)
 		{
-			QByteArray itemData = evt->mimeData()->data("application/x-devil");
+			QByteArray itemData = evt->mimeData()->data(
+				"application/x-frosty-devil");
 			QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
 			int source_index = -1;
@@ -539,7 +540,7 @@ void StorageBase::dropEvent(QDropEvent *evt)
 
 	int index = indexAt( evt->pos() );
 
-	if( !evt->mimeData()->hasFormat("application/x-devil") || index < 0 )
+	if( !evt->mimeData()->hasFormat("application/x-frosty-devil") || index < 0 )
 	{
 		evt->ignore();
 		return;
@@ -547,7 +548,7 @@ void StorageBase::dropEvent(QDropEvent *evt)
 
 	DevilData old_devil = devilAt(index);
 
-	QByteArray itemData = evt->mimeData()->data("application/x-devil");
+	QByteArray itemData = evt->mimeData()->data("application/x-frosty-devil");
 	QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
 	DevilData source_devil;
