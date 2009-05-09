@@ -197,12 +197,14 @@ class ajax:
 
 		return self.request(action);
 
-	def handle_relation(self, table, name_ja, name_en, update=False):
+	def handle_relation(self, table, name_ja, name_en, update=False,
+		insert=True):
 		id_value = self.request_id(table, u"name_ja", name_ja);
-		if id_value == -1:
+		if id_value == -1 and insert == True:
 			# TODO: Error check this
 			resp = self.insert_relation(table, name_ja, name_en)
 			return resp[0][u"ids"][0];
+			return -1
 		elif update:
 			# TODO: Error check this
 			self.update_relation(table, id_value, name_ja, name_en)
