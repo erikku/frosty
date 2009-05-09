@@ -19,6 +19,7 @@
 
 #include "Login.h"
 #include "Settings.h"
+#include "Instance.h"
 #include "Taskbar.h"
 #include "registration.h"
 #include "sha1.h"
@@ -124,6 +125,7 @@ void Login::validationImage(const QPixmap& image, const QString& error)
 	settings->setPass(pass);
 
 	Taskbar::getSingletonPtr()->show();
+	Instance::getSingletonPtr()->loginOK();
 
 	mRegistration->deleteLater();
 	deleteLater();

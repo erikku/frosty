@@ -19,6 +19,7 @@
 
 #include "Register.h"
 #include "Settings.h"
+#include "Instance.h"
 #include "Taskbar.h"
 #include "Options.h"
 #include "registration.h"
@@ -100,6 +101,7 @@ void Register::registrationComplete()
 	settings->setPass(pass);
 
 	Taskbar::getSingletonPtr()->show();
+	Instance::getSingletonPtr()->loginOK();
 
 	deleteLater();
 	close();
@@ -222,6 +224,7 @@ void Register::showLogin()
 void Register::guestLogin()
 {
 	Taskbar::getSingletonPtr()->show();
+	Instance::getSingletonPtr()->loginOK();
 
 	deleteLater();
 	close();

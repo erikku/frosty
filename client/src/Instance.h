@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  client/src/main.cpp                                                         *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/Instance.h                                                       *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,46 +17,43 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#include <QtGui/QApplication>
-#include <QtGui/QPalette>
+#ifndef __Instance_h__
+#define __Instance_h__
 
-#include <QtCore/QTranslator>
-#include <QtCore/QFile>
+#include <QtCore/QObject>
+#include <QtCore/QList>
 
-#include "PaletteEditor.h"
-#include "Settings.h"
-#include "Instance.h"
+class QLocalSocket;
+class QLocalServer;
 
-#include <QtNetwork/QSslSocket>
-#include <QtNetwork/QSslCertificate>
-
-int main(int argc, char *argv[])
+class Instance : public QObject
 {
-	QApplication::setStyle("plastique");
+	Q_OBJECT
 
-	QApplication app(argc, argv);
+public:
+	Instance(QObject *parent = 0);
+	~Instance();
 
-	QApplication::setWindowIcon( QIcon( ":/frosty.png") );
+	static Instance* getSingletonPtr();
 
-	QTranslator translator;
-	translator.load( QString("frosty_%1").arg(settings->lang()) );
-	app.installTranslator(&translator);
+public slots:
+	void loginOK();
 
-	QFile paletteFile(":/dark.xml");
-	paletteFile.open(QIODevice::ReadOnly);
-	QPalette palette = PaletteEditor::importPalette( paletteFile.readAll() );
-	paletteFile.close();
+protected slots:
+	void checkConnection();
+	void newConnection();
+	void disconnected();
+	void readyRead();
 
-	app.setPalette(palette);
+protected:
+	void startup();
 
-	QFile cert_file(":/ca.crt");
-    cert_file.open(QIODevice::ReadOnly);
+	QLocalSocket *mSocket;
+	QLocalServer *mServer;
 
-	QSslCertificate cert(&cert_file);
-	QSslSocket::addDefaultCaCertificate(cert);
+	QList<QLocalSocket*> mClients;
 
-	Instance *inst = new Instance;
-	Q_UNUSED(inst);
+	bool mLoginOK;
+};
 
-	return app.exec();
-}
+#endif // __Instance_h__
