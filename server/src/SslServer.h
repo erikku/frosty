@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  server/src/ShoutboxActions.h                                                *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  server/src/SslServer.h                                                      *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,21 +17,27 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __ShoutboxActions_h__
-#define __ShoutboxActions_h__
+#ifndef __SslServer_h__
+#define __SslServer_h__
 
-#include <QtCore/QMap>
-#include <QtCore/QList>
-#include <QtCore/QVariant>
-#include <QtSql/QSqlDatabase>
+#include <QtNetwork/QTcpServer>
 
-class QIODevice;
+class QTcpSocket;
+class QSslError;
 
-QVariantMap shoutboxLogin(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap shoutboxPoll(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap shoutboxPost(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+class SslServer : public QTcpServer
+{
+	Q_OBJECT
 
-#endif // __ShoutboxActions_h__
+signals:
+	void newConnection(QTcpSocket *socket);
+
+protected slots:
+	void error(QAbstractSocket::SocketError err);
+	void sslErrors(const QList<QSslError>& errors);
+
+protected:
+	virtual void incomingConnection(int socketDescriptor);
+};
+
+#endif // __SslServer_h__

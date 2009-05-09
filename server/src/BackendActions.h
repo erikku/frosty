@@ -25,17 +25,17 @@
 #include <QtCore/QVariant>
 #include <QtSql/QSqlDatabase>
 
-class QTcpSocket;
+class QIODevice;
 
-QVariantMap backendActionSalt(int i, QTcpSocket *connection,
+QVariantMap backendActionSalt(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap backendActionDelete(int i, QTcpSocket *connection,
+QVariantMap backendActionDelete(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap backendActionInsert(int i, QTcpSocket *connection,
+QVariantMap backendActionInsert(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
+QVariantMap backendActionUpdate(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap backendActionSelect(int i, QTcpSocket *connection,
+QVariantMap backendActionSelect(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 
 #endif // __BackendActions_h__

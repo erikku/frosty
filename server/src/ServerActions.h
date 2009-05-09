@@ -25,9 +25,9 @@
 #include <QtCore/QVariant>
 #include <QtSql/QSqlDatabase>
 
-class QTcpSocket;
+class QIODevice;
 
-QVariantMap serverActionUpdates(int i, QTcpSocket *connection,
+QVariantMap serverActionUpdates(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 
 #endif // __ServerActions_h__

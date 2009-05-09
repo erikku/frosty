@@ -27,9 +27,9 @@
 #include <QtCore/QList>
 #include <QtCore/QMap>
 
-class QTcpSocket;
+class QIODevice;
 
-typedef QVariantMap (*BackendActionHandler)(int, QTcpSocket*,
+typedef QVariantMap (*BackendActionHandler)(int, QIODevice*,
 	const QSqlDatabase&, const QVariantMap&, const QString&);
 
 class Backend : public QObject
@@ -39,7 +39,7 @@ class Backend : public QObject
 public:
 	Backend(QObject *parent = 0);
 
-	QVariantList parseRequest(QTcpSocket *connection,
+	QVariantList parseRequest(QIODevice *connection,
 		const QSqlDatabase& db, const QMap<QString, QString>& post) const;
 
 protected:

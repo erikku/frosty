@@ -79,6 +79,7 @@ HEADERS     += src/Auth.h \
                src/Log.h \
                src/Server.h \
                src/Session.h \
+               src/SslServer.h \
                src/Utils.h \
                src/sha1.h \
                src/json.h
@@ -96,6 +97,7 @@ SOURCES     += src/main.cpp \
                src/Server.cpp \
                src/ServerActions.cpp \
                src/Session.cpp \
+               src/SslServer.cpp \
                src/Utils.cpp \
                src/sha1.c \
                src/json.cpp

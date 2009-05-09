@@ -20,7 +20,7 @@
 #include "AuthActions.h"
 #include "Auth.h"
 
-QVariantMap authActionQueryPerms(int i, QTcpSocket *connection,
+QVariantMap authActionQueryPerms(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -52,7 +52,7 @@ QVariantMap authActionQueryPerms(int i, QTcpSocket *connection,
 	}
 }
 
-QVariantMap authActionQueryUsers(int i, QTcpSocket *connection,
+QVariantMap authActionQueryUsers(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -66,7 +66,7 @@ QVariantMap authActionQueryUsers(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap authActionQueryUser(int i, QTcpSocket *connection,
+QVariantMap authActionQueryUser(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -81,7 +81,7 @@ QVariantMap authActionQueryUser(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap authActionMakeInactive(int i, QTcpSocket *connection,
+QVariantMap authActionMakeInactive(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -94,7 +94,7 @@ QVariantMap authActionMakeInactive(int i, QTcpSocket *connection,
 	return QVariantMap();
 }
 
-QVariantMap authActionMakeActive(int i, QTcpSocket *connection,
+QVariantMap authActionMakeActive(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -107,7 +107,7 @@ QVariantMap authActionMakeActive(int i, QTcpSocket *connection,
 	return QVariantMap();
 }
 
-QVariantMap authActionModifyUser(int i, QTcpSocket *connection,
+QVariantMap authActionModifyUser(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);

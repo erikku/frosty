@@ -37,8 +37,10 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QStringList>
 #include <QtNetwork/QHttpRequestHeader>
-#include <QtNetwork/QSslSocket>
-#include <QtNetwork/QSslKey>
+#include <QtNetwork/QHttpResponseHeader>
+#include <QtNetwork/QLocalServer>
+#include <QtNetwork/QLocalSocket>
+#include <QtNetwork/QTcpSocket>
 #include <gd.h>
 
 #include <QtSql/QSqlError>
@@ -46,6 +48,7 @@
 #include <QtSql/QSqlRecord>
 #include <QtSql/QSqlDatabase>
 
+#include "SslServer.h"
 
 #ifdef QT_GUI_LIB
 Server::Server(int ac, char *av[]) : QApplication(ac, av)
@@ -67,17 +70,30 @@ void Server::init()
 	conf->loadConfig("config.xml");
 
 	mBackend = new Backend;
-	mConnection = new SslServer;
 
-	connect(mConnection, SIGNAL(newConnection(QTcpSocket*)),
-		this, SLOT(handleNewConnection(QTcpSocket*)));
+	if(conf->address() == "internal")
+	{
+		mLocalConnection = new QLocalServer;
 
-	if(conf->address() == "any")
-		mConnection->listen(QHostAddress::Any, conf->port());
-	else if(conf->address() == "localhost")
-		mConnection->listen(QHostAddress::LocalHost, conf->port());
+		connect(mLocalConnection, SIGNAL(newConnection()),
+			this, SLOT(handleNewLocalConnection()));
+
+		mLocalConnection->listen("frosty_local");
+	}
 	else
-		mConnection->listen(QHostAddress(conf->address()), conf->port());
+	{
+		mSslConnection = new SslServer;
+
+		connect(mSslConnection, SIGNAL(newConnection(QTcpSocket*)),
+			this, SLOT(handleNewConnection(QTcpSocket*)));
+
+		if(conf->address() == "any")
+			mSslConnection->listen(QHostAddress::Any, conf->port());
+		else if(conf->address() == "localhost")
+			mSslConnection->listen(QHostAddress::LocalHost, conf->port());
+		else
+			mSslConnection->listen(QHostAddress(conf->address()), conf->port());
+	}
 
 	if(conf->dbType() == "sqlite")
 	{
@@ -103,57 +119,9 @@ void Server::init()
 	//QSqlDatabase::removeDatabase("master");
 }
 
-void SslServer::incomingConnection(int descriptor)
-{
-	if( conf->sslEnabled() )
-	{
-		QSslSocket *socket = new QSslSocket;
-
-		connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
-			this, SLOT(error(QAbstractSocket::SocketError)));
-		connect(socket, SIGNAL(sslErrors(const QList<QSslError>&)),
-			this, SLOT(sslErrors(const QList<QSslError>&)));
-
-		socket->setLocalCertificate( conf->sslCert() );
-		socket->setPrivateKey( conf->sslKey() );
-
-		socket->setSocketDescriptor(descriptor);
-		socket->startServerEncryption();
-
-		emit newConnection(socket);
-	}
-	else
-	{
-		QTcpSocket *socket = new QTcpSocket;
-
-		connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
-			this, SLOT(error(QAbstractSocket::SocketError)));
-
-		socket->setSocketDescriptor(descriptor);
-
-		emit newConnection(socket);
-	}
-}
-
-void SslServer::error(QAbstractSocket::SocketError err)
-{
-	Q_UNUSED(err);
-
-	QTcpSocket *socket = qobject_cast<QTcpSocket*>( sender() );
-	Q_ASSERT(socket);
-
-	LOG_ERROR( QString("Socket Error: %1\n").arg( socket->errorString() ) );
-}
-
-void SslServer::sslErrors(const QList<QSslError>& errors)
-{
-	foreach(QSslError err, errors)
-		LOG_ERROR( QString("SSL Error: %1").arg( err.errorString() ) );
-}
-
 void Server::handleNewConnection(QTcpSocket *socket)
 {
-	Q_ASSERT(mConnection);
+	Q_ASSERT(mSslConnection && socket);
 
 	QTcpSocket *connection = socket;
 
@@ -173,15 +141,37 @@ void Server::handleNewConnection(QTcpSocket *socket)
 	read(connection);
 }
 
+void Server::handleNewLocalConnection()
+{
+	Q_ASSERT(mLocalConnection);
+	QLocalSocket *connection = mLocalConnection->nextPendingConnection();
+	Q_ASSERT(connection);
+
+	connect(connection, SIGNAL(readyRead()),
+		this, SLOT(readyRead()));
+	connect(connection, SIGNAL(disconnected()),
+		connection, SLOT(deleteLater()));
+
+	connection->open(QIODevice::ReadWrite);
+
+	ConnectionData *data = new ConnectionData;
+	mConnections[connection] = data;
+	data->contentRead = false;
+	data->contentLength = 0;
+	data->done = false;
+
+	read(connection);
+}
+
 void Server::readyRead()
 {
-	QTcpSocket *connection = qobject_cast<QTcpSocket*>(sender());
+	QIODevice *connection = qobject_cast<QIODevice*>(sender());
 	Q_ASSERT(connection);
 
 	read(connection);
 }
 
-void Server::read(QTcpSocket *connection)
+void Server::read(QIODevice *connection)
 {
 	ConnectionData *data = mConnections.value(connection);
 	Q_ASSERT(data);
@@ -218,7 +208,7 @@ void Server::read(QTcpSocket *connection)
 		finalize(connection);
 }
 
-void Server::finalize(QTcpSocket *connection)
+void Server::finalize(QIODevice *connection)
 {
 	ConnectionData *data = mConnections.value(connection);
 	Q_ASSERT(data);
@@ -268,15 +258,13 @@ void Server::finalize(QTcpSocket *connection)
 			{
 				// The session is expired/invalid and we need to
 				// create a new session.
-				session_key = Session::getSingletonPtr()->create(
-					connection->peerAddress() );
+				session_key = createSessionKey(connection);
 			}
 		}
 		else
 		{
 			// There is no existing session so just create a new one.
-			session_key = Session::getSingletonPtr()->create(
-				connection->peerAddress() );
+			session_key = createSessionKey(connection);
 		}
 
 		QString cookie = Session::keyToCookie(session_key,
@@ -295,8 +283,7 @@ void Server::finalize(QTcpSocket *connection)
 			if( !session_data.isValid() )
 			{
 				// The session is no longer valid (expired?) so make a new one.
-				session_key = Session::getSingletonPtr()->create(
-					connection->peerAddress() );
+				session_key = createSessionKey(connection);
 
 				QString cookie = Session::keyToCookie(session_key,
 					header.value("host") );
@@ -349,8 +336,7 @@ void Server::finalize(QTcpSocket *connection)
 		}
 		else
 		{
-			QString session_key = Session::getSingletonPtr()->create(
-				connection->peerAddress() );
+			QString session_key = createSessionKey(connection);
 
 			QString cookie = Session::keyToCookie(session_key,
 				header.value("host") );
@@ -385,7 +371,7 @@ QHttpResponseHeader Server::basicResponseHeader() const
 	return header;
 }
 
-void Server::error(QTcpSocket *connection)
+void Server::error(QIODevice *connection)
 {
 	QFile file(":/400.html");
 	file.open(QIODevice::ReadOnly);
@@ -407,7 +393,7 @@ void Server::error(QTcpSocket *connection)
 	connection->close();
 }
 
-void Server::respond(QTcpSocket *connection, const QVariant& data)
+void Server::respond(QIODevice *connection, const QVariant& data)
 {
 	QHttpResponseHeader header = basicResponseHeader();
 	header.setValue("X-JSON", QString("(%1)").arg( json::toJSON(data) ));
@@ -418,7 +404,7 @@ void Server::respond(QTcpSocket *connection, const QVariant& data)
 	connection->close();
 }
 
-void Server::captcha(QTcpSocket *connection, const QString& session_key,
+void Server::captcha(QIODevice *connection, const QString& session_key,
 	const QString& cookie, const QString& error_text)
 {
 	QStringList letters = conf->captchaLetters();
@@ -488,4 +474,13 @@ void Server::captcha(QTcpSocket *connection, const QString& session_key,
 
 	gdFree(image);
 	gdImageDestroy(im);
+}
+
+QString Server::createSessionKey(QIODevice *connection)
+{
+	QTcpSocket *tcp = qobject_cast<QTcpSocket*>(connection);
+	if(tcp)
+		return Session::getSingletonPtr()->create( tcp->peerAddress() );
+
+	return "internal";
 }

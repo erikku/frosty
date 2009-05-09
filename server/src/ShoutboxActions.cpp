@@ -28,7 +28,7 @@
 
 QQueue<QVariantMap> g_shoutbox_queue;
 
-QVariantMap shoutboxLogin(int i, QTcpSocket *connection,
+QVariantMap shoutboxLogin(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -50,7 +50,7 @@ QVariantMap shoutboxLogin(int i, QTcpSocket *connection,
 	return ret;
 }
 
-QVariantMap shoutboxPoll(int i, QTcpSocket *connection,
+QVariantMap shoutboxPoll(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -82,7 +82,7 @@ QVariantMap shoutboxPoll(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap shoutboxPost(int i, QTcpSocket *connection,
+QVariantMap shoutboxPost(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);

@@ -20,7 +20,7 @@
 #include "ServerActions.h"
 #include "Config.h"
 
-QVariantMap serverActionUpdates(int i, QTcpSocket *connection,
+QVariantMap serverActionUpdates(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);

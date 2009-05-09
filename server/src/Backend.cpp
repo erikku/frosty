@@ -71,7 +71,7 @@ Backend::Backend(QObject *parent_object) : QObject(parent_object)
 	auth->start(mActionHandlers);
 }
 
-QVariantList Backend::parseRequest(QTcpSocket *connection,
+QVariantList Backend::parseRequest(QIODevice *connection,
 	const QSqlDatabase& db, const QMap<QString, QString>& post) const
 {
 	QVariant request = json::parse( post.value("request") );

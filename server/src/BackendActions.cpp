@@ -31,7 +31,7 @@
 
 #define tr(msg) QObject::tr(msg)
 
-QVariantMap backendActionSalt(int i, QTcpSocket *connection,
+QVariantMap backendActionSalt(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -46,7 +46,7 @@ QVariantMap backendActionSalt(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap backendActionDelete(int i, QTcpSocket *connection,
+QVariantMap backendActionDelete(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
@@ -242,7 +242,7 @@ QVariantMap backendActionDelete(int i, QTcpSocket *connection,
 	return QVariantMap();
 }
 
-QVariantMap backendActionInsert(int i, QTcpSocket *connection,
+QVariantMap backendActionInsert(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
@@ -597,7 +597,7 @@ QVariantMap backendActionInsert(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
+QVariantMap backendActionUpdate(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
@@ -1187,7 +1187,7 @@ QVariantMap backendActionUpdate(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap backendActionSelect(int i, QTcpSocket *connection,
+QVariantMap backendActionSelect(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);

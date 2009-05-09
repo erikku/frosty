@@ -29,27 +29,15 @@
 #include <QtCore/QVariant>
 #include <QtCore/QMap>
 
-#include <QtNetwork/QHttpResponseHeader>
-#include <QtNetwork/QTcpServer>
 #include <QtSql/QSqlDatabase>
 
+class QHttpResponseHeader;
+
 class Backend;
+class QIODevice;
+class QLocalServer;
 class QTcpSocket;
-
-class SslServer : public QTcpServer
-{
-	Q_OBJECT
-
-signals:
-	void newConnection(QTcpSocket *socket);
-
-protected slots:
-	void error(QAbstractSocket::SocketError err);
-	void sslErrors(const QList<QSslError>& errors);
-
-protected:
-	virtual void incomingConnection(int socketDescriptor);
-};
+class SslServer;
 
 class ConnectionData
 {
@@ -77,21 +65,25 @@ public:
 protected slots:
 	void readyRead();
 	void handleNewConnection(QTcpSocket *socket);
+	void handleNewLocalConnection();
 
 protected:
-	void read(QTcpSocket *connection);
-	void error(QTcpSocket *connection);
-	void finalize(QTcpSocket *connection);
-	void respond(QTcpSocket *connection, const QVariant& data);
-	void captcha(QTcpSocket *connection, const QString& session_key,
+	void read(QIODevice *connection);
+	void error(QIODevice *connection);
+	void finalize(QIODevice *connection);
+	void respond(QIODevice *connection, const QVariant& data);
+	void captcha(QIODevice *connection, const QString& session_key,
 		const QString& cookie, const QString& error = QString());
+
+	inline QString createSessionKey(QIODevice *connection);
 
 	QHttpResponseHeader basicResponseHeader() const;
 
 	QSqlDatabase db;
 	Backend *mBackend;
-	SslServer *mConnection;
-	QMap<QTcpSocket*, ConnectionData*> mConnections;
+	SslServer *mSslConnection;
+	QLocalServer *mLocalConnection;
+	QMap<QIODevice*, ConnectionData*> mConnections;
 };
 
 #endif // __Server_h__

@@ -40,7 +40,7 @@ void simulator_reset_cache()
 	simulator_cache.clear();
 }
 
-QVariantMap simulatorCache(int i, QTcpSocket *connection,
+QVariantMap simulatorCache(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
@@ -267,7 +267,7 @@ QVariantMap simulatorCache(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap simulatorLoadStorage(int i, QTcpSocket *connection,
+QVariantMap simulatorLoadStorage(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(action);
@@ -332,7 +332,7 @@ QVariantMap simulatorLoadStorage(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap simulatorSyncStorage(int i, QTcpSocket *connection,
+QVariantMap simulatorSyncStorage(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(connection);
@@ -381,7 +381,7 @@ QVariantMap simulatorSyncStorage(int i, QTcpSocket *connection,
 	return QVariantMap();
 }
 
-QVariantMap simulatorLoadCOMP(int i, QTcpSocket *connection,
+QVariantMap simulatorLoadCOMP(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(action);
@@ -446,7 +446,7 @@ QVariantMap simulatorLoadCOMP(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap simulatorSyncCOMP(int i, QTcpSocket *connection,
+QVariantMap simulatorSyncCOMP(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(connection);

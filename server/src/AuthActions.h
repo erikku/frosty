@@ -25,19 +25,19 @@
 #include <QtCore/QVariant>
 #include <QtSql/QSqlDatabase>
 
-class QTcpSocket;
+class QIODevice;
 
-QVariantMap authActionQueryPerms(int i, QTcpSocket *connection,
+QVariantMap authActionQueryPerms(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap authActionQueryUsers(int i, QTcpSocket *connection,
+QVariantMap authActionQueryUsers(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap authActionQueryUser(int i, QTcpSocket *connection,
+QVariantMap authActionQueryUser(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap authActionMakeInactive(int i, QTcpSocket *connection,
+QVariantMap authActionMakeInactive(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap authActionMakeActive(int i, QTcpSocket *connection,
+QVariantMap authActionMakeActive(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
-QVariantMap authActionModifyUser(int i, QTcpSocket *connection,
+QVariantMap authActionModifyUser(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
 
 #endif // __AuthActions_h__

@@ -29,7 +29,7 @@
 
 #define tr(msg) QObject::tr(msg)
 
-QVariantMap dbActionExport(int i, QTcpSocket *connection,
+QVariantMap dbActionExport(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -108,7 +108,7 @@ QVariantMap dbActionExport(int i, QTcpSocket *connection,
 	return map;
 }
 
-QVariantMap dbActionImport(int i, QTcpSocket *connection,
+QVariantMap dbActionImport(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
@@ -177,7 +177,7 @@ QVariantMap dbActionImport(int i, QTcpSocket *connection,
 	return QVariantMap();
 }
 
-QVariantMap dbActionTables(int i, QTcpSocket *connection,
+QVariantMap dbActionTables(int i, QIODevice *connection,
 	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
