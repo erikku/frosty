@@ -147,11 +147,6 @@ void COMP::itemDoubleClicked(IconListWidgetItem *item)
 {
 	Q_ASSERT(ui.devilList->row(item) >= 0);
 
-	// Release the mouse so the AddDevil can be used
-	QMouseEvent release_event(QEvent::MouseMove, QPoint(-1, -1),
-		QPoint(-1, -1), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-	qApp->sendEvent(item, &release_event);
-
 	indexDoubleClicked( ui.devilList->row(item) );
 }
 
@@ -229,31 +224,4 @@ QPoint COMP::hotspot(int index) const
 	Q_UNUSED(index);
 
 	return QPoint(16, 16);
-}
-
-void COMP::mouseMoveEvent(QMouseEvent *evt)
-{
-	// If we are starting to drag an item, we need to release the mouse
-
-	if( !(evt->buttons() & Qt::LeftButton) )
-		return;
-
-	if( (evt->pos() - mDragStartPosition).manhattanLength()
-		< QApplication::startDragDistance() )
-			return;
-
-	int index = indexAt(mDragStartPosition);
-	if(index < 0)
-		return;
-
-	DevilData devil_data = devilAt(index);
-	if( devil_data.isEmpty() )
-		return;
-
-	// Release the mouse from the item so the drag works right
-	QMouseEvent release_event(QEvent::MouseMove, QPoint(-1, -1),
-		QPoint(-1, -1), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-	qApp->sendEvent(ui.devilList->itemAt(index), &release_event);
-
-	StorageBase::mouseMoveEvent(evt);
 }

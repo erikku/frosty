@@ -28,7 +28,6 @@ IconListWidgetItem::IconListWidgetItem(IconListWidget *parent_widget) :
 {
 	ui.setupUi(this);
 
-	setMouseTracking(true);
 	setAutoFillBackground(true);
 
 	mUpperFont = ui.text1->font();
@@ -96,82 +95,25 @@ IconListWidgetItem::IconListWidgetItem(const QIcon& ico, const QString& t1,
 	setPalette(pal);
 }
 
-void IconListWidgetItem::mouseMoveEvent(QMouseEvent *evt)
-{
-	evt->accept();
-	grabMouse();
-
-	if(mIconListWidget)
-	{
-		QWidget *viewport = mIconListWidget->mListArea->viewport();
-		QPoint bottom_left(viewport->width(), viewport->height());
-
-		QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
-			viewport->mapToGlobal(bottom_left) );
-
-		if( area.contains( evt->globalPos() ) &&
-			rect().contains( evt->pos() ) )
-		{
-			setBackgroundRole(QPalette::Highlight);
-		}
-		else
-		{
-			releaseMouse();
-
-			if(mSelected)
-				setBackgroundRole(QPalette::AlternateBase);
-			else
-				setBackgroundRole(QPalette::NoRole);
-		}
-
-		QWidget *p = qobject_cast<QWidget*>(parent());
-		while( p->parent() )
-			p = qobject_cast<QWidget*>(p->parent());
-
-		if(p)
-		{
-			// Send the mouse event to the parent widget
-			QMouseEvent move_event(evt->type(), mapTo(p, evt->pos()),
-				evt->globalPos(), evt->button(), evt->buttons(),
-				evt->modifiers());
-			qApp->sendEvent(p, &move_event);
-		}
-	}
-	else
-	{
-		releaseMouse();
-	}
-}
-
-void IconListWidgetItem::mousePressEvent(QMouseEvent *evt)
+void IconListWidgetItem::enterEvent(QEvent *evt)
 {
 	if(!mIconListWidget)
 		return;
 
-	QWidget *viewport = mIconListWidget->mListArea->viewport();
-	QPoint bottom_left(viewport->width(), viewport->height());
+	evt->accept();
+	setBackgroundRole(QPalette::Highlight);
+}
 
-	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
-		viewport->mapToGlobal(bottom_left) );
+void IconListWidgetItem::leaveEvent(QEvent *evt)
+{
+	if(!mIconListWidget)
+		return;
 
-	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
-	{
-		window()->activateWindow();
-		window()->raise();
-
-		QWidget *p = qobject_cast<QWidget*>(parent());
-		while( p->parent() )
-			p = qobject_cast<QWidget*>(p->parent());
-
-		if(p)
-		{
-			// Send the press event to the parent widget
-			QMouseEvent press_event(evt->type(), mapTo(p, evt->pos()),
-				evt->globalPos(), evt->button(), evt->buttons(),
-				evt->modifiers());
-			qApp->sendEvent(p, &press_event);
-		}
-	}
+	evt->accept();
+	if(mSelected)
+		setBackgroundRole(QPalette::AlternateBase);
+	else
+		setBackgroundRole(QPalette::NoRole);
 }
 
 void IconListWidgetItem::mouseReleaseEvent(QMouseEvent *evt)
@@ -179,17 +121,8 @@ void IconListWidgetItem::mouseReleaseEvent(QMouseEvent *evt)
 	if(!mIconListWidget)
 		return;
 
-	QWidget *viewport = mIconListWidget->mListArea->viewport();
-	QPoint bottom_left(viewport->width(), viewport->height());
-
-	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
-		viewport->mapToGlobal(bottom_left) );
-
-	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
-	{
-		evt->accept();
-		emit clicked();
-	}
+	evt->accept();
+	emit clicked();
 }
 
 void IconListWidgetItem::mouseDoubleClickEvent(QMouseEvent *evt)
@@ -197,17 +130,8 @@ void IconListWidgetItem::mouseDoubleClickEvent(QMouseEvent *evt)
 	if(!mIconListWidget)
 		return;
 
-	QWidget *viewport = mIconListWidget->mListArea->viewport();
-	QPoint bottom_left(viewport->width(), viewport->height());
-
-	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
-		viewport->mapToGlobal(bottom_left) );
-
-	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
-	{
-		evt->accept();
-		emit doubleClicked();
-	}
+	evt->accept();
+	emit doubleClicked();
 }
 
 bool IconListWidgetItem::isSelected() const

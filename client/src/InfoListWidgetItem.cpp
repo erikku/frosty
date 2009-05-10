@@ -27,7 +27,6 @@ InfoListWidgetItem::InfoListWidgetItem(InfoListWidget *parent_widget) :
 {
 	ui.setupUi(this);
 
-	setMouseTracking(true);
 	setAutoFillBackground(true);
 
 	mUpperFont = ui.text1->font();
@@ -97,56 +96,25 @@ InfoListWidgetItem::InfoListWidgetItem(const QIcon& ico, const QString& t1,
 	setPalette(pal);
 }
 
-void InfoListWidgetItem::mouseMoveEvent(QMouseEvent *evt)
-{
-	evt->accept();
-	grabMouse();
-
-	if(mInfoListWidget)
-	{
-		QWidget *viewport = mInfoListWidget->ui.listArea->viewport();
-		QPoint bottom_left(viewport->width(), viewport->height());
-
-		QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
-			viewport->mapToGlobal(bottom_left) );
-
-		if( area.contains( evt->globalPos() ) &&
-			rect().contains( evt->pos() ) )
-		{
-			setBackgroundRole(QPalette::Highlight);
-		}
-		else
-		{
-			releaseMouse();
-
-			if(mSelected)
-				setBackgroundRole(QPalette::AlternateBase);
-			else
-				setBackgroundRole(QPalette::NoRole);
-		}
-	}
-	else
-	{
-		releaseMouse();
-	}
-}
-
-void InfoListWidgetItem::mousePressEvent(QMouseEvent *evt)
+void InfoListWidgetItem::enterEvent(QEvent *evt)
 {
 	if(!mInfoListWidget)
 		return;
 
-	QWidget *viewport = mInfoListWidget->ui.listArea->viewport();
-	QPoint bottom_left(viewport->width(), viewport->height());
+	evt->accept();
+	setBackgroundRole(QPalette::Highlight);
+}
 
-	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
-		viewport->mapToGlobal(bottom_left) );
+void InfoListWidgetItem::leaveEvent(QEvent *evt)
+{
+	if(!mInfoListWidget)
+		return;
 
-	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
-	{
-		window()->activateWindow();
-		window()->raise();
-	}
+	evt->accept();
+	if(mSelected)
+		setBackgroundRole(QPalette::AlternateBase);
+	else
+		setBackgroundRole(QPalette::NoRole);
 }
 
 void InfoListWidgetItem::mouseReleaseEvent(QMouseEvent *evt)
@@ -154,17 +122,8 @@ void InfoListWidgetItem::mouseReleaseEvent(QMouseEvent *evt)
 	if(!mInfoListWidget)
 		return;
 
-	QWidget *viewport = mInfoListWidget->ui.listArea->viewport();
-	QPoint bottom_left(viewport->width(), viewport->height());
-
-	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
-		viewport->mapToGlobal(bottom_left) );
-
-	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
-	{
-		evt->accept();
-		emit clicked();
-	}
+	evt->accept();
+	emit clicked();
 }
 
 void InfoListWidgetItem::mouseDoubleClickEvent(QMouseEvent *evt)
@@ -172,17 +131,8 @@ void InfoListWidgetItem::mouseDoubleClickEvent(QMouseEvent *evt)
 	if(!mInfoListWidget)
 		return;
 
-	QWidget *viewport = mInfoListWidget->ui.listArea->viewport();
-	QPoint bottom_left(viewport->width(), viewport->height());
-
-	QRect area(viewport->mapToGlobal( QPoint(0, 0) ),
-		viewport->mapToGlobal(bottom_left) );
-
-	if( area.contains( evt->globalPos() ) && rect().contains( evt->pos() ) )
-	{
-		evt->accept();
-		emit doubleClicked();
-	}
+	evt->accept();
+	emit doubleClicked();
 }
 
 bool InfoListWidgetItem::isSelected() const

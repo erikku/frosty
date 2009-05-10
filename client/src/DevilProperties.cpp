@@ -86,6 +86,8 @@ DevilProperties::DevilProperties(QWidget *parent_widget) :
 	connect(ui.extractButton, SIGNAL(clicked(bool)),
 		this, SLOT(extractHistory()));
 
+	ui.historyTree->header()->hide();
+
 	setAcceptDrops(true);
 	historySelectionChanged();
 }
@@ -452,7 +454,7 @@ void DevilProperties::mouseMoveEvent(QMouseEvent *evt)
 	QDrag *drag = new QDrag(this);
 	drag->setMimeData(mimeData);
 	drag->setPixmap(pixmap);
-	drag->setHotSpot(evt->pos() - skill->pos());
+	drag->setHotSpot(evt->pos() - skill->mapTo(this, QPoint(0,0)));
 	drag->exec();
 }
 

@@ -137,7 +137,7 @@ int Storage::indexAt(const QPoint& p) const
 
 QPoint Storage::indexPosition(int index) const
 {
-	Q_ASSERT(index < capacity() || index >= 0);
+	Q_ASSERT(index < capacity() && index >= 0);
 	if(index >= capacity() || index < 0)
 		return QPoint(0, 0);
 

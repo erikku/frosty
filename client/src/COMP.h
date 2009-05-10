@@ -57,8 +57,6 @@ protected:
 
 	virtual QPoint hotspot(int index) const;
 
-	virtual void mouseMoveEvent(QMouseEvent *event);
-
 private:
 	Ui::COMP ui;
 };

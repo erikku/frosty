@@ -75,8 +75,8 @@ signals:
 	void selectionChanged();
 
 protected:
-	virtual void mouseMoveEvent(QMouseEvent *event);
-	virtual void mousePressEvent(QMouseEvent *event);
+	virtual void enterEvent(QEvent *event);
+	virtual void leaveEvent(QEvent *event);
 	virtual void mouseReleaseEvent(QMouseEvent *event);
 	virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
