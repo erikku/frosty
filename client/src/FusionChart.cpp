@@ -173,8 +173,22 @@ void FusionChart::calculateFusion(int first, int second)
 	QVariantMap devilA = mDevilData.at(first);
 	QVariantMap devilB = mDevilData.at(second);
 
-	QVariantMap devilInfoA = cache->devilByID( devilA.value("id").toInt() );
-	QVariantMap devilInfoB = cache->devilByID( devilB.value("id").toInt() );
+	// Can't fuse the same demon together
+	int id_a = devilA.value("id").toInt();
+	int id_b = devilB.value("id").toInt();
+	if(id_a == id_b)
+		return;
+
+	QVariantMap devilInfoA = cache->devilByID(id_a);
+	QVariantMap devilInfoB = cache->devilByID(id_b);
+
+	// Can't fuse the same type of demon
+	int parent_a = devilInfoA.value("parent_id").toInt();
+	int parent_b = devilInfoB.value("parent_id").toInt();
+	if(parent_a == id_b || parent_b == id_a)
+		return;
+	if(parent_a > 0 && parent_b > 0 && parent_a == parent_b)
+		return;
 
 	int devilGenusA = devilInfoA.value("genus_id").toInt();
 	int devilGenusB = devilInfoB.value("genus_id").toInt();
@@ -360,6 +374,8 @@ void FusionChart::mouseReleaseEvent(QMouseEvent *evt)
 		return;
 
 	QVariantMap devil_data = mFusionData.at(index);
+	if( devil_data.isEmpty() )
+		return;
 
 	int slot1 = index % mDevilLabels.count();
 	int slot2 = (index - slot1) / mDevilLabels.count();
