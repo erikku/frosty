@@ -112,6 +112,7 @@ protected:
 	QPoint mDragStartPosition;
 
 private:
+	int mCurrent;
 	bool mEditable;
 	bool mLoaded, mMarked;
 

@@ -106,14 +106,20 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 	act = menu->addSeparator();
 
+	bool guest = settings->email().isEmpty();
+
 	// COMP Action
 	act = menu->addAction(/* icon, */tr("&COMP") );
+	act->setEnabled(!guest);
+	ui.compButton->setEnabled(!guest);
 	connect(act, SIGNAL(triggered()), this, SLOT(showCOMP()));
 	connect(ui.compButton, SIGNAL(clicked(bool)),
 		this, SLOT(showCOMP()));
 
 	// Storage Action
 	act = menu->addAction(/* icon, */tr("&Storage") );
+	act->setEnabled(!guest);
+	ui.storageButton->setEnabled(!guest);
 	connect(act, SIGNAL(triggered()), this, SLOT(showStorage()));
 	connect(ui.storageButton, SIGNAL(clicked(bool)),
 		this, SLOT(showStorage()));

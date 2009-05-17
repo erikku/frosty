@@ -336,63 +336,15 @@ QVariantMap FusionChart::fuseDevils(const QVariantMap& devilA,
 	while(skills.count() < 8)
 		skills << -1;
 
-	QVariantList inherited_skills = devilA.value("skills").toList();
-	inherited_skills << devilB.value("skills").toList();
-
-	DevilCache *cache = DevilCache::getSingletonPtr();
-
-	QVariantMap devil_info = cache->devilByID(
-		resultDevil.value("id").toInt() );
-
-	QMap<int, bool> canInherit;
-	canInherit[-2] = false;
-	canInherit[-1] = false;
-	canInherit[0] = devil_info.value("breath").toBool();
-	canInherit[1] = devil_info.value("wing").toBool();
-	canInherit[2] = devil_info.value("pierce").toBool();
-	canInherit[3] = devil_info.value("fang").toBool();
-	canInherit[4] = devil_info.value("claw").toBool();
-	canInherit[5] = devil_info.value("needle").toBool();
-	canInherit[6] = devil_info.value("sword").toBool();
-	canInherit[7] = devil_info.value("strange").toBool();
-	canInherit[8] = devil_info.value("eye").toBool();
-	canInherit[99] = true;
-
-	QMutableListIterator<QVariant> it(inherited_skills);
-	while( it.hasNext() )
-	{
-		int skill = it.next().toInt();
-		if(skills_lookup.contains(skill) || skill <= 0)
-			it.remove();
-
-		if(skill > 0)
-		{
-			QVariantMap skill_info = cache->skillByID(skill);
-			Q_ASSERT( !skill_info.isEmpty() );
-
-			int inherit = skill_info.value("inheritance").toInt();
-
-			Q_ASSERT( canInherit.contains(inherit) );
-			if( !canInherit.contains(inherit) )
-				inherit = -1;
-
-			// Check if this demon can inherit the skill
-			if( !canInherit.value(inherit) )
-			{
-				it.remove();
-				continue;
-			}
-		}
-
-		skills_lookup << skill;
-	}
-
 	QVariantMap devil;
 	devil["id"] = resultDevil.value("id").toInt();
 	devil["lvl"] = resultDevil.value("lvl").toInt();
 	devil["skills"] = skills;
-	devil["inherited_skills"] = inherited_skills;
 	devil["parents"] = QVariantList() << devilA << devilB;
+
+	DevilCache *cache = DevilCache::getSingletonPtr();
+
+	devil["inherited_skills"] = cache->calcInheritedSkills(devil);
 
 	return devil;
 }

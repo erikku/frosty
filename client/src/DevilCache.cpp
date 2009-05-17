@@ -228,7 +228,6 @@ void DevilCache::loadSimulatorData()
 
 		QVariantMap values = it.value().toMap();
 
-		QHash<int, int> inside;
 		QMapIterator<QString, QVariant> inside_it(values);
 		while( inside_it.hasNext() )
 		{
@@ -241,10 +240,14 @@ void DevilCache::loadSimulatorData()
 			int inside_value = mGenusByName.value(
 				inside_it.value().toString() );
 
-			inside[inside_key] = inside_value;
-		}
+#ifndef QT_NO_DEBUG
+			GenusPair genus_key(key, inside_key);
+			if( mFusionCombos.contains(genus_key) )
+				Q_ASSERT(mFusionCombos.value(genus_key) == inside_value);
+#endif // QT_NO_DEBUG
 
-		mFusionCombos[key] = inside;
+			mFusionCombos[GenusPair(key, inside_key)] = inside_value;
+		}
 	}
 
 	//
@@ -323,14 +326,10 @@ int DevilCache::seireiGenus() const
 
 int DevilCache::resultGenus(int first, int second) const
 {
-	if( !mFusionCombos.contains(first) )
+	if( !mFusionCombos.contains( GenusPair(first, second) ) )
 		return -1;
 
-	QHash<int, int> inside = mFusionCombos.value(first);
-	if( !inside.contains(second) )
-		return -1;
-
-	return inside.value(second);
+	return mFusionCombos.value( GenusPair(first, second) );
 }
 
 int DevilCache::seireiModifier(int genus, int seirei) const
@@ -342,4 +341,72 @@ int DevilCache::seireiModifier(int genus, int seirei) const
 	Q_ASSERT( inside.contains(seirei) );
 
 	return inside.value(seirei);
+}
+
+QVariantList DevilCache::calcInheritedSkills(const QVariantMap& devil) const
+{
+	QList<int> skills;
+	{
+		QVariantList skills_list = devil.value("skills").toList();
+		QListIterator<QVariant> it(skills_list);
+		while( it.hasNext() )
+			skills << it.next().toInt();
+	}
+
+	QVariantList parents = devil.value("parents").toList();
+	QListIterator<QVariant> parent_it(parents);
+
+	QVariantMap devil_info = devilByID( devil.value("id").toInt() );
+
+	QMap<int, bool> canInherit;
+	canInherit[-2] = false;
+	canInherit[-1] = false;
+	canInherit[0] = devil_info.value("breath").toBool();
+	canInherit[1] = devil_info.value("wing").toBool();
+	canInherit[2] = devil_info.value("pierce").toBool();
+	canInherit[3] = devil_info.value("fang").toBool();
+	canInherit[4] = devil_info.value("claw").toBool();
+	canInherit[5] = devil_info.value("needle").toBool();
+	canInherit[6] = devil_info.value("sword").toBool();
+	canInherit[7] = devil_info.value("strange").toBool();
+	canInherit[8] = devil_info.value("eye").toBool();
+	canInherit[99] = true;
+
+	QVariantList inherited_skills;
+
+	while( parent_it.hasNext() )
+	{
+		QVariantMap parent = parent_it.next().toMap();
+
+		QVariantList parent_skills = parent.value("skills").toList();
+		QListIterator<QVariant> skills_it(parent_skills);
+		while( skills_it.hasNext() )
+		{
+			int skill = skills_it.next().toInt();
+			if( skill < 0 || skills.contains(skill) )
+				continue;
+
+			QVariantMap skill_info = skillByID(skill);
+			Q_ASSERT( !skill_info.isEmpty() );
+
+			int inherit = skill_info.value("inheritance").toInt();
+
+			Q_ASSERT( canInherit.contains(inherit) );
+			if( !canInherit.contains(inherit) )
+				inherit = -1;
+
+			if( !canInherit.value(inherit) )
+				continue;
+
+			inherited_skills << skill;
+			skills << skill;
+		}
+	}
+
+	return inherited_skills;
+}
+
+QHash<GenusPair, int> DevilCache::fusionCombos() const
+{
+	return mFusionCombos;
 }

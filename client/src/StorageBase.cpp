@@ -40,9 +40,10 @@
 #include "DevilProperties.h"
 
 StorageBase::StorageBase(QWidget *parent_widget) : QWidget(parent_widget),
-	mEditable(false), mLoaded(false), mMarked(false), mSyncTimer(0),
-	mAddDevil(false), mFusionChart(0), mFuseButton(0), mPropertiesButton(0),
-	mDismissButton(0), mAddButton(0), mDuplicateButton(0), mExtractButton(0)
+	mCurrent(-1), mEditable(false), mLoaded(false), mMarked(false),
+	mSyncTimer(0), mAddDevil(false), mFusionChart(0), mFuseButton(0),
+	mPropertiesButton(0), mDismissButton(0), mAddButton(0),
+	mDuplicateButton(0), mExtractButton(0)
 {
 	// Nothing to see here
 }
@@ -227,9 +228,10 @@ void StorageBase::selectionChanged()
 
 		DevilProperties *prop = DevilProperties::getSingletonPtr();
 
-		if(prop->isVisible() && good)
+		// Only reset the devil if the selection changes
+		if(prop->isVisible() && good && mCurrent != index)
 			prop->setActiveDevil(this, index, devil_data);
-		else
+		else if(!prop->isVisible() || !good)
 			prop->hide();
 
 		if(good && mExtractButton && mEditable)
@@ -259,6 +261,8 @@ void StorageBase::selectionChanged()
 		mAddButton->setEnabled(index >= 0 && !good && mEditable);
 	if(mDuplicateButton)
 		mDuplicateButton->setEnabled(good && free_slots >= 1 && mEditable);
+
+	mCurrent = index;
 }
 
 void StorageBase::indexDoubleClicked(int idx)

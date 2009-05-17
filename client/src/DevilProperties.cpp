@@ -19,8 +19,10 @@
 
 #include "DevilProperties.h"
 #include "DevilCache.h"
+#include "AddParents.h"
 
 #include <QtGui/QMouseEvent>
+#include <QtGui/QHeaderView>
 #include <QtGui/QDrag>
 
 #ifndef QT_NO_DEBUG
@@ -85,6 +87,10 @@ DevilProperties::DevilProperties(QWidget *parent_widget) :
 		this, SLOT(historySelectionChanged()));
 	connect(ui.extractButton, SIGNAL(clicked(bool)),
 		this, SLOT(extractHistory()));
+	connect(ui.addChildren, SIGNAL(clicked(bool)),
+		this, SLOT(addChildren()));
+	connect(ui.dismissChildren, SIGNAL(clicked(bool)),
+		this, SLOT(dismissChildren()));
 
 	ui.historyTree->header()->hide();
 
@@ -92,22 +98,203 @@ DevilProperties::DevilProperties(QWidget *parent_widget) :
 	historySelectionChanged();
 }
 
+void DevilProperties::addChildren()
+{
+	QList<QTreeWidgetItem*> items = ui.historyTree->selectedItems();
+	if( items.isEmpty() )
+		return;
+
+	QTreeWidgetItem *item = items.first();
+	if(!item)
+		return;
+
+	int devil_id = item->data(0, Qt::UserRole).toMap().value("id").toInt();
+
+	AddParents *p = new AddParents(devil_id, this);
+
+	connect(p, SIGNAL(children(const QList<QVariantMap>&)),
+		this, SLOT(addChildren(const QList<QVariantMap>&)));
+
+	p->show();
+}
+
+void DevilProperties::addChildren(const QList<QVariantMap>& list)
+{
+	QList<QTreeWidgetItem*> items = ui.historyTree->selectedItems();
+	if( items.isEmpty() )
+		return;
+
+	QTreeWidgetItem *item = items.first();
+	if(!item)
+		return;
+
+	DevilCache *cache = DevilCache::getSingletonPtr();
+
+	foreach(QVariantMap data, list)
+	{
+		QVariantMap info = cache->devilByID( data.value("id").toInt() );
+
+		QString text = info.value("name").toString();
+		int level_base = info.value("lvl").toInt();
+		int level_current = data.value("lvl").toInt();
+		if(level_base == level_current)
+		{
+			text = tr("%1 (%2)").arg(text).arg(level_base);
+		}
+		else
+		{
+			text = tr("%1 (%2=>%3)").arg(text).arg(
+				level_base).arg(level_current);
+		}
+
+		QTreeWidgetItem *child;
+		child = new QTreeWidgetItem;
+		child->setText(0, text);
+		child->setData(0, Qt::UserRole, data);
+		child->setToolTip(0, cache->devilToolTip(data));
+		item->addChild(child);
+	}
+
+	QVariantMap data = rebuildDevilData( ui.historyTree->topLevelItem(0) );
+	historySelectionChanged();
+
+	mActiveStorage->setAt(mActiveSlot, data);
+}
+
+void DevilProperties::dismissChildren()
+{
+	QList<QTreeWidgetItem*> items = ui.historyTree->selectedItems();
+	if( items.isEmpty() )
+		return;
+
+	foreach(QTreeWidgetItem *child, items.first()->takeChildren())
+		delete child;
+
+	mActiveItem->setData(0, Qt::UserRole, mActiveData);
+	mActiveStorage->setAt(mActiveSlot, rebuildDevilData(
+		ui.historyTree->topLevelItem(0) ) );
+
+	historySelectionChanged();
+}
+
+DevilData DevilProperties::rebuildDevilData(QTreeWidgetItem *item) const
+{
+	const DevilData original_data = item->data(0, Qt::UserRole).toMap();
+
+	int level = original_data.value("lvl").toInt();
+	int id = original_data.value("id").toInt();
+
+
+	QVariantList parents, possible_skills;
+	QList<int> default_skills;
+
+	DevilCache *cache = DevilCache::getSingletonPtr();
+	Q_ASSERT(cache);
+
+	{
+		QVariantList info_skills = cache->devilByID(
+			id).value("skills").toList();
+
+		QListIterator<QVariant> it(info_skills);
+		while( it.hasNext() )
+		{
+			QVariantMap skill = it.next().toMap();
+
+			int skill_id = skill.value("skill").toInt();
+			int skill_level = skill.value("lvl").toInt();
+			if(skill_level <= level)
+			{
+				default_skills << skill_id;
+				possible_skills << skill_id;
+			}
+		}
+	}
+
+	for(int i = 0; i < item->childCount(); i++)
+		parents << rebuildDevilData( item->child(i) );
+
+	DevilData data = original_data;
+	data["parents"] = parents;
+	data["skills"] = possible_skills;
+
+	QVariantList inherited_skills = cache->calcInheritedSkills(data);
+	data["inherited_skills"] = inherited_skills;
+
+	QList<int> inherited_ids;
+	{
+		QListIterator<QVariant> inherited_it(inherited_skills);
+
+		while( inherited_it.hasNext() )
+			inherited_ids << inherited_it.next().toInt();
+	}
+
+	QVariantList final_active;
+
+	// Fix active skills
+	{
+		QVariantList old_active = original_data.value("skills").toList();
+		QListIterator<QVariant> it(old_active);
+		while( it.hasNext() )
+		{
+			int skill = it.next().toInt();
+
+			int index = inherited_ids.indexOf(skill);
+			if(index >= 0)
+			{
+				final_active << skill;
+				inherited_ids.removeAt(index);
+				inherited_skills.removeAt(index);
+				continue;
+			}
+
+			index = default_skills.indexOf(skill);
+			if(index >= 0)
+			{
+				final_active << skill;
+				default_skills.removeAt(index);
+				continue;
+			}
+
+			final_active << -1;
+		}
+	}
+
+	data["skills"] = final_active;
+	data["inherited_skills"] = inherited_skills;
+
+	item->setData(0, Qt::UserRole, data);
+
+	return data;
+}
+
 void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
 	const DevilData& devil_data)
 {
 	mActiveSlot = slot;
 	mActiveStorage = storage;
-	mData = devil_data;
+
+	updateHistory(devil_data);
+
+	loadDevilData( ui.historyTree->topLevelItem(0) );
+}
+
+void DevilProperties::loadDevilData(QTreeWidgetItem *item)
+{
+	if(!item)
+		return;
+
+	mActiveItem = item;
+	mActiveData = item->data(0, Qt::UserRole).toMap();
 
 	DevilCache *cache = DevilCache::getSingletonPtr();
 
 	QVariantMap info = cache->devilByID(
-		mData.value("id").toInt() );
+		mActiveData.value("id").toInt() );
 
 	QPixmap icon( QString("icons/devils/icon_%1.png").arg(
 		info.value("icon").toString() ) );
 
-	int lvl = mData.value("lvl").toInt();
+	int lvl = mActiveData.value("lvl").toInt();
 
 	QMap<int, QString> lncEnum;
 	lncEnum[0] = tr("Law");
@@ -126,7 +313,7 @@ void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
 	setWindowTitle( tr("%1 - %2 Properties").arg(
 		tr("Absolutely Frosty") ).arg( info.value("name").toString() ) );
 
-	QVariantList skills = mData.value("skills").toList();
+	QVariantList skills = mActiveData.value("skills").toList();
 	QListIterator<QVariant> it(skills);
 
 	QPixmap blank(":/border.png");
@@ -167,7 +354,7 @@ void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
 		i++;
 	}
 
-	skills = mData.value("inherited_skills").toList();
+	skills = mActiveData.value("inherited_skills").toList();
 	it = skills;
 
 	i = 0;
@@ -188,7 +375,6 @@ void DevilProperties::setActiveDevil(StorageBase *storage, int slot,
 	}
 
 	updateLearnedSkills();
-	updateHistory();
 }
 
 void DevilProperties::updateLearnedSkills()
@@ -196,7 +382,7 @@ void DevilProperties::updateLearnedSkills()
 	DevilCache *cache = DevilCache::getSingletonPtr();
 
 	QVariantMap info = cache->devilByID(
-		mData.value("id").toInt() );
+		mActiveData.value("id").toInt() );
 
 	// Update the demon's level
 	int lvl = ui.level->value();
@@ -222,7 +408,7 @@ void DevilProperties::updateLearnedSkills()
 
 		int skill_id = map.value("skill").toInt();
 		int skill_lvl = map.value("lvl").toInt();
-		if(skill_lvl < 1 || skill_lvl > lvl)
+		if(skill_lvl > lvl)
 			continue;
 
 		if( mActiveIDs.contains(skill_id) || mInheritedIDs.contains(skill_id) )
@@ -233,38 +419,47 @@ void DevilProperties::updateLearnedSkills()
 		QPixmap skill_icon( QString("icons/skills/icon_%1.png").arg(
 			skill_info.value("icon").toString() ) );
 
+		int learned_at = skill_lvl;
+		if(learned_at < 1)
+			learned_at = info.value("lvl").toInt();
+
+		QString tooltip = tr("%1\nSkill learned at level %2.").arg(
+			cache->skillToolTip(skill_id) ).arg(learned_at);
+
 		mLearnedSkills.at(i)->setPixmap(skill_icon);
-		mLearnedSkills.at(i)->setToolTip( cache->skillToolTip(skill_id) );
+		mLearnedSkills.at(i)->setToolTip(tooltip);
 		mLearnedIDs[i] = skill_id;
 
 		i++;
 	}
 
 	// If the level changed, we should update the devil info
-	if(mData.value("lvl").toInt() != lvl)
+	if(mActiveData.value("lvl").toInt() != lvl)
 	{
 		bool blocked = ui.level->blockSignals(true);
 		ui.level->setMinimum(lvl);
 		ui.level->setValue(lvl);
 		ui.level->blockSignals(blocked);
-		mData["lvl"] = lvl;
+		mActiveData["lvl"] = lvl;
 
-		mActiveStorage->setAt(mActiveSlot, mData);
+		mActiveItem->setData(0, Qt::UserRole, mActiveData);
+		mActiveStorage->setAt(mActiveSlot, rebuildDevilData(
+			ui.historyTree->topLevelItem(0) ) );
 	}
 }
 
-void DevilProperties::updateHistory()
+void DevilProperties::updateHistory(const DevilData &data)
 {
 	ui.historyTree->clear();
 
 	DevilCache *cache = DevilCache::getSingletonPtr();
 
 	QVariantMap info = cache->devilByID(
-		mData.value("id").toInt() );
+		data.value("id").toInt() );
 
 	QString text = info.value("name").toString();
 	int level_base = info.value("lvl").toInt();
-	int level_current = mData.value("lvl").toInt();
+	int level_current = data.value("lvl").toInt();
 	if(level_base == level_current)
 	{
 		text = tr("%1 (%2)").arg(text).arg(level_base);
@@ -278,10 +473,10 @@ void DevilProperties::updateHistory()
 	QTreeWidgetItem *parent;
 	parent = new QTreeWidgetItem;
 	parent->setText(0, text);
-	parent->setData(0, Qt::UserRole, mData);
-	parent->setToolTip(0, cache->devilToolTip(mData));
+	parent->setData(0, Qt::UserRole, data);
+	parent->setToolTip(0, cache->devilToolTip(data));
 
-	updateHistoryParent(parent, mData);
+	updateHistoryParent(parent, data);
 
 	ui.historyTree->addTopLevelItem(parent);
 	ui.historyTree->expandAll();
@@ -328,20 +523,29 @@ void DevilProperties::updateHistoryParent(QTreeWidgetItem *parent,
 
 void DevilProperties::historySelectionChanged()
 {
+	QList<QTreeWidgetItem*> items = ui.historyTree->selectedItems();
+	if( items.isEmpty() )
+	{
+		ui.extractButton->setEnabled(false);
+		ui.dismissChildren->setEnabled(false);
+		ui.addChildren->setEnabled(false);
+
+		return;
+	}
+
 	if(!mActiveStorage || mActiveStorage->count() >= mActiveStorage->capacity() )
 	{
 		ui.extractButton->setEnabled(false);
 		return;
 	}
 
-	QList<QTreeWidgetItem*> items = ui.historyTree->selectedItems();
-	if( items.isEmpty() )
-	{
-		ui.extractButton->setEnabled(false);
-		return;
-	}
+	loadDevilData( items.first() );
 
-	ui.extractButton->setEnabled(true);
+	if( items.first() != ui.historyTree->topLevelItem(0) )
+		ui.extractButton->setEnabled(true);
+
+	ui.dismissChildren->setEnabled( items.first()->childCount() );
+	ui.addChildren->setEnabled(items.first()->childCount() == 0);
 }
 
 void DevilProperties::extractHistory()
@@ -584,7 +788,7 @@ void DevilProperties::dropEvent(QDropEvent *evt)
 			skills << id;
 	}
 
-	mData["skills"] = skills;
+	mActiveData["skills"] = skills;
 
 	skills.clear();
 	foreach(int id, mInheritedIDs)
@@ -593,9 +797,11 @@ void DevilProperties::dropEvent(QDropEvent *evt)
 			skills << id;
 	}
 
-	mData["inherited_skills"] = skills;
+	mActiveData["inherited_skills"] = skills;
 
-	mActiveStorage->setAt(mActiveSlot, mData);
+	mActiveItem->setData(0, Qt::UserRole, mActiveData);
+	mActiveStorage->setAt(mActiveSlot, rebuildDevilData(
+		ui.historyTree->topLevelItem(0) ) );
 }
 
 void DevilProperties::rewindSkills(int start,

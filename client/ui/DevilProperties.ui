@@ -1110,6 +1110,24 @@
          </item>
         </layout>
        </item>
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QPushButton" name="addChildren">
+           <property name="text">
+            <string>Add Parents</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="dismissChildren">
+           <property name="text">
+            <string>Dismiss Parents</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
     </widget>

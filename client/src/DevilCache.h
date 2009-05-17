@@ -22,7 +22,8 @@
 
 #include <QtCore/QVariantMap>
 #include <QtCore/QObject>
-#include <QtCore/QHash>
+
+#include "GenusPair.h"
 
 class DevilCache : public QObject
 {
@@ -42,6 +43,10 @@ public:
 	int seireiGenus() const;
 	int resultGenus(int first, int second) const;
 	int seireiModifier(int genus, int seirei) const;
+
+	QHash<GenusPair, int> fusionCombos() const;
+
+	QVariantList calcInheritedSkills(const QVariantMap& devil) const;
 
 signals:
 	void cacheReady();
@@ -67,7 +72,7 @@ protected:
 	QMap<int, int> mSeireiCombos;
 	QMap<QString, int> mGenusByName;
 	QMap<QString, int> mSeireiByName;
-	QHash< int, QHash<int, int> > mFusionCombos;
+	QHash<GenusPair, int> mFusionCombos;
 	QMap< int, QMap<int, int> > mSeireiModifiers;
 	QHash< int, QList<QVariantMap> > mDevilsByGenus;
 };

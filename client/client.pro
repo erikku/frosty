@@ -74,7 +74,8 @@ FORMS       += ui/PaletteEditor.ui \
                ui/Clock.ui \
                ui/DevilProperties.ui \
                ui/FusionChart.ui \
-               ui/MoonPhases.ui
+               ui/MoonPhases.ui \
+               ui/AddParents.ui
 HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/baseTransfer.h \
@@ -148,7 +149,8 @@ HEADERS     += src/ajax.h \
                src/Clock.h \
                src/DevilProperties.h \
                src/FusionChart.h \
-               src/MoonPhases.h
+               src/MoonPhases.h \
+               src/AddParents.h
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
@@ -225,4 +227,5 @@ SOURCES     += src/main.cpp \
                src/Clock.cpp \
                src/DevilProperties.cpp \
                src/FusionChart.cpp \
-               src/MoonPhases.cpp
+               src/MoonPhases.cpp \
+               src/AddParents.cpp

@@ -35,19 +35,28 @@ public:
 
 	void setActiveDevil(StorageBase *storage, int slot, const DevilData& data);
 
+public slots:
+	void addChildren(const QList<QVariantMap>& list);
+
 protected slots:
 	void historySelectionChanged();
 	void updateLearnedSkills();
 	void extractHistory();
-	void updateHistory();
+	void updateHistory(const DevilData& data);
+
+	void addChildren();
+	void dismissChildren();
 
 protected:
 	DevilProperties(QWidget *parent = 0);
+
+	DevilData rebuildDevilData(QTreeWidgetItem *item) const;
 
 	void darkenWidget(QWidget *widget);
 
 	void rewindSkills(int start, QList<QLabel*> *icons, QList<int> *ids);
 
+	void loadDevilData(QTreeWidgetItem *item);
 	void updateHistoryParent(QTreeWidgetItem *parent, const DevilData& data);
 
 	virtual void mousePressEvent(QMouseEvent *event);
@@ -60,7 +69,8 @@ protected:
 	int mActiveSlot;
 	StorageBase *mActiveStorage;
 
-	DevilData mData;
+	DevilData mActiveData;
+	QTreeWidgetItem *mActiveItem;
 
 	QList<int> mActiveIDs, mLearnedIDs, mInheritedIDs;
 	QList<QLabel*> mActiveSkills, mLearnedSkills, mInheritedSkills;
