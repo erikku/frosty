@@ -69,7 +69,7 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.affinitySuicideLabel << ui.affinityAlmightyLabel
 		<< ui.affinitySpecialLabel << ui.affinitiesLabel
 		<< ui.modLabel << ui.modCompatLabel << ui.stackSizeLabel
-		<< ui.separatorWidget << ui.descSeparator;
+		<< ui.separatorWidget << ui.descSeparator << ui.modifierCriticalLabel;
 
 	// Edit labels
 	widgets << ui.elementsLabel2 << ui.nameLabel2 << ui.japaneseNameLabel2
@@ -117,7 +117,7 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		<< ui.affinitySpecialLabel2 << ui.locationsEditDivider
 		<< ui.affinitiesLabel2 << ui.stackSizeLabel2
 		<< ui.modLabel2 << ui.modCompatLabel2 << ui.stackSizeLabel2
-		<< ui.descSeparator2;
+		<< ui.descSeparator2 << ui.modifierCriticalLabel2;
 
 	foreach(QWidget *widget, widgets)
 		darkenWidget(widget);
@@ -172,6 +172,7 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 		ui.modifierIntelligenceEdit, 0);
 	bindNumber("modifier_speed", ui.modifierSpeed, ui.modifierSpeedEdit, 0);
 	bindNumber("modifier_luck", ui.modifierLuck, ui.modifierLuckEdit, 0);
+	bindNumber("modifier_critical", ui.modifierCritical, ui.modifierCriticalEdit, 0);
 	bindNumber("modifier_attack", ui.modifierAttack, ui.modifierAttackEdit, 0);
 	bindNumber("modifier_gun", ui.modifierGun, ui.modifierGunEdit, 0);
 	bindNumber("modifier_magic", ui.modifierMagic, ui.modifierMagicEdit, 0);

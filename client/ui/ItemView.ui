@@ -959,6 +959,32 @@
                </property>
               </widget>
              </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="modifierCriticalLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Critical</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QLabel" name="modifierCritical">
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>
@@ -3009,14 +3035,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
              </property>
              <property name="maximum">
               <number>1000000</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -3094,14 +3120,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
              </property>
              <property name="maximum">
               <number>100</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -3136,14 +3162,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
              </property>
              <property name="maximum">
               <number>1000000</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -3480,14 +3506,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
              </property>
              <property name="maximum">
               <number>93</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -3565,14 +3591,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>0</number>
              </property>
              <property name="maximum">
               <number>5</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -4346,6 +4372,32 @@
              </item>
              <item row="5" column="3">
               <widget class="QSpinBox" name="modifierMagicDefenseEdit">
+               <property name="minimum">
+                <number>-99</number>
+               </property>
+               <property name="maximum">
+                <number>99</number>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="modifierCriticalLabel2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Critical</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QSpinBox" name="modifierCriticalEdit">
                <property name="minimum">
                 <number>-99</number>
                </property>
