@@ -148,6 +148,8 @@ protected:
 	SearchEdit *mQuickSearch;
 
 	QString mRelationID, mRelationForeignTable, mRelationForeignID;
+
+	mutable int mCurrentID;
 };
 
 #endif // __BindDetailedMultiRelation_h__

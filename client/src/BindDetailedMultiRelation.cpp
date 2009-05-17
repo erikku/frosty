@@ -73,7 +73,7 @@ void BindDetailedMultiRelation::multiRelationColumn(const QString& col_arg)
 BindDetailedMultiRelation::BindDetailedMultiRelation(QObject *obj_parent) :
 	AjaxBind(obj_parent), mViewer(0), mEditor(0), mAddList(0), mAddStack(0),
 	mRemoveButton(0), mEditButton(0), mAddButton(0), mCancelButton(0),
-	mNewButton(0), mQuickSearch(0)
+	mNewButton(0), mQuickSearch(0), mCurrentID(0)
 {
 	ajax::getSingletonPtr()->subscribe(this);
 }
@@ -128,14 +128,16 @@ QVariantList BindDetailedMultiRelation::customViewActions(int id) const
 		action["relations"] = QVariantList() << relation
 			<< mAdditionalRelations;
 
+	mCurrentID = id;
+
 	QVariantMap where;
 	where["column"] = QString("%1.%2").arg(mOtherTable).arg(mRelationID);
 	where["type"] = "equals";
 	where["value"] = id;
 
 	action["where"] = QVariantList() << where;
-	action["user_data"] = QString("multi_relation_%1_%2").arg(
-		mTable).arg(mOtherTable);
+	action["user_data"] = QString("multi_relation_%1_%2_%3").arg(
+		mTable).arg(mOtherTable).arg(mCurrentID);
 
 	return QVariantList() << action << refreshItemCache();
 }
@@ -448,7 +450,8 @@ void BindDetailedMultiRelation::ajaxResponse(const QVariantMap& resp,
 		return;
 	}
 
-	user_data2 = QString("multi_relation_%1_%2").arg(mTable).arg(mOtherTable);
+	user_data2 = QString("multi_relation_%1_%2_%3").arg(
+		mTable).arg(mOtherTable).arg(mCurrentID);
 
 	if(user_data != user_data2)
 		return;
