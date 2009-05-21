@@ -621,7 +621,7 @@ void BindMultiRelation::ajaxResponse(const QVariantMap& resp,
 
 	user_data2 = QString("multirel_%1_%2").arg(mTable).arg(mOtherTable);
 
-	if(resp.value("user_data").toString() != user_data)
+	if(resp.value("user_data").toString() != user_data2)
 		return;
 
 	QString name_col = QString("%1_%2").arg(
