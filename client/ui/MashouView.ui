@@ -324,13 +324,53 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="desc_jaFusion1">
-           <property name="wordWrap">
+          <widget class="QScrollArea">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="widgetResizable">
             <bool>true</bool>
            </property>
-           <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-           </property>
+           <widget class="QWidget">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>515</width>
+              <height>49</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout">
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="desc_jaFusion1">
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -348,13 +388,53 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="desc_jaFusion2">
-           <property name="wordWrap">
+          <widget class="QScrollArea">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="widgetResizable">
             <bool>true</bool>
            </property>
-           <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-           </property>
+           <widget class="QWidget">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>515</width>
+              <height>49</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout">
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="desc_jaFusion2">
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -372,13 +452,53 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="desc_enFusion1">
-           <property name="wordWrap">
+          <widget class="QScrollArea">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="widgetResizable">
             <bool>true</bool>
            </property>
-           <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-           </property>
+           <widget class="QWidget">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>515</width>
+              <height>48</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout">
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="desc_enFusion1">
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -396,13 +516,53 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="desc_enFusion2">
-           <property name="wordWrap">
+          <widget class="QScrollArea">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="widgetResizable">
             <bool>true</bool>
            </property>
-           <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-           </property>
+           <widget class="QWidget">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>515</width>
+              <height>49</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout">
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="desc_enFusion2">
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -639,11 +799,11 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -764,14 +924,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
              </property>
              <property name="maximum">
               <number>90</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -790,14 +950,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
              </property>
              <property name="maximum">
               <number>90</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -829,14 +989,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
              </property>
              <property name="maximum">
               <number>90</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -855,14 +1015,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="value">
-              <number>0</number>
-             </property>
              <property name="minimum">
               <number>-1</number>
              </property>
              <property name="maximum">
               <number>90</number>
+             </property>
+             <property name="value">
+              <number>0</number>
              </property>
             </widget>
            </item>
