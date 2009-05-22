@@ -27,6 +27,9 @@
 #include "sha1.h"
 
 #include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QRegExp>
+#include <QtCore/QFileInfo>
 #include <QtCore/QDateTime>
 #include <QtGui/QInputDialog>
 #include <QtSql/QSqlQuery>
@@ -40,8 +43,6 @@ offlineTransfer::offlineTransfer(QObject *parent) : baseTransfer(parent)
 
 	/// Load the server config
 	conf->loadConfig(":/config.xml");
-
-	mBackend = new Backend;
 
 	if(conf->dbType() == "sqlite")
 	{
@@ -65,10 +66,31 @@ offlineTransfer::offlineTransfer(QObject *parent) : baseTransfer(parent)
 
 	if(conf->userDBType() == "sqlite")
 	{
+		bool create = !QFileInfo( conf->userDBPath() ).exists();
+
 		user_db = QSqlDatabase::addDatabase("QSQLITE", "user");
 		user_db.setDatabaseName( conf->userDBPath() );
 		if( !user_db.open() )
 			LOG_ERROR( user_db.lastError().text() );
+
+		if(create)
+		{
+			QFile sql(":/user.sql");
+			sql.open(QIODevice::ReadOnly);
+
+			QStringList lines = QString::fromUtf8( sql.readAll() ).split("\n");
+			foreach(QString line, lines)
+			{
+				QRegExp lineMatcher("^(.+);$");
+				if( line.isEmpty() || !lineMatcher.exactMatch(line) )
+					continue;
+
+				QSqlQuery query(user_db);
+				query.exec( lineMatcher.cap(1) );
+			}
+
+			sql.close();
+		}
 	}
 	else // mysql
 	{
@@ -82,6 +104,8 @@ offlineTransfer::offlineTransfer(QObject *parent) : baseTransfer(parent)
 		QSqlQuery query("SET CHARSET utf8", user_db);
 		query.exec();
 	}
+
+	mBackend = new Backend;
 
 	{
 		QString hash, path = QDir::homePath();

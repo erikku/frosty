@@ -21,5 +21,6 @@
 	<file alias="seirei.json">res/seirei.json</file>
 	<file alias="gpl.txt">res/gpl.txt</file>
 	<file alias="config.xml">res/config.xml</file>
+	<file alias="user.sql">res/user.sql</file>
 </qresource>
 </RCC>
