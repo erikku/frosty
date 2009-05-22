@@ -30,7 +30,10 @@ class QHttpResponseHeader;
 
 #include "sha1.h"
 
+#ifndef QSTRINGMAP_DEF
+#define QSTRINGMAP_DEF
 typedef QMap<QString, QString> QStringMap;
+#endif // QSTRINGMAP_DEF
 
 class localTransfer : public baseTransfer
 {

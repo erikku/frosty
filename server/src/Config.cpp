@@ -69,6 +69,9 @@ void Config::loadDefaults()
 	mDBType = "sqlite";
 	mDBPath = "master.db";
 
+	mUserDBType = "sqlite";
+	mUserDBPath = "user.db";
+
 	mShoutboxLog = true;
 	mShoutboxLogPath = "shoutbox.log";
 
@@ -79,7 +82,8 @@ void Config::loadConfig(const QString& path)
 {
 	if( mWatcher->files().isEmpty() )
 	{
-		mWatcher->addPath(path);
+		if( !path.isEmpty() && path.at(0) != ':' )
+			mWatcher->addPath(path);
 	}
 	else if(mWatcher->files().first() != path)
 	{
@@ -221,46 +225,88 @@ void Config::loadConfig(const QString& path)
 	else
 		mAuthAdminDB = nodeToBool(nodes.first(), mAuthAdminDB);
 
-	// <database><type>
-	nodes = elementsByXPath(doc, "/database/type");
+	// <database><master><type>
+	nodes = elementsByXPath(doc, "/database/master/type");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBType = nodes.first().toElement().text().trimmed().toLower();
 	else
 		LOG_WARNING( tr("Failed to find database type in config file\n") );
 
-	// <database><path>
-	nodes = elementsByXPath(doc, "/database/path");
+	// <database><master><path>
+	nodes = elementsByXPath(doc, "/database/master/path");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBPath = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "sqlite")
 		LOG_WARNING( tr("Failed to find database path in config file\n") );
 
-	// <database><host>
-	nodes = elementsByXPath(doc, "/database/host");
+	// <database><master><host>
+	nodes = elementsByXPath(doc, "/database/master/host");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBPath = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "mysql")
 		LOG_WARNING( tr("Failed to find database host in config file\n") );
 
-	// <database><user>
-	nodes = elementsByXPath(doc, "/database/user");
+	// <database><master><user>
+	nodes = elementsByXPath(doc, "/database/master/user");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBUser = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "mysql")
 		LOG_WARNING( tr("Failed to find database user in config file\n") );
 
-	// <database><pass>
-	nodes = elementsByXPath(doc, "/database/pass");
+	// <database><master><pass>
+	nodes = elementsByXPath(doc, "/database/master/pass");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBPass = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "mysql")
 		LOG_WARNING( tr("Failed to find database password in config file\n") );
 
-	// <database><db>
-	nodes = elementsByXPath(doc, "/database/db");
+	// <database><master><db>
+	nodes = elementsByXPath(doc, "/database/master/db");
 	if( nodes.count() && nodes.first().isElement() )
 		mDBName = nodes.first().toElement().text().trimmed();
 	else if(mDBType == "mysql")
+		LOG_WARNING( tr("Failed to find database name in config file\n") );
+
+	// <database><user><type>
+	nodes = elementsByXPath(doc, "/database/user/type");
+	if( nodes.count() && nodes.first().isElement() )
+		mUserDBType = nodes.first().toElement().text().trimmed().toLower();
+	else
+		LOG_WARNING( tr("Failed to find database type in config file\n") );
+
+	// <database><user><path>
+	nodes = elementsByXPath(doc, "/database/user/path");
+	if( nodes.count() && nodes.first().isElement() )
+		mUserDBPath = nodes.first().toElement().text().trimmed();
+	else if(mUserDBType == "sqlite")
+		LOG_WARNING( tr("Failed to find database path in config file\n") );
+
+	// <database><user><host>
+	nodes = elementsByXPath(doc, "/database/user/host");
+	if( nodes.count() && nodes.first().isElement() )
+		mUserDBPath = nodes.first().toElement().text().trimmed();
+	else if(mUserDBType == "mysql")
+		LOG_WARNING( tr("Failed to find database host in config file\n") );
+
+	// <database><user><user>
+	nodes = elementsByXPath(doc, "/database/user/user");
+	if( nodes.count() && nodes.first().isElement() )
+		mUserDBUser = nodes.first().toElement().text().trimmed();
+	else if(mUserDBType == "mysql")
+		LOG_WARNING( tr("Failed to find database user in config file\n") );
+
+	// <database><user><pass>
+	nodes = elementsByXPath(doc, "/database/user/pass");
+	if( nodes.count() && nodes.first().isElement() )
+		mUserDBPass = nodes.first().toElement().text().trimmed();
+	else if(mUserDBType == "mysql")
+		LOG_WARNING( tr("Failed to find database password in config file\n") );
+
+	// <database><user><db>
+	nodes = elementsByXPath(doc, "/database/user/db");
+	if( nodes.count() && nodes.first().isElement() )
+		mUserDBName = nodes.first().toElement().text().trimmed();
+	else if(mUserDBType == "mysql")
 		LOG_WARNING( tr("Failed to find database name in config file\n") );
 
 	// <auth><database><type>
@@ -487,12 +533,19 @@ void Config::saveConfig(const QString& path)
 	writeXPath(doc, "/connection/address", mAddress);
 	writeXPath(doc, "/connection/port", QString::number(mPort));
 
-	writeXPath(doc, "/database/type", mDBType);
-	writeXPath(doc, "/database/path", mDBPath);
-	writeXPath(doc, "/database/host", mDBHost);
-	writeXPath(doc, "/database/user", mDBUser);
-	writeXPath(doc, "/database/pass", mDBPass);
-	writeXPath(doc, "/database/name", mDBName);
+	writeXPath(doc, "/database/master/type", mDBType);
+	writeXPath(doc, "/database/master/path", mDBPath);
+	writeXPath(doc, "/database/master/host", mDBHost);
+	writeXPath(doc, "/database/master/user", mDBUser);
+	writeXPath(doc, "/database/master/pass", mDBPass);
+	writeXPath(doc, "/database/master/name", mDBName);
+
+	writeXPath(doc, "/database/user/type", mUserDBType);
+	writeXPath(doc, "/database/user/path", mUserDBPath);
+	writeXPath(doc, "/database/user/host", mUserDBHost);
+	writeXPath(doc, "/database/user/user", mUserDBUser);
+	writeXPath(doc, "/database/user/pass", mUserDBPass);
+	writeXPath(doc, "/database/user/name", mUserDBName);
 
 	writeXPath(doc, "/log/levels/debug", mLogDebug ? "true" : "false");
 	writeXPath(doc, "/log/levels/info", mLogInfo ? "true" : "false");
@@ -731,6 +784,66 @@ QString Config::dbName() const
 void Config::setDBName(const QString& name)
 {
 	mDBName = name;
+}
+
+QString Config::userDBType() const
+{
+	return mUserDBType;
+}
+
+void Config::setUserDBType(const QString& type)
+{
+	mUserDBType = type;
+}
+
+QString Config::userDBPath() const
+{
+	return mUserDBPath;
+}
+
+void Config::setUserDBPath(const QString& path)
+{
+	mUserDBPath = path;
+}
+
+QString Config::userDBHost() const
+{
+	return mUserDBHost;
+}
+
+void Config::setUserDBHost(const QString& host)
+{
+	mUserDBHost = host;
+}
+
+QString Config::userDBUser() const
+{
+	return mUserDBUser;
+}
+
+void Config::setUserDBUser(const QString& user)
+{
+	mUserDBUser = user;
+}
+
+QString Config::userDBPass() const
+{
+	return mUserDBPass;
+}
+
+void Config::setUserDBPass(const QString& pass)
+{
+	mUserDBPass = pass;
+}
+
+QString Config::userDBName() const
+{
+	return mUserDBName;
+}
+
+void Config::setUserDBName(const QString& name)
+{
+	mUserDBName = name;
 }
 
 QString Config::authDBType() const

@@ -21,12 +21,14 @@
 #include "Config.h"
 
 QVariantMap serverActionUpdates(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
 	Q_UNUSED(email);
 	Q_UNUSED(action);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QVariantMap map;

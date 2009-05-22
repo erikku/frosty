@@ -115,8 +115,25 @@ void Server::init()
 		query.exec();
 	}
 
-	//db.close();
-	//QSqlDatabase::removeDatabase("master");
+	if(conf->userDBType() == "sqlite")
+	{
+		user_db = QSqlDatabase::addDatabase("QSQLITE", "user");
+		user_db.setDatabaseName( conf->userDBPath() );
+		if( !user_db.open() )
+			LOG_ERROR( user_db.lastError().text() );
+	}
+	else // mysql
+	{
+		user_db = QSqlDatabase::addDatabase("QMYSQL", "user");
+		user_db.setHostName( conf->userDBHost() );
+		user_db.setDatabaseName( conf->userDBName() );
+		user_db.setUserName( conf->userDBUser() );
+		user_db.setPassword( conf->userDBPass() );
+		user_db.open();
+
+		QSqlQuery query("SET CHARSET utf8", user_db);
+		query.exec();
+	}
 }
 
 void Server::handleNewConnection(QTcpSocket *socket)
@@ -239,7 +256,8 @@ void Server::finalize(QIODevice *connection)
 	if(post.contains("request") && header.method() == "POST"
 		&& header.path() == "/backend.php")
 	{
-		QVariantList set = mBackend->parseRequest(connection, db, post);
+		QVariantList set = mBackend->parseRequest(
+			connection, db, user_db, post);
 		QVariant response = set;
 
 		respond(connection, response);

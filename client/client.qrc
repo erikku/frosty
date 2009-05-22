@@ -20,5 +20,6 @@
 	<file alias="seirei_modifiers.json">res/seirei_modifiers.json</file>
 	<file alias="seirei.json">res/seirei.json</file>
 	<file alias="gpl.txt">res/gpl.txt</file>
+	<file alias="config.xml">res/config.xml</file>
 </qresource>
 </RCC>

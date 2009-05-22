@@ -28,16 +28,22 @@
 class QIODevice;
 
 QVariantMap authActionQueryPerms(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap authActionQueryUsers(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap authActionQueryUser(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap authActionMakeInactive(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap authActionMakeActive(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap authActionModifyUser(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 
 #endif // __AuthActions_h__

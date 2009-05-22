@@ -16,10 +16,17 @@
 #  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 QT          += network sql xml
-TEMPLATE     = app
+
+offline {
+	TEMPLATE = lib
+	VERSION  = 1.0.0
+	CONFIG  += staticlib
+} else {
+	TEMPLATE = app
+}
+
 TARGET       = frosty_server
 INCLUDEPATH += src
-CONFIG      += gui
 
 OBJECTS_DIR = .objs
 MOC_DIR     = .moc

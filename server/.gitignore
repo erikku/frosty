@@ -10,6 +10,7 @@ debug
 frosty_server
 frosty_server.exe
 frosty_server_*.qm
+libfrosty_server*
 config.xml
 *.db
 *.log

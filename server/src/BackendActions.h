@@ -28,14 +28,19 @@
 class QIODevice;
 
 QVariantMap backendActionSalt(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap backendActionDelete(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap backendActionInsert(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap backendActionUpdate(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap backendActionSelect(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 
 #endif // __BackendActions_h__

@@ -30,10 +30,12 @@
 #define tr(msg) QObject::tr(msg)
 
 QVariantMap dbActionExport(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(email);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QVariantMap export_tables;
@@ -109,10 +111,12 @@ QVariantMap dbActionExport(int i, QIODevice *connection,
 }
 
 QVariantMap dbActionImport(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(email);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	if( !action.contains("export") )
@@ -178,11 +182,13 @@ QVariantMap dbActionImport(int i, QIODevice *connection,
 }
 
 QVariantMap dbActionTables(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(email);
 	Q_UNUSED(action);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QStringList tables = db.tables();

@@ -11,4 +11,7 @@ debug
 frosty
 frosty.exe
 frosty_*.qm
+server.log
+master.db
+user.db
 *.pro.user

@@ -29,12 +29,14 @@
 QQueue<QVariantMap> g_shoutbox_queue;
 
 QVariantMap shoutboxLogin(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
 	Q_UNUSED(email);
 	Q_UNUSED(action);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QVariantMap user_info = Auth::getSingletonPtr()->queryUser(
@@ -42,7 +44,8 @@ QVariantMap shoutboxLogin(int i, QIODevice *connection,
 
 	QVariantMap perms = Auth::getSingletonPtr()->queryPerms(email).toMap();
 
-	QVariantMap ret = shoutboxPoll(i, connection, db, action, QString());
+	QVariantMap ret = shoutboxPoll(i, connection,
+		db, user_db, action, QString());
 	ret["modify_db"] = perms.value("modify_db");
 	ret["nick"] = user_info.value("name");
 	ret["admin"] = perms.value("admin");
@@ -51,10 +54,12 @@ QVariantMap shoutboxLogin(int i, QIODevice *connection,
 }
 
 QVariantMap shoutboxPoll(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	uint stamp = action.value("timestamp").toUInt();
@@ -83,10 +88,12 @@ QVariantMap shoutboxPoll(int i, QIODevice *connection,
 }
 
 QVariantMap shoutboxPost(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QVariantMap user_info = Auth::getSingletonPtr()->queryUser(

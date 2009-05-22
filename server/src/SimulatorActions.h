@@ -30,14 +30,19 @@ class QIODevice;
 void simulator_reset_cache();
 
 QVariantMap simulatorCache(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap simulatorLoadStorage(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap simulatorSyncStorage(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap simulatorLoadCOMP(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap simulatorSyncCOMP(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 
 #endif // __SimulatorActions_h__

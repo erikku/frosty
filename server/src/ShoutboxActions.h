@@ -28,10 +28,13 @@
 class QIODevice;
 
 QVariantMap shoutboxLogin(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap shoutboxPoll(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 QVariantMap shoutboxPost(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 
 #endif // __ShoutboxActions_h__

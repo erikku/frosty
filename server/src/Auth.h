@@ -30,6 +30,8 @@
 class Auth
 {
 public:
+	~Auth();
+
 	static Auth* getSingletonPtr();
 
 	void start(const QMap<QString, BackendActionHandler>& actionHandlers);

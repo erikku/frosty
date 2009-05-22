@@ -21,10 +21,12 @@
 #include "Auth.h"
 
 QVariantMap authActionQueryPerms(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	if( action.contains("email") )
@@ -53,10 +55,12 @@ QVariantMap authActionQueryPerms(int i, QIODevice *connection,
 }
 
 QVariantMap authActionQueryUsers(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(action);
 	Q_UNUSED(connection);
 
@@ -67,10 +71,12 @@ QVariantMap authActionQueryUsers(int i, QIODevice *connection,
 }
 
 QVariantMap authActionQueryUser(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QString target_email = action.value("email").toString();
@@ -82,10 +88,12 @@ QVariantMap authActionQueryUser(int i, QIODevice *connection,
 }
 
 QVariantMap authActionMakeInactive(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QString target_email = action.value("email").toString();
@@ -95,10 +103,12 @@ QVariantMap authActionMakeInactive(int i, QIODevice *connection,
 }
 
 QVariantMap authActionMakeActive(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QString target_email = action.value("email").toString();
@@ -108,10 +118,12 @@ QVariantMap authActionMakeActive(int i, QIODevice *connection,
 }
 
 QVariantMap authActionModifyUser(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QString target_email = action.value("email").toString();

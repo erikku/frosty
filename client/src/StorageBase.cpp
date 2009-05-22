@@ -201,7 +201,10 @@ void StorageBase::markDirty()
 
 	mMarked = true;
 
-	mSyncTimer->start(60000); // 60 seconds
+	if(settings->url().toString() == "offline")
+		mSyncTimer->start(5000); // 5 seconds
+	else
+		mSyncTimer->start(60000); // 60 seconds
 
 	Taskbar::getSingletonPtr()->notifyDirty( syncUserData() );
 }

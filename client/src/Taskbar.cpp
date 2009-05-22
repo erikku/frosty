@@ -31,6 +31,8 @@
 #include "ImportExport.h"
 #include "ajax.h"
 
+#include "offlineTransfer.h"
+
 // My Devils
 #include "COMP.h"
 #include "Storage.h"
@@ -106,7 +108,8 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 	act = menu->addSeparator();
 
-	bool guest = settings->email().isEmpty();
+	bool guest = settings->email().isEmpty() &&
+		settings->url().toString() != "offline";
 
 	// COMP Action
 	act = menu->addAction(/* icon, */tr("&COMP") );
@@ -203,6 +206,8 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 void Taskbar::quit()
 {
+	delete offlineTransfer::inst();
+
 	mTray->hide();
 	qApp->quit();
 }

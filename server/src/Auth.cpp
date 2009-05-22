@@ -33,6 +33,12 @@ Auth::Auth()
 	// Nothing to see here
 }
 
+Auth::~Auth()
+{
+	mAuthDB.close();
+	mAuthDB = QSqlDatabase();
+}
+
 Auth* Auth::getSingletonPtr()
 {
 	if(!g_auth_inst)

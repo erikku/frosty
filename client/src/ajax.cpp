@@ -22,6 +22,7 @@
 #include "sha1.h"
 #include "ajaxTransfer.h"
 #include "localTransfer.h"
+#include "offlineTransfer.h"
 
 #include "Settings.h"
 #include "LogWidget.h"
@@ -45,6 +46,14 @@ ajax::ajax(QObject *parent_object) : QObject(parent_object)
 	mRequestQueueTimer->setSingleShot(true);
 
 	connect(mRequestQueueTimer, SIGNAL(timeout()), this, SLOT(dispatchQueue()));
+
+	offlineTransfer *transfer = offlineTransfer::inst();
+
+	connect(transfer, SIGNAL(transferFinished(const QVariantMap&,
+		const QString&)), this, SIGNAL(response(const QVariantMap&,
+		const QString&)), Qt::QueuedConnection);
+	connect(transfer, SIGNAL(transferFailed(const QString&)),
+		this, SLOT(handleError(const QString&)), Qt::QueuedConnection);
 
 	g_ajax_inst = this;
 }
@@ -111,55 +120,47 @@ void ajax::dispatchQueue(const QUrl& url)
 
 void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 {
-	// TODO: Error checking here
-	QString json_request = json::toJSON(req);
-
-	//QMessageBox::information(0, "JSON Request", json_request);
-	//cout << json_request.toLocal8Bit().data() << endl << endl;
-
-	QMap<QString, QString> post;
-	post["request"] = json_request;
-
-	QByteArray data;
-	if( !settings->email().isEmpty() && !settings->pass().isEmpty() )
-	{
-		unsigned char checksum[20];
-		QString pass, hash = settings->pass() + json_request;
-
-		sha1((uchar*)hash.toAscii().data(), hash.toAscii().size(), checksum);
-
-		for(int i = 0; i < 20; i++)
-		{
-			int byte = (int)checksum[i];
-			pass += QString("%1").arg(byte, 2, 16, QLatin1Char('0'));
-		}
-
-		post["email"] = settings->email();
-		post["pass"] = pass;
-	}
-
 	baseTransfer *base = 0;
 
-	if(url.toString() == "local")
+	if(url.toString() == "offline")
 	{
-		localTransfer *transfer = localTransfer::start(post);
-		base = transfer;
-
-		connect(transfer, SIGNAL(transferFinished(const QVariantMap&,
-			const QString&)), this, SIGNAL(response(const QVariantMap&,
-			const QString&)) );
-		connect(transfer, SIGNAL(transferFailed(const QString&)),
-			this, SLOT(handleError(const QString&)), Qt::QueuedConnection);
+		base = offlineTransfer::start(req);
 	}
 	else
 	{
-		ajaxTransfer *transfer = ajaxTransfer::start(url, post);
-		base = transfer;
+		// TODO: Error checking here
+		QString json_request = json::toJSON(req);
 
-		connect(transfer, SIGNAL(transferFinished(const QVariantMap&,
+		QMap<QString, QString> post;
+		post["request"] = json_request;
+
+		QByteArray data;
+		if( !settings->email().isEmpty() && !settings->pass().isEmpty() )
+		{
+			unsigned char checksum[20];
+			QString pass, hash = settings->pass() + json_request;
+
+			sha1((uchar*)hash.toAscii().data(), hash.toAscii().size(), checksum);
+
+			for(int i = 0; i < 20; i++)
+			{
+				int byte = (int)checksum[i];
+				pass += QString("%1").arg(byte, 2, 16, QLatin1Char('0'));
+			}
+
+			post["email"] = settings->email();
+			post["pass"] = pass;
+		}
+
+		if(url.toString() == "local")
+			base = localTransfer::start(post);
+		else
+			base = ajaxTransfer::start(url, post);
+
+		connect(base, SIGNAL(transferFinished(const QVariantMap&,
 			const QString&)), this, SIGNAL(response(const QVariantMap&,
 			const QString&)) );
-		connect(transfer, SIGNAL(transferFailed(const QString&)),
+		connect(base, SIGNAL(transferFailed(const QString&)),
 			this, SLOT(handleError(const QString&)), Qt::QueuedConnection);
 	}
 

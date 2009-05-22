@@ -28,6 +28,7 @@
 class QIODevice;
 
 QVariantMap serverActionUpdates(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email);
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email);
 
 #endif // __ServerActions_h__

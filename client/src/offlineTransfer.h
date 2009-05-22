@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  server/src/Backend.h                                                        *
-*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/offlineTransfer.h                                                *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,40 +17,40 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __Backend_h__
-#define __Backend_h__
+#ifndef __offlineTransfer_h__
+#define __offlineTransfer_h__
+
+#include "baseTransfer.h"
 
 #include <QtSql/QSqlDatabase>
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
-#include <QtCore/QList>
-#include <QtCore/QMap>
 
-class QIODevice;
+class Backend;
 
-typedef QVariantMap (*BackendActionHandler)(int, QIODevice*,
-	const QSqlDatabase&, const QSqlDatabase&,
-	const QVariantMap&, const QString&);
+#ifndef QSTRINGMAP_DEF
+#define QSTRINGMAP_DEF
+typedef QMap<QString, QString> QStringMap;
+#endif // QSTRINGMAP_DEF
 
-class Backend : public QObject
+class offlineTransfer : public baseTransfer
 {
 	Q_OBJECT
 
 public:
-	Backend(QObject *parent = 0);
+	~offlineTransfer();
 
-	QVariantList parseRequest(QIODevice *connection,
-		const QSqlDatabase& db,
-		const QSqlDatabase& user_db,
-		const QMap<QString, QString>& post) const;
+	static offlineTransfer* inst();
 
-	QVariantList parseRequestInternal(QIODevice *connection,
-		const QSqlDatabase& db, const QSqlDatabase& user_db,
-		const QVariant& request, const QString& email) const;
+	static offlineTransfer* start(const QVariant& req);
 
 protected:
-	QMap<QString, BackendActionHandler> mActionHandlers;
+	offlineTransfer(QObject *parent = 0);
+
+	offlineTransfer* startReal(const QVariant& req);
+
+	QString mEmail;
+	QSqlDatabase db, user_db;
+
+	Backend *mBackend;
 };
 
-#endif // __Backend_h__
+#endif // __offlineTransfer_h__

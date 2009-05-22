@@ -32,10 +32,12 @@
 #define tr(msg) QObject::tr(msg)
 
 QVariantMap backendActionSalt(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(i);
 	Q_UNUSED(db);
+	Q_UNUSED(user_db);
 	Q_UNUSED(email);
 	Q_UNUSED(action);
 	Q_UNUSED(connection);
@@ -47,9 +49,11 @@ QVariantMap backendActionSalt(int i, QIODevice *connection,
 }
 
 QVariantMap backendActionDelete(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	// Check for the 'table' paramater
@@ -243,9 +247,11 @@ QVariantMap backendActionDelete(int i, QIODevice *connection,
 }
 
 QVariantMap backendActionInsert(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	// Check for the 'table' paramater
@@ -598,9 +604,11 @@ QVariantMap backendActionInsert(int i, QIODevice *connection,
 }
 
 QVariantMap backendActionUpdate(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	// Check for the 'table' paramater
@@ -1173,7 +1181,7 @@ QVariantMap backendActionUpdate(int i, QIODevice *connection,
 
 		if( !query.exec() )
 			return herror_sql(db, "update action", tr("SQL error for row %1 in "
-				"action %2: %3").arg(j).arg(j).arg( query.lastError().text() ));
+				"action %2: %3").arg(j).arg(i).arg( query.lastError().text() ));
 
 		ids << query.lastInsertId();
 	}
@@ -1188,9 +1196,11 @@ QVariantMap backendActionUpdate(int i, QIODevice *connection,
 }
 
 QVariantMap backendActionSelect(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	// Check for the 'table' paramater

@@ -79,7 +79,8 @@ protected:
 
 	QHttpResponseHeader basicResponseHeader() const;
 
-	QSqlDatabase db;
+	QSqlDatabase db, user_db;
+
 	Backend *mBackend;
 	SslServer *mSslConnection;
 	QLocalServer *mLocalConnection;

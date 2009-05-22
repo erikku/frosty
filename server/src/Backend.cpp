@@ -72,24 +72,20 @@ Backend::Backend(QObject *parent_object) : QObject(parent_object)
 }
 
 QVariantList Backend::parseRequest(QIODevice *connection,
-	const QSqlDatabase& db, const QMap<QString, QString>& post) const
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QMap<QString, QString>& post) const
 {
 	QVariant request = json::parse( post.value("request") );
-	QVariantList request_results;
 
 	if( !request.canConvert(QVariant::Map) )
 	{
-		request_results << herror(tr("request"),
+		return QVariantList() << herror(tr("request"),
 			tr("Request is not an object") );
-
-		return request_results;
 	}
 	else if( !request.toMap().contains("actions") )
 	{
-		request_results << herror(tr("request"),
+		return QVariantList() << herror(tr("request"),
 			tr("Request does not contain any actions") );
-
-		return request_results;
 	}
 
 	QString email;
@@ -105,12 +101,19 @@ QVariantList Backend::parseRequest(QIODevice *connection,
 			QVariantMap error;
 			error["error"] = "Authentication Error";
 
-			QVariantList list;
-			list << error;
-
-			return list;
+			return QVariantList() << error;
 		}
 	}
+
+	return parseRequestInternal(connection,	 db, user_db, request, email);
+}
+
+QVariantList Backend::parseRequestInternal(QIODevice *connection,
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariant& request,
+	const QString& email) const
+{
+	QVariantList request_results;
 
 	QVariantList actions = request.toMap().value("actions").toList();
 
@@ -152,7 +155,7 @@ QVariantList Backend::parseRequest(QIODevice *connection,
 			if( auth->validateRequest(email, action) )
 			{
 				request_result = mActionHandlers.value(name)(i, connection, db,
-					action, email);
+					user_db, action, email);
 			}
 			else
 			{

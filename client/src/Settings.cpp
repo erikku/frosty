@@ -36,13 +36,15 @@ Settings::Settings(QObject *parent_object) : QObject(parent_object)
 	if( !qsettings.contains("backend") )
 	{
 		// http://www.troopersklan.jp/megaten/backend.php
+		// https://gigadelic.homelinux.net:55517/backend.php
 		QString text = QInputDialog::getText(0,
 			tr("Absolutely Frosty Database Location"),
-			tr("URL:"), QLineEdit::Normal,
-			"https://gigadelic.homelinux.net:55517/backend.php");
+			tr("URL:"), QLineEdit::Normal, "offline");
 
 		if( !text.isEmpty() )
 			mURL = QUrl(text);
+		else
+			mURL = QUrl("offline");
 
 		qsettings.setValue("backend", mURL);
 	}

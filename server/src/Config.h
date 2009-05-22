@@ -137,6 +137,36 @@ public:
 
 	Q_PROPERTY(QString mDBName READ dbName WRITE setDBName)
 
+	QString userDBType() const;
+	void setUserDBType(const QString& type);
+
+	Q_PROPERTY(QString mUserDBType READ userDBType WRITE setUserDBType)
+
+	QString userDBPath() const;
+	void setUserDBPath(const QString& path);
+
+	Q_PROPERTY(QString mUserDBPath READ userDBPath WRITE setUserDBPath)
+
+	QString userDBHost() const;
+	void setUserDBHost(const QString& host);
+
+	Q_PROPERTY(QString mUserDBHost READ userDBHost WRITE setUserDBHost)
+
+	QString userDBUser() const;
+	void setUserDBUser(const QString& user);
+
+	Q_PROPERTY(QString mUserDBUser READ userDBUser WRITE setUserDBUser)
+
+	QString userDBPass() const;
+	void setUserDBPass(const QString& pass);
+
+	Q_PROPERTY(QString mUserDBPass READ userDBPass WRITE setUserDBPass)
+
+	QString userDBName() const;
+	void setUserDBName(const QString& name);
+
+	Q_PROPERTY(QString mUserDBName READ userDBName WRITE setUserDBName)
+
 	QString authDBType() const;
 	void setAuthDBType(const QString& type);
 
@@ -289,6 +319,13 @@ protected:
 	QString mDBUser;
 	QString mDBPass;
 	QString mDBName;
+
+	QString mUserDBType;
+	QString mUserDBPath;
+	QString mUserDBHost;
+	QString mUserDBUser;
+	QString mUserDBPass;
+	QString mUserDBName;
 
 	QString mAuthDBType;
 	QString mAuthDBPath;

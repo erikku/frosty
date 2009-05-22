@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<frosty>
+    <connection>
+        <!-- Valid values are 'any', 'localhost', or any IP address -->
+        <address>localhost</address>
+        <port>55517</port>
+    </connection>
+    <database>
+        <!-- Database types are 'mysql' and 'sqlite' -->
+        <master>
+            <type>sqlite</type>
+            <path>master.db</path>
+        </master>
+        <user>
+            <type>sqlite</type>
+            <path>user.db</path>
+        </user>
+    </database>
+    <log>
+        <levels>
+            <debug>true</debug>
+            <info>true</info>
+            <warning>true</warning>
+            <error>true</error>
+            <critical>true</critical>
+        </levels>
+        <!-- 'plain' or 'html' -->
+        <type>html</type>
+        <path>server.log</path>
+        <!-- in bytes -->
+        <size>16384</size><!-- 16kb -->
+        <!-- how many logs to keep -->
+        <rotate>3</rotate>
+    </log>
+    <!--
+        A unique server signature to pass along with every response.
+        You can include ${version} in the string to insert the version of the server.
+    -->
+    <signature>Absolutely Frosty Offline Server v${version}</signature>
+    <!-- The following salts should be changed for each server -->
+    <salts>
+        <img>hack_me</img>
+        <pass>hack_me_too</pass>
+    </salts>
+    <captcha>
+        <letters>a,b,c</letters>
+        <font>font.ttf</font>
+    </captcha>
+    <auth>
+        <!--
+            This will override the permissions of the given user to give them admin rights.
+            This user must still exist in the database, so don't forget to register it.
+        -->
+        <admin>offline@local.server</admin>
+        <!-- Default permissions for the user -->
+        <defaults>
+            <admin>true</admin>
+            <view_db>true</view_db>
+            <modify_db>true</modify_db>
+            <admin_db>true</admin_db>
+        </defaults>
+        <database>
+            <!-- Database types are 'mysql' and 'sqlite' -->
+            <type>sqlite</type>
+            <path>user.db</path>
+        </database>
+    </auth>
+    <ssl>
+        <enabled>false</enabled>
+        <cert>server.crt</cert>
+        <key>server.key</key>
+    </ssl>
+    <updates>
+        <client>
+            <win32></win32>
+            <macosx></macosx>
+            <linux></linux>
+        </client>
+        <updater>
+            <win32></win32>
+            <macosx></macosx>
+            <linux></linux>
+        </updater>
+    </updates>
+	<shoutbox>
+		<log>
+			<enabled>false</enabled>
+			<path>shoutbox.log</path>
+		</log>
+	</shoutbox>
+</frosty>

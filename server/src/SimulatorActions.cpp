@@ -41,9 +41,11 @@ void simulator_reset_cache()
 }
 
 QVariantMap simulatorCache(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
 	Q_UNUSED(email);
+	Q_UNUSED(user_db);
 	Q_UNUSED(connection);
 
 	QVariantMap map;
@@ -268,8 +270,10 @@ QVariantMap simulatorCache(int i, QIODevice *connection,
 }
 
 QVariantMap simulatorLoadStorage(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
+	Q_UNUSED(db);
 	Q_UNUSED(action);
 	Q_UNUSED(connection);
 
@@ -281,15 +285,15 @@ QVariantMap simulatorLoadStorage(int i, QIODevice *connection,
 	QString sql = "SELECT devil FROM db_storage WHERE user_id = :user_id "
 		"ORDER BY slot";
 
-	QSqlQuery query(db);
+	QSqlQuery query(user_db);
 	if( !query.prepare(sql) )
-		return herror_sql(db, "simulator_load_storage action", tr("SQL error "
+		return herror_sql(user_db, "simulator_load_storage action", tr("SQL error "
 			"for action %1: %2").arg(i).arg( query.lastError().text() ));
 
 	query.bindValue(":user_id", user_id, QSql::In);
 
 	if( !query.exec() )
-		return herror_sql(db, "simulator_load_storage action", tr("SQL error "
+		return herror_sql(user_db, "simulator_load_storage action", tr("SQL error "
 			"for action %1: %2").arg(i).arg( query.lastError().text() ));
 
 	QVariantList devils;
@@ -298,7 +302,7 @@ QVariantMap simulatorLoadStorage(int i, QIODevice *connection,
 
 	if( devils.isEmpty() )
 	{
-		QSqlDatabase m_db = db;
+		QSqlDatabase m_db = user_db;
 		m_db.transaction();
 
 		for(int j = 0; j < SLOT_COUNT_STORAGE; j++)
@@ -307,7 +311,7 @@ QVariantMap simulatorLoadStorage(int i, QIODevice *connection,
 				"VALUES(:user_id, :slot, :devil)";
 
 			if( !query.prepare(sql) )
-				return herror_sql(db, "simulator_load_storage action", tr("SQL "
+				return herror_sql(m_db, "simulator_load_storage action", tr("SQL "
 					"error for action %1: %2").arg(i).arg(
 					query.lastError().text() ));
 
@@ -316,7 +320,7 @@ QVariantMap simulatorLoadStorage(int i, QIODevice *connection,
 			query.bindValue(":devil", "{}", QSql::In);
 
 			if( !query.exec() )
-				return herror_sql(db, "simulator_load_storage action", tr("SQL "
+				return herror_sql(m_db, "simulator_load_storage action", tr("SQL "
 					"error for action %1: %2").arg(i).arg(
 					query.lastError().text() ));
 
@@ -333,8 +337,10 @@ QVariantMap simulatorLoadStorage(int i, QIODevice *connection,
 }
 
 QVariantMap simulatorSyncStorage(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
+	Q_UNUSED(db);
 	Q_UNUSED(connection);
 
 	// Check for the 'devils' paramater
@@ -352,15 +358,15 @@ QVariantMap simulatorSyncStorage(int i, QIODevice *connection,
 		return herror("simulator_sync_storage action", tr("unexpected number "
 			"of devil storage slots for action %1").arg(i));
 
-	QSqlDatabase m_db = db;
+	QSqlDatabase m_db = user_db;
 	m_db.transaction();
 
 	QString sql = "UPDATE db_storage SET devil = :devil WHERE "
 		"user_id = :user_id AND slot = :slot";
 
-	QSqlQuery query(db);
+	QSqlQuery query(m_db);
 	if( !query.prepare(sql) )
-		return herror_sql(db, "simulator_sync_storage action", tr("SQL "
+		return herror_sql(m_db, "simulator_sync_storage action", tr("SQL "
 			"error for action %1: %2").arg(i).arg(
 			query.lastError().text() ));
 
@@ -371,7 +377,7 @@ QVariantMap simulatorSyncStorage(int i, QIODevice *connection,
 		query.bindValue(":devil", devils.at(j), QSql::In);
 
 		if( !query.exec() )
-			return herror_sql(db, "simulator_sync_storage action", tr("SQL "
+			return herror_sql(m_db, "simulator_sync_storage action", tr("SQL "
 				"error for action %1: %2").arg(i).arg(
 				query.lastError().text() ));
 	}
@@ -382,8 +388,10 @@ QVariantMap simulatorSyncStorage(int i, QIODevice *connection,
 }
 
 QVariantMap simulatorLoadCOMP(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
+	Q_UNUSED(db);
 	Q_UNUSED(action);
 	Q_UNUSED(connection);
 
@@ -395,15 +403,15 @@ QVariantMap simulatorLoadCOMP(int i, QIODevice *connection,
 	QString sql = "SELECT devil FROM db_comp WHERE user_id = :user_id "
 		"ORDER BY slot";
 
-	QSqlQuery query(db);
+	QSqlQuery query(user_db);
 	if( !query.prepare(sql) )
-		return herror_sql(db, "simulator_load_comp action", tr("SQL error "
+		return herror_sql(user_db, "simulator_load_comp action", tr("SQL error "
 			"for action %1: %2").arg(i).arg( query.lastError().text() ));
 
 	query.bindValue(":user_id", user_id, QSql::In);
 
 	if( !query.exec() )
-		return herror_sql(db, "simulator_load_comp action", tr("SQL error "
+		return herror_sql(user_db, "simulator_load_comp action", tr("SQL error "
 			"for action %1: %2").arg(i).arg( query.lastError().text() ));
 
 	QVariantList devils;
@@ -412,7 +420,7 @@ QVariantMap simulatorLoadCOMP(int i, QIODevice *connection,
 
 	if( devils.isEmpty() )
 	{
-		QSqlDatabase m_db = db;
+		QSqlDatabase m_db = user_db;
 		m_db.transaction();
 
 		for(int j = 0; j < SLOT_COUNT_COMP; j++)
@@ -421,7 +429,7 @@ QVariantMap simulatorLoadCOMP(int i, QIODevice *connection,
 				"VALUES(:user_id, :slot, :devil)";
 
 			if( !query.prepare(sql) )
-				return herror_sql(db, "simulator_load_comp action", tr("SQL "
+				return herror_sql(m_db, "simulator_load_comp action", tr("SQL "
 					"error for action %1: %2").arg(i).arg(
 					query.lastError().text() ));
 
@@ -430,7 +438,7 @@ QVariantMap simulatorLoadCOMP(int i, QIODevice *connection,
 			query.bindValue(":devil", "{}", QSql::In);
 
 			if( !query.exec() )
-				return herror_sql(db, "simulator_load_comp action", tr("SQL "
+				return herror_sql(m_db, "simulator_load_comp action", tr("SQL "
 					"error for action %1: %2").arg(i).arg(
 					query.lastError().text() ));
 
@@ -447,8 +455,10 @@ QVariantMap simulatorLoadCOMP(int i, QIODevice *connection,
 }
 
 QVariantMap simulatorSyncCOMP(int i, QIODevice *connection,
-	const QSqlDatabase& db, const QVariantMap& action, const QString& email)
+	const QSqlDatabase& db, const QSqlDatabase& user_db,
+	const QVariantMap& action, const QString& email)
 {
+	Q_UNUSED(db);
 	Q_UNUSED(connection);
 
 	// Check for the 'devils' paramater
@@ -466,15 +476,15 @@ QVariantMap simulatorSyncCOMP(int i, QIODevice *connection,
 		return herror("simulator_sync_comp action", tr("unexpected number "
 			"of devil COMP slots for action %1").arg(i));
 
-	QSqlDatabase m_db = db;
+	QSqlDatabase m_db = user_db;
 	m_db.transaction();
 
 	QString sql = "UPDATE db_comp SET devil = :devil WHERE "
 		"user_id = :user_id AND slot = :slot";
 
-	QSqlQuery query(db);
+	QSqlQuery query(m_db);
 	if( !query.prepare(sql) )
-		return herror_sql(db, "simulator_sync_comp action", tr("SQL "
+		return herror_sql(m_db, "simulator_sync_comp action", tr("SQL "
 			"error for action %1: %2").arg(i).arg(
 			query.lastError().text() ));
 
@@ -485,7 +495,7 @@ QVariantMap simulatorSyncCOMP(int i, QIODevice *connection,
 		query.bindValue(":devil", devils.at(j), QSql::In);
 
 		if( !query.exec() )
-			return herror_sql(db, "simulator_sync_comp action", tr("SQL "
+			return herror_sql(m_db, "simulator_sync_comp action", tr("SQL "
 				"error for action %1: %2").arg(i).arg(
 				query.lastError().text() ));
 	}

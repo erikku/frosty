@@ -15,10 +15,11 @@
 #  Free Software Foundation, Inc.,
 #  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-QT          += network xml
+QT          += network sql xml
 TEMPLATE     = app
 TARGET       = frosty
-INCLUDEPATH += src
+INCLUDEPATH += src ../server/src
+LIBS        += -L../server -lfrosty_server
 
 OBJECTS_DIR = .objs
 MOC_DIR     = .moc
@@ -80,6 +81,7 @@ HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/baseTransfer.h \
                src/localTransfer.h \
+               src/offlineTransfer.h \
                src/PaletteEditor.h \
                src/ClickableLabel.h \
                src/AjaxList.h \
@@ -155,6 +157,7 @@ SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
                src/localTransfer.cpp \
+               src/offlineTransfer.cpp \
                src/json.cpp \
                src/PaletteEditor.cpp \
                src/ClickableLabel.cpp \
