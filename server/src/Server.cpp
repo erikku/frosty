@@ -456,14 +456,22 @@ QByteArray Server::gzipCompress(const QByteArray& content) const
 	stream.total_out = 0;
 
 	QByteArray output;
+#if QT_VERSION >= 0x040500
 	output.append((char*)header, sizeof(header));
+#else
+	output.append( QByteArray((char*)header, sizeof(header)) );
+#endif
 
 	stream.next_out = buffer;
 	stream.avail_out = sizeof(buffer);
 
 	deflate(&stream, Z_FINISH);
 
+#if QT_VERSION >= 0x040500
 	output.append((char*)buffer, stream.total_out);
+#else
+	output.append( QByteArray((char*)buffer, stream.total_out) );
+#endif
 
 	deflateEnd(&stream);
 
@@ -480,7 +488,11 @@ QByteArray Server::gzipCompress(const QByteArray& content) const
 	footer[6] = (stream.total_in >> 16) & 0xFF;
 	footer[7] = (stream.total_in >> 24) & 0xFF;
 
+#if QT_VERSION >= 0x040500
 	output.append((char*)footer, sizeof(footer));
+#else
+	output.append( QByteArray((char*)footer, sizeof(footer)) );
+#endif
 
 	return output;
 }

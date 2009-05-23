@@ -169,7 +169,11 @@ void ajaxTransfer::readyRead(const QHttpResponseHeader& resp)
 			int ret = inflate(&mStream, Z_SYNC_FLUSH);
 			int written = sizeof(out_buffer) - mStream.avail_out;
 
+#if QT_VERSION >= 0x040500
 			mContent.append(out_buffer, written);
+#else
+			mContent.append( QByteArray( out_buffer, written) );
+#endif
 
 			if(ret != Z_OK)
 				break;
