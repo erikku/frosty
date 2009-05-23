@@ -46,6 +46,7 @@ public:
 	QByteArray content;
 	int contentLength;
 	bool contentRead;
+	bool gzip_ok;
 	bool done;
 };
 
@@ -76,6 +77,8 @@ protected:
 		const QString& cookie, const QString& error = QString());
 
 	inline QString createSessionKey(QIODevice *connection);
+
+	QByteArray gzipCompress(const QByteArray& content) const;
 
 	QHttpResponseHeader basicResponseHeader() const;
 

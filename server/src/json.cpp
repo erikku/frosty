@@ -187,7 +187,7 @@ json::json(const QString& string)
 	str = string;
 }
 
-QVariant json::parse(const QString& str)
+QVariant json::parse(const QString& str, bool die)
 {
 	json j(str);
 
@@ -202,6 +202,9 @@ QVariant json::parse(const QString& str)
 	}
 	catch(JSONParseError e)
 	{
+		if(!die)
+			return QVariant();
+
 #ifdef QT_GUI_LIB
 		QMessageBox box(QMessageBox::Critical, "JSON Parse Error", e.toHTML(),
 			QMessageBox::Ok);

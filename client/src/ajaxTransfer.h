@@ -27,6 +27,7 @@
 #include <QtCore/QByteArray>
 #include <QtNetwork/QSslError>
 #include <QtNetwork/QHttp>
+#include <zlib.h>
 
 #include "sha1.h"
 
@@ -52,9 +53,12 @@ protected:
 	ajaxTransfer(QObject *parent = 0);
 
 	int mRequestID;
+	bool mUsingGzip;
 	QUrl mBackendURL;
 	QByteArray mContent;
 	QVariantList mResponse;
+
+	z_stream mStream;
 
 	QPointer<QHttp> mHttp;
 };

@@ -87,6 +87,8 @@ ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 	}
 
 	header.addValue("User-Agent", "Qt4 JSON");
+	header.addValue("Accept-Encoding", "gzip");
+	header.addValue("X-FrostyRPC-Version", "1.0");
 	header.addValue("Host", url.host());
 
 	connect( transfer->mHttp, SIGNAL(requestFinished(int, bool)),
@@ -106,19 +108,11 @@ ajaxTransfer* ajaxTransfer::start(const QUrl& url,
 
 void ajaxTransfer::requestFinished(int id, bool error)
 {
-	emit transferInfo(QString::fromUtf8(mContent), mResponse);
-
 	if(mRequestID != id)
 		return;
 
-	QString content_error = QString::fromUtf8(mContent);
-	if( !content_error.isEmpty() )
-	{
-		emit transferFailed(content_error);
-		deleteLater();
-
-		return;
-	}
+	if(mUsingGzip)
+		inflateEnd(&mStream);
 
 	if(error)
 	{
@@ -128,12 +122,28 @@ void ajaxTransfer::requestFinished(int id, bool error)
 		return;
 	}
 
-	foreach(QVariant action, mResponse)
-	{
-		QVariantMap map = action.toMap();
+	QString result = QString::fromUtf8(mContent);
 
-		emit transferFinished(map, map.value("user_data").toString());
+	mResponse = json::parse(result, false).toList();
+	if( mResponse.isEmpty() )
+	{
+		emit transferFailed(result);
+		deleteLater();
+
+		return;
 	}
+
+	QListIterator<QVariant> it(mResponse);
+	while( it.hasNext() )
+	{
+		QVariantMap map = it.next().toMap();
+		if( map.contains("error") )
+			emit transferFailed(map.value("error").toString());
+		else
+			emit transferFinished(map, map.value("user_data").toString());
+	}
+
+	emit transferInfo(result, mResponse);
 
 	deleteLater();
 }
@@ -142,7 +152,37 @@ void ajaxTransfer::readyRead(const QHttpResponseHeader& resp)
 {
 	Q_UNUSED(resp);
 
-	mContent += mHttp->readAll();
+	if(mUsingGzip)
+	{
+		QByteArray buffer = mHttp->readAll();
+
+		char out_buffer[4096];
+
+		mStream.next_in = (Bytef*)buffer.data();
+		mStream.avail_in = buffer.size();
+
+		while(true)
+		{
+			mStream.next_out = (Bytef*)out_buffer;
+			mStream.avail_out = sizeof(out_buffer);
+
+			int ret = inflate(&mStream, Z_SYNC_FLUSH);
+			int written = sizeof(out_buffer) - mStream.avail_out;
+
+			mContent.append(out_buffer, written);
+
+			if(ret != Z_OK)
+				break;
+
+			// We are done reading what we have so far
+			if(mStream.avail_in == 0)
+				break;
+		}
+	}
+	else
+	{
+		mContent += mHttp->readAll();
+	}
 }
 
 void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
@@ -156,33 +196,12 @@ void ajaxTransfer::responseHeaderReceived(const QHttpResponseHeader& resp)
 		return;
 	}
 
-	if( !resp.hasKey("X-JSON") )
+	if( resp.hasKey("Content-Encoding") && resp.value("Content-Encoding"
+		).trimmed().compare("gzip", Qt::CaseInsensitive) == 0 )
 	{
-		emit transferFailed( tr("Response missing X-JSON header") );
-		deleteLater();
+		mUsingGzip = true;
 
-		return;
-	}
-
-	QRegExp jsonResponse("\\((.*)\\)");
-	QString result = resp.value("X-JSON").toAscii();
-
-	if( jsonResponse.exactMatch(result) )
-		result = jsonResponse.cap(1);
-
-	// TODO: Add error checking here
-	mResponse = json::parse(result).toList();
-
-	QListIterator<QVariant> it(mResponse);
-	while( it.hasNext() )
-	{
-		QVariantMap map = it.next().toMap();
-		if( map.contains("error") )
-		{
-			emit transferFailed( map.value("error").toString() );
-			deleteLater();
-
-			return;
-		}
+		memset(&mStream, 0, sizeof(mStream));
+		inflateInit2(&mStream, MAX_WBITS + 16);
 	}
 }

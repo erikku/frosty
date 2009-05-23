@@ -41,7 +41,9 @@
 #include <QtNetwork/QLocalServer>
 #include <QtNetwork/QLocalSocket>
 #include <QtNetwork/QTcpSocket>
+
 #include <gd.h>
+#include <zlib.h>
 
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
@@ -153,6 +155,7 @@ void Server::handleNewConnection(QTcpSocket *socket)
 	mConnections[connection] = data;
 	data->contentRead = false;
 	data->contentLength = 0;
+	data->gzip_ok = false;
 	data->done = false;
 
 	read(connection);
@@ -210,6 +213,32 @@ void Server::read(QIODevice *connection)
 		{
 			QHttpRequestHeader header(data->header);
 
+			// Check for gzip support
+			QStringList encodings = header.value(
+				"Accept-Encoding").trimmed().split(",");
+
+			foreach(QString encoding, encodings)
+			{
+				encoding = encoding.trimmed();
+
+				QRegExp encodingMatcher("^([^;]+);\\s*q\\=([0-9\\.]+)$");
+				if( encodingMatcher.exactMatch(encoding) )
+				{
+					if(encodingMatcher.cap(2).trimmed().toFloat() == 0)
+						continue;
+					if(encodingMatcher.cap(1).trimmed().compare("gzip",
+						Qt::CaseInsensitive) != 0)
+							continue;
+
+					data->gzip_ok = true;
+				}
+				else
+				{
+					if(encoding.compare("gzip", Qt::CaseInsensitive) == 0)
+						data->gzip_ok = true;
+				}
+			}
+
 			data->contentLength = header.contentLength();
 			data->contentRead = true;
 
@@ -256,6 +285,10 @@ void Server::finalize(QIODevice *connection)
 	if(post.contains("request") && header.method() == "POST"
 		&& header.path() == "/backend.php")
 	{
+		if(header.value("X-FrostyRPC-Version") != "1.0")
+			respond(connection, "RPC version mismatch. "
+				"Please update your client.");
+
 		QVariantList set = mBackend->parseRequest(
 			connection, db, user_db, post);
 		QVariant response = set;
@@ -385,40 +418,142 @@ QHttpResponseHeader Server::basicResponseHeader() const
 	header.setStatusLine(200, "OK");
 	header.setValue("Server", signature);
 	header.setValue("X-Powered-By", powered_by);
+	header.setValue("X-FrostyRPC-Version", "1.0");
 
 	return header;
 }
 
+QByteArray Server::gzipCompress(const QByteArray& content) const
+{
+	z_stream stream;
+	stream.zalloc = Z_NULL;
+	stream.zfree = Z_NULL;
+	stream.opaque = Z_NULL;
+
+	if(deflateInit2(&stream, Z_DEFAULT_COMPRESSION, Z_DEFLATED,
+		-MAX_WBITS, 8, Z_DEFAULT_STRATEGY) != Z_OK)
+			return QByteArray("deflateInit2");
+
+	stream.next_in = (unsigned char*)content.data();
+	stream.avail_in = content.size();
+	stream.total_in = 0;
+
+	time_t mtime = QDateTime::currentDateTime().toTime_t();
+
+	unsigned char header[10], buffer[(size_t)(content.size() * 1.1) + 12];
+
+	header[0] = 0x1F;
+	header[1] = 0x8B;
+	header[2] = Z_DEFLATED;
+	header[3] = 0;
+	header[4] = (mtime >>  0) & 0xFF;
+	header[5] = (mtime >>  8) & 0xFF;
+	header[6] = (mtime >> 16) & 0xFF;
+	header[7] = (mtime >> 24) & 0xFF;
+	header[8] = 0x00;
+	header[9] = 0x03;
+
+	stream.total_out = 0;
+
+	QByteArray output;
+	output.append((char*)header, sizeof(header));
+
+	stream.next_out = buffer;
+	stream.avail_out = sizeof(buffer);
+
+	deflate(&stream, Z_FINISH);
+
+	output.append((char*)buffer, stream.total_out);
+
+	deflateEnd(&stream);
+
+	unsigned char footer[8];
+
+	unsigned int crc = crc32(0L, (Bytef*)content.data(), content.size());
+
+	footer[0] = (crc >>  0) & 0xFF;
+	footer[1] = (crc >>  8) & 0xFF;
+	footer[2] = (crc >> 16) & 0xFF;
+	footer[3] = (crc >> 24) & 0xFF;
+	footer[4] = (stream.total_in >>  0) & 0xFF;
+	footer[5] = (stream.total_in >>  8) & 0xFF;
+	footer[6] = (stream.total_in >> 16) & 0xFF;
+	footer[7] = (stream.total_in >> 24) & 0xFF;
+
+	output.append((char*)footer, sizeof(footer));
+
+	return output;
+}
+
 void Server::error(QIODevice *connection)
 {
+	ConnectionData *data = mConnections.value(connection);
+	Q_ASSERT(data);
+
 	QFile file(":/400.html");
 	file.open(QIODevice::ReadOnly);
 
 	QString signature = conf->signature();
 	signature.replace("${version}", "0.1.0");
 
-	QString content = file.readAll();
-	content.replace("${signature}", signature);
+	QString content_string = file.readAll();
+	content_string.replace("${signature}", signature);
+
+	QByteArray content;
+	if(data->gzip_ok)
+		content = gzipCompress( content_string.toUtf8() );
+	else
+		content = content_string.toUtf8();
 
 	file.close();
 
 	QHttpResponseHeader header = basicResponseHeader();
 	header.setStatusLine(400, "Bad Request");
-	header.setContentLength( content.toUtf8().length() );
+	header.setContentLength( content.length() );
 	header.setContentType("text/html; charset=UTF-8");
 
-	connection->write( QString(header.toString() + content).toUtf8() );
+	if(data->gzip_ok)
+		header.setValue("Content-Encoding", "gzip");
+
+	connection->write( header.toString().toUtf8() );
+
+	connection->write(content);
 	connection->close();
 }
 
 void Server::respond(QIODevice *connection, const QVariant& data)
 {
+	ConnectionData *conn_data = mConnections.value(connection);
+	Q_ASSERT(conn_data);
+
+	QByteArray content;
+	if(conn_data->gzip_ok)
+	{
+		if(data.type() == QVariant::String)
+			content = gzipCompress( data.toString().toUtf8() );
+		else
+			content = gzipCompress( json::toJSON(data).toUtf8() );
+	}
+	else
+	{
+		if(data.type() == QVariant::String)
+			content = data.toString().toUtf8();
+		else
+			content = json::toJSON(data).toUtf8();
+	}
+
 	QHttpResponseHeader header = basicResponseHeader();
-	header.setValue("X-JSON", QString("(%1)").arg( json::toJSON(data) ));
-	header.setContentLength(0);
+	header.setContentLength( content.length() );
 	header.setContentType("application/x-json");
+	header.setValue("X-JSON", "{\"actions\":"
+		"[{\"error\":\"You must update your client.\"}]}");
+
+	if(conn_data->gzip_ok)
+		header.setValue("Content-Encoding", "gzip");
 
 	connection->write( header.toString().toUtf8() );
+
+	connection->write(content);
 	connection->close();
 }
 

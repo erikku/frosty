@@ -59,7 +59,7 @@ private:
 class json
 {
 public:
-	static QVariant parse(const QString& str);
+	static QVariant parse(const QString& str, bool die = true);
 	static QString toJSON(const QVariant& obj);
 
 #ifdef QT_GUI_LIB
