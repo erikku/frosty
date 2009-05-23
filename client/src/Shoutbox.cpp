@@ -50,7 +50,7 @@ Shoutbox::Shoutbox(QWidget *parent_widget) : QWidget(parent_widget),
 	QVariantMap action;
 	action["action"] = "shoutbox_login";
 	action["timestamp"] = mLastStamp;
-	action["user_data"] = "shoutbox";
+	action["user_data"] = "shoutbox_login";
 
 	ajax::getSingletonPtr()->request(settings->url(), action);
 
