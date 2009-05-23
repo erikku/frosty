@@ -26,7 +26,8 @@
 
 HttpTransfer::HttpTransfer(QObject *parent_object) : QObject(parent_object)
 {
-	// Nothing to see here
+	memset(&mStream, 0, sizeof(mStream));
+	BZ2_bzDecompressInit(&mStream, 0, 0);
 }
 
 HttpTransfer::~HttpTransfer()
@@ -52,7 +53,8 @@ HttpTransfer* HttpTransfer::start(const QUrl& url, const QString& path,
 
 	sha1_starts(&transfer->mChecksumContext);
 
-	QHttpRequestHeader header(post.isEmpty() ? "GET" : "POST", url.path());
+	QHttpRequestHeader header(post.isEmpty() ? "GET" : "POST",
+		url.path() + ".bz2");
 
 	QByteArray data;
 	if( !post.isEmpty() )
@@ -108,6 +110,8 @@ void HttpTransfer::requestFinished(int id, bool error)
 
 	Q_UNUSED(error);
 
+	BZ2_bzDecompressEnd(&mStream);
+
 	mDestHandle->close();
 	delete mDestHandle;
 	mDestHandle = 0;
@@ -139,9 +143,28 @@ void HttpTransfer::readyRead(const QHttpResponseHeader& resp)
 
 	QByteArray buffer = mHttp->readAll();
 
-	sha1_update(&mChecksumContext, (uchar*)buffer.data(), buffer.size());
-	mDestHandle->write(buffer);
-	mWritten += buffer.size();
+	mStream.next_in = buffer.data();
+	mStream.avail_in = buffer.size();
+
+	while(true)
+	{
+		mStream.next_out = mBufferOut;
+		mStream.avail_out = sizeof(mBufferOut);
+
+		int ret = BZ2_bzDecompress(&mStream);
+		int written = sizeof(mBufferOut) - mStream.avail_out;
+
+		sha1_update(&mChecksumContext, (uchar*)mBufferOut, written);
+		mDestHandle->write(mBufferOut, written);
+		mWritten += written;
+
+		if(ret != BZ_OK)
+			break;
+
+		// We are done reading what we have so far
+		if(mStream.avail_in == 0)
+			break;
+	}
 
 	emit progressChanged( qRound((double)mWritten /
 		(double)mContentLength * 100.0f) );

@@ -25,6 +25,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtNetwork/QHttp>
+#include <bzlib.h>
 
 #include "sha1.h"
 
@@ -61,6 +62,9 @@ protected:
 	int mContentLength;
 	QFile *mDestHandle;
 	sha1_context mChecksumContext;
+
+	bz_stream mStream;
+	char mBufferOut[4096];
 };
 
 #endif // __HttpTransfer_h__

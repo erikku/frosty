@@ -19,6 +19,7 @@ QT          += network webkit xml
 TEMPLATE     = app
 TARGET       = frosty_updater
 INCLUDEPATH += src
+LIBS        += -lbz2
 
 OBJECTS_DIR = .objs
 MOC_DIR     = .moc
