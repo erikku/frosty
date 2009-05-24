@@ -18,6 +18,7 @@
 \******************************************************************************/
 
 #include "Options.h"
+#include "Taskbar.h"
 #include "Settings.h"
 
 #include <QtCore/QCoreApplication>
@@ -36,6 +37,8 @@ Options::Options(QWidget *parent_widget) : QWidget(parent_widget)
 
 	darkenWidget(ui.interfaceLanguageLabel);
 	darkenWidget(ui.backendUrlLabel);
+	darkenWidget(ui.trayNoticeLabel);
+	darkenWidget(ui.closePolicyLabel);
 
 	connect(ui.clearLoginInfoButton, SIGNAL(clicked(bool)),
 		this, SLOT(clearLoginInfo()));
@@ -69,6 +72,9 @@ void Options::loadSettings()
 {
 	ui.backendUrl->setText( settings->url().toString() );
 	ui.interfaceLanguage->setCurrentIndex(settings->lang() == "ja" ? 0 : 1);
+	ui.trayNotice->setCheckState(settings->remindTrayIcon() ?
+		Qt::Checked : Qt::Unchecked);
+	ui.closePolicy->setCurrentIndex(settings->taskbarClosePolicy());
 
 	show();
 }
@@ -84,6 +90,9 @@ void Options::saveSettings()
 	else
 		settings->setLang("ja");
 
+	settings->setRemindTrayIcon(ui.trayNotice->checkState() == Qt::Checked);
+	settings->setTaskbarClosePolicy(ui.closePolicy->currentIndex());
+
 	hide();
 
 	QMessageBox::StandardButton button = QMessageBox::warning(this,
@@ -95,7 +104,7 @@ void Options::saveSettings()
 	if(button == QMessageBox::No)
 		return;
 
-	qApp->quit();
+	Taskbar::getSingletonPtr()->quit();
 }
 
 void Options::clearLoginInfo()
@@ -112,5 +121,5 @@ void Options::clearLoginInfo()
 	settings->setEmail( QString() );
 	settings->setPass( QString() );
 
-	qApp->quit();
+	Taskbar::getSingletonPtr()->quit();
 }

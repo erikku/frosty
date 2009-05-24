@@ -44,6 +44,7 @@
 #include <QtCore/QFile>
 
 #include <QtGui/QSystemTrayIcon>
+#include <QtGui/QMessageBox>
 #include <QtGui/QAction>
 #include <QtGui/QMenu>
 
@@ -75,6 +76,12 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 	QMenu *menu = new QMenu( tr("Absolutely Frosty") );
 	QAction *act;
+
+	// Taskbar Action
+	act = menu->addAction(/* icon, */tr("&Taskbar") );
+	connect(act, SIGNAL(triggered()), this, SLOT(show()));
+
+	act = menu->addSeparator();
 
 	// Devils Action
 	act = menu->addAction(/* icon, */tr("&Devils") );
@@ -201,6 +208,77 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 		action["user_data"] = "auth_query_perms";
 
 		ajax::getSingletonPtr()->request(settings->url(), action);
+	}
+
+	if( !settings->remindTrayIcon() )
+		return;
+
+	QMessageBox msgBox;
+	msgBox.setText( tr("This application uses a system tray icon (found in the "
+		"bottom right on the taskbar, next to the time). If you see the tray "
+		"icon is yellow (as seen to the left), there is unsaved data waiting "
+		"to be written to the database. Please don't quit the application "
+		"while the icon is yellow.") );
+	msgBox.setWindowTitle( tr("About the Tray Icon") );
+	msgBox.setIconPixmap( QPixmap(":/frosty_dirty.png") );
+	QPushButton *silent = msgBox.addButton(tr("Thanks, now be silent!"),
+		QMessageBox::AcceptRole);
+	QPushButton *later = msgBox.addButton(tr("Remind me again later!"),
+		QMessageBox::RejectRole);
+	msgBox.setDefaultButton(silent);
+	msgBox.exec();
+
+	if(msgBox.clickedButton() == silent)
+		settings->setRemindTrayIcon(false);
+
+	Q_UNUSED(later);
+}
+
+void Taskbar::closeEvent(QCloseEvent *event)
+{
+	Q_UNUSED(event);
+
+	int policy = settings->taskbarClosePolicy();
+	if(policy == 1) // Always Close
+	{
+		return;
+	}
+	else if(policy == 2) // Always Quit
+	{
+		quit();
+		return;
+	}
+
+	QMessageBox msgBox;
+	msgBox.setText( tr("You are about to close the taskbar. You can still "
+		"get to the database using the system tray icon (found in the "
+		"bottom right on the taskbar, next to the time). If you meant to "
+		"quit the application, you can do so now.") );
+	msgBox.setIconPixmap( QPixmap(":/frosty.png") );
+	msgBox.setWindowTitle( tr("Closing the Taskbar") );
+	QPushButton *always_quit = msgBox.addButton(tr("Always Quit"),
+		QMessageBox::AcceptRole);
+	QPushButton *just_quit = msgBox.addButton(tr("Quit Once"),
+		QMessageBox::YesRole);
+	QPushButton *always_close = msgBox.addButton(tr("Always Close"),
+		QMessageBox::RejectRole);
+	QPushButton *just_close = msgBox.addButton(tr("Close Once"),
+		QMessageBox::NoRole);
+	msgBox.setDefaultButton(just_close);
+	msgBox.exec();
+
+	if(msgBox.clickedButton() == always_quit)
+	{
+		settings->setTaskbarClosePolicy(2);
+		quit();
+	}
+	else if(msgBox.clickedButton() == just_quit)
+	{
+		quit();
+	}
+	else if(msgBox.clickedButton() == always_close)
+	{
+		settings->setTaskbarClosePolicy(1);
 	}
 }
 

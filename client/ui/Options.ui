@@ -1,96 +1,134 @@
-<ui version="4.0" >
- <author>John Eric Martin &lt;john.eric.martin@gmail.com></author>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>John Eric Martin &lt;john.eric.martin@gmail.com&gt;</author>
  <class>Options</class>
- <widget class="QWidget" name="Options" >
-  <property name="geometry" >
+ <widget class="QWidget" name="Options">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>130</height>
+    <height>133</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
+  <layout class="QVBoxLayout">
+   <property name="margin">
     <number>9</number>
    </property>
    <item>
-    <layout class="QGridLayout" >
-     <property name="horizontalSpacing" >
+    <layout class="QGridLayout">
+     <property name="horizontalSpacing">
       <number>5</number>
      </property>
-     <property name="verticalSpacing" >
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="interfaceLanguageLabel" >
-       <property name="text" >
+     <item row="0" column="0">
+      <widget class="QLabel" name="interfaceLanguageLabel">
+       <property name="text">
         <string>Interface Language:</string>
        </property>
-       <property name="alignment" >
+       <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="backendUrlLabel" >
-       <property name="text" >
+     <item row="1" column="0">
+      <widget class="QLabel" name="backendUrlLabel">
+       <property name="text">
         <string>Backend URL:</string>
        </property>
-       <property name="alignment" >
+       <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <widget class="QComboBox" name="interfaceLanguage" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+     <item row="0" column="1">
+      <widget class="QComboBox" name="interfaceLanguage">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <item>
-        <property name="text" >
+        <property name="text">
          <string>日本語</string>
         </property>
        </item>
        <item>
-        <property name="text" >
+        <property name="text">
          <string>English</string>
         </property>
        </item>
       </widget>
      </item>
-     <item row="1" column="1" >
-      <widget class="QLineEdit" name="backendUrl" />
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="backendUrl"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QCheckBox" name="trayNotice">
+       <property name="text">
+        <string>Show Notice</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="trayNoticeLabel">
+       <property name="text">
+        <string>Tray Icon Notice:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="closePolicyLabel">
+       <property name="text">
+        <string>Close Policy:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="closePolicy">
+       <item>
+        <property name="text">
+         <string>Ask</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Close</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Quit</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QPushButton" name="clearLoginInfoButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="clearLoginInfoButton">
+       <property name="text">
         <string>Clear Login Info</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -99,9 +137,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QDialogButtonBox" name="buttonBox" >
-       <property name="standardButtons" >
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -109,7 +147,6 @@
    </item>
   </layout>
  </widget>
- <includes/>
  <resources/>
  <connections/>
 </ui>

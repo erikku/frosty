@@ -41,6 +41,9 @@ public:
 
 	bool canDelete() const;
 
+	bool remindTrayIcon() const;
+	int taskbarClosePolicy() const;
+
 	static Settings* getSingletonPtr();
 
 public slots:
@@ -52,7 +55,13 @@ public slots:
 	void setEmail(const QString& email);
 	void setPass(const QString& pass);
 
+	void setRemindTrayIcon(bool remind);
+	void setTaskbarClosePolicy(int policy);
+
 protected:
+	bool mRemindTrayIcon;
+	int mTaskbarClosePolicy;
+
 	QUrl mURL, mUpdateURL;
 	QString mLang, mEmail, mPass;
 };

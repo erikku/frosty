@@ -76,6 +76,8 @@ protected slots:
 protected:
 	Taskbar(QWidget *parent = 0);
 
+	virtual void closeEvent(QCloseEvent *event);
+
 	Ui::Taskbar ui;
 
 	Options *mOptions;

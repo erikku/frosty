@@ -56,6 +56,8 @@ Settings::Settings(QObject *parent_object) : QObject(parent_object)
 	if( !qsettings.contains("lang") )
 		qsettings.setValue("lang", "en");
 
+	mRemindTrayIcon = qsettings.value("remind_tray", true).toBool();
+	mTaskbarClosePolicy = qsettings.value("close_taskbar", 0).toInt();
 	mUpdateURL = qsettings.value("update_url").toUrl();
 	mLang = qsettings.value("lang", "en").toString();
 	mEmail = qsettings.value("email").toString();
@@ -116,6 +118,16 @@ bool Settings::canDelete() const
 	return (args.contains("-d") || args.contains("--delete"));
 }
 
+bool Settings::remindTrayIcon() const
+{
+	return mRemindTrayIcon;
+}
+
+int Settings::taskbarClosePolicy() const
+{
+	return mTaskbarClosePolicy;
+}
+
 void Settings::setUrl(const QUrl& u)
 {
 	mURL = u;
@@ -154,4 +166,20 @@ void Settings::setUpdateUrl(const QUrl& u)
 
 	QSettings qsettings;
 	qsettings.setValue("update_url", u);
+}
+
+void Settings::setRemindTrayIcon(bool remind)
+{
+	mRemindTrayIcon = remind;
+
+	QSettings qsettings;
+	qsettings.setValue("remind_tray", remind);
+}
+
+void Settings::setTaskbarClosePolicy(int policy)
+{
+	mTaskbarClosePolicy = policy;
+
+	QSettings qsettings;
+	qsettings.setValue("close_taskbar", policy);
 }
