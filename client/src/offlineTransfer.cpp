@@ -81,7 +81,7 @@ offlineTransfer::offlineTransfer(QObject *parent) : baseTransfer(parent)
 			QStringList lines = QString::fromUtf8( sql.readAll() ).split("\n");
 			foreach(QString line, lines)
 			{
-				QRegExp lineMatcher("^(.+);$");
+				QRegExp lineMatcher("^\\s*(.+);\\s*$");
 				if( line.isEmpty() || !lineMatcher.exactMatch(line) )
 					continue;
 

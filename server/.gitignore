@@ -17,3 +17,4 @@ config.xml
 *.crt
 *.key
 *.pro.user
+object_script.*

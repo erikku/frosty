@@ -11,3 +11,4 @@ frosty_updater
 frosty_updater.exe
 frosty_updater_*.qm
 *.pro.user
+object_script.*

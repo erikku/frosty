@@ -16,7 +16,7 @@
 #  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 QT          += network sql xml
-CONFIG      += offline
+CONFIG      += offline gui
 
 offline {
 	TEMPLATE = lib
@@ -24,6 +24,10 @@ offline {
 	CONFIG  += staticlib
 } else {
 	TEMPLATE = app
+
+	win32 {
+		RC_FILE = server.rc
+	}
 }
 
 TARGET       = frosty_server
@@ -55,7 +59,6 @@ QMAKE_CFLAGS_DEBUG += -W -Wall -ansi -pedantic-errors -Wcast-align \
 	-Wbad-function-cast -Wmissing-prototypes -Wnested-externs
 
 win32 {
-	RC_FILE = server.rc
 	QMAKE_CXXFLAGS_DEBUG += -mnop-fun-dllimport
 }
 
