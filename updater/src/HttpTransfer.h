@@ -39,7 +39,7 @@ public:
 	~HttpTransfer();
 
 	static HttpTransfer* start(const QUrl& url, const QString& path,
-		const QMap<QString, QString>& post = QStringMap());
+		const QMap<QString, QString>& post = QStringMap(), bool bzip2 = false);
 
 protected slots:
 	void requestFinished(int id, bool error);
@@ -63,6 +63,7 @@ protected:
 	QFile *mDestHandle;
 	sha1_context mChecksumContext;
 
+	bool mUsingBzip2;
 	bz_stream mStream;
 	char mBufferOut[4096];
 };

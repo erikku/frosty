@@ -127,5 +127,5 @@ void BasicRelationList::refresh()
 	action["order_by"] = QVariantList() << orderby_name << orderby_id;
 	action["user_data"] = QString("%1_relation_list").arg(mTable);
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 }

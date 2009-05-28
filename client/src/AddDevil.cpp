@@ -56,7 +56,7 @@ AddDevil::AddDevil(QWidget *parent_widget) : QDialog(parent_widget), mSlot(-1)
 		action["columns"] = QVariantList() << "id" << "icon"
 			<< "name_en" << "name_ja";
 
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 	}
 
 	handleItemSelected();

@@ -47,7 +47,7 @@ DevilCache::DevilCache(QObject *parent_object) : QObject(parent_object),
 		action["user_data"] = "simulator_cache";
 		action["lang"] = settings->lang();
 
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 	}
 }
 

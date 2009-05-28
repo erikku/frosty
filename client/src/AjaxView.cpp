@@ -34,7 +34,6 @@
 #include <iostream>
 #endif // QT_NO_DEBUG
 
-#include "Settings.h"
 #include "ajax.h"
 
 #include "IconEdit.h"
@@ -124,11 +123,9 @@ void AjaxView::update()
 
 	setEnabled(false);
 
-	QUrl url = settings->url();
 	QVariantList update_actions = createUpdateActions();
-
 	foreach(QVariant action, update_actions)
-		ajax::getSingletonPtr()->request(url, action);
+		ajax::getSingletonPtr()->request(action);
 
 	cancel();
 	clear();
@@ -170,11 +167,9 @@ void AjaxView::view(int id, bool switchView)
 
 	mID = id;
 
-	QUrl url = settings->url();
 	QVariantList view_actions = createViewActions();
-
 	foreach(QVariant action, view_actions)
-		ajax::getSingletonPtr()->request(url, action);
+		ajax::getSingletonPtr()->request(action);
 
 	setEnabled(false);
 }

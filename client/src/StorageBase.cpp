@@ -187,7 +187,7 @@ void StorageBase::sync()
 
 	QVariantList sync_actions = syncData();
 	foreach(QVariant action, sync_actions)
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 
 	// Stop the timer now
 	mSyncTimer->stop();
@@ -201,7 +201,7 @@ void StorageBase::markDirty()
 
 	mMarked = true;
 
-	if(settings->url().toString() == "offline")
+	if( settings->offline() )
 		mSyncTimer->start(5000); // 5 seconds
 	else
 		mSyncTimer->start(60000); // 60 seconds
@@ -213,7 +213,7 @@ void StorageBase::loadDevils()
 {
 	QVariantList load_actions = loadData();
 	foreach(QVariant action, load_actions)
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 }
 
 void StorageBase::selectionChanged()

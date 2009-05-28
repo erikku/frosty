@@ -19,7 +19,7 @@ QT          += network sql xml
 TEMPLATE     = app
 TARGET       = frosty
 INCLUDEPATH += src ../server/src
-LIBS        += -L../server -lfrosty_server
+LIBS        += -L../server -lfrosty_server -lbz2
 
 OBJECTS_DIR = .objs
 MOC_DIR     = .moc

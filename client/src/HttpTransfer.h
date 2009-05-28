@@ -25,6 +25,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtNetwork/QHttp>
+#include <bzlib.h>
 
 #include "sha1.h"
 
@@ -38,7 +39,7 @@ public:
 	~HttpTransfer();
 
 	static HttpTransfer* start(const QUrl& url, const QString& path,
-		const QMap<QString, QString>& post = QStringMap());
+		const QMap<QString, QString>& post = QStringMap(), bool bzip2 = false);
 
 protected slots:
 	void requestFinished(int id, bool error);
@@ -61,6 +62,10 @@ protected:
 	int mContentLength;
 	QFile *mDestHandle;
 	sha1_context mChecksumContext;
+
+	bool mUsingBzip2;
+	bz_stream mStream;
+	char mBufferOut[4096];
 };
 
 #endif // __HttpTransfer_h__

@@ -257,7 +257,7 @@ void BindRelation::refreshRelationCache()
 	if( !mFilters.isEmpty() )
 		action["where"] = mFilters;
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 }
 
 void BindRelation::ajaxResponse(const QVariantMap& resp,

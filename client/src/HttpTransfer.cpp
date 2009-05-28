@@ -26,7 +26,7 @@
 
 HttpTransfer::HttpTransfer(QObject *parent_object) : QObject(parent_object)
 {
-	// Nothing to see here
+	memset(&mStream, 0, sizeof(mStream));
 }
 
 HttpTransfer::~HttpTransfer()
@@ -39,7 +39,7 @@ HttpTransfer::~HttpTransfer()
 }
 
 HttpTransfer* HttpTransfer::start(const QUrl& url, const QString& path,
-	const QMap<QString, QString>& post)
+	const QMap<QString, QString>& post, bool bzip2)
 {
 	HttpTransfer *transfer = new HttpTransfer;
 
@@ -49,10 +49,23 @@ HttpTransfer* HttpTransfer::start(const QUrl& url, const QString& path,
 	transfer->mSourceURL = url;
 	transfer->mDestPath = path;
 	transfer->mDestHandle = 0;
+	transfer->mUsingBzip2 = bzip2;
+
+	QHttpRequestHeader header;
+	if(bzip2)
+	{
+		BZ2_bzDecompressInit(&transfer->mStream, 0, 0);
+
+		header = QHttpRequestHeader(post.isEmpty() ?
+			"GET" : "POST", url.path() + ".bz2");
+	}
+	else
+	{
+		header = QHttpRequestHeader(post.isEmpty() ?
+			"GET" : "POST", url.path());
+	}
 
 	sha1_starts(&transfer->mChecksumContext);
-
-	QHttpRequestHeader header(post.isEmpty() ? "GET" : "POST", url.path());
 
 	QByteArray data;
 	if( !post.isEmpty() )
@@ -108,6 +121,9 @@ void HttpTransfer::requestFinished(int id, bool error)
 
 	Q_UNUSED(error);
 
+	if(mUsingBzip2)
+		BZ2_bzDecompressEnd(&mStream);
+
 	mDestHandle->close();
 	delete mDestHandle;
 	mDestHandle = 0;
@@ -139,9 +155,37 @@ void HttpTransfer::readyRead(const QHttpResponseHeader& resp)
 
 	QByteArray buffer = mHttp->readAll();
 
-	sha1_update(&mChecksumContext, (uchar*)buffer.data(), buffer.size());
-	mDestHandle->write(buffer);
-	mWritten += buffer.size();
+	if(mUsingBzip2)
+	{
+		mStream.next_in = buffer.data();
+		mStream.avail_in = buffer.size();
+
+		while(true)
+		{
+			mStream.next_out = mBufferOut;
+			mStream.avail_out = sizeof(mBufferOut);
+
+			int ret = BZ2_bzDecompress(&mStream);
+			int written = sizeof(mBufferOut) - mStream.avail_out;
+
+			sha1_update(&mChecksumContext, (uchar*)mBufferOut, written);
+			mDestHandle->write(mBufferOut, written);
+			mWritten += written;
+
+			if(ret != BZ_OK)
+				break;
+
+			// We are done reading what we have so far
+			if(mStream.avail_in == 0)
+				break;
+		}
+	}
+	else
+	{
+		sha1_update(&mChecksumContext, (uchar*)buffer.data(), buffer.size());
+		mDestHandle->write(buffer);
+		mWritten += buffer.size();
+	}
 
 	emit progressChanged( qRound((double)mWritten /
 		(double)mContentLength * 100.0f) );

@@ -44,6 +44,8 @@ protected:
 
 	QString mUpdaterPath;
 	QString mUpdaterHash;
+
+	bool mHaveVersionFile;
 };
 
 #endif // __VersionCheck_h__

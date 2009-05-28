@@ -396,7 +396,7 @@ void BindMultiRelation::setQuickSearch(SearchEdit *edit)
 
 void BindMultiRelation::addRequested()
 {
-	ajax::getSingletonPtr()->request(settings->url(), refreshItemCache());
+	ajax::getSingletonPtr()->request(refreshItemCache());
 }
 
 void BindMultiRelation::startAdd()

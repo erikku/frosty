@@ -115,8 +115,7 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 
 	act = menu->addSeparator();
 
-	bool guest = settings->email().isEmpty() &&
-		settings->url().toString() != "offline";
+	bool guest = settings->email().isEmpty() && !settings->offline();
 
 	// COMP Action
 	act = menu->addAction(/* icon, */tr("&COMP") );
@@ -207,7 +206,7 @@ Taskbar::Taskbar(QWidget *parent_widget) : QWidget(parent_widget), mOptions(0),
 		action["action"] = "auth_query_perms";
 		action["user_data"] = "auth_query_perms";
 
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 	}
 
 	if( !settings->remindTrayIcon() )

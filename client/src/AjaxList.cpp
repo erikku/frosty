@@ -75,7 +75,7 @@ AjaxList::AjaxList(AjaxView *view,
 		action["action"] = "auth_query_perms";
 		action["user_data"] = "auth_query_perms";
 
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 	}
 }
 
@@ -214,11 +214,11 @@ void AjaxList::refresh()
 
 	QVariant filter_action = filterAction();
 	if( !filter_action.isNull() )
-		ajax::getSingletonPtr()->request(settings->url(), filter_action);
+		ajax::getSingletonPtr()->request(filter_action);
 	else
 		mDataLoaded++;
 
-	ajax::getSingletonPtr()->request(settings->url(), listAction());
+	ajax::getSingletonPtr()->request(listAction());
 
 	setEnabled(false);
 }
@@ -266,11 +266,11 @@ void AjaxList::deleteAjax()
 	if(button == QMessageBox::No)
 		return;
 
-	ajax::getSingletonPtr()->request(settings->url(), deleteAction(id));
+	ajax::getSingletonPtr()->request(deleteAction(id));
 
 	QVariantList custom_actions = mAjaxView->createDeleteActions(id);
 	foreach(QVariant action, custom_actions)
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 }
 
 void AjaxList::ajaxResponse(const QVariantMap& resp, const QString& user_data)

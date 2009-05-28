@@ -37,8 +37,10 @@ Options::Options(QWidget *parent_widget) : QWidget(parent_widget)
 
 	darkenWidget(ui.interfaceLanguageLabel);
 	darkenWidget(ui.backendUrlLabel);
+	darkenWidget(ui.updaterUrlLabel);
 	darkenWidget(ui.trayNoticeLabel);
 	darkenWidget(ui.closePolicyLabel);
+	darkenWidget(ui.offlineModeLabel);
 
 	connect(ui.clearLoginInfoButton, SIGNAL(clicked(bool)),
 		this, SLOT(clearLoginInfo()));
@@ -70,7 +72,19 @@ void Options::darkenWidget(QWidget *widget)
 
 void Options::loadSettings()
 {
-	ui.backendUrl->setText( settings->url().toString() );
+	ui.backendUrl->clear();
+	foreach(QUrl url, settings->urls())
+		ui.backendUrl->addItem(url.toString());
+
+	ui.updaterUrl->clear();
+	foreach(QUrl url, settings->updateUrls())
+		ui.updaterUrl->addItem(url.toString());
+
+	ui.offlineMode->setCheckState(settings->offline() ?
+		Qt::Checked : Qt::Unchecked);
+	ui.backendUrl->setCurrentIndex(0);
+	ui.updaterUrl->setCurrentIndex(0);
+
 	ui.interfaceLanguage->setCurrentIndex(settings->lang() == "ja" ? 0 : 1);
 	ui.trayNotice->setCheckState(settings->remindTrayIcon() ?
 		Qt::Checked : Qt::Unchecked);
@@ -83,7 +97,9 @@ void Options::saveSettings()
 {
 	emit optionsChanged();
 
-	settings->setUrl( QUrl(ui.backendUrl->text()) );
+	settings->setUrl( QUrl(ui.backendUrl->currentText()) );
+	settings->setUpdateUrl( QUrl(ui.updaterUrl->currentText()) );
+	settings->setOffline(ui.offlineMode->checkState() == Qt::Checked);
 
 	if(ui.interfaceLanguage->currentIndex() == 1)
 		settings->setLang("en");

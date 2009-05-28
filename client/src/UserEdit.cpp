@@ -18,7 +18,7 @@
 \******************************************************************************/
 
 #include "UserEdit.h"
-#include "Settings.h"
+
 #include "ajax.h"
 #include "sha1.h"
 
@@ -85,18 +85,18 @@ void UserEdit::refresh()
 	action["email"] = mEmail;
 	action["user_data"] = "auth_edit_query_perms";
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 
 	action["action"] = "auth_query_user";
 	action["user_data"] = "auth_edit_query_user";
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 
 	action.clear();
 	action["action"] = QString("salt");
 	action["user_data"] = "salt";
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 }
 
 void UserEdit::updateUser()
@@ -161,7 +161,7 @@ void UserEdit::updateUser()
 	action["perms"] = perms;
 	action["user_data"] = QString("auth_modify_user");
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 	setEnabled(false);
 }
 

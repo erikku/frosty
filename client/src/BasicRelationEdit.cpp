@@ -18,7 +18,7 @@
 \******************************************************************************/
 
 #include "BasicRelationEdit.h"
-#include "Settings.h"
+
 #include "ajax.h"
 
 #include <QtGui/QMessageBox>
@@ -67,7 +67,7 @@ void BasicRelationEdit::submitRelation()
 	if(mID > 0)
 		action["where"] = QVariantList() << where;
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 }
 
 void BasicRelationEdit::refresh()
@@ -97,7 +97,7 @@ void BasicRelationEdit::refresh()
 	action["user_data"] = QString("%1_entry").arg(mTable);
 	action["where"] = QVariantList() << where;
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 }
 
 void BasicRelationEdit::ajaxResponse(const QVariantMap& resp,

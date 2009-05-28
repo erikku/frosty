@@ -35,22 +35,13 @@ Settings::Settings(QObject *parent_object) : QObject(parent_object)
 	QSettings qsettings;
 	if( !qsettings.contains("backend") )
 	{
-		// http://www.troopersklan.jp/megaten/backend.php
-		// https://gigadelic.homelinux.net:55517/backend.php
-		QString text = QInputDialog::getText(0,
-			tr("Absolutely Frosty Database Location"),
-			tr("URL:"), QLineEdit::Normal, "offline");
-
-		if( !text.isEmpty() )
-			mURL = QUrl(text);
-		else
-			mURL = QUrl("offline");
-
-		qsettings.setValue("backend", mURL);
+		setUrl( QUrl("https://gigadelic.homelinux.net:55517/backend.php") );
+		setOffline(true);
 	}
 	else
 	{
-		mURL = qsettings.value("backend").toUrl();
+		foreach(QVariant url, qsettings.value("backend_urls").toList())
+			mURLs.append( url.toUrl() );
 	}
 
 	if( !qsettings.contains("lang") )
@@ -58,10 +49,44 @@ Settings::Settings(QObject *parent_object) : QObject(parent_object)
 
 	mRemindTrayIcon = qsettings.value("remind_tray", true).toBool();
 	mTaskbarClosePolicy = qsettings.value("close_taskbar", 0).toInt();
-	mUpdateURL = qsettings.value("update_url").toUrl();
+
+	foreach(QVariant url, qsettings.value("update_urls").toList())
+		mUpdateURLs.append( url.toUrl() );
+
+	mOfflineMode = qsettings.value("offline", true).toBool();
 	mLang = qsettings.value("lang", "en").toString();
 	mEmail = qsettings.value("email").toString();
 	mPass = qsettings.value("pass").toString();
+
+	if( mURLs.isEmpty() )
+	{
+		QUrl url = qsettings.value("backend").toUrl();
+		if( url == QUrl("offline") )
+		{
+			url = QUrl("https://gigadelic.homelinux.net:55517/backend.php");
+
+			setOffline(true);
+		}
+		else
+		{
+			setOffline(false);
+		}
+
+		setUrl(url);
+	}
+
+	if( mUpdateURLs.isEmpty() )
+	{
+		mUpdateURLs.append( QUrl("http://gigadelic.homelinux.net:10900"
+			"/frosty/updates") );
+		mUpdateURLs.append( QUrl("http://gigadelic.homelinux.net:10900"
+			"/frosty/updates_jp") );
+
+		if( qsettings.contains("update_url") )
+			setUpdateUrl( qsettings.value("update_url").toUrl() );
+		else
+			setUpdateUrl( QUrl(mUpdateURLs.first()) );
+	}
 
 	Q_ASSERT(g_settings == 0);
 	g_settings = this;
@@ -88,7 +113,15 @@ Settings* Settings::getSingletonPtr()
 
 QUrl Settings::url() const
 {
-	return mURL;
+	if( mURLs.isEmpty() )
+		return QUrl();
+
+	return mURLs.first();
+}
+
+QList<QUrl> Settings::urls() const
+{
+	return mURLs;
 }
 
 QString Settings::lang() const
@@ -108,7 +141,15 @@ QString Settings::pass() const
 
 QUrl Settings::updateUrl() const
 {
-	return mUpdateURL;
+	if( mUpdateURLs.isEmpty() )
+		return QUrl();
+
+	return mUpdateURLs.first();
+}
+
+QList<QUrl> Settings::updateUrls() const
+{
+	return mUpdateURLs;
 }
 
 bool Settings::canDelete() const
@@ -128,12 +169,31 @@ int Settings::taskbarClosePolicy() const
 	return mTaskbarClosePolicy;
 }
 
+bool Settings::offline() const
+{
+	return mOfflineMode;
+}
+
 void Settings::setUrl(const QUrl& u)
 {
-	mURL = u;
+	if( mURLs.contains(u) )
+		mURLs.removeAt( mURLs.indexOf(u) );
+
+	mURLs.prepend(u);
+
+	while(mURLs.count() > 5)
+		mURLs.removeLast();
 
 	QSettings qsettings;
 	qsettings.setValue("backend", u);
+
+	{
+		QVariantList urls;
+		foreach(QUrl url, mURLs)
+			urls.append(url);
+
+		qsettings.setValue("backend_urls", urls);
+	}
 }
 
 void Settings::setLang(const QString& l)
@@ -162,10 +222,24 @@ void Settings::setPass(const QString& p)
 
 void Settings::setUpdateUrl(const QUrl& u)
 {
-	mUpdateURL = u;
+	if( mUpdateURLs.contains(u) )
+		mUpdateURLs.removeAt( mUpdateURLs.indexOf(u) );
+
+	mUpdateURLs.prepend(u);
+
+	while(mUpdateURLs.count() > 5)
+		mUpdateURLs.removeLast();
 
 	QSettings qsettings;
 	qsettings.setValue("update_url", u);
+
+	{
+		QVariantList urls;
+		foreach(QUrl url, mUpdateURLs)
+			urls.append(url);
+
+		qsettings.setValue("update_urls", urls);
+	}
 }
 
 void Settings::setRemindTrayIcon(bool remind)
@@ -182,4 +256,12 @@ void Settings::setTaskbarClosePolicy(int policy)
 
 	QSettings qsettings;
 	qsettings.setValue("close_taskbar", policy);
+}
+
+void Settings::setOffline(bool is_offline)
+{
+	mOfflineMode = is_offline;
+
+	QSettings qsettings;
+	qsettings.setValue("offline", is_offline);
 }

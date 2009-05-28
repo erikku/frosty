@@ -962,5 +962,5 @@ bool BindDetailedMultiRelation::itemMatches(const QVariantMap& map,
 
 void BindDetailedMultiRelation::addRequested()
 {
-	ajax::getSingletonPtr()->request(settings->url(), refreshItemCache());
+	ajax::getSingletonPtr()->request(refreshItemCache());
 }

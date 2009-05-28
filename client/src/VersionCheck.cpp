@@ -21,6 +21,7 @@
 #include "HttpTransfer.h"
 #include "Settings.h"
 #include "ajax.h"
+#include "json.h"
 #include "sha1.h"
 
 #include <QtCore/QDir>
@@ -31,17 +32,31 @@
 
 static VersionCheck *g_versioncheck_inst = 0;
 
-VersionCheck::VersionCheck(QObject *parent_object) : QObject(parent_object)
+VersionCheck::VersionCheck(QObject *parent_object) : QObject(parent_object),
+	mHaveVersionFile(false)
 {
 	ajax::getSingletonPtr()->subscribe(this);
 
+#ifdef CHECK_SERVER_VERSION
 	{
 		QVariantMap action;
 		action["action"] = "server_updates";
 		action["user_data"] = "server_updates";
 
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 	}
+#else // CHECK_SERVER_VERSION
+	QString updateUrl = settings->updateUrl().toString();
+
+	HttpTransfer *transfer = HttpTransfer::start(
+		QUrl(updateUrl + "/version.json"),
+		QDir(qApp->applicationDirPath()).filePath("version.json") );
+
+	connect(transfer, SIGNAL(transferFailed()),
+		this, SLOT(transferFailed()));
+	connect(transfer, SIGNAL(transferFinished(const QString&)),
+		this, SLOT(transferFinished(const QString&)));
+#endif // CHECK_SERVER_VERSION
 }
 
 VersionCheck* VersionCheck::getSingletonPtr()
@@ -78,14 +93,10 @@ void VersionCheck::ajaxResponse(const QVariantMap& resp,
 		mUpdaterPath = updater;
 		mUpdaterHash = updater_hash;
 
-		if(sha1HashFile(client) != client_hash)
-		{
-			QMessageBox::warning(0, tr("Client Needs Updating"), tr("A new "
-				"version of the client is avaliable for downloading. It is "
-				"recommended you exit the client now and run the updater."));
-		}
+		QRegExp hashMatcher("[0-9a-f]{40}");
 
-		if(sha1HashFile(updater) != updater_hash)
+		if(hashMatcher.exactMatch(updater_hash) &&
+			sha1HashFile(updater) != updater_hash)
 		{
 			QMessageBox::StandardButton button = QMessageBox::warning(0,
 				tr("Updater Needs Updating"), tr("A new version of updater is "
@@ -98,10 +109,11 @@ void VersionCheck::ajaxResponse(const QVariantMap& resp,
 			{
 				HttpTransfer *transfer = HttpTransfer::start(
 #ifdef Q_OS_WIN32
-					QUrl(updateUrl + "/frosty_updater.exe"), updater);
+					QUrl(updateUrl + "/frosty_updater.exe"),
 #else
-					QUrl(updateUrl + "/frosty_updater"), updater);
+					QUrl(updateUrl + "/frosty_updater"),
 #endif
+					updater, QStringMap(), true);
 
 				connect(transfer, SIGNAL(transferFailed()),
 					this, SLOT(transferFailed()));
@@ -110,6 +122,14 @@ void VersionCheck::ajaxResponse(const QVariantMap& resp,
 
 				return;
 			}
+		}
+
+		if(hashMatcher.exactMatch(client_hash) &&
+			sha1HashFile(client) != client_hash)
+		{
+			QMessageBox::warning(0, tr("Client Needs Updating"), tr("A new "
+				"version of the client is avaliable for downloading. It is "
+				"recommended you exit the client now and run the updater."));
 		}
 	}
 }
@@ -147,6 +167,27 @@ void VersionCheck::transferFailed()
 
 void VersionCheck::transferFinished(const QString& checksum)
 {
+#ifndef CHECK_SERVER_VERSION
+	if(!mHaveVersionFile)
+	{
+		QFile file( QDir(qApp->applicationDirPath()).filePath("version.json") );
+		if( !file.open(QIODevice::ReadOnly) )
+			return;
+
+		QString line = file.readLine().trimmed();
+		QVariantMap versions = json::parse(line).toMap();
+
+		ajaxResponse(versions, "server_updates");
+
+		file.close();
+		file.remove();
+
+		mHaveVersionFile = true;
+
+		return;
+	}
+#endif // CHECK_SERVER_VERSION
+
 	QFile file(mUpdaterPath);
 	file.setPermissions(QFile::ReadOwner | QFile::WriteOwner |
 		QFile::ExeOwner | QFile::ReadGroup | QFile::ExeGroup |

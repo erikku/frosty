@@ -70,9 +70,7 @@ void Instance::checkConnection()
 
 void Instance::startup()
 {
-	bool offline = settings->url().toString() == "offline";
-
-	if( settings->email().isEmpty() && !offline )
+	if( settings->email().isEmpty() && !settings->offline() )
 	{
 		(new Register)->show();
 	}
@@ -82,7 +80,7 @@ void Instance::startup()
 		Taskbar::getSingletonPtr()->show();
 	}
 
-	if( !qApp->arguments().contains("--no-check") && !offline )
+	if( !qApp->arguments().contains("--no-check") )
 	{
 		VersionCheck::getSingletonPtr();
 

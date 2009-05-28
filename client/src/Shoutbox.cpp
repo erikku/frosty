@@ -18,7 +18,7 @@
 \******************************************************************************/
 
 #include "Shoutbox.h"
-#include "Settings.h"
+
 #include "ajax.h"
 
 #include <QtCore/QTimer>
@@ -52,7 +52,7 @@ Shoutbox::Shoutbox(QWidget *parent_widget) : QWidget(parent_widget),
 	action["timestamp"] = mLastStamp;
 	action["user_data"] = "shoutbox_login";
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 
 	ui.messageEdit->setEnabled(false);
 }
@@ -67,7 +67,7 @@ void Shoutbox::shout()
 	action["text"] = ui.messageEdit->text();
 	action["user_data"] = "shoutbox";
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 
 	QString stamp = QDateTime::currentDateTime().toString(
 		"MM/dd hh:mm:ss");
@@ -108,7 +108,7 @@ void Shoutbox::checkNew()
 	action["timestamp"] = mLastStamp;
 	action["user_data"] = "shoutbox";
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 }
 
 void Shoutbox::updateShoutButton()

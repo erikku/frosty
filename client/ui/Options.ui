@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>133</height>
+    <height>204</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -33,7 +33,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="backendUrlLabel">
        <property name="text">
         <string>Backend URL:</string>
@@ -63,17 +63,14 @@
        </item>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="backendUrl"/>
-     </item>
-     <item row="2" column="1">
+     <item row="4" column="1">
       <widget class="QCheckBox" name="trayNotice">
        <property name="text">
         <string>Show Notice</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="trayNoticeLabel">
        <property name="text">
         <string>Tray Icon Notice:</string>
@@ -83,7 +80,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="closePolicyLabel">
        <property name="text">
         <string>Close Policy:</string>
@@ -93,7 +90,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="5" column="1">
       <widget class="QComboBox" name="closePolicy">
        <item>
         <property name="text">
@@ -110,6 +107,47 @@
          <string>Quit</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="offlineModeLabel">
+       <property name="text">
+        <string>Offline Mode:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="updaterUrlLabel">
+       <property name="text">
+        <string>Updater URL:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QCheckBox" name="offlineMode">
+       <property name="text">
+        <string>Enabed</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="backendUrl">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="updaterUrl">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>

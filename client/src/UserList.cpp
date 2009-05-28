@@ -19,7 +19,7 @@
 
 #include "UserList.h"
 #include "UserEdit.h"
-#include "Settings.h"
+
 #include "ajax.h"
 
 #include <QtGui/QListWidget>
@@ -83,7 +83,7 @@ void UserList::makeUserActive()
 	action["email"] = item->data(Qt::UserRole);
 	action["user_data"] = QString("auth_make_active");
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 
 	clear();
 }
@@ -100,7 +100,7 @@ void UserList::makeUserInactive()
 	action["email"] = item->data(Qt::UserRole);
 	action["user_data"] = QString("auth_make_inactive");
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 
 	clear();
 }
@@ -162,7 +162,7 @@ void UserList::refresh()
 	action["action"] = "auth_query_users";
 	action["user_data"] = "auth_query_users";
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 }
 
 void UserList::ajaxResponse(const QVariantMap& resp, const QString& user_data)

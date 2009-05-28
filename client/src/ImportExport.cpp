@@ -18,7 +18,7 @@
 \******************************************************************************/
 
 #include "ImportExport.h"
-#include "Settings.h"
+
 #include "ajax.h"
 #include "json.h"
 
@@ -52,7 +52,7 @@ ImportExport::ImportExport(QWidget *parent_widget) : QWidget(parent_widget)
 		action["action"] = "db_tables";
 		action["user_data"] = "db_tables";
 
-		ajax::getSingletonPtr()->request(settings->url(), action);
+		ajax::getSingletonPtr()->request(action);
 	}
 
 	toggleView();
@@ -171,7 +171,7 @@ void ImportExport::importDB()
 	action["user_data"] = "db_import";
 	action["export"] = json::parse(json);
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 
 	setEnabled(false);
 }
@@ -203,7 +203,7 @@ void ImportExport::exportDB()
 	action["user_data"] = "db_export";
 	action["tables"] = tables;
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 
 	setEnabled(false);
 }

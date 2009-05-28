@@ -19,7 +19,7 @@
 
 #include "RelationList.h"
 #include "RelationEdit.h"
-#include "Settings.h"
+
 #include "ajax.h"
 
 #include <QtGui/QMessageBox>
@@ -81,7 +81,7 @@ void RelationList::deleteRelation(int id, const QString& name)
 	action["where"] = QVariantList() << where;
 	action["user_data"] = QString("%1_relation_delete").arg(mTable);
 
-	ajax::getSingletonPtr()->request(settings->url(), action);
+	ajax::getSingletonPtr()->request(action);
 }
 
 void RelationList::showList(const QString& window_title, const QString& table)

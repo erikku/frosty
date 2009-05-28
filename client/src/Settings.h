@@ -32,17 +32,22 @@ public:
 	Settings(QObject *parent = 0);
 
 	QUrl url() const;
+	QList<QUrl> urls() const;
+
 	QString lang() const;
 
 	QString email() const;
 	QString pass() const;
 
 	QUrl updateUrl() const;
+	QList<QUrl> updateUrls() const;
 
 	bool canDelete() const;
 
 	bool remindTrayIcon() const;
 	int taskbarClosePolicy() const;
+
+	bool offline() const;
 
 	static Settings* getSingletonPtr();
 
@@ -58,11 +63,14 @@ public slots:
 	void setRemindTrayIcon(bool remind);
 	void setTaskbarClosePolicy(int policy);
 
+	void setOffline(bool is_offline);
+
 protected:
+	bool mOfflineMode;
 	bool mRemindTrayIcon;
 	int mTaskbarClosePolicy;
 
-	QUrl mURL, mUpdateURL;
+	QList<QUrl> mURLs, mUpdateURLs;
 	QString mLang, mEmail, mPass;
 };
 

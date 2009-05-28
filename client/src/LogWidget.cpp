@@ -18,7 +18,6 @@
 \******************************************************************************/
 
 #include "LogWidget.h"
-#include "Settings.h"
 #include "LogView.h"
 
 #include "baseTransfer.h"
@@ -100,7 +99,7 @@ void LogWidget::resendRequest()
 	QVariantList acts = request.value("actions").toList();
 
 	foreach(QVariant act, acts)
-		ajax::getSingletonPtr()->request(settings->url(), act);
+		ajax::getSingletonPtr()->request(act);
 }
 
 void LogWidget::registerRequest(baseTransfer *transfer, const QVariant& request)

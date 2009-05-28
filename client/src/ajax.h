@@ -37,7 +37,9 @@ class ajax : public QObject
 public:
 	static ajax* getSingletonPtr();
 
+	void request(const QVariant& request);
 	void request(const QUrl& url, const QVariant& request);
+
 	void subscribe(QObject *obj);
 
 public slots:
@@ -58,6 +60,7 @@ protected:
 
 	LogWidget *mLog;
 
+	QUrl mURL;
 	QTimer *mRequestQueueTimer;
 	QMap<QUrl, QVariantList> mRequestQueue;
 };

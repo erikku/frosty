@@ -117,7 +117,8 @@ void Updater::downloadFile(const QString& path)
 
 	url = QString("%1/%2").arg(url.toString()).arg(path);
 
-	HttpTransfer *transfer = HttpTransfer::start(url, path);
+	HttpTransfer *transfer = HttpTransfer::start(url, path,
+		QStringMap(), true);
 
 	connect(transfer, SIGNAL(transferFinished(const QString&)),
 		this, SLOT(transferFinished(const QString&)));

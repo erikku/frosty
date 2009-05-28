@@ -41,6 +41,8 @@ ajax::ajax(QObject *parent_object) : QObject(parent_object)
 {
 	Q_ASSERT(g_ajax_inst == 0);
 
+	mURL = settings->url();
+
 	mLog = LogWidget::getSingletonPtr();
 	mRequestQueueTimer = new QTimer;
 	mRequestQueueTimer->setSingleShot(true);
@@ -76,6 +78,14 @@ ajax* ajax::getSingletonPtr()
 	Q_ASSERT(g_ajax_inst != 0);
 
 	return g_ajax_inst;
+}
+
+void ajax::request(const QVariant& req)
+{
+	if( settings->offline() )
+		request(QUrl("offline"), req);
+	else
+		request(mURL, req);
 }
 
 void ajax::request(const QUrl& url, const QVariant& req)
@@ -122,7 +132,7 @@ void ajax::dispatchRequest(const QUrl& url, const QVariant& req)
 {
 	baseTransfer *base = 0;
 
-	if(url.toString() == "offline")
+	if(QUrl("offline") == url)
 	{
 		base = offlineTransfer::start(req);
 	}
