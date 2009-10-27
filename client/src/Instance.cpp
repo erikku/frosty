@@ -25,6 +25,9 @@
 #include "Register.h"
 #include "Taskbar.h"
 
+// Persona 3 Portable Stuff
+#include "p3p/Home.h"
+
 #include <QtCore/QTimer>
 #include <QtGui/QApplication>
 
@@ -77,7 +80,19 @@ void Instance::startup()
 	else
 	{
 		mLoginOK = true;
-		Taskbar::getSingletonPtr()->show();
+
+		bool p3p = qApp->arguments().contains("--p3p");
+		if(settings->mode() == "p3p")
+			p3p = true;
+
+		bool imagine = qApp->arguments().contains("--imagine");
+		if(settings->mode() == "imagine")
+			imagine = true;
+
+		if(p3p)
+			(new Home)->show();
+		else // imagine
+			Taskbar::getSingletonPtr()->show();
 	}
 
 	if( !qApp->arguments().contains("--no-check") )

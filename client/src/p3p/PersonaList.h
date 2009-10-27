@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  libkawaii - A Japanese language support library for Qt4                     *
-*  Copyright (C) 2007 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/PersonaList.h                                                      *
+*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,28 +17,41 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __KanaRomajiConverter_h__
-#define __KanaRomajiConverter_h__
+#ifndef __PersonaList_h__
+#define __PersonaList_h__
 
-#include <QtCore/QString>
+#include "AjaxList.h"
 
-typedef enum _RubyFormat
+#include <QtCore/QMap>
+#include <QtCore/QVariant>
+
+class PersonaView;
+class QListWidgetItem;
+
+class PersonaList : public AjaxList
 {
-	Normal = 0,
-	Flat,
-	Bottom,
-	Top,
-	ShortHand,
-	Wiki,
-	NoParentheses
-}RubyFormat;
+	Q_OBJECT
 
-bool containsRuby(const QString& text);
-QString reduceRuby(const QString& bottom, const QString& top);
-QString parseRuby(const QString& string, RubyFormat format = Flat);
-QString romajiToKana(const QString& string, bool special = true);
-QString kanaToRomaji(const QString& string, bool special = true);
-QString katakanaToHiragana(const QString& string);
-QString hiraganaToKatakana(const QString& string);
+public:
+	PersonaList(PersonaView *view = 0, QWidget *parent = 0);
 
-#endif // __KanaRomajiConverter_h__
+protected:
+	virtual QVariant filterAction() const;
+	virtual QVariant filterUserData() const;
+
+	virtual QVariant listAction() const;
+	virtual QVariant listUserData() const;
+
+	virtual QString switchTitle() const;
+	virtual QString switchMessage() const;
+
+	virtual QString deleteTitle() const;
+	virtual QString deleteMessage() const;
+	virtual QVariant deleteAction(int id) const;
+	virtual QVariant deleteUserData() const;
+
+	virtual int filterID(const QVariantMap& map) const;
+	virtual QString itemIcon(const QVariantMap& map) const;
+};
+
+#endif // __PersonaList_h__

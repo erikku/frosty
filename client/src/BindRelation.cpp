@@ -104,10 +104,8 @@ void BindRelation::handleViewResponse(const QVariantMap& values)
 	int id = data.toInt();
 
 	mLastID = id;
-	if(mFilled)
+	if(mFilled && mEditor->findData(id) != -1)
 	{
-		Q_ASSERT( mEditor->findData(id) != -1 );
-
 		mViewer->setText( mCache.key(id) );
 		mEditor->setCurrentIndex( mEditor->findData(id) );
 		mEditor->setEnabled(true);

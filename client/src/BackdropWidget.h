@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  libkawaii - A Japanese language support library for Qt4                     *
-*  Copyright (C) 2007 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/BackdropWidget.h                                                 *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,28 +17,27 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __KanaRomajiConverter_h__
-#define __KanaRomajiConverter_h__
+#ifndef __BackdropWidget_h__
+#define __BackdropWidget_h__
 
-#include <QtCore/QString>
+#include <QtGui/QWidget>
+#include <QtGui/QPixmap>
 
-typedef enum _RubyFormat
+class BackdropWidget : public QWidget
 {
-	Normal = 0,
-	Flat,
-	Bottom,
-	Top,
-	ShortHand,
-	Wiki,
-	NoParentheses
-}RubyFormat;
+	Q_OBJECT
 
-bool containsRuby(const QString& text);
-QString reduceRuby(const QString& bottom, const QString& top);
-QString parseRuby(const QString& string, RubyFormat format = Flat);
-QString romajiToKana(const QString& string, bool special = true);
-QString kanaToRomaji(const QString& string, bool special = true);
-QString katakanaToHiragana(const QString& string);
-QString hiraganaToKatakana(const QString& string);
+public:
+	BackdropWidget(QWidget *parent = 0);
 
-#endif // __KanaRomajiConverter_h__
+public slots:
+	void setBackdrop(const QString& path);
+
+protected:
+	virtual void paintEvent(QPaintEvent *evt);
+
+	QString mBackdropPath;
+	QPixmap mBackdrop, mWidgetPixmap;
+};
+
+#endif // __BackdropWidget_h__

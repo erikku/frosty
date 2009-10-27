@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  libkawaii - A Japanese language support library for Qt4                     *
-*  Copyright (C) 2007 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/p3p/Home.h                                                       *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,28 +17,22 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __KanaRomajiConverter_h__
-#define __KanaRomajiConverter_h__
+#ifndef __Home_h__
+#define __Home_h__
 
-#include <QtCore/QString>
+#include "ui_Home.h"
 
-typedef enum _RubyFormat
+class Home : public QWidget
 {
-	Normal = 0,
-	Flat,
-	Bottom,
-	Top,
-	ShortHand,
-	Wiki,
-	NoParentheses
-}RubyFormat;
+	Q_OBJECT
 
-bool containsRuby(const QString& text);
-QString reduceRuby(const QString& bottom, const QString& top);
-QString parseRuby(const QString& string, RubyFormat format = Flat);
-QString romajiToKana(const QString& string, bool special = true);
-QString kanaToRomaji(const QString& string, bool special = true);
-QString katakanaToHiragana(const QString& string);
-QString hiraganaToKatakana(const QString& string);
+public:
+	Home(QWidget *parent = 0);
 
-#endif // __KanaRomajiConverter_h__
+protected:
+	void darkenWidget(QWidget *widget);
+
+	Ui::Home ui;
+};
+
+#endif // __Home_h__

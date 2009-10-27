@@ -76,7 +76,9 @@ FORMS       += ui/PaletteEditor.ui \
                ui/DevilProperties.ui \
                ui/FusionChart.ui \
                ui/MoonPhases.ui \
-               ui/AddParents.ui
+               ui/AddParents.ui \
+               ui/p3p/Home.ui \
+               ui/p3p/PersonaView.ui
 HEADERS     += src/ajax.h \
                src/ajaxTransfer.h \
                src/baseTransfer.h \
@@ -142,6 +144,7 @@ HEADERS     += src/ajax.h \
                src/BindNumberSelector.h \
                src/BindDetailedMultiRelation.h \
                src/BindMultiRelation.h \
+               src/BindStatRelation.h \
                src/Shoutbox.h \
                src/COMP.h \
                src/Storage.h \
@@ -152,7 +155,12 @@ HEADERS     += src/ajax.h \
                src/DevilProperties.h \
                src/FusionChart.h \
                src/MoonPhases.h \
-               src/AddParents.h
+               src/AddParents.h \
+               src/BackdropWidget.h \
+               src/p3p/Home.h \
+               src/p3p/PersonaList.h \
+               src/p3p/PersonaView.h \
+               src/p3p/PersonaWindow.h
 SOURCES     += src/main.cpp \
                src/ajax.cpp \
                src/ajaxTransfer.cpp \
@@ -221,6 +229,7 @@ SOURCES     += src/main.cpp \
                src/BindNumberSelector.cpp \
                src/BindDetailedMultiRelation.cpp \
                src/BindMultiRelation.cpp \
+               src/BindStatRelation.cpp \
                src/Shoutbox.cpp \
                src/COMP.cpp \
                src/Storage.cpp \
@@ -231,4 +240,9 @@ SOURCES     += src/main.cpp \
                src/DevilProperties.cpp \
                src/FusionChart.cpp \
                src/MoonPhases.cpp \
-               src/AddParents.cpp
+               src/AddParents.cpp \
+               src/BackdropWidget.cpp \
+               src/p3p/Home.cpp \
+               src/p3p/PersonaList.cpp \
+               src/p3p/PersonaView.cpp \
+               src/p3p/PersonaWindow.cpp

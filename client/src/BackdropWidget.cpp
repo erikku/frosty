@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  libkawaii - A Japanese language support library for Qt4                     *
-*  Copyright (C) 2007 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/BackdropWidget.cpp                                               *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,28 +17,47 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __KanaRomajiConverter_h__
-#define __KanaRomajiConverter_h__
+#include "BackdropWidget.h"
 
-#include <QtCore/QString>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
 
-typedef enum _RubyFormat
+BackdropWidget::BackdropWidget(QWidget *parent) : QWidget(parent)
 {
-	Normal = 0,
-	Flat,
-	Bottom,
-	Top,
-	ShortHand,
-	Wiki,
-	NoParentheses
-}RubyFormat;
+	/// @TODO REMOVE THIS
+	mBackdropPath = "icons/p3p/persona/PST_05A.png";
+	mBackdropPath = "icons/p3p/persona/PST_08A.png";
 
-bool containsRuby(const QString& text);
-QString reduceRuby(const QString& bottom, const QString& top);
-QString parseRuby(const QString& string, RubyFormat format = Flat);
-QString romajiToKana(const QString& string, bool special = true);
-QString kanaToRomaji(const QString& string, bool special = true);
-QString katakanaToHiragana(const QString& string);
-QString hiraganaToKatakana(const QString& string);
+	mBackdrop = QPixmap(mBackdropPath);
+}
 
-#endif // __KanaRomajiConverter_h__
+void BackdropWidget::setBackdrop(const QString& path)
+{
+	mBackdropPath = path;
+	mBackdrop = QPixmap(path);
+
+	// Clear the widget pixmap so it recreates it
+	mWidgetPixmap = QPixmap();
+}
+
+void BackdropWidget::paintEvent(QPaintEvent *evt)
+{
+	if( !isVisible() || width() <= 0 || height() <= 0 )
+		return;
+
+	if( mWidgetPixmap.size() != size() )
+	{
+		mWidgetPixmap = QPixmap( size() );
+		mWidgetPixmap.fill(Qt::transparent);
+
+		int x = mWidgetPixmap.width() - mBackdrop.width();
+		int y = mWidgetPixmap.height() - mBackdrop.height();
+
+		QPainter painter(&mWidgetPixmap);
+		painter.drawPixmap(x, y, mBackdrop);
+	}
+
+	QPainter painter(this);
+	painter.fillRect(evt->rect(), Qt::transparent);
+	painter.drawPixmap(evt->rect(), mWidgetPixmap);
+}

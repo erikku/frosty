@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  libkawaii - A Japanese language support library for Qt4                     *
-*  Copyright (C) 2007 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/p3p/Home.cpp                                                     *
+*  Copyright (C) 2009 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,28 +17,42 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __KanaRomajiConverter_h__
-#define __KanaRomajiConverter_h__
+#include "Home.h"
 
-#include <QtCore/QString>
+#include "PersonaWindow.h"
 
-typedef enum _RubyFormat
+#ifndef QT_NO_DEBUG
+#include <iostream>
+#endif // QT_NO_DEBUG
+
+Home::Home(QWidget *parent) : QWidget(parent)
 {
-	Normal = 0,
-	Flat,
-	Bottom,
-	Top,
-	ShortHand,
-	Wiki,
-	NoParentheses
-}RubyFormat;
+	ui.setupUi(this);
 
-bool containsRuby(const QString& text);
-QString reduceRuby(const QString& bottom, const QString& top);
-QString parseRuby(const QString& string, RubyFormat format = Flat);
-QString romajiToKana(const QString& string, bool special = true);
-QString kanaToRomaji(const QString& string, bool special = true);
-QString katakanaToHiragana(const QString& string);
-QString hiraganaToKatakana(const QString& string);
+	darkenWidget(ui.titleLabel);
 
-#endif // __KanaRomajiConverter_h__
+	QWidget *oldPage = ui.tabWidget->currentWidget();
+
+	ui.tabWidget->addTab(new PersonaWindow, tr("Persona"));
+
+	delete oldPage;
+}
+
+void Home::darkenWidget(QWidget *widget)
+{
+	QPalette dark_palette = palette();
+	dark_palette.setBrush(QPalette::Window,
+		dark_palette.brush(QPalette::Base));
+
+	QLabel *label = qobject_cast<QLabel*>(widget);
+	if(label)
+		label->setMargin(5);
+#ifndef QT_NO_DEBUG
+	else
+		std::cout << tr("darkenWidget(%1) is not a QLabel").arg(
+			widget->objectName()).toLocal8Bit().data() << std::endl;
+#endif // QT_NO_DEBUG
+
+	widget->setAutoFillBackground(true);
+	widget->setPalette(dark_palette);
+}
