@@ -80,9 +80,9 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindNumber("stack_size", ui.stackSize, ui.stackSizeEdit, 1);
 	bindRelation("type", ui.type, ui.typeEdit, "db_item_type",
 		QString(), ui.typeEditButton, tr("Item Type"));
-	bindRelation("equip_type", ui.equipType, ui.equipTypeEdit, "db_equip_type",
+	bindRelation("equip_type", ui.equipType, ui.equipTypeEdit, "db_item_equip_type",
 		QString(), ui.equipTypeEditButton, tr("Equip Type"));
-	bindRelation("affinity", ui.affinity, ui.affinityEdit, "db_affinity",
+	bindRelation("affinity", ui.affinity, ui.affinityEdit, "db_item_affinity",
 		QString(), ui.affinityEditButton, tr("Affinity"));
 	bindNumber("stock", ui.stock, ui.stockEdit, 0);
 	bindEnum("lnc_req", ui.lncReq, ui.lncReqEdit, lncEnum, 0);
@@ -108,8 +108,8 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 	bindNumber("mod_level", ui.modLevel, ui.modLevelEdit, -1);
 	bindNumber("mod_slot", ui.modSlot, ui.modSlotEdit, -1);
 	bindText("mod_desc", ui.modDesc, ui.modDescEdit);
-	bindStatRelation("db_item_stats", ui.stats, ui.statsEditList,
-		"item", "stat", "db_stats", "name_{$lang}", "val",
+	bindStatRelation("db_item_stat_pair", ui.stats, ui.statsEditList,
+		"item", "stat", "db_item_stats", "name_{$lang}", "val",
 		ui.statsEditAdd, ui.statsEditEdit, ui.statsEditRemove,
 		ui.statsEditSearchAdd, ui.statsEditSearchCancel, ui.statsEditAddSearch,
 		ui.statsEditAddList, tr("What is the value for this stat?"),
@@ -126,6 +126,16 @@ ItemView::ItemView(QWidget *parent_widget) : AjaxView(parent_widget)
 	// Init the view
 	initView(ui.stackedWidget, ui.editButton, ui.cancelButton,
 		ui.refreshButton, ui.updateButton);
+
+	ui.selectionWidget->widget(2)->hide();
+	ui.selectionWidget->removeTab(2);
+
+	ui.fusion1->hide();
+	ui.fusion2->hide();
+	ui.cashShop->hide();
+	ui.fusion1Label->hide();
+	ui.fusion2Label->hide();
+	ui.cashShopLabel->hide();
 }
 
 bool ItemView::checkValues()

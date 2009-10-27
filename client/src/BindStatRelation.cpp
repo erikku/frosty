@@ -798,7 +798,7 @@ QVariant BindStatRelation::refreshItemCache() const
 
 	QVariantMap action;
 	action["action"] = QString("select");
-	action["table"] = QString("db_stats"); // TODO: Fix this
+	action["table"] = QString("db_item_stats"); // TODO: Fix this
 	action["columns"] = cols;
 	action["order_by"] = QVariantList() << orderby_name;
 	action["user_data"] = QString("stat_relation_%1_%2_cache").arg(
