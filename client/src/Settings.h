@@ -39,6 +39,8 @@ public:
 	QString email() const;
 	QString pass() const;
 
+	QString mode() const;
+
 	QUrl updateUrl() const;
 	QList<QUrl> updateUrls() const;
 
@@ -54,6 +56,8 @@ public:
 public slots:
 	void setUrl(const QUrl& url);
 	void setLang(const QString& lang);
+
+	void setMode(const QString& mode);
 
 	void setUpdateUrl(const QUrl& url);
 
@@ -71,7 +75,7 @@ protected:
 	int mTaskbarClosePolicy;
 
 	QList<QUrl> mURLs, mUpdateURLs;
-	QString mLang, mEmail, mPass;
+	QString mLang, mEmail, mPass, mMode;
 };
 
 #define settings ( Settings::getSingletonPtr() )

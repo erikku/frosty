@@ -127,6 +127,14 @@ protected:
 		const QString& extra_column = QString(),
 		const QString& extra_prompt = QString(),
 		QStackedWidget *add_stack = 0);
+	void bindStatRelation(const QString& field, QListWidget *view,
+		QListWidget *edit, const QString& id, const QString& foreign_id,
+		const QString& foreign_table, const QString& text_column,
+		const QString& extra_column, QPushButton *add_button,
+		QPushButton *edit_button, QPushButton *remove_button,
+		QPushButton *new_button, QPushButton *cancel_button,
+		SearchEdit *quick_filter, QListWidget *add_list,
+		const QString& extra_prompt, QStackedWidget *add_stack);
 	void bindMultiRelation(const QString& field, QListWidget *view,
 		QListWidget *edit, const QString& id, const QString& foreign_id,
 		const QString& foreign_table, const QString& column,

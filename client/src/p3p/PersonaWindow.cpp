@@ -1,6 +1,6 @@
 /******************************************************************************\
-*  libkawaii - A Japanese language support library for Qt4                     *
-*  Copyright (C) 2007 John Eric Martin <john.eric.martin@gmail.com>            *
+*  client/src/PersonaWindow.cpp                                                  *
+*  Copyright (C) 2008 John Eric Martin <john.eric.martin@gmail.com>            *
 *                                                                              *
 *  This program is free software; you can redistribute it and/or modify        *
 *  it under the terms of the GNU General Public License version 2 as           *
@@ -17,28 +17,42 @@
 *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.                   *
 \******************************************************************************/
 
-#ifndef __KanaRomajiConverter_h__
-#define __KanaRomajiConverter_h__
+#include "PersonaWindow.h"
+#include "PersonaList.h"
+#include "PersonaView.h"
+#include "UserList.h"
+#include "Options.h"
 
-#include <QtCore/QString>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QSplitter>
 
-typedef enum _RubyFormat
+PersonaWindow::PersonaWindow(QWidget *parent_widget) : QWidget(parent_widget)
 {
-	Normal = 0,
-	Flat,
-	Bottom,
-	Top,
-	ShortHand,
-	Wiki,
-	NoParentheses
-}RubyFormat;
+	mPersonaView = new PersonaView;
+	mPersonaList = new PersonaList(mPersonaView);
 
-bool containsRuby(const QString& text);
-QString reduceRuby(const QString& bottom, const QString& top);
-QString parseRuby(const QString& string, RubyFormat format = Flat);
-QString romajiToKana(const QString& string, bool special = true);
-QString kanaToRomaji(const QString& string, bool special = true);
-QString katakanaToHiragana(const QString& string);
-QString hiraganaToKatakana(const QString& string);
+	QSplitter *mainSplitter = new QSplitter;
+	mainSplitter->addWidget(mPersonaList);
+	mainSplitter->addWidget(mPersonaView);
 
-#endif // __KanaRomajiConverter_h__
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->addWidget(mainSplitter);
+
+	connect(mPersonaList, SIGNAL(itemClicked(int)), mPersonaView, SLOT(view(int)));
+	connect(mPersonaView, SIGNAL(viewChanged()), mPersonaList, SLOT(refresh()));
+	connect(mPersonaList, SIGNAL(addItemRequested()), mPersonaView, SLOT(add()));
+	connect(Options::getSingletonPtr(), SIGNAL(optionsChanged()),
+		this, SLOT(refresh()));
+
+	setLayout(mainLayout);
+	setWindowTitle( tr("%1 - Persona List").arg(
+		tr("Absolutely Frosty") ) );
+
+	resize(800, 600);
+}
+
+void PersonaWindow::refresh()
+{
+	mPersonaList->refresh();
+	mPersonaView->refresh();
+}

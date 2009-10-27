@@ -57,6 +57,7 @@ Settings::Settings(QObject *parent_object) : QObject(parent_object)
 	mLang = qsettings.value("lang", "en").toString();
 	mEmail = qsettings.value("email").toString();
 	mPass = qsettings.value("pass").toString();
+	mMode = qsettings.value("mode", "imagine").toString();
 
 	if( mURLs.isEmpty() )
 	{
@@ -139,6 +140,11 @@ QString Settings::pass() const
 	return mPass;
 }
 
+QString Settings::mode() const
+{
+	return mMode.toLower();
+}
+
 QUrl Settings::updateUrl() const
 {
 	if( mUpdateURLs.isEmpty() )
@@ -194,6 +200,14 @@ void Settings::setUrl(const QUrl& u)
 
 		qsettings.setValue("backend_urls", urls);
 	}
+}
+
+void Settings::setMode(const QString& m)
+{
+	mMode = m.toLower();
+
+	QSettings qsettings;
+	qsettings.setValue("mode", mMode);
 }
 
 void Settings::setLang(const QString& l)

@@ -52,6 +52,7 @@
 #include "BindNumberSelector.h"
 #include "BindDetailedMultiRelation.h"
 #include "BindMultiRelation.h"
+#include "BindStatRelation.h"
 
 AjaxView::AjaxView(QWidget *parent_widget) : QWidget(parent_widget),
 	mID(-1), mCanEdit(false)
@@ -454,6 +455,41 @@ void AjaxView::bindDetailedMultiRelation(const QString& field,
 	bind->setExtraColumn(extra_column);
 	bind->setExtraPrompt(extra_prompt);
 	bind->setColumns(cols);
+
+	bind->setRemoveButton(remove_button);
+	bind->setEditButton(edit_button);
+	bind->setAddButton(add_button);
+
+	bind->setCancelButton(cancel_button);
+	bind->setNewButton(new_button);
+
+	bind->setAddStack(add_stack);
+	bind->setAddList(add_list);
+
+	bind->setQuickSearch(quick_filter);
+
+	mBinds << bind;
+}
+
+void AjaxView::bindStatRelation(const QString& field, QListWidget *view_widget,
+	QListWidget *edit_widget, const QString& id, const QString& foreign_id,
+	const QString& foreign_table, const QString& text_column,
+	const QString& extra_column, QPushButton *add_button,
+	QPushButton *edit_button, QPushButton *remove_button,
+	QPushButton *new_button, QPushButton *cancel_button,
+	SearchEdit *quick_filter, QListWidget *add_list,
+	const QString& extra_prompt, QStackedWidget *add_stack)
+{
+	BindStatRelation *bind = new BindStatRelation;
+	bind->setViewer(view_widget);
+	bind->setEditor(edit_widget);
+	bind->setOtherTable(field);
+	bind->setTable( table() );
+
+	bind->setRelation(id, foreign_table, foreign_id);
+	bind->setExtraColumn(extra_column);
+	bind->setExtraPrompt(extra_prompt);
+	bind->setTextColumn(text_column);
 
 	bind->setRemoveButton(remove_button);
 	bind->setEditButton(edit_button);

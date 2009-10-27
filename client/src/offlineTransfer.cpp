@@ -168,7 +168,10 @@ offlineTransfer* offlineTransfer::startReal(const QVariant& req)
 	{
 		QVariantMap resp = it.next().toMap();
 
-		emit transferFinished(resp, resp.value("user_data").toString());
+		if( resp.contains("error") )
+			emit transferFailed(resp.value("error").toString());
+		else
+			emit transferFinished(resp, resp.value("user_data").toString());
 	}
 
 	return this;
