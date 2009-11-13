@@ -46,6 +46,7 @@ protected slots:
 
 	void addChildren();
 	void dismissChildren();
+	void exportDevil();
 
 protected:
 	DevilProperties(QWidget *parent = 0);

@@ -23,12 +23,15 @@
 #include <QtCore/QMimeData>
 
 #include <QtGui/QPushButton>
+#include <QtGui/QMessageBox>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDragMoveEvent>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QDropEvent>
+#include <QtGui/QClipboard>
 #include <QtGui/QDrag>
+#include <iostream>
 
 #include "ajax.h"
 #include "json.h"
@@ -80,6 +83,23 @@ void StorageBase::add()
 
 	if( !devilAt(index).isEmpty() )
 		return;
+
+	QString jdata = QApplication::clipboard()->text().trimmed();
+	jdata = QString::fromUtf8( qUncompress(
+		QByteArray::fromBase64(jdata.toUtf8()) ) );
+	DevilData data = json::parse(jdata, false).toMap();
+	if( !data.isEmpty() )
+	{
+		if( QMessageBox::question(this, tr("Import Devil"), tr("Would you "
+			"like to import the devil found in the clipboard?"),
+			QMessageBox::Yes | QMessageBox::No, QMessageBox::No) ==
+			QMessageBox::Yes)
+		{
+			setAt(index, data);
+
+			return;
+		}
+	}
 
 	Q_ASSERT(mAddDevil);
 

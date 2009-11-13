@@ -1108,6 +1108,13 @@
            </property>
           </spacer>
          </item>
+         <item>
+          <widget class="QPushButton" name="exportButton">
+           <property name="text">
+            <string>Copy to Clipboard</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

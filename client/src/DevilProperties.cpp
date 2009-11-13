@@ -20,9 +20,11 @@
 #include "DevilProperties.h"
 #include "DevilCache.h"
 #include "AddParents.h"
+#include "json.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QHeaderView>
+#include <QtGui/QClipboard>
 #include <QtGui/QDrag>
 
 #ifndef QT_NO_DEBUG
@@ -91,6 +93,8 @@ DevilProperties::DevilProperties(QWidget *parent_widget) :
 		this, SLOT(addChildren()));
 	connect(ui.dismissChildren, SIGNAL(clicked(bool)),
 		this, SLOT(dismissChildren()));
+	connect(ui.exportButton, SIGNAL(clicked(bool)),
+		this, SLOT(exportDevil()));
 
 	ui.historyTree->header()->hide();
 
@@ -830,4 +834,12 @@ void DevilProperties::rewindSkills(int start,
 	skill->setPixmap(blank);
 	skill->setToolTip(QString());
 	ids->replace(index, -1);
+}
+
+void DevilProperties::exportDevil()
+{
+	QString data = QString::fromUtf8(
+		qCompress(json::toJSON(mActiveData).toUtf8(), 9).toBase64() );
+
+	QApplication::clipboard()->setText(data);
 }
